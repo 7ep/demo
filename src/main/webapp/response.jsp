@@ -5,5 +5,6 @@
     </head>
     <body>
         <h2>Hello, ${user}!</h2>
+        <p>the sum of ${item_a} and ${item_b} is ${sum}</p>
     </body>
 </html>

@@ -15,10 +15,23 @@ public class HelloServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+        throws ServletException, IOException, NumberFormatException {
+
         String name = request.getParameter("name");
         if (name == null) name = "World";
         request.setAttribute("user", name);
+
+        int item_a = Integer.parseInt(request.getParameter("item_a"));
+        request.setAttribute("item_a", item_a);
+
+        int item_b = Integer.parseInt(request.getParameter("item_b"));
+        request.setAttribute("item_b", item_b);
+
+        request.setAttribute("sum", doAdd(item_a, item_b));
         request.getRequestDispatcher("response.jsp").forward(request, response); 
     }
+
+   private int doAdd(int a, int b) {
+     return a + b;
+   }
 }
