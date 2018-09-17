@@ -21,11 +21,21 @@ public class HelloServlet extends HttpServlet {
         if (name == null) name = "World";
         request.setAttribute("user", name);
 
-        int item_a = Integer.parseInt(request.getParameter("item_a"));
-        request.setAttribute("item_a", item_a);
+        int item_a;
+        try {
+          item_a = Integer.parseInt(request.getParameter("item_a"));
+          request.setAttribute("item_a", item_a);
+        } catch (NumberFormatException ex) {
+          item_a = 0;
+        }
 
-        int item_b = Integer.parseInt(request.getParameter("item_b"));
-        request.setAttribute("item_b", item_b);
+        int item_b;
+        try {
+          item_b = Integer.parseInt(request.getParameter("item_b"));
+          request.setAttribute("item_b", item_b);
+        } catch (NumberFormatException ex) {
+          item_b = 0;
+        }
 
         request.setAttribute("sum", doAdd(item_a, item_b));
         request.getRequestDispatcher("response.jsp").forward(request, response); 
