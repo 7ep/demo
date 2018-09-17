@@ -5,11 +5,30 @@ plugins {
 
 repositories {
   jcenter()
+  mavenCentral()
 }
 
 dependencies {
   providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+
+  // the cucumber stuff we'll need.
+  testCompile 'io.cucumber:cucumber-java:3.0.2'
+  testCompile 'io.cucumber:cucumber-junit:3.0.2'
+
+  // junit, for running unit tests
   testCompile 'junit:junit:4.12'
+
+  // mockito, for mocking objects in our unit tests
   testCompile 'org.mockito:mockito-core:2.7.19'  
+}
+
+task cucumber(dependsOn: testClasses) {
+    doLast {
+        javaexec {
+            main = "cucumber.api.cli.Main"
+            classpath = configurations.testRuntimeClasspath + sourceSets.main.output + sourceSets.test.output
+            args = ['--plugin', 'pretty', '--glue', 'com.coveros.training', 'src/test/resources']
+        }
+    }
 }
 
