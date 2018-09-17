@@ -1,0 +1,5 @@
+# ignore the gradle stuff that gets generated
+.gradle/
+
+# ignore the build directory - its compiled stuff
+build/
