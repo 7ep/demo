@@ -3,7 +3,7 @@ pipeline {
   agent {
     docker {
       image 'gradle:alpine'
-      args '-p 8888:8888 -v /home/gradle:/home/gradle -v /var/jenkins_home/workspace/:/var/jenkins_home/workspace'
+      args '-p 8888:8888 -v /home/gradle:/home/gradle'
     }
   }
 
