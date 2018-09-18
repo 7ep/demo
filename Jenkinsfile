@@ -6,10 +6,23 @@ pipeline {
     }
   }
   stages {
+
     stage('Build') {
       steps {
         sh './gradlew clean assemble'
       }
     }
+
+    stage('Test') {
+      steps {
+        sh 'gradle test'
+      }
+      post {
+        always {
+          junit 'build/test-results/test/*.xml'
+        }
+      }
+    }
+
   }
 }
