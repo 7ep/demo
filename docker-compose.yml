@@ -13,7 +13,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /home/bkatz:/home
 
-
 volumes:
   jenkins-data:
 
