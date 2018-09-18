@@ -7,7 +7,6 @@ services:
     image: jenkinsci/blueocean
     ports:
     - "8080:8080"
-    - "28888:8888"
     volumes:
       - jenkins-data:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
