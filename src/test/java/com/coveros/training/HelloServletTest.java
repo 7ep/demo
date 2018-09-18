@@ -86,10 +86,9 @@ public class HelloServletTest {
     }
 
 
-    @When("I run a failing step")
+    @When("I run a passing step")
     public void i_run_a_failing_step() {
         // Write code here that turns the phrase above into concrete actions
-        throw new RuntimeException();
     }
 
 

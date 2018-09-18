@@ -3,3 +3,6 @@
 
 # ignore the build directory - its compiled stuff
 build/
+
+# ignore the intellij directory
+.idea/
