@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+
+  jenkins:
+    user: root
+    image: jenkinsci/blueocean
+    ports:
+    - "8080:8080"
+    - "28888:8888"
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/bkatz:/home
+
+
+volumes:
+  jenkins-data:
+
