@@ -26,6 +26,17 @@ pipeline {
       }
     }
 
+    stage('Test-BDD') {
+      steps {
+        sh 'gradle cucumber'
+      }
+      post {
+        always {
+          junit 'build/test-results/test/*.xml'
+        }
+      }
+    }
+
     stage('Deliver') {
       steps {
         sh './jenkins/scripts/deliver.sh'
