@@ -1,15 +1,17 @@
 pipeline {
+
   agent {
     docker {
       image 'gradle:alpine'
       args '-v /root/.m2:/root/.m2'
     }
   }
+
   stages {
 
     stage('Build') {
       steps {
-        sh './gradlew clean assemble'
+        sh 'gradle clean assemble'
       }
     }
 
@@ -24,5 +26,11 @@ pipeline {
       }
     }
 
+    stage('Deliver') {
+      steps {
+        sh './jenkins/scripts/deliver.sh'
+      }
+
   }
+
 }
