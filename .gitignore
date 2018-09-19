@@ -6,3 +6,6 @@ build/
 
 # ignore the intellij directory
 .idea/
+
+# ignore the database text file we create
+database.txt
