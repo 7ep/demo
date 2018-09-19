@@ -31,7 +31,7 @@ task cucumber(dependsOn: testClasses) {
         javaexec {
             main = "cucumber.api.cli.Main"
             classpath = configurations.testRuntimeClasspath + sourceSets.main.output + sourceSets.test.output
-            args = ['--plugin', 'pretty', '--plugin', 'json:build/bdd/file.json', '--glue', 'com.coveros.training', 'src/test/resources']
+            args = ['--plugin', 'default_summary', '--plugin', 'json:build/bdd/file.json', '--glue', 'com.coveros.training', 'src/test/resources']
         }
     }
 }

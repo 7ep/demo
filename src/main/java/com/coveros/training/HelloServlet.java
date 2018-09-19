@@ -17,7 +17,7 @@ public class HelloServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException, NumberFormatException {
 
-        String name = request.getParameter("name");
+        String name = request.getParameter("username");
         if (name == null) name = "World";
         request.setAttribute("user", name);
 

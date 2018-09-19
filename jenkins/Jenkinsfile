@@ -3,7 +3,7 @@ pipeline {
   agent {
     docker {
       image 'gradle:alpine'
-      args '-p 8888:8888 -v /home/gradle:/home/gradle'
+      args '-v /home/gradle:/home/gradle'
     }
   }
 
@@ -32,11 +32,6 @@ pipeline {
       }
     }
 
-    stage('Deploy') {
-      steps {
-        sh 'jenkins/scripts/deploy.sh'
-      }
-    }
 
 
   }
