@@ -75,7 +75,7 @@ public class HelloServletTest {
      */
     @Test
     public void doPostWithName() throws Exception {
-        when(request.getParameter("name")).thenReturn("Dolly");
+        when(request.getParameter("username")).thenReturn("Dolly");
         when(request.getRequestDispatcher("response.jsp"))
             .thenReturn(requestDispatcher);
 
