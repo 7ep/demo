@@ -27,12 +27,14 @@ public class RegisterServletTest {
     private HttpServletRequest request;
     private HttpServletResponse response;
     private RequestDispatcher requestDispatcher;
+    private RegisterServlet registerServlet;
 
     @Before
     public void before() {
       request = mock(HttpServletRequest.class);
       response = mock(HttpServletResponse.class);
       requestDispatcher = mock(RequestDispatcher.class);
+      registerServlet = spy(RegisterServlet.class);
     } 
 
     @Test
@@ -68,6 +70,8 @@ public class RegisterServletTest {
     public void doPostWithoutName() throws Exception {
         when(request.getRequestDispatcher("registration.jsp"))
             .thenReturn(requestDispatcher);
+        when(registerServlet.isUserInDatabase("EMPTY_USERNAME")).thenReturn(false);
+        doNothing().when(registerServlet).saveToDatabase("EMPTY_USERNAME", "");
 
         new RegisterServlet().doPost(request, response);
 
@@ -87,8 +91,10 @@ public class RegisterServletTest {
         when(request.getParameter("username")).thenReturn("Dolly");
         when(request.getRequestDispatcher("registration.jsp"))
             .thenReturn(requestDispatcher);
+        when(registerServlet.isUserInDatabase("Dolly")).thenReturn(false);
+        doNothing().when(registerServlet).saveToDatabase("Dolly", "");
 
-        new RegisterServlet().doPost(request, response);
+        registerServlet.doPost(request, response);
 
         verify(request).setAttribute("username", "Dolly");
         verify(requestDispatcher).forward(request,response);

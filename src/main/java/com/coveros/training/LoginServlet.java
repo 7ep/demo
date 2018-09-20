@@ -20,15 +20,10 @@ import java.util.StringTokenizer;
 
 import java.nio.charset.StandardCharsets;
 
-@WebServlet(name = "RegisterServlet", urlPatterns = {"register"}, loadOnStartup = 1) 
-public class RegisterServlet extends HttpServlet {
+@WebServlet(name = "LoginServlet", urlPatterns = {"login"}, loadOnStartup = 1) 
+public class LoginServlet extends HttpServlet {
 
   private static String DATABASE_NAME = "database.txt";
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-        response.getWriter().print("Hello, World!");  
-    }
 
     private String putUsernameInRequest(HttpServletRequest request) {
         String username = request.getParameter("username");
@@ -49,19 +44,15 @@ public class RegisterServlet extends HttpServlet {
         String username = putUsernameInRequest(request);
         String password = putPasswordInRequest(request);
 
-        if (!isUserInDatabase(username)) {
-          saveToDatabase(username, password);
-          request.getRequestDispatcher("registration.jsp").forward(request, response); 
+        if (isUserRegistered(username, password)) {
+          request.getRequestDispatcher("welcome.jsp").forward(request, response); 
         } else {
-          request.getRequestDispatcher("already_registered.jsp").forward(request, response); 
+          request.getRequestDispatcher("not_registered.jsp").forward(request, response); 
         }
     }
 
-   protected void saveToDatabase(String username, String password) {
-     saveTextToFile(username + " " + password);
-   }
 
-   protected boolean isUserInDatabase(String username) {
+   protected boolean isUserRegistered(String username, String password) {
      try {
       File database = new File(DATABASE_NAME);
       try (BufferedReader br = new BufferedReader(new FileReader(database))) {
@@ -69,7 +60,7 @@ public class RegisterServlet extends HttpServlet {
         while ((line = br.readLine()) != null) {
           StringTokenizer st = new StringTokenizer(line);
           while (st.hasMoreTokens()) {
-            if (st.nextToken().equals(username)) {
+            if (st.nextToken().equals(username) && st.nextToken().equals(password)) {
               return true;
             }
           }
@@ -82,24 +73,6 @@ public class RegisterServlet extends HttpServlet {
      }
    }
 
-   /**
-    * save text to a file.  If the file exists, append.  If 
-    * the file doesn't exist, create a new file.
-    */
-   private void saveTextToFile(String text) {
-      try {
-          final Path path = Paths.get(DATABASE_NAME);
-          StandardOpenOption openOption = Files.exists(path) ? 
-                       StandardOpenOption.APPEND : 
-                       StandardOpenOption.CREATE;
-          Files.write(path, 
-                      Arrays.asList(text), 
-                      StandardCharsets.UTF_8,
-                      openOption );
-      } catch (final IOException ioe) {
-          throw new RuntimeException(ioe);
-      }
-   }
 
 }
 
