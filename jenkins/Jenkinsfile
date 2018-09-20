@@ -17,6 +17,7 @@ pipeline {
 
     stage('Test') {
       steps {
+        sh 'gradle cucumber'
         sh 'gradle test'
       }
       post {
@@ -25,14 +26,6 @@ pipeline {
         }
       }
     }
-
-    stage('Test-BDD') {
-      steps {
-        sh 'gradle cucumber'
-      }
-    }
-
-
 
   }
 
