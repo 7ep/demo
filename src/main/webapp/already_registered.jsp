@@ -5,6 +5,6 @@
     </head>
     <body>
         <h2>Hello, ${username}! you are already registered!.</h2>
-        <p>Log in <a href="login.jsp">here</a></p>
+        <p>Log in <a href="login.html">here</a></p>
     </body>
 </html>

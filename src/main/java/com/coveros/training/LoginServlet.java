@@ -1,24 +1,15 @@
 package com.coveros.training;
 
-import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.File;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.StringTokenizer;
-
-import java.nio.charset.StandardCharsets;
 
 @WebServlet(name = "LoginServlet", urlPatterns = {"login"}, loadOnStartup = 1) 
 public class LoginServlet extends HttpServlet {
@@ -47,7 +38,7 @@ public class LoginServlet extends HttpServlet {
         if (isUserRegistered(username, password)) {
           request.getRequestDispatcher("welcome.jsp").forward(request, response); 
         } else {
-          request.getRequestDispatcher("not_registered.jsp").forward(request, response); 
+          request.getRequestDispatcher("not_registered.html").forward(request, response);
         }
     }
 

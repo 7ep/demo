@@ -1,14 +1,11 @@
 package com.coveros.training;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import static org.mockito.Mockito.*;
-
+import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import cucumber.api.PendingException;
+import org.junit.Before;
+import org.junit.Test;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +14,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
 
-
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
-
-import cucumber.api.java.en.When;
 
 public class RegisterServletTest {
     private HttpServletRequest request;
@@ -70,10 +64,10 @@ public class RegisterServletTest {
     public void doPostWithoutName() throws Exception {
         when(request.getRequestDispatcher("registration.jsp"))
             .thenReturn(requestDispatcher);
-        when(registerServlet.isUserInDatabase("EMPTY_USERNAME")).thenReturn(false);
+        doReturn(false).when(registerServlet).isUserInDatabase("EMPTY_USERNAME");
         doNothing().when(registerServlet).saveToDatabase("EMPTY_USERNAME", "");
 
-        new RegisterServlet().doPost(request, response);
+        registerServlet.doPost(request, response);
 
         verify(request).setAttribute("username", "EMPTY_USERNAME");
         verify(requestDispatcher).forward(request,response);
@@ -91,7 +85,7 @@ public class RegisterServletTest {
         when(request.getParameter("username")).thenReturn("Dolly");
         when(request.getRequestDispatcher("registration.jsp"))
             .thenReturn(requestDispatcher);
-        when(registerServlet.isUserInDatabase("Dolly")).thenReturn(false);
+        doReturn(false).when(registerServlet).isUserInDatabase("Dolly");
         doNothing().when(registerServlet).saveToDatabase("Dolly", "");
 
         registerServlet.doPost(request, response);

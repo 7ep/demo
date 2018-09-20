@@ -9,3 +9,6 @@ build/
 
 # ignore the database text file we create
 database.txt
+
+# I think Intellij adds this build directory
+out/

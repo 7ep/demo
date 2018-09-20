@@ -1,6 +1,7 @@
 plugins {
   id 'war'
   id 'org.gretty' version '2.2.0'
+  id "com.github.spacialcircumstances.gradle-cucumber-reporting" version "0.0.15"
 }
 
 repositories {
@@ -19,7 +20,7 @@ dependencies {
   testCompile 'junit:junit:4.12'
 
   // mockito, for mocking objects in our unit tests
-  testCompile 'org.mockito:mockito-core:2.7.19'  
+  testCompile 'org.mockito:mockito-core:2.7.19'
 }
 
 gretty {
@@ -34,5 +35,11 @@ task cucumber(dependsOn: testClasses) {
             args = ['--monochrome', '--plugin', 'pretty', '--plugin', 'json:build/bdd/file.json', '--glue', 'com.coveros.training', 'src/test/resources']
         }
     }
+}
+
+cucumberReports {
+    outputDir = file('build/reports/bdd')
+    buildName = '0'
+    reports = files('build/bdd/file.json')
 }
 
