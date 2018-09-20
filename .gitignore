@@ -12,3 +12,9 @@ database.txt
 
 # I think Intellij adds this build directory
 out/
+
+
+# don't want the chromedriver in our repo
+# we have a readme in that directory to aid in 
+# downloading the file we need.
+ui_tests/chromedriver.exe
