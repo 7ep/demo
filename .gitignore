@@ -18,3 +18,7 @@ out/
 # we have a readme in that directory to aid in 
 # downloading the file we need.
 ui_tests/chromedriver.exe
+
+# we don't need to store the log in our repo
+ui_tests/debug.log
+
