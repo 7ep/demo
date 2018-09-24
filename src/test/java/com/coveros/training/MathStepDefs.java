@@ -5,7 +5,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 
-public class MathServletTest {
+public class MathStepDefs {
 
     private int calculated_total;
 
