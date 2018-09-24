@@ -27,7 +27,8 @@ gretty {
   httpPort = 8888
 }
 
-task cucumber(dependsOn: testClasses) {
+task cucumber {
+    dependsOn testClasses
     doLast {
         javaexec {
             main = "cucumber.api.cli.Main"
@@ -37,9 +38,19 @@ task cucumber(dependsOn: testClasses) {
     }
 }
 
+task doCucumberReport {
+    dependsOn cucumber
+    doLast {
+        generateCucumberReports
+    }
+}
+
 cucumberReports {
     outputDir = file('build/reports/bdd')
     buildName = '0'
     reports = files('build/bdd/file.json')
+    testTasksFinalizedByReport = false
 }
+
+cucumber.mustRunAfter(testClasses)
 
