@@ -34,7 +34,7 @@ public class LoginServlet extends HttpServlet {
         if (LoginUtils.isUserRegistered(username, password)) {
           request.getRequestDispatcher("welcome.jsp").forward(request, response); 
         } else {
-          request.getRequestDispatcher("not_registered.html").forward(request, response);
+          request.getRequestDispatcher("failed_login.html").forward(request, response);
         }
     }
 
