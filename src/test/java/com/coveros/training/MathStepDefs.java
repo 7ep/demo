@@ -14,13 +14,15 @@ public class MathStepDefs {
         // just a comment.  No state to set up.
     }
 
-    @When("^I add <num(\\d+)> to <num(\\d+)>$")
-    public void iAddNumToNum(int num1, int num2) throws Throwable {
-        calculated_total = num1 + num2;
+    @When("I add (.*) to (.*)")
+    public void i_add_to(String num1, String num2) {
+        // Write code here that turns the phrase above into concrete actions
+        calculated_total = Integer.valueOf(num1) + Integer.valueOf(num2);
     }
 
-    @Then("^the result should be <num(\\d+)>$")
-    public void theResultShouldBeTotal(int total) throws Throwable {
-        Assert.assertEquals(total, calculated_total);
+    @Then("the result should be (.*)")
+    public void the_result_should_be(String total) {
+        Assert.assertEquals((int)Integer.valueOf(total), calculated_total);
     }
+
 }

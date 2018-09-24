@@ -5,8 +5,8 @@ Feature: As a user who has trouble with doing math in their head, I want to add 
     When I add <num1> to <num2>
     Then the result should be <total>
     Examples:
-      | num1 | num2 | total |
-      | 2    |   3     |  5  |
-      | 9    |   6     |  15 |
-      | 2    |   -3    | -1  |
+      | num1 | num2    | total |
+      | 2    |   3     |  5    |
+      | 9    |   6     |  15   |
+      | 2    |   -3    | -1    |
 
