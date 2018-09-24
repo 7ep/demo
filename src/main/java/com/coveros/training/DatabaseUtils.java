@@ -55,6 +55,27 @@ public class DatabaseUtils {
         }
     }
 
+    public static boolean isUsernameAndPasswordInDatabase(String username, String password) {
+        try {
+            File database = new File(DATABASE_NAME);
+            try (BufferedReader br = new BufferedReader(new FileReader(database))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    StringTokenizer st = new StringTokenizer(line);
+                    while (st.hasMoreTokens()) {
+                        if (st.nextToken().equals(username) && st.nextToken().equals(password)) {
+                            return true;
+                        }
+                    }
+                }
+                // if we get to this point, we never found that username
+                return false;
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     /**
      * clears the database.  Mostly used by the test system.
      */

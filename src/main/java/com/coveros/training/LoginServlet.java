@@ -5,11 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.StringTokenizer;
 
 @WebServlet(name = "LoginServlet", urlPatterns = {"login"}, loadOnStartup = 1) 
 public class LoginServlet extends HttpServlet {
@@ -35,7 +31,7 @@ public class LoginServlet extends HttpServlet {
         String username = putUsernameInRequest(request);
         String password = putPasswordInRequest(request);
 
-        if (isUserRegistered(username, password)) {
+        if (LoginUtils.isUserRegistered(username, password)) {
           request.getRequestDispatcher("welcome.jsp").forward(request, response); 
         } else {
           request.getRequestDispatcher("not_registered.html").forward(request, response);
@@ -43,26 +39,7 @@ public class LoginServlet extends HttpServlet {
     }
 
 
-   protected boolean isUserRegistered(String username, String password) {
-     try {
-      File database = new File(DATABASE_NAME);
-      try (BufferedReader br = new BufferedReader(new FileReader(database))) {
-        String line;
-        while ((line = br.readLine()) != null) {
-          StringTokenizer st = new StringTokenizer(line);
-          while (st.hasMoreTokens()) {
-            if (st.nextToken().equals(username) && st.nextToken().equals(password)) {
-              return true;
-            }
-          }
-        }
-        // if we get to this point, we never found that username
-        return false;
-      }
-     } catch (Exception ex) {
-       throw new RuntimeException(ex);
-     }
-   }
+
 
 
 }
