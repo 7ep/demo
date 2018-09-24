@@ -1,32 +1,27 @@
 package com.coveros.training;
 
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import io.cucumber.datatable.DataTable;
 import org.junit.Assert;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RegistrationStepDefs {
 
     String myUsername;
     RegistrationResult myRegistrationResult;
+    List<RegistrationResult> resultsList;
 
     // a password used that will suffice as a typical password
     private static String TYPICAL_PASSWORD = "typical_password_123";
 
-    @Before
-    public void beforeEachScenario() {
-        DatabaseUtils.destroyDatabase();
-    }
-
-    @After
-    public void afterEachScenario() {
-        DatabaseUtils.destroyDatabase();
-    }
 
     @Given("^a user \"([^\"]*)\" is not currently registered in the system$")
     public void aUserIsNotCurrentlyRegisteredInTheSystem(String username) {
+        DatabaseUtils.destroyDatabase();
         Assert.assertFalse(userIsRegistered(username));
         myUsername = username;
     }
@@ -47,6 +42,7 @@ public class RegistrationStepDefs {
 
     @Given("^a username of \"([^\"]*)\" is registered$")
     public void aUsernameOfIsRegistered(String username) {
+        DatabaseUtils.destroyDatabase();
         RegistrationUtils.processRegistration(username, TYPICAL_PASSWORD);
         Assert.assertTrue(userIsRegistered(username));
         myUsername = username;
@@ -63,5 +59,18 @@ public class RegistrationStepDefs {
         Assert.assertEquals(RegistrationResult.ALREADY_REGISTERED, myRegistrationResult);
     }
 
+    @When("^they provide a poor password:$")
+    public void theyProvideAPoorPassword(DataTable passwords) {
+        resultsList = new ArrayList<>();
+        for (String pw : passwords.asList()) {
+            myRegistrationResult = RegistrationUtils.processRegistration(myUsername, pw);
+            resultsList.add(myRegistrationResult);
+        }
+    }
+
+    @Then("^they fail to register and the system indicates the failure$")
+    public void theyFailToRegisterAndTheSystemIndicatesTheFailure() {
+        resultsList.stream().allMatch(x -> x.equals(RegistrationResult.PASSWORD_BAD));
+    }
 
 }

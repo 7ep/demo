@@ -1,21 +1,26 @@
 package com.coveros.training;
 
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 
-import java.util.List;
-
 public class MathServletTest {
 
-    @When("I add number_a to number_b, I get a sum:")
-    public void i_add_number_a_to_number_b_I_get_a_sum(List<List<Integer>> dataTable) {
-        for (List row : dataTable) {
-          Integer addend_a = (Integer)row.get(0);
-          Integer addend_b = (Integer)row.get(1);
-          Integer expected_sum = (Integer)row.get(2);
-          Integer actual_sum = addend_a + addend_b;
-          Assert.assertEquals(expected_sum, actual_sum);
-        }
+    private int calculated_total;
+
+    @Given("^my website is running and can do math$")
+    public void myWebsiteIsRunningAndCanDoMath() {
+        // just a comment.  No state to set up.
     }
 
+    @When("^I add <num(\\d+)> to <num(\\d+)>$")
+    public void iAddNumToNum(int num1, int num2) throws Throwable {
+        calculated_total = num1 + num2;
+    }
+
+    @Then("^the result should be <num(\\d+)>$")
+    public void theResultShouldBeTotal(int total) throws Throwable {
+        Assert.assertEquals(total, calculated_total);
+    }
 }

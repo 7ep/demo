@@ -28,7 +28,7 @@ gretty {
 }
 
 task cucumber {
-    dependsOn testClasses
+    dependsOn test
     doLast {
         javaexec {
             main = "cucumber.api.cli.Main"
@@ -52,5 +52,6 @@ cucumberReports {
     testTasksFinalizedByReport = false
 }
 
-cucumber.mustRunAfter(testClasses)
+test.finalizedBy(cucumber)
+cucumber.finalizedBy(generateCucumberReports)
 

@@ -11,11 +11,12 @@ Narrative: A user wants to access the system, but they can only do it if they ha
     When they register with that username and use the password, "password123"
     Then they become registered
 
-  Scenario Outline: A user is unable to register due to bad password
-    Given a user is not currently registered in the system
+  Scenario: A user is unable to register due to bad password
+    Given a user "alice" is not currently registered in the system
     When they provide a poor password:
-    | "pass" |
-    | "123"  |
+    | aaa |
+    | pass |
+    | 123  |
     Then they fail to register and the system indicates the failure
 
   Scenario: A user is unable to register due to the username already existing
