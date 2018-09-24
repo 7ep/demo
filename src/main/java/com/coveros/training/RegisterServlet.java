@@ -11,12 +11,14 @@ public class RegisterServlet extends HttpServlet {
     private String putUsernameInRequest(HttpServletRequest request) {
         String username = request.getParameter("username");
         if (username == null) request.setAttribute("username", "EMPTY_USERNAME");
+        request.setAttribute("username", username);
         return username;
     }
 
     private String putPasswordInRequest(HttpServletRequest request) {
         String password = request.getParameter("password");
         if (password == null) request.setAttribute("password", "EMPTY_PASSWORD");
+        request.setAttribute("password", password);
         return password;
     }
 
