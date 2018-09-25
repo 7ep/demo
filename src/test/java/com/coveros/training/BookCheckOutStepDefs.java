@@ -1,5 +1,6 @@
 package com.coveros.training;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -58,8 +59,8 @@ public class BookCheckOutStepDefs {
         libraryUtils.lendBook(myBook, myBorrower, jan_31st);
     }
 
-    @Then("^the database indicates the book is loaned to them on that date$")
-    public void theDatabaseIndicatesTheBookIsLoanedToHerOnThatDate() {
+    @Then("^the system indicates the book is loaned to them on that date$")
+    public void theSystemIndicatesTheBookIsLoanedToThemOnThatDate() {
         final String result = lendingDb.searchDatabaseForKey(myBook);
         Assert.assertTrue(result.contains("2018-01-31T00:00Z"));
     }
@@ -92,14 +93,9 @@ public class BookCheckOutStepDefs {
         }
     }
 
-    @Given("^today is \"([^\"]*)\"$")
-    public void todayIs(String todayDate) {
-        initializeEmptyDatabaseAndUtility();
-        currentDateTime = convertStringToOffsetDateTime(todayDate);
-    }
-
-    @And("^the book, \"([^\"]*)\", was lent out to \"([^\"]*)\" on \"([^\"]*)\"$")
+    @Given("^the book, \"([^\"]*)\" was lent out to \"([^\"]*)\" on \"([^\"]*)\"$")
     public void theBookWasLentOutToOn(String book, String borrower, String lendingDate) {
+        initializeEmptyDatabaseAndUtility();
         final OffsetDateTime lendingDateConverted = convertStringToOffsetDateTime(lendingDate);
         libraryUtils.registerBook(book);
         libraryUtils.registerBorrower(borrower);
@@ -107,8 +103,8 @@ public class BookCheckOutStepDefs {
         myBook = book;
     }
 
-    @When("^the database is checked for details on that book$")
-    public void theDatabaseIsCheckedForDetailsOnThatBook() {
+    @When("^the system is checked for details on that book$")
+    public void theSystemIsCheckedForDetailsOnThatBook() {
         bookInfo = libraryUtils.queryBookInfo(myBook);
     }
 
@@ -116,5 +112,6 @@ public class BookCheckOutStepDefs {
     public void itIndicatesItIsCheckedOutToThemOnThatDate() {
         Assert.assertTrue(bookInfo.contains("2018-01-01"));
     }
+
 
 }
