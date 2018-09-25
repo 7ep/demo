@@ -4,6 +4,6 @@
         <title>Result Page</title>
     </head>
     <body>
-        <h2>Result: ${result}</h2>
+        <h2 id="result">Result: ${result}</h2>
     </body>
 </html>
