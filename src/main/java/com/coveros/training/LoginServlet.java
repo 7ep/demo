@@ -10,8 +10,6 @@ import java.io.IOException;
 @WebServlet(name = "LoginServlet", urlPatterns = {"login"}, loadOnStartup = 1) 
 public class LoginServlet extends HttpServlet {
 
-  private static String DATABASE_NAME = "database.txt";
-
     private String putUsernameInRequest(HttpServletRequest request) {
         String username = request.getParameter("username");
         if (username == null) username = "EMPTY_USERNAME";
@@ -31,11 +29,11 @@ public class LoginServlet extends HttpServlet {
         String username = putUsernameInRequest(request);
         String password = putPasswordInRequest(request);
 
-        if (LoginUtils.isUserRegistered(username, password)) {
-          request.getRequestDispatcher("welcome.jsp").forward(request, response); 
-        } else {
-          request.getRequestDispatcher("failed_login.html").forward(request, response);
-        }
+        final DatabaseUtils authDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.AUTH_DATABASE_NAME);
+        final LoginUtils loginUtils = new LoginUtils(authDb);
+        final Boolean userRegistered = loginUtils.isUserRegistered(username, password);
+        request.setAttribute("result", userRegistered.toString());
+        request.getRequestDispatcher("result.jsp").forward(request, response);
     }
 
 

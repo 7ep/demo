@@ -2,15 +2,21 @@ package com.coveros.training;
 
 public class RegistrationUtils {
 
-    public static RegistrationResult processRegistration(String username, String password) {
-        if (RegistrationUtils.isUserInDatabase(username)) {
+    private final DatabaseUtils authDb;
+
+    public RegistrationUtils(DatabaseUtils authDb) {
+        this.authDb = authDb;
+    }
+
+    public RegistrationResult processRegistration(String username, String password) {
+        if (isUserInDatabase(username)) {
             return RegistrationResult.ALREADY_REGISTERED;
         }
 
         return registerUser(username, password);
     }
 
-    private static RegistrationResult registerUser(String username, String password) {
+    private RegistrationResult registerUser(String username, String password) {
 
         // first we check if the username is empty
         boolean isUsernameEmpty = username == null || username.isEmpty();
@@ -29,19 +35,19 @@ public class RegistrationUtils {
      *
      * See implementation for criteria.
      */
-    public static boolean isPasswordGood(String password) {
+    private static boolean isPasswordGood(String password) {
         if (password == null) return false;
         if (password.isEmpty()) return false;
         if (password.length() < 6) return false;
         return true;
     }
 
-    public static boolean isUserInDatabase(String username) {
-        return DatabaseUtils.searchDatabaseForKey(username);
+    public boolean isUserInDatabase(String username) {
+        return authDb.searchDatabaseForKey(username) != null;
     }
 
-    private static void saveToDatabase(String username, String password) {
-        DatabaseUtils.saveTextToFile(username + " " + password);
+    private void saveToDatabase(String username, String password) {
+        authDb.saveTextToFile(username + " " + password);
     }
 
 }

@@ -29,27 +29,18 @@ public class RegisterServlet extends HttpServlet {
 
             final RegistrationResult registrationResult = processRegistration(username, password);
 
-            switch (registrationResult) {
-                case ALREADY_REGISTERED:
-                    request.getRequestDispatcher("already_registered.jsp").forward(request, response);
-                    break;
-                case SUCCESSFUL_REGISTRATION:
-                    request.getRequestDispatcher("registration.jsp").forward(request, response);
-                    break;
-                case EMPTY_USERNAME:
-                    request.getRequestDispatcher("empty_username.html").forward(request, response);
-                    break;
-                case PASSWORD_BAD:
-                    request.getRequestDispatcher("bad_password.html").forward(request, response);
-                    break;
-            }
+            request.setAttribute("result", registrationResult.toString());
+            request.getRequestDispatcher("result.jsp").forward(request, response);
+
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
 
     protected RegistrationResult processRegistration(String username, String password) {
-        return RegistrationUtils.processRegistration(username, password);
+        final DatabaseUtils authDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.AUTH_DATABASE_NAME);
+        final RegistrationUtils registrationUtils = new RegistrationUtils(authDb);
+        return registrationUtils.processRegistration(username, password);
     }
 
 }

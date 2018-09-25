@@ -8,28 +8,42 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
 
 public class DatabaseUtils {
-    public static String DATABASE_NAME = "database.txt";
+    public static String AUTH_DATABASE_NAME = "authentication.txt";
+    public static String LIBRARY_BORROWER_DATABASE_NAME = "borrowers.txt";
+    public static String LIBRARY_BOOKS_DATABASE_NAME = "books.txt";
+    public static String LIBRARY_LENDING_DATABASE = "lending.txt";
 
-    public static boolean searchDatabaseForKey(String username) {
+    // the database we are currently pointing at.
+    private final String databaseName;
+
+    public static DatabaseUtils obtainDatabaseAccess(String databaseName) {
+        return new DatabaseUtils(databaseName);
+    }
+
+    private DatabaseUtils(String databaseName) {
+        this.databaseName = databaseName;
+    }
+
+    /**
+     * Scan through the lines of the file, return the first line
+     * that has this key.
+     */
+    public String searchDatabaseForKey(String key) {
         try {
-            File database = new File(DATABASE_NAME);
+            File database = new File(databaseName);
             if (!database.exists() || database.isDirectory()) {
-                return false;
+                return null;
             }
             try (BufferedReader br = new BufferedReader(new FileReader(database))) {
                 String line;
                 while ((line = br.readLine()) != null) {
-                    StringTokenizer st = new StringTokenizer(line);
-                    while (st.hasMoreTokens()) {
-                        if (st.nextToken().equals(username)) {
-                            return true;
-                        }
-                    }
+                    if (line.contains(key)) return line;
                 }
-                // if we get to this point, we never found that username
-                return false;
+                // if we get to this point, we never found the key
+                return null;
             }
         } catch(Exception ex) {
             throw new RuntimeException(ex);
@@ -40,9 +54,9 @@ public class DatabaseUtils {
      * save text to a file.  If the file exists, append.  If
      * the file doesn't exist, create a new file.
      */
-    public static void saveTextToFile(String text) {
+    public void saveTextToFile(String text) {
         try {
-            final Path path = Paths.get(DATABASE_NAME);
+            final Path path = Paths.get(databaseName);
             StandardOpenOption openOption = Files.exists(path) ?
                     StandardOpenOption.APPEND :
                     StandardOpenOption.CREATE;
@@ -55,9 +69,9 @@ public class DatabaseUtils {
         }
     }
 
-    public static boolean isUsernameAndPasswordInDatabase(String username, String password) {
+    public boolean isUsernameAndPasswordInDatabase(String username, String password) {
         try {
-            File database = new File(DATABASE_NAME);
+            File database = new File(databaseName);
             try (BufferedReader br = new BufferedReader(new FileReader(database))) {
                 String line;
                 while ((line = br.readLine()) != null) {
@@ -79,10 +93,10 @@ public class DatabaseUtils {
     /**
      * clears the database.  Mostly used by the test system.
      */
-    public static void destroyDatabase() {
+    public void clearDatabaseContents() {
         PrintWriter pw = null;
         try {
-            pw = new PrintWriter(DATABASE_NAME);
+            pw = new PrintWriter(databaseName);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

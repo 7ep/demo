@@ -28,9 +28,8 @@ public class MathServlet extends HttpServlet {
         int item_a = putNumberInRequest("item_a", request);
         int item_b = putNumberInRequest("item_b", request);
 
-        request.setAttribute("sum", doAdd(item_a, item_b));
-
-        request.getRequestDispatcher("mathresult.jsp").forward(request, response); 
+        request.setAttribute("result", doAdd(item_a, item_b));
+        request.getRequestDispatcher("result.jsp").forward(request, response);
     }
 
 

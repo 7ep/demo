@@ -37,13 +37,13 @@ public class RegisterServletTest {
         mockRequestParam("username", "");
         mockRequestParam("password", "");
         mockRegisterUserToReturnSomeResponse(RegistrationResult.EMPTY_USERNAME);
-        mockRequestDispatcherForExpectedRedirection("empty_username.html");
+        mockRequestDispatcherForExpectedRedirection("result.jsp");
 
         // do the post
         registerServlet.doPost(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(request).getRequestDispatcher("empty_username.html");
+        verify(request).getRequestDispatcher("result.jsp");
     }
 
     /**
@@ -58,13 +58,13 @@ public class RegisterServletTest {
         mockRequestParam("username", "Alice");
         mockRequestParam("password", "password123");
         mockRegisterUserToReturnSomeResponse(RegistrationResult.SUCCESSFUL_REGISTRATION);
-        mockRequestDispatcherForExpectedRedirection("registration.jsp");
+        mockRequestDispatcherForExpectedRedirection("result.jsp");
 
         // do the post
         registerServlet.doPost(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(request).getRequestDispatcher("registration.jsp");
+        verify(request).getRequestDispatcher("result.jsp");
     }
 
 

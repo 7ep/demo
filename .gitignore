@@ -8,7 +8,10 @@ build/
 .idea/
 
 # ignore the database text file we create
-database.txt
+authentication.txt
+books.txt
+borrowers.txt
+lending.txt
 
 # I think Intellij adds this build directory
 out/

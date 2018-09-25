@@ -4,17 +4,26 @@
 </head>
 <body>
 
+<form method="post" action="login">
+
+  <h2>Login</h2>
+  <label for="username">Name:</label>
+  <p><input type="text" id="username" name="username" placeholder="name"/></p>
+
+  <label for="password">Password:</label>
+  <p><input type="password" id="password" name="password" /></p>
+  <p><input type="submit" id="loginbutton" value="login" /></p>
+</form>
+
 <form method="post" action="register">  
 
-  <h2>Ready to login?</h2>
-  <p>Login <a href="login.html">here</a></p> 
   <h2>Register a user</h2>
   <label for="username">Name:</label>
   <p><input type="text" id="username" name="username" placeholder="name"/></p>
 
   <label for="password">Password:</label>
   <p><input type="password" id="password" name="password" /></p>
-  <p><input type="submit" id="say-hello-button" value="register" /></p>
+  <p><input type="submit" value="register" /></p>
 </form>
 
 <form method="post" action="math">  
@@ -23,8 +32,43 @@
   <input type="number" id="say-hello-item_a-input" name="item_a" placeholder="addend a" />
   <input type="number" id="say-hello-item_b-input" name="item_b" placeholder="addend b" />
 
-  <p><input type="submit" id="say-hello-button" value="process math" /></p>
+  <p><input type="submit" value="process math" /></p>
 </form>
+
+<form method="post" action="lend">
+
+  <h2>Borrow a book</h2>
+
+  <label for="book">Name:</label>
+  <p><input type="text" name="book" placeholder="book"/></p>
+
+  <label for="borrower">Name:</label>
+  <p><input type="text" name="borrower" placeholder="borrower"/></p>
+
+
+  <p><input type="submit" value="lend book" /></p>
+</form>
+
+<form method="post" action="registerbook">
+
+  <h2>Register a book</h2>
+
+  <label for="book">Name:</label>
+  <p><input type="text" name="book" placeholder="book"/></p>
+
+  <p><input type="submit" value="register book" /></p>
+</form>
+
+<form method="post" action="registerborrower">
+
+  <h2>Register a borrower</h2>
+
+  <label for="book">Name:</label>
+  <p><input type="text" name="borrower" placeholder="borrower"/></p>
+
+  <p><input type="submit" value="register borrower" /></p>
+</form>
+
 
 </body>
 </html>

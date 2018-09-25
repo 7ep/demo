@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
-        <title>Math Page</title>
+        <title>Result Page</title>
     </head>
     <body>
-        <p>the sum of ${item_a} and ${item_b} is ${sum}</p>
+        <h2>Result: ${result}</h2>
     </body>
 </html>

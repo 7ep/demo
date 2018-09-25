@@ -1,15 +1,11 @@
 package com.coveros.training;
 
-import cucumber.api.PendingException;
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.cucumber.datatable.DataTable;
 import org.junit.Assert;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,20 +14,32 @@ public class RegistrationStepDefs {
     String myUsername;
     RegistrationResult myRegistrationResult;
     List<RegistrationResult> resultsList;
+    private RegistrationUtils registrationUtils;
+    private LoginUtils loginUtils;
+
+    /**
+     * create objects for registration and login, and clear the database.
+     */
+    private void initializeDatabaseAccess() {
+        final DatabaseUtils authDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.AUTH_DATABASE_NAME);
+        authDb.clearDatabaseContents();
+        registrationUtils = new RegistrationUtils(authDb);
+        loginUtils = new LoginUtils(authDb);
+    }
 
     // a password used that will suffice as a typical password
     private static String TYPICAL_PASSWORD = "typical_password_123";
 
     @Given("^a user \"([^\"]*)\" is not currently registered in the system$")
     public void aUserIsNotCurrentlyRegisteredInTheSystem(String username) {
-        DatabaseUtils.destroyDatabase();
+        initializeDatabaseAccess();
         Assert.assertFalse(userIsRegistered(username));
         myUsername = username;
     }
 
     @When("^they register with that username and use the password, \"([^\"]*)\"$")
     public void theyRegisterWithThatUsernameAndUseThePassword(String password) {
-        RegistrationUtils.processRegistration(myUsername, password);
+        registrationUtils.processRegistration(myUsername, password);
     }
 
     @Then("they become registered")
@@ -40,20 +48,20 @@ public class RegistrationStepDefs {
     }
 
     private boolean userIsRegistered(String username) {
-        return RegistrationUtils.isUserInDatabase(username);
+        return registrationUtils.isUserInDatabase(username);
     }
 
     @Given("^a username of \"([^\"]*)\" is registered$")
     public void aUsernameOfIsRegistered(String username) {
-        DatabaseUtils.destroyDatabase();
-        RegistrationUtils.processRegistration(username, TYPICAL_PASSWORD);
+        initializeDatabaseAccess();
+        registrationUtils.processRegistration(username, TYPICAL_PASSWORD);
         Assert.assertTrue(userIsRegistered(username));
         myUsername = username;
     }
 
     @When("a user tries to register with that same name")
     public void a_user_tries_to_register_with_that_same_name() {
-        myRegistrationResult = RegistrationUtils.processRegistration(myUsername, TYPICAL_PASSWORD);
+        myRegistrationResult = registrationUtils.processRegistration(myUsername, TYPICAL_PASSWORD);
     }
 
 
@@ -66,7 +74,7 @@ public class RegistrationStepDefs {
     public void theyProvideAPoorPassword(DataTable passwords) {
         resultsList = new ArrayList<>();
         for (String pw : passwords.asList()) {
-            myRegistrationResult = RegistrationUtils.processRegistration(myUsername, pw);
+            myRegistrationResult = registrationUtils.processRegistration(myUsername, pw);
             resultsList.add(myRegistrationResult);
         }
     }
