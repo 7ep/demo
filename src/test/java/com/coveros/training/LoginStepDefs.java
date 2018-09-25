@@ -1,5 +1,6 @@
 package com.coveros.training;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
@@ -11,14 +12,9 @@ public class LoginStepDefs {
 
     Boolean isRegisteredUser;
 
-    @Before
-    @After
-    public void deleteDatabase() {
-        DatabaseUtils.destroyDatabase();
-    }
-
     @Given("^\"([^\"]*)\" is registered in the system with the password \"([^\"]*)\"$")
     public void isRegisteredInSystemWithPassword(String username, String password) {
+        DatabaseUtils.destroyDatabase();
         RegistrationUtils.processRegistration(username, password);
     }
 

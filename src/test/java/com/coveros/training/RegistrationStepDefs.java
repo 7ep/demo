@@ -8,6 +8,7 @@ import cucumber.api.java.en.When;
 import io.cucumber.datatable.DataTable;
 import org.junit.Assert;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,15 +21,9 @@ public class RegistrationStepDefs {
     // a password used that will suffice as a typical password
     private static String TYPICAL_PASSWORD = "typical_password_123";
 
-    @Before
-    @After
-    public void deleteDatabase() {
-        DatabaseUtils.destroyDatabase();
-    }
-
     @Given("^a user \"([^\"]*)\" is not currently registered in the system$")
     public void aUserIsNotCurrentlyRegisteredInTheSystem(String username) {
-
+        DatabaseUtils.destroyDatabase();
         Assert.assertFalse(userIsRegistered(username));
         myUsername = username;
     }
@@ -49,6 +44,7 @@ public class RegistrationStepDefs {
 
     @Given("^a username of \"([^\"]*)\" is registered$")
     public void aUsernameOfIsRegistered(String username) {
+        DatabaseUtils.destroyDatabase();
         RegistrationUtils.processRegistration(username, TYPICAL_PASSWORD);
         Assert.assertTrue(userIsRegistered(username));
         myUsername = username;
