@@ -1,5 +1,6 @@
 package com.coveros.training;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
@@ -61,7 +62,7 @@ public class RegistrationStepDefs {
         Assert.assertEquals(RegistrationResult.ALREADY_REGISTERED, myRegistrationResult);
     }
 
-    @When("^they provide a poor password:$")
+    @When("^they enter their username and provide a poor password:$")
     public void theyProvideAPoorPassword(DataTable passwords) {
         resultsList = new ArrayList<>();
         for (String pw : passwords.asList()) {
@@ -72,7 +73,8 @@ public class RegistrationStepDefs {
 
     @Then("^they fail to register and the system indicates the failure$")
     public void theyFailToRegisterAndTheSystemIndicatesTheFailure() {
-        resultsList.stream().allMatch(x -> x.equals(RegistrationResult.PASSWORD_BAD));
+        boolean allMatching = resultsList.stream().allMatch(x -> x.equals(RegistrationResult.PASSWORD_BAD));
+        Assert.assertTrue(allMatching);
     }
 
 }

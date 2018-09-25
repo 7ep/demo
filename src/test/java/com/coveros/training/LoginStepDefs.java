@@ -18,11 +18,6 @@ public class LoginStepDefs {
         RegistrationUtils.processRegistration(username, password);
     }
 
-    @When("^when a user authenticates with (.*) and (.*)$")
-    public void whenUserAuthenticatesWithUsernameAndPassword(String username, String password) {
-        isRegisteredUser = LoginUtils.isUserRegistered(username, password);
-    }
-
     @Then("^The system decides that they are authenticated.$")
     public void theSystemDecidesThatTheyAreAuthenticated() {
         Assert.assertTrue(isRegisteredUser);
@@ -31,6 +26,12 @@ public class LoginStepDefs {
     @Then("^The system decides that they are not authenticated.$")
     public void theSystemDecidesThatTheyAreNotAuthenticated() {
         Assert.assertFalse(isRegisteredUser);
+    }
+
+
+    @When("^when a user authenticates with \"([^\"]*)\" and \"([^\"]*)\"$")
+    public void whenAUserAuthenticatesWithAnd(String username, String password) throws Throwable {
+        isRegisteredUser = LoginUtils.isUserRegistered(username, password);
     }
 
 
