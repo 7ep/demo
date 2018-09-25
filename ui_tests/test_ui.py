@@ -14,15 +14,15 @@ driver.get("http://localhost:8888/demo")
 title = driver.title
 assert "Web Demo" in title
 
-username = driver.find_element_by_id("username")
+username = driver.find_element_by_id("login_username")
 username.clear()
 username.send_keys("someuser")
 
-password = driver.find_element_by_id("password")
+password = driver.find_element_by_id("login_password")
 password.clear()
 password.send_keys("somepass")
 
-register_button = driver.find_element_by_id("say-hello-button")
+register_button = driver.find_element_by_id("login_submit")
 time.sleep(1)
 register_button.click()
 
