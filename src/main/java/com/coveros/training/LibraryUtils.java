@@ -17,7 +17,7 @@ public class LibraryUtils {
     public LibraryActionResults lendBook(String book, String borrower, OffsetDateTime now) {
         if (booksDb.searchDatabaseForKey(book) == null) return LibraryActionResults.BOOK_NOT_REGISTERED;
         if (borrowerDb.searchDatabaseForKey(borrower) == null) return LibraryActionResults.BORROWER_NOT_REGISTERED;
-
+        if (lendingDb.searchDatabaseForKey(book) != null) return LibraryActionResults.BOOK_CHECKED_OUT;
         lendingDb.saveTextToFile(book + " " + borrower + " " + now);
         return LibraryActionResults.SUCCESS;
     }

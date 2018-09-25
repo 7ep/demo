@@ -54,7 +54,7 @@ public class BookCheckOutStepDefs {
         myBook = book;
     }
 
-    @When("^they check out the book$")
+    @When("^they try to check out the book$")
     public void theyCheckOutTheBook() {
         libraryUtils.lendBook(myBook, myBorrower, jan_31st);
     }
@@ -84,34 +84,26 @@ public class BookCheckOutStepDefs {
         Assert.assertEquals(LibraryActionResults.BORROWER_NOT_REGISTERED, libraryActionResults);
     }
 
-    private OffsetDateTime convertStringToOffsetDateTime(String date) {
-        try {
-            Date tempDate = new SimpleDateFormat("MM/dd/yyyy").parse(date);
-            return OffsetDateTime.ofInstant(tempDate.toInstant(), ZoneOffset.UTC);
-        } catch (Exception ex) {
-            throw new RuntimeException("Test failure.  Date format probably wrong.");
-        }
-    }
-
-    @Given("^the book, \"([^\"]*)\" was lent out to \"([^\"]*)\" on \"([^\"]*)\"$")
-    public void theBookWasLentOutToOn(String book, String borrower, String lendingDate) {
+    @Given("^a borrower, \"([^\"]*)\", is registered and a book, \"([^\"]*)\" is already checked out to \"([^\"]*)\"$")
+    public void aBorrowerIsRegisteredAndABookIsAlreadyCheckedOutTo(String borrower_a, String book, String borrower_b) throws Throwable {
         initializeEmptyDatabaseAndUtility();
-        final OffsetDateTime lendingDateConverted = convertStringToOffsetDateTime(lendingDate);
+        libraryUtils.registerBorrower(borrower_a);
+        libraryUtils.registerBorrower(borrower_b);
+        myBorrower = borrower_a;
+
         libraryUtils.registerBook(book);
-        libraryUtils.registerBorrower(borrower);
-        libraryUtils.lendBook(book, borrower, lendingDateConverted);
         myBook = book;
+
+        // a previous person already checked it out.
+        libraryUtils.lendBook(book, borrower_b, jan_1st);
+
+        // now we try to check it out.
+        libraryActionResults = libraryUtils.lendBook(book, borrower_a, jan_31st);
+
     }
 
-    @When("^the system is checked for details on that book$")
-    public void theSystemIsCheckedForDetailsOnThatBook() {
-        bookInfo = libraryUtils.queryBookInfo(myBook);
+    @Then("^the system indicates that the book is not available$")
+    public void theSystemIndicatesThatTheBookIsNotAvailable() {
+        Assert.assertEquals(LibraryActionResults.BOOK_CHECKED_OUT, libraryActionResults);
     }
-
-    @Then("^it indicates it is checked out to them on that date$")
-    public void itIndicatesItIsCheckedOutToThemOnThatDate() {
-        Assert.assertTrue(bookInfo.contains("2018-01-01"));
-    }
-
-
 }
