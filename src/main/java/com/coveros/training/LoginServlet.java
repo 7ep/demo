@@ -32,7 +32,8 @@ public class LoginServlet extends HttpServlet {
         final DatabaseUtils authDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.AUTH_DATABASE_NAME);
         final LoginUtils loginUtils = new LoginUtils(authDb);
         final Boolean userRegistered = loginUtils.isUserRegistered(username, password);
-        request.setAttribute("result", userRegistered.toString());
+        String responseText = userRegistered ? "access granted" : "access denied";
+        request.setAttribute("result", responseText);
         request.getRequestDispatcher("result.jsp").forward(request, response);
     }
 
