@@ -47,6 +47,7 @@ def step_impl(context):
 def step_impl(context):
   result = context.driver.find_element_by_id('result')
   assert "ALREADY_REGISTERED" in result.text
+  time.sleep(2)
   context.driver.close()
 
 

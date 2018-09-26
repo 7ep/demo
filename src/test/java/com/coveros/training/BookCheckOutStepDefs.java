@@ -1,18 +1,14 @@
 package com.coveros.training;
 
-import cucumber.api.PendingException;
-import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Date;
 
 public class BookCheckOutStepDefs {
 
@@ -97,7 +93,7 @@ public class BookCheckOutStepDefs {
         // a previous person already checked it out.
         libraryUtils.lendBook(book, borrower_b, jan_1st);
 
-        // now we try to check it out.
+        // now we try to check it out.  It should indicate BOOK_CHECKED_OUT.
         libraryActionResults = libraryUtils.lendBook(book, borrower_a, jan_31st);
 
     }
