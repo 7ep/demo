@@ -13,7 +13,19 @@ pipeline {
       steps {
         sh './gradlew cucumber'
         sh './gradlew test'
+        publishHTML(
+          [
+            allowMissing: false, 
+            alwaysLinkToLastBuild: false, 
+            keepAll: false, 
+            reportDir: 'build/reports/bdd/cucumber-html-reports/', 
+            reportFiles: 'overview-features.html', 
+            reportName: 'Cucumber Report', 
+            reportTitles: ''
+           ]
+         )
       }
+
       post {
         always {
           junit 'build/test-results/test/*.xml'
@@ -21,17 +33,6 @@ pipeline {
         }
       }
 
-      publishHTML(
-        [
-          allowMissing: false, 
-          alwaysLinkToLastBuild: false, 
-          keepAll: false, 
-          reportDir: 'build/reports/bdd/cucumber-html-reports/', 
-          reportFiles: 'overview-features.html', 
-          reportName: 'Cucumber Report', 
-          reportTitles: ''
-         ]
-       )
     }
 
   }
