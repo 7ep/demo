@@ -18,19 +18,20 @@ pipeline {
         always {
           junit 'build/test-results/test/*.xml'
 
-          publishHTML(
-            [
-              allowMissing: false, 
-              alwaysLinkToLastBuild: false, 
-              keepAll: false, 
-              reportDir: 'build/reports/bdd/cucumber-html-reports/', 
-              reportFiles: 'overview-features.html', 
-              reportName: 'Cucumber Report', 
-              reportTitles: ''
-             ]
-           )
         }
       }
+
+      publishHTML(
+        [
+          allowMissing: false, 
+          alwaysLinkToLastBuild: false, 
+          keepAll: false, 
+          reportDir: 'build/reports/bdd/cucumber-html-reports/', 
+          reportFiles: 'overview-features.html', 
+          reportName: 'Cucumber Report', 
+          reportTitles: ''
+         ]
+       )
     }
 
   }
