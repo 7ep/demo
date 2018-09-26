@@ -13,17 +13,8 @@ pipeline {
       steps {
         sh './gradlew cucumber'
         sh './gradlew test'
-        publishHTML(
-          [
-            allowMissing: false, 
-            alwaysLinkToLastBuild: false, 
-            keepAll: false, 
-            reportDir: 'build/reports/bdd/cucumber-html-reports/', 
-            reportFiles: 'overview-features.html', 
-            reportName: 'Cucumber Report', 
-            reportTitles: ''
-           ]
-         )
+        sh 'cp build/reports/bdd/cucumber-html-reports/* /var/www/cucumber/'
+        sh 'cp build/reports/tests/test/* /var/www/unittest/'
       }
 
       post {
