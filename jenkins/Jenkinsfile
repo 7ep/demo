@@ -10,14 +10,14 @@ pipeline {
 
     stage('Build') {
       steps {
-        sh 'gradle clean assemble'
+        sh './gradlew clean assemble'
       }
     }
 
     stage('Test') {
       steps {
-        sh 'gradle cucumber'
-        sh 'gradle test'
+        sh './gradlew cucumber'
+        sh './gradlew test'
       }
       post {
         always {
