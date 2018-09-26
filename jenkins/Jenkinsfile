@@ -1,9 +1,8 @@
 pipeline {
 
   agent {
-    docker {
-      image 'gradle:alpine'
-      args '-v /home/gradle:/home/gradle'
+    node {
+      label 'master'
     }
   }
 
