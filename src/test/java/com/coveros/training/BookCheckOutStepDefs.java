@@ -1,27 +1,25 @@
 package com.coveros.training;
 
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 public class BookCheckOutStepDefs {
 
     String myBook;
     String myBorrower;
-    String bookInfo;
+    OffsetDateTime borrowTime;
     OffsetDateTime jan_1st = OffsetDateTime.of(LocalDateTime.of(2018, Month.JANUARY, 1, 0, 0), ZoneOffset.UTC);
     DatabaseUtils borrowersDb;
     DatabaseUtils booksDb;
     DatabaseUtils lendingDb;
     LibraryUtils libraryUtils;
-    OffsetDateTime jan_31st = OffsetDateTime.of(LocalDateTime.of(2018, Month.JANUARY, 31, 0, 0), ZoneOffset.UTC);
-    OffsetDateTime currentDateTime;
+    OffsetDateTime Jan_2nd = OffsetDateTime.of(LocalDateTime.of(2018, Month.JANUARY, 2, 0, 0), ZoneOffset.UTC);
     LibraryActionResults libraryActionResults;
 
     /**
@@ -39,20 +37,24 @@ public class BookCheckOutStepDefs {
         libraryUtils = new LibraryUtils(borrowersDb, booksDb, lendingDb);
     }
 
-    @Given("^a borrower, \"([^\"]*)\", is registered and a book, \"([^\"]*)\" is available for borrowing$")
-    public void aBorrowerIsRegisteredAndABookIsAvailableForBorrowing(String borrower, String book) {
+    @Given("^a borrower, \"([^\"]*)\", is registered$")
+    public void aBorrowerIsRegistered(String borrower) {
         initializeEmptyDatabaseAndUtility();
 
         libraryUtils.registerBorrower(borrower);
         myBorrower = borrower;
+    }
 
+    @And("^a book, \"([^\"]*)\" is available for borrowing$")
+    public void aBookIsAvailableForBorrowing(String book) {
         libraryUtils.registerBook(book);
         myBook = book;
     }
 
-    @When("^they try to check out the book$")
-    public void theyCheckOutTheBook() {
-        libraryUtils.lendBook(myBook, myBorrower, jan_31st);
+    @When("^they try to check out the book on \"([^\"]*)\"$")
+    public void theyTryToCheckOutTheBookOn(String date) {
+        borrowTime = OffsetDateTime.of(LocalDate.parse(date, DateTimeFormatter.ofPattern("MMMM dd, yyyy")).atStartOfDay(), ZoneOffset.UTC);
+        libraryUtils.lendBook(myBook, myBorrower, borrowTime);
     }
 
     @Then("^the system indicates the book is loaned to them on that date$")
@@ -61,8 +63,19 @@ public class BookCheckOutStepDefs {
         Assert.assertTrue(result.contains("2018-01-31T00:00Z"));
     }
 
-    @Given("^an individual, \"([^\"]*)\", is not registered as a borrower$")
-    public void anIndividualIsNotRegisteredAsABorrower(String borrower) {
+    @When("^they try to check out the book$")
+    public void theyCheckOutTheBook() {
+        libraryUtils.lendBook(myBook, myBorrower, Jan_2nd);
+    }
+
+    @Then("^the system indicates the book is loaned to them on some date$")
+    public void theSystemIndicatesTheBookIsLoanedToThemOnSomeDate() {
+        final String result = lendingDb.searchDatabaseForKey(myBook);
+        Assert.assertTrue(result.contains("2018-01-31T00:00Z"));
+    }
+
+    @Given("^an individual, \"([^\"]*)\", is not registered$")
+    public void anIndividualIsNotRegistered(String borrower) {
         initializeEmptyDatabaseAndUtility();
         myBorrower = borrower;
     }
@@ -72,7 +85,7 @@ public class BookCheckOutStepDefs {
         libraryUtils.registerBook(book);
         myBook = book;
 
-        libraryActionResults = libraryUtils.lendBook(myBook, myBorrower, jan_31st);
+        libraryActionResults = libraryUtils.lendBook(myBook, myBorrower, Jan_2nd);
     }
 
     @Then("^the system indicates that they are not registered$")
@@ -80,13 +93,9 @@ public class BookCheckOutStepDefs {
         Assert.assertEquals(LibraryActionResults.BORROWER_NOT_REGISTERED, libraryActionResults);
     }
 
-    @Given("^a borrower, \"([^\"]*)\", is registered and a book, \"([^\"]*)\" is already checked out to \"([^\"]*)\"$")
-    public void aBorrowerIsRegisteredAndABookIsAlreadyCheckedOutTo(String borrower_a, String book, String borrower_b) throws Throwable {
-        initializeEmptyDatabaseAndUtility();
-        libraryUtils.registerBorrower(borrower_a);
+    @Given("^and a book, \"([^\"]*)\" is already checked out to \"([^\"]*)\"$")
+    public void andABookIsAlreadyCheckedOutTo(String book, String borrower_b) {
         libraryUtils.registerBorrower(borrower_b);
-        myBorrower = borrower_a;
-
         libraryUtils.registerBook(book);
         myBook = book;
 
@@ -94,12 +103,14 @@ public class BookCheckOutStepDefs {
         libraryUtils.lendBook(book, borrower_b, jan_1st);
 
         // now we try to check it out.  It should indicate BOOK_CHECKED_OUT.
-        libraryActionResults = libraryUtils.lendBook(book, borrower_a, jan_31st);
-
+        libraryActionResults = libraryUtils.lendBook(book, myBorrower, Jan_2nd);
     }
 
     @Then("^the system indicates that the book is not available$")
     public void theSystemIndicatesThatTheBookIsNotAvailable() {
         Assert.assertEquals(LibraryActionResults.BOOK_CHECKED_OUT, libraryActionResults);
     }
+
+
+
 }
