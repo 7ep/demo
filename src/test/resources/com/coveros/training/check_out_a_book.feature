@@ -1,4 +1,6 @@
-Feature: As a patron of the library system, I would like to check out a book so that I may take it outside the library.
+Feature: As a patron of the library system,
+  I would like to check out a book
+  so that I may take it outside the library.
 
   Narrative: A county library system has many books available for borrowing.  If you
   live in that county, and you have registered for a library card, you are able
@@ -10,9 +12,9 @@ Feature: As a patron of the library system, I would like to check out a book so 
     When they try to check out the book on "January 31, 2018"
     Then the system indicates the book is loaned to them on that date
 
-  Scenario: A non-registered borrower should not be able to borrow a book
+  Scenario: A non-registered person should not be able to borrow a book
     Given an individual, "bob", is not registered
-    When they try to check out a book, "Zen And The Art Of Motorcycle Maintenance" that is available
+    When they try to check out a book, "BDD in Action" that is available
     Then the system indicates that they are not registered
 
   # The following is a poor scenario.
