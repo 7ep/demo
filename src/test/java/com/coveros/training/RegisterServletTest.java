@@ -12,6 +12,8 @@ import static org.mockito.Mockito.*;
 
 public class RegisterServletTest {
 
+    public static final RegistrationResult EMPTY_USERNAME = RegistrationResult.create(false, RegistrationStatusEnums.EMPTY_USERNAME.toString());
+    public static final RegistrationResult SUCCESSFUL_REGISTRATION = RegistrationResult.create(true, RegistrationStatusEnums.SUCCESSFULLY_REGISTERED.toString());
     private HttpServletRequest request;
     private HttpServletResponse response;
     private RequestDispatcher requestDispatcher;
@@ -36,7 +38,7 @@ public class RegisterServletTest {
         // given a user entered an empty string for username
         mockRequestParam("username", "");
         mockRequestParam("password", "");
-        mockRegisterUserToReturnSomeResponse(RegistrationResult.EMPTY_USERNAME);
+        mockRegisterUserToReturnSomeResponse(EMPTY_USERNAME);
         mockRequestDispatcherForExpectedRedirection("result.jsp");
 
         // do the post
@@ -57,7 +59,7 @@ public class RegisterServletTest {
         // given a user entered their username
         mockRequestParam("username", "Alice");
         mockRequestParam("password", "password123");
-        mockRegisterUserToReturnSomeResponse(RegistrationResult.SUCCESSFUL_REGISTRATION);
+        mockRegisterUserToReturnSomeResponse(SUCCESSFUL_REGISTRATION);
         mockRequestDispatcherForExpectedRedirection("result.jsp");
 
         // do the post

@@ -3,14 +3,13 @@ package com.coveros.training;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import io.cucumber.datatable.DataTable;
 import org.junit.Assert;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RegistrationStepDefs {
 
+    public static final RegistrationResult ALREADY_REGISTERED = RegistrationResult.create(false, RegistrationStatusEnums.ALREADY_REGISTERED.toString());
     String myUsername;
     RegistrationResult myRegistrationResult;
     List<RegistrationResult> resultsList;
@@ -28,7 +27,7 @@ public class RegistrationStepDefs {
     }
 
     // a password used that will suffice as a typical password
-    private static String TYPICAL_PASSWORD = "typical_password_123";
+    private static String TYPICAL_PASSWORD = "LpcVWwRkWSNVH";
 
     @Given("^a user \"([^\"]*)\" is not currently registered in the system$")
     public void aUserIsNotCurrentlyRegisteredInTheSystem(String username) {
@@ -67,22 +66,16 @@ public class RegistrationStepDefs {
 
     @Then("the system indicates a failure to register")
     public void the_system_indicates_a_failure_to_register() {
-        Assert.assertEquals(RegistrationResult.ALREADY_REGISTERED, myRegistrationResult);
+        Assert.assertEquals(ALREADY_REGISTERED, myRegistrationResult);
     }
 
-    @When("^they enter their username and provide a poor password:$")
-    public void theyProvideAPoorPassword(DataTable passwords) {
-        resultsList = new ArrayList<>();
-        for (String pw : passwords.asList()) {
-            myRegistrationResult = registrationUtils.processRegistration(myUsername, pw);
-            resultsList.add(myRegistrationResult);
-        }
+    @When("^they enter their username and provide a poor (.*)$")
+    public void theyEnterTheirUsernameAndProvideAPoorPassword(String password) {
+        myRegistrationResult = registrationUtils.processRegistration(myUsername, password);
     }
 
-    @Then("^they fail to register and the system indicates the failure$")
-    public void theyFailToRegisterAndTheSystemIndicatesTheFailure() {
-        boolean allMatching = resultsList.stream().allMatch(x -> x.equals(RegistrationResult.PASSWORD_BAD));
-        Assert.assertTrue(allMatching);
+    @Then("^they fail to register and the system indicates the (.*)$")
+    public void theyFailToRegisterAndTheSystemIndicatesTheResponse(String response) {
+        Assert.assertTrue(myRegistrationResult.toString().toLowerCase().contains(response));
     }
-
 }
