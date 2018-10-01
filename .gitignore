@@ -25,3 +25,8 @@ ui_tests/chromedriver.exe
 # we don't need to store the log in our repo
 ui_tests/debug.log
 
+# this generated source directory relates to annotations
+# built from AutoValue.  We have a plugin, 
+# org.inferred.processors, that works with AutoValue
+# and makes this directory
+generated_src/
