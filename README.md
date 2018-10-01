@@ -17,6 +17,12 @@ To run:
     gradlew appRun
 
 
+Screenshots:
+![Cucumber report](https://github.com/7ep/demo/tree/master/screenshots/cucumber_report.png)
+![Feature file](https://github.com/7ep/demo/tree/master/screenshots/feature_file.png)
+![Jenkins pipeline](https://github.com/7ep/demo/tree/master/screenshots/jenkins_pipeline.png)
+![Webapp](https://github.com/7ep/demo/tree/master/screenshots/webapp.png)
+
 
 For convenience, there is a docker-compose file which will start up
 Jenkins. The path to the Jenkinsfile is jenkins/Jenkinsfile.  In order
