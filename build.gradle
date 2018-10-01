@@ -1,48 +1,48 @@
 plugins {
-  id 'war'
+    id 'war'
 
-  // gretty is a gradle plugin to make it easy to run a server and hotswap code at runtime.
-  id 'org.gretty' version '2.2.0'
+    // gretty is a gradle plugin to make it easy to run a server and hotswap code at runtime.
+    id 'org.gretty' version '2.2.0'
 
-  // provides Cucumber reporting
-  id "com.github.spacialcircumstances.gradle-cucumber-reporting" version "0.0.15"
+    // provides Cucumber reporting
+    id "com.github.spacialcircumstances.gradle-cucumber-reporting" version "0.0.15"
 
-  // this allows AutoValue to work with Intellij
-  id 'org.inferred.processors' version '1.2.18'  
+    // this allows AutoValue to work with Intellij
+    id 'org.inferred.processors' version '1.2.18'
 }
 
 repositories {
-  jcenter()
-  mavenCentral()
+    jcenter()
+    mavenCentral()
 }
 
 dependencies {
-  providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 
-  // the cucumber stuff we'll need.
-  testCompile 'io.cucumber:cucumber-java:3.0.2'
-  testCompile 'io.cucumber:cucumber-junit:3.0.2'
+    // the cucumber stuff we'll need.
+    testCompile 'io.cucumber:cucumber-java:3.0.2'
+    testCompile 'io.cucumber:cucumber-junit:3.0.2'
 
-  // junit, for running unit tests
-  testCompile 'junit:junit:4.12'
+    // junit, for running unit tests
+    testCompile 'junit:junit:4.12'
 
-  // mockito, for mocking objects in our unit tests
-  testCompile 'org.mockito:mockito-core:2.7.19'
+    // mockito, for mocking objects in our unit tests
+    testCompile 'org.mockito:mockito-core:2.7.19'
 
-  // a tool to help assure that equals and hashcode were implemented correctly.
-  testCompile group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.0'
+    // a tool to help assure that equals and hashcode were implemented correctly.
+    testCompile group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.0'
 
-  // autoValue is a cool tool that makes it safe and easy to write
-  // value types.  See https://github.com/google/auto/tree/master/value
-  compile "com.google.auto.value:auto-value-annotations:1.6.2"
-  annotationProcessor "com.google.auto.value:auto-value:1.6.2"
+    // autoValue is a cool tool that makes it safe and easy to write
+    // value types.  See https://github.com/google/auto/tree/master/value
+    compile "com.google.auto.value:auto-value-annotations:1.6.2"
+    annotationProcessor "com.google.auto.value:auto-value:1.6.2"
 
-  compile group: 'me.gosimple', name: 'nbvcxz', version: '1.4.2'
+    compile group: 'me.gosimple', name: 'nbvcxz', version: '1.4.2'
 }
 
 // configure jetty to run on port 8888 when we run "./gradlew appRun"
 gretty {
-  httpPort = 8888
+    httpPort = 8888
 }
 
 // some of the configuration for running Cucumber BDD
