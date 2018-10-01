@@ -1,27 +1,32 @@
-Demo - demonstrates an application and tests
+## Demo - demonstrates an application and tests
 
-dependencies: Java 8.
+#### dependencies: 
+    Java 8.
 
-To build with tests:
-    On Linux
+#### To build with tests:
+On Linux
+
     ./gradlew clean build
 
-    On Windows
+On Windows
+
     gradlew clean build
 
-To run:
-    On Linux
+#### To run:
+On Linux
+
     ./gradlew appRun
 
-    On Windows
+On Windows
+
     gradlew appRun
 
 
 Screenshots:
-![Cucumber report](https://github.com/7ep/demo/tree/master/screenshots/cucumber_report.png)
-![Feature file](https://github.com/7ep/demo/tree/master/screenshots/feature_file.png)
-![Jenkins pipeline](https://github.com/7ep/demo/tree/master/screenshots/jenkins_pipeline.png)
-![Webapp](https://github.com/7ep/demo/tree/master/screenshots/webapp.png)
+![alt Cucumber report](https://raw.githubusercontent.com/7ep/demo/master/screenshots/cucumber_report.png)
+![Feature file](https://raw.githubusercontent.com/7ep/demo/master/screenshots/feature_file.png)
+![Jenkins pipeline](https://raw.githubusercontent.com/7ep/demo/master/screenshots/jenkins_pipeline.png)
+![Webapp](https://raw.githubusercontent.com/7ep/demo/master/screenshots/webapp.png)
 
 
 For convenience, there is a docker-compose file which will start up
