@@ -16,3 +16,11 @@ To run:
     On Windows
     gradlew appRun
 
+
+
+For conveniece, there is a docker-compose file which will start up
+Jenkins. The path to the Jenkinsfile is jenkins/Jenkinsfile.  In order
+to run Jenkins you will need both Docker and docker-compose installed.
+
+Also, see the ui_tests directory to see what can be done with a little
+python and Selenium, using Behave to run BDD tests.
