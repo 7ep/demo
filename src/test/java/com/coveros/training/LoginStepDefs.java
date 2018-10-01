@@ -33,7 +33,7 @@ public class LoginStepDefs {
         Assert.assertTrue(isRegisteredUser);
     }
 
-    @Then("^The system decides that they are not authenticated.$")
+    @Then("^The system decides that they are not authenticated, because .*$")
     public void theSystemDecidesThatTheyAreNotAuthenticated() {
         Assert.assertFalse(isRegisteredUser);
     }

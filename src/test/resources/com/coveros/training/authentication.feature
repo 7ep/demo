@@ -16,14 +16,14 @@ Feature: As a user of the system, I want to be able to authenticate myself, so I
   Scenario Outline: Entering invalid credentials fails to authenticate a user to the system.
     Given "alice" is registered in the system with the password "LpcVWwRkWSNVH"
     When when a user authenticates with "<username>" and "<password>"
-    Then The system decides that they are not authenticated.
+    Then The system decides that they are not authenticated, because <note>
     Examples:
-      | username      |    password     | notes                               |
-      | alice         | lpcvwwrkwsnvh   | same password, but all lower-case   |
-      | aliceee       | LpcVWwRkWSNVH   | incorrect username                  |
-      | alice         |                 | empty password                      |
-      | alice         | LpcVWwR         | short password                      |
-      | ALICE         | LpcVWwRkWSNVH   | upper-case username                 |
+      | username      |    password     | note                                          |
+      | alice         | lpcvwwrkwsnvh   | the password is correct, but all lower-case   |
+      | aliceee       | LpcVWwRkWSNVH   | we used an incorrect username                 |
+      | alice         |                 | we used an empty password                     |
+      | alice         | LpcVWwR         | we used a shortened version of the password   |
+      | ALICE         | LpcVWwRkWSNVH   | the username was made all upper-case          |
 
   @registration
   Scenario: A user registers themselves to the system
