@@ -1,7 +1,14 @@
 plugins {
   id 'war'
+
+  // gretty is a gradle plugin to make it easy to run a server and hotswap code at runtime.
   id 'org.gretty' version '2.2.0'
+
+  // provides Cucumber reporting
   id "com.github.spacialcircumstances.gradle-cucumber-reporting" version "0.0.15"
+
+  // this allows AutoValue to work with Intellij
+  id 'org.inferred.processors' version '1.2.18'  
 }
 
 repositories {
@@ -21,12 +28,24 @@ dependencies {
 
   // mockito, for mocking objects in our unit tests
   testCompile 'org.mockito:mockito-core:2.7.19'
+
+  // a tool to help assure that equals and hashcode were implemented correctly.
+  testCompile group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.0'
+
+  // autoValue is a cool tool that makes it safe and easy to write
+  // value types.  See https://github.com/google/auto/tree/master/value
+  compile "com.google.auto.value:auto-value-annotations:1.6.2"
+  annotationProcessor "com.google.auto.value:auto-value:1.6.2"
+
+  compile group: 'me.gosimple', name: 'nbvcxz', version: '1.4.2'
 }
 
+// configure jetty to run on port 8888 when we run "./gradlew appRun"
 gretty {
   httpPort = 8888
 }
 
+// some of the configuration for running Cucumber BDD
 task cucumber {
     dependsOn test
     doLast {
@@ -38,13 +57,7 @@ task cucumber {
     }
 }
 
-task doCucumberReport {
-    dependsOn cucumber
-    doLast {
-        generateCucumberReports
-    }
-}
-
+// configuration for the cucumber reports.
 cucumberReports {
     outputDir = file('build/reports/bdd')
     buildName = '0'
@@ -52,6 +65,8 @@ cucumberReports {
     testTasksFinalizedByReport = false
 }
 
+// configure test to run cucumber, followed by cucumber reports.
+// this way, when we run test or build we get all our cucumber too.
 test.finalizedBy(cucumber)
 cucumber.finalizedBy(generateCucumberReports)
 
