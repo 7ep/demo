@@ -1,5 +1,6 @@
 package com.coveros.training;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -43,6 +44,5 @@ public class LoginStepDefs {
     public void whenAUserAuthenticatesWithAnd(String username, String password) throws Throwable {
         isRegisteredUser = loginUtils.isUserRegistered(username, password);
     }
-
 
 }

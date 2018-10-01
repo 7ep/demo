@@ -2,8 +2,9 @@ package com.coveros.training;
 
 import me.gosimple.nbvcxz.Nbvcxz;
 import me.gosimple.nbvcxz.scoring.Result;
+import me.gosimple.nbvcxz.scoring.TimeEstimate;
 
-import static com.coveros.training.PasswordResult.*;
+import static com.coveros.training.PasswordResultEnums.*;
 import static com.coveros.training.RegistrationStatusEnums.*;
 
 public class RegistrationUtils {
@@ -30,7 +31,7 @@ public class RegistrationUtils {
 
         // then we check if the password is good.
         final PasswordResult passwordResult = isPasswordGood(password);
-        if (passwordResult != SUCCESS) return RegistrationResult.create(false, passwordResult.toString());
+        if (passwordResult.status() != SUCCESS) return RegistrationResult.create(false, passwordResult.toString());
 
         // finally, we try saving to the database.
         saveToDatabase(username, password);
@@ -43,17 +44,21 @@ public class RegistrationUtils {
      * See implementation for criteria.
      */
     protected static PasswordResult isPasswordGood(String password) {
-        if (password == null) return EMPTY_PASSWORD;
-        if (password.isEmpty()) return EMPTY_PASSWORD;
-        if (password.length() < 6) return TOO_SHORT;
+        if (password == null) return PasswordResult.createDefault(EMPTY_PASSWORD);
+        if (password.isEmpty()) return PasswordResult.createDefault(EMPTY_PASSWORD);
+        if (password.length() < 6) return PasswordResult.createDefault(TOO_SHORT);
 
         // Nbvcxz is a tool that tests entropy on passwords
         // See github.com/GoSimpleLLC/nbvcxz
         final Nbvcxz nbvcxz = new Nbvcxz();
         final Result result = nbvcxz.estimate(password);
-        if (!result.isMinimumEntropyMet()) return INSUFFICIENT_ENTROPY;
+        final String suggestions = String.join(";", result.getFeedback().getSuggestion());
+        final Double entropy = result.getEntropy();
+        String timeToCrackOff = TimeEstimate.getTimeToCrackFormatted(result, "OFFLINE_BCRYPT_12");
+        String timeToCrackOn = TimeEstimate.getTimeToCrackFormatted(result, "ONLINE_THROTTLED");
+        if (!result.isMinimumEntropyMet()) return PasswordResult.create(INSUFFICIENT_ENTROPY, entropy, timeToCrackOff, timeToCrackOn, suggestions);;
 
-        return SUCCESS;
+        return PasswordResult.create(SUCCESS, entropy, timeToCrackOff, timeToCrackOn, result.getFeedback().getResult());
     }
 
     public boolean isUserInDatabase(String username) {

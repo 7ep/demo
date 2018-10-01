@@ -1,10 +1,13 @@
 package com.coveros.training;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import io.cucumber.datatable.DataTable;
 import org.junit.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RegistrationStepDefs {
@@ -12,9 +15,9 @@ public class RegistrationStepDefs {
     public static final RegistrationResult ALREADY_REGISTERED = RegistrationResult.create(false, RegistrationStatusEnums.ALREADY_REGISTERED.toString());
     String myUsername;
     RegistrationResult myRegistrationResult;
-    List<RegistrationResult> resultsList;
     private RegistrationUtils registrationUtils;
     private LoginUtils loginUtils;
+    private PasswordResult passwordResult;
 
     /**
      * create objects for registration and login, and clear the database.
@@ -36,14 +39,14 @@ public class RegistrationStepDefs {
         myUsername = username;
     }
 
-    @When("^they register with that username and use the password, \"([^\"]*)\"$")
-    public void theyRegisterWithThatUsernameAndUseThePassword(String password) {
-        registrationUtils.processRegistration(myUsername, password);
+    @When("^they register with that username and use the password \"([^\"]*)\"$")
+    public void theyRegisterWithThatUsernameAndUseThePassword(String pw) {
+        registrationUtils.processRegistration(myUsername, pw);
     }
 
     @Then("they become registered")
     public void they_become_registered() {
-        Assert.assertTrue(userIsRegistered(myUsername));
+        registrationUtils.isUserInDatabase(myUsername);
     }
 
     private boolean userIsRegistered(String username) {
@@ -77,5 +80,20 @@ public class RegistrationStepDefs {
     @Then("^they fail to register and the system indicates the (.*)$")
     public void theyFailToRegisterAndTheSystemIndicatesTheResponse(String response) {
         Assert.assertTrue(myRegistrationResult.toString().toLowerCase().contains(response));
+    }
+
+    @Given("^a user is in the midst of registering for an account$")
+    public void aUserIsInTheMidstOfRegisteringForAnAccount() throws Throwable {
+        // just a comment.  No state needs to be set up.
+    }
+
+    @When("^they try registering with the password (.*)$")
+    public void theyTryRegisteringWithThePasswordPassword(String password) {
+        passwordResult = RegistrationUtils.isPasswordGood(password);
+    }
+
+    @Then("^the system returns that the password has insufficient entropy, taking this long to crack: (.*)$")
+    public void theSystemReturnsThatThePasswordHasInsufficientEntropyTakingThisLongToCrackTime_to_crack(String timeToCrack) {
+        Assert.assertEquals(timeToCrack, passwordResult.timeToCrackOffline());
     }
 }

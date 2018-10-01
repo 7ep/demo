@@ -6,24 +6,26 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.coveros.training.PasswordResultEnums.*;
+
 public class RegistrationUtilsTests {
 
     @Test
     public void testShouldFailOnShortPassword() {
         final PasswordResult result = RegistrationUtils.isPasswordGood("abc");
-        Assert.assertEquals(PasswordResult.TOO_SHORT, result);
+        Assert.assertEquals(TOO_SHORT, result.status());
     }
 
     @Test
     public void testShouldFailOnEmptyPassword_EmptyString() {
         final PasswordResult result = RegistrationUtils.isPasswordGood("");
-        Assert.assertEquals(PasswordResult.EMPTY_PASSWORD, result);
+        Assert.assertEquals(EMPTY_PASSWORD, result.status());
     }
 
     @Test
     public void testShouldFailOnEmptyPassword_NullValue() {
         final PasswordResult result = RegistrationUtils.isPasswordGood(null);
-        Assert.assertEquals(PasswordResult.EMPTY_PASSWORD, result);
+        Assert.assertEquals(EMPTY_PASSWORD, result.status());
     }
 
     /**
@@ -33,16 +35,16 @@ public class RegistrationUtilsTests {
      */
     @Test
     public void testShouldHaveInsufficientEntropyInPassword() {
-        final List<String> badPasswords = Arrays.asList("abc123", "typical_password_123");
+        final List<String> badPasswords = Arrays.asList("abc123", "abc123horse", "abc123horsestaples", "typical_password_123");
         for (String password : badPasswords) {
             final PasswordResult result = RegistrationUtils.isPasswordGood(password);
-            Assert.assertEquals(PasswordResult.INSUFFICIENT_ENTROPY, result);
+            Assert.assertEquals(INSUFFICIENT_ENTROPY, result.status());
         }
     }
 
     @Test
     public void testShouldHaveSufficientEntropyInPassword() {
         final PasswordResult result = RegistrationUtils.isPasswordGood("LpcVWwRkWSNVH");
-        Assert.assertEquals(PasswordResult.SUCCESS, result);
+        Assert.assertEquals(SUCCESS, result.status());
     }
 }

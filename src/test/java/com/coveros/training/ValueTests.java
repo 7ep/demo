@@ -4,6 +4,8 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static com.coveros.training.PasswordResultEnums.EMPTY_PASSWORD;
+
 /**
  * A test to make sure all our value objects follow rules.
  *
@@ -20,7 +22,7 @@ public class ValueTests {
 
     @Test
     public void testShouldOutputGoodString() {
-        final RegistrationResult registrationResult = RegistrationResult.create(false, PasswordResult.EMPTY_PASSWORD.toString());
+        final RegistrationResult registrationResult = RegistrationResult.create(false, EMPTY_PASSWORD.toString());
         Assert.assertEquals("RegistrationResult{wasSuccessfullyRegistered=false, message=EMPTY_PASSWORD}", registrationResult.toString());
     }
 }

@@ -26,13 +26,25 @@ Feature: As a user of the system, I want to be able to authenticate myself, so I
       | ALICE         | LpcVWwRkWSNVH   | the username was made all upper-case          |
 
   @registration
-  Scenario: A user registers themselves to the system
+  Scenario: A user registers themselves to the system with a good password
     Given a user "alice" is not currently registered in the system
-    When they register with that username and use the password, "LpcVWwRkWSNVH"
+    When they register with that username and use the password "lpcvwwrkwsnvh"
     Then they become registered
 
   @registration
-  Scenario Outline: A user is unable to register due to bad password
+  Scenario Outline: A user might try different passwords, but we are making sure they are excellent before we allow it.
+    Given a user is in the midst of registering for an account
+    When they try registering with the password <password>
+    Then the system returns that the password has insufficient entropy, taking this long to crack: <time_to_crack>
+    Examples:
+    | password                | time_to_crack               |
+    | typical_password_123    | 1 hours                     |
+    | aaaaaa                  | instant                     |
+    | password123             | instant                     |
+    | really_totally_long_wut | 564 centuries               |
+
+  @registration
+  Scenario Outline: A user is unable to register due to blatantly bad password
     Given a user "alice" is not currently registered in the system
     When they enter their username and provide a poor <password>
     Then they fail to register and the system indicates the <response>
@@ -43,7 +55,7 @@ Feature: As a user of the system, I want to be able to authenticate myself, so I
       | aaaaa                 |  too_short            |
       |                       |  empty_password       |
       | password123           |  insufficient_entropy |
-      | typical_password_123  |  insufficient_entropy |
+
 
   @registration
   Scenario: A user is unable to register due to the username already existing
