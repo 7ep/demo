@@ -72,14 +72,17 @@ public class RegistrationStepDefs {
         Assert.assertEquals(ALREADY_REGISTERED, myRegistrationResult);
     }
 
-    @When("^they enter their username and provide a poor (.*)$")
+    @When("^they enter their username and provide a poor password of (.*)$")
     public void theyEnterTheirUsernameAndProvideAPoorPassword(String password) {
         myRegistrationResult = registrationUtils.processRegistration(myUsername, password);
     }
 
-    @Then("^they fail to register and the system indicates the (.*)$")
-    public void theyFailToRegisterAndTheSystemIndicatesTheResponse(String response) {
-        Assert.assertTrue(myRegistrationResult.toString().toLowerCase().contains(response));
+    @Then("^they fail to register and the system indicates a response: (.*)$")
+    public void theyFailToRegisterAndTheSystemIndicatesAResponse(String response) {
+        Assert.assertTrue(myRegistrationResult.toString()
+                .toLowerCase()
+                .replace("_", " ")
+                .contains(response));
     }
 
     @Given("^a user is in the midst of registering for an account$")

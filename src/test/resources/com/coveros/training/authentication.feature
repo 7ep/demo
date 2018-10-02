@@ -31,6 +31,8 @@ Feature: As a user of the system, I want to be able to authenticate myself, so I
     When they register with that username and use the password "lpcvwwrkwsnvh"
     Then they become registered
 
+  # The following is a scenario that is extra documentation for the team.
+  # It helps  make concrete the reasons why the system requires more difficult passwords.
   @registration
   Scenario Outline: A user might try different passwords, but we are making sure they are excellent before we allow it.
     Given a user is in the midst of registering for an account
@@ -46,15 +48,15 @@ Feature: As a user of the system, I want to be able to authenticate myself, so I
   @registration
   Scenario Outline: A user is unable to register due to blatantly bad password
     Given a user "alice" is not currently registered in the system
-    When they enter their username and provide a poor <password>
-    Then they fail to register and the system indicates the <response>
+    When they enter their username and provide a poor password of <password>
+    Then they fail to register and the system indicates a response: <response>
     Examples:
       | password              |   response            |
-      | a                     |  too_short            |
-      | 123                   |  too_short            |
-      | aaaaa                 |  too_short            |
-      |                       |  empty_password       |
-      | password123           |  insufficient_entropy |
+      | a                     |  too short            |
+      | 123                   |  too short            |
+      | aaaaa                 |  too short            |
+      |                       |  empty password       |
+      | password123           |  insufficient entropy |
 
 
   @registration
