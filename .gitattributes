@@ -1,0 +1,9 @@
+# LF normalization for text files
+* text=auto
+
+# allow gradlew.bat to retain CRLF
+gradlew.bat text eol=crlf
+
+# screenshots are binary and shouldn't be changed
+*.jpg binary
+*.png binary
