@@ -30,3 +30,4 @@ ui_tests/debug.log
 # org.inferred.processors, that works with AutoValue
 # and makes this directory
 generated_src/
+generated_testSrc/
