@@ -1,7 +1,9 @@
 ## Demo - demonstrates an application and tests
 
 #### dependencies: 
-    Java 8.
+    Java 8.  
+
+It *has* to be Java 8.  Don't use Java 10, it will error out because Mockito doesn't work with Java 10.
 
 #### To build with tests:
 On Linux
