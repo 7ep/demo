@@ -16,6 +16,9 @@ to select by id:
 to select using CSS:
 	driver.find_element_by_css_selector("#foo")
 
+to assert something
+	assert "Registered Page" in title
+
 to close the browser:
 	driver.close()
 
@@ -27,9 +30,6 @@ actions
 In all the following actions, it's assumed we have assigned
 some element on the page to the "element" variable.  For example:
 element = driver.find_element_by_id("login_submit")
-
-check
-	assert "Registered Page" in title
 
 clear contents of input:
 	element.clear()
