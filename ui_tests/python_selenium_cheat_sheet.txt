@@ -1,58 +1,88 @@
 UI automation cheatsheet with Python and Selenium
 
 start with these:
-	from selenium import webdriver
-	from selenium.webdriver.common.keys import Keys
+----------------
+
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 
 to open the browser:
-	driver = webdriver.Chrome()
+-------------------
+
+driver = webdriver.Chrome()
 
 to open a page:
-	driver.get("http://localhost:8888/demo")
+--------------
+
+driver.get("http://localhost:8888/demo")
 
 to select by id:
-	driver.find_element_by_id("login_username")
+---------------
+
+driver.find_element_by_id("login_username")
 
 to select using CSS:
-	driver.find_element_by_css_selector("#foo")
+-------------------
 
-to assert something
-	assert "Registered Page" in title
+driver.find_element_by_css_selector("#foo")
+
+to assert something:
+-------------------
+
+assert "Registered Page" in title
 
 to close the browser:
-	driver.close()
+--------------------
+
+driver.close()
 
 
 
 actions 
--------
+=======
 
 In all the following actions, it's assumed we have assigned
 some element on the page to the "element" variable.  For example:
 element = driver.find_element_by_id("login_submit")
 
 clear contents of input:
-	element.clear()
+-----------------------
 
-click
-	element.click()
-	
-type
-	element.send_keys("somepass")
-	
-doubleclick
-	element.double_click()
-	
-hover
-	hover = ActionChains(firefox).move_to_element(element_to_hover_over)
-	hover.perform()
+element.clear()
 
-keydown
-	(to press ctrl+c)
-	ActionChains(driver).key_down(Keys.CONTROL).send_keys('c').key_up(Keys.CONTROL).perform()
+click:
+-----
+
+element.click()
 	
-goback
-	driver.back()
+type something in a field:
+-------------------------
+
+element.send_keys("somepass")
 	
-delete all visible cookies
-	driver.delete_all_cookies()
+doubleclick:
+-----------
+
+element.double_click()
+	
+hover:
+-----
+
+hover = ActionChains(firefox).move_to_element(element_to_hover_over)
+hover.perform()
+
+keydown:
+-------
+
+(to press ctrl+c)
+ActionChains(driver).key_down(Keys.CONTROL).send_keys('c').key_up(Keys.CONTROL).perform()
+	
+go backwards in the browser history:
+-----------------------------------
+
+driver.back()
+	
+delete all visible cookies:
+--------------------------
+
+driver.delete_all_cookies()
