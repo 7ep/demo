@@ -28,6 +28,9 @@ In all the following actions, it's assumed we have assigned
 some element on the page to the "element" variable.  For example:
 element = driver.find_element_by_id("login_submit")
 
+check
+	assert "Registered Page" in title
+
 clear contents of input:
 	element.clear()
 
@@ -37,9 +40,6 @@ click
 type
 	element.send_keys("somepass")
 	
-check
-	assert "Registered Page" in title
-
 doubleclick
 	element.double_click()
 	

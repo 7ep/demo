@@ -1,0 +1,118 @@
+Let's start by running our application locally, as something to test.
+
+In a terminal window, start up the application.  In the home directory for this application, run this:
+on Windows:
+	gradlew appRun
+on Linux:
+	./gradlew appRun
+	
+It should return a message like this:
+	$ gradlew appRun
+	13:09:01 INFO  Jetty 9.2.24.v20180105 started and listening on port 8888
+	13:09:01 INFO  demo runs at:
+	13:09:01 INFO    http://localhost:8888/demo
+
+	> Task :appRun
+	Press any key to stop the server.
+	<===========--> 88% EXECUTING [18s]
+	> :appRun
+	> IDLE
+
+
+Let's start by opening a terminal.
+Make sure you are in the ui_tests directory.
+Kick off the Python program.
+
+You should see something like this:
+	C:\Users\byron\dev\demo\ui_tests>python
+	Python 3.7.0 (v3.7.0:1bf9cc5093, Jun 27 2018, 04:06:47) [MSC v.1914 32 bit (Intel)] on win32
+	Type "help", "copyright", "credits" or "license" for more information.
+	>>>
+
+If it mentions a different version of Python, that's fine.
+
+Now, let's start typing some commands.
+First, the boilerplate stuff so we have access to the commands we'll need:
+	from selenium import webdriver
+	from selenium.webdriver.common.keys import Keys
+	
+Those shouldn't return any response.  If there are errors indicated, take another look and make sure you typed it correctly and that dependencies are resolved (you need Selenium installed for these commands to work).
+
+Now, let's open up Chrome.
+	driver = webdriver.Chrome()
+	
+If this went well, you should see a Chrome browser open up, and a message in your terminal about devtools listening.  Otherwise you should see an error message in your terminal.  Make sure you have installed Chromedriver in your path before running these commands.
+
+Let's tell Selenium to go to our application:
+
+	driver.get("localhost:8888/demo")
+	
+You should see that page show up in the browser, if you did that right.
+
+Let's get some information about the page, like it's title.  Easy:
+
+	>>> driver.title
+	'Web Demo'
+	
+Let's assert that:
+
+	assert "Web Demo" in driver.title
+
+This should return nothing, indicating success.  Let's try it with something that's not there:
+
+	>>> assert "Foo" in driver.title
+	Traceback (most recent call last):
+	  File "<stdin>", line 1, in <module>
+	AssertionError
+
+Ah!  an error returned.
+	
+Let's try out adding some text to a field.  The first thing we have to do is select the field.  There are various ways to do this, but just to jump ahead, here's the way to select the input for the login username, and assign it to a variable called "login_username_field"
+
+	login_username_field = driver.find_element_by_id("login_username")
+	
+If that worked correctly, you shouldn't see any message returned.  We can see if we caught the element by simply typing the variable name:
+
+	login_username_field
+
+Which should return something like this:
+<selenium.webdriver.remote.webelement.WebElement (session="5a75e46839b143d536a462131339ebcc", element="0.5216071359417056-1")>	
+
+Let's add some text to that field:
+
+	login_username_field.send_keys("someuser")
+	
+You should see the text "someuser" appear in the login username field.
+
+Let's repeat these commands for the password field in the login form.
+
+select the input for the login form password, and assign it to a variable called "login_password_field"
+
+	login_password_field = driver.find_element_by_id("login_password")
+	
+If we caught the element by simply typing the variable name:
+
+	login_password_field
+
+Which should return something like this:
+<selenium.webdriver.remote.webelement.WebElement (session="5a75e46839b143d536a462131339ebcc", element="0.5216071359417056-2")>	
+
+Let's add some text to that field:
+
+	login_password_field.send_keys("somepass")
+	
+You should see the text "********" appear in the login password field.
+
+Now we've simulated the actions of a user typing in their username and password on a page.  Let's try the final step, clicking on the login button.
+
+Several of the following steps are going to seem familiar at this point.  But let's step through them slowly and carefully.
+
+login_button = driver.find_element_by_id("login_submit")
+
+Again, as before, no message should be indicated, meaning we have selected an element on the page.
+
+Now, we're going to send a click to that button:
+
+login_button.click()
+
+This should cause your browser to jump to another page.
