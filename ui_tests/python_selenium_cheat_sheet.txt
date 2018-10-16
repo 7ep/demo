@@ -2,7 +2,7 @@ UI automation cheatsheet with Python and Selenium
 
 start with these:
 	from selenium import webdriver
-	from selenium.webdriver.common.keys 
+	from selenium.webdriver.common.keys import Keys
 
 to open the browser:
 	driver = webdriver.Chrome()
@@ -14,7 +14,7 @@ to select by id:
 	driver.find_element_by_id("login_username")
 
 to select using CSS:
-	driver.find_element_by_css("#foo")
+	driver.find_element_by_css_selector("#foo")
 
 to close the browser:
 	driver.close()
