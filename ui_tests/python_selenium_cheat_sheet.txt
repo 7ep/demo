@@ -26,10 +26,6 @@ to select using CSS:
 
 driver.find_element_by_css_selector("#foo")
 
-to assert something:
--------------------
-
-assert "Registered Page" in title
 
 to close the browser:
 --------------------
