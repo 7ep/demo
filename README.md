@@ -1,9 +1,5 @@
 ## Demo - demonstrates an application and tests
 
-Please note that this branch has had nearly all functionality 
-removed in order to prepare for exercises.  See the branch
-called "complete" for the functional version.
-
 #### dependencies: 
     Java 8.  
 
