@@ -4,7 +4,9 @@
 
 2. gave it 1024 megabytes of ram and 4 gigabytes of hard drive storage
 
-3. in File -> Preferences, click on Network, and click the icon on the right to create a new network.  Double click on the newly created network and rename it training_network, and click OK.
+3. in File -> Preferences, click on Network, and click the icon on the
+right to create a new network.  Double click on the newly created
+network and rename it training_network, and click OK.)
 
 in settings:
   Put the Centos7 dvd in its virtual drive...
@@ -14,21 +16,31 @@ in settings:
 
 Start it up.
 
-Choose "install Centos 7".  (It defaults to "test this media and install centos7", but it's a virtual machine, so just press the up arrow and choose "install centos 7".
+Choose "install Centos 7".  (It defaults to "test this media and
+install centos7", but it's a virtual machine, so just press the up
+arrow and choose "install centos 7".)
 
 Choose English for the languages.
 
-Under system, click on "installation destination" and then click Done on the page it opens up.  (it defaults properly)
+Under system, click on "installation destination" and then click Done
+on the page it opens up.  (it defaults properly)
 
-Click on the network & Host name icon and toggle it from off to on, then click Done.
+Click on the network & Host name icon and toggle it from off to on,
+then click Done.
 
 Click on the "Begin Installation" button in the bottom right.
 
-While it is installing, you will see options to set the root password and create a user.  We're not too concerned about security, since this box is just for educational purposes.  However, it won't let you complete installation until you create a user.  Make a user for yourself.  I recommend enabling it as an administrator user (check the box) and make it not require a password (uncheck that box).
+While it is installing, you will see options to set the root password
+and create a user.  We're not too concerned about security, since this
+box is just for educational purposes.  However, it won't let you
+complete installation until you create a user.  Make a user for
+yourself.  I recommend enabling it as an administrator user (check the
+box) and make it not require a password (uncheck that box).
 
 Finally, it finishes, and you can click the button labeled "reboot".  Do so.
 
-Once it finishes rebooting, you will see a console window waiting for you to enter your username.  It should look like this:
+Once it finishes rebooting, you will see a console window waiting for
+you to enter your username.  It should look like this:
 
 ---------------------------------------------------
 
@@ -39,24 +51,34 @@ localhost login: _
 
 ---------------------------------------------------
 
-I find that working in that console is a pain.  So the first thing we want to do is make sure we can access this using ssh and then we'll communicate with our machine solely through that protocol.
+I find that working in that console is a pain.  So the first thing we
+want to do is make sure we can access this using ssh and then we'll
+communicate with our machine solely through that protocol.
 
 
 
-First, log in as the user you created.  You didn't set a password, so you shouldn't need to enter a password for it.  It's an admin user, so you can just run sudo <whatever> to act as root.
+First, log in as the user you created.  You didn't set a password, so
+you shouldn't need to enter a password for it.  It's an admin user, so
+you can just run sudo <whatever> to act as root.
 
-First, let's turn off the firewall and SELinux (its security system).  It's a pain in the rear, and remember, this is for educational purposes, so security is *not* a concern.  Ease of use is.  
+First, let's turn off the firewall and SELinux (its security system).
+It's a pain in the rear, and remember, this is for educational
+purposes, so security is *not* a concern.  Ease of use is.  
 
 $ #turn off the firewall and disable it
 $ sudo systemctl stop firewalld
 $ sudo systemctl disable firewalld
 
-To disable SELinux, open /etc/selinux/config and set SELINUX mode to disabled.
-You can do that with an editor, or you can run this command:
+To disable SELinux, open /etc/selinux/config and set SELINUX mode to
+disabled.  You can do that with an editor, or you can run this
+command:
 
 sudo sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 
-Let's also change the settings on sshd (the ssh daemon) so it will allow us to log in without a password.  Edit the file at /etc/ssh/sshd_config and change the value of a parameter:
+Let's also change the settings on sshd (the ssh daemon) so it will
+allow us to log in without a password.  Edit the file at
+/etc/ssh/sshd_config and change the value of a parameter:
+
 #PermitEmptyPasswords no
 
 becomes
@@ -76,11 +98,21 @@ run this:
 
   $ ip addr
   
-It should show you the network details.  You are looking for the ip address this box was assigned by the network.  It should resemble this value: 10.0.2.15/24
+It should show you the network details.  You are looking for the ip
+address this box was assigned by the network.  It should resemble this
+value: 10.0.2.15/24
 
-(One interesting note: I found that when going through these steps, that VirtualBox had reset my network settings for this box to basic NAT, rather than Nat Network like I previously had set.  If that happens to you, just go back into the box's settings and reset it to NAT Network.  This will also probably change the ip address of the box, so you may need to run ip addr again to see what it is now.)
+(One interesting note: I found that when going through these steps,
+that VirtualBox had reset my network settings for this box to basic
+NAT, rather than Nat Network like I previously had set.  If that
+happens to you, just go back into the box's settings and reset it to
+NAT Network.  This will also probably change the ip address of the
+box, so you may need to run ip addr again to see what it is now.)
 
-Once you have that, click on the menu item File -> Preferences -> Network and double-click on training_network, and click on the "Port Forwarding" button.  Add a new row, as follows (modify for your ip address)
+Once you have that, click on the menu item File -> Preferences ->
+Network and double-click on training_network, and click on the "Port
+Forwarding" button.  Add a new row, as follows (modify for your ip
+address)
 
 +-------+----------+---------+-----------+-----------+------------+
 | Name  | Protocol | Host IP | Host Port | Guest IP  | Guest Port |
@@ -90,7 +122,8 @@ Once you have that, click on the menu item File -> Preferences -> Network and do
 
 Then click all the OK buttons to close the windows.
 
-You should be able to ssh into your centos box by running ssh against localhost at 2222.
+You should be able to ssh into your centos box by running ssh against
+localhost at 2222.
 
 
 From here on out, all commands should be run from ssh.
@@ -111,7 +144,8 @@ $ cd demo
 
 $ ./gradlew appRun
 
-It will take a while to pull down some packages from the internet, but when it's done you should see something like this:
+It will take a while to pull down some packages from the internet, but
+when it's done you should see something like this:
 
   Starting a Gradle Daemon (subsequent builds will be faster)
   15:00:09 INFO  Jetty 9.2.24.v20180105 started and listening on port 8888
@@ -124,7 +158,12 @@ It will take a while to pull down some packages from the internet, but when it's
   > :appRun
   > IDLE
 
-In order to access the application from our host, we will want to open up a port forwarding between our system and the guest.  Go to virtualbox and to the menu bar, and go to File -> preferences -> Network.  Double-click on "training_network" and click on Port forwarding, and add this new rule (adjust the ip address per your machine):
+In order to access the application from our host, we will want to open
+up a port forwarding between our system and the guest.  Go to
+virtualbox and to the menu bar, and go to File -> preferences ->
+Network.  Double-click on "training_network" and click on Port
+forwarding, and add this new rule (adjust the ip address per your
+machine):
 
 +-------+----------+---------+-----------+-----------+------------+
 | Name  | Protocol | Host IP | Host Port | Guest IP  | Guest Port |
@@ -132,7 +171,8 @@ In order to access the application from our host, we will want to open up a port
 | ssh   | TCP      |         | 8888      | 10.0.2.15 | 8888       |
 +-------+----------+---------+-----------+-----------+------------+
 
-Once you click OK to close all the windows, you should be able to open up a url to the application from the host machine:
+Once you click OK to close all the windows, you should be able to open
+up a url to the application from the host machine:
 
 http://localhost:8888/demo/
 
@@ -148,7 +188,8 @@ Let's install a browser that can run in the console.
 
 $ sudo yum -y install lynx
 
-Let's add a database, since we'll plan to use a real database for the next sprint instead of a text file.
+Let's add a database, since we'll plan to use a real database for the
+next sprint instead of a text file.
 
 $ sudo yum install https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-7-x86_64/pgdg-centos10-10-2.noarch.rpm
 $ sudo yum install postgresql10
@@ -157,9 +198,16 @@ $ sudo yum install postgresql10-server
 $ sudo /usr/pgsql-10/bin/postgresql-10-setup initdb
 $ sudo systemctl start postgresql-10
 
-There is a command to start up the database on boot.  We won't use that for now - we want everything to be intentional.  If we need a database, we'll need to start it ourselves.  For reference, the command to have it start on boot is sudo systemctl enable postgresql-10.
+There is a command to start up the database on boot.  We won't use
+that for now - we want everything to be intentional.  If we need a
+database, we'll need to start it ourselves.  For reference, the
+command to have it start on boot is sudo systemctl enable
+postgresql-10.
 
-Recall that this is all educational, so security isn't the slightest concern.  So what we will do here is make the database easily accessible so we can work with it.  Dealing with security is a pain, by definition, so we'll skip that in this exercise.
+Recall that this is all educational, so security isn't the slightest
+concern.  So what we will do here is make the database easily
+accessible so we can work with it.  Dealing with security is a pain,
+by definition, so we'll skip that in this exercise.
 
 First, we'll switch to being the user "postgres":
 
@@ -177,14 +225,16 @@ We should see something like this:
 
   postgres=#
   
-Alright, we know the database is up and we can access it.  Let's make it easier to access.  Still in the psql client, run this command:
+Alright, we know the database is up and we can access it.  Let's make
+it easier to access.  Still in the psql client, run this command:
 
   postgres=# CREATE ROLE brk WITH SUPERUSER LOGIN;
   CREATE ROLE
 
 Log out of psql by running typing \q and pressing enter.
 
-exit out of being postgres and be your original user again.  Try to access the psql client from there:
+exit out of being postgres and be your original user again.  Try to
+access the psql client from there:
 
 $ psql postgres
 
@@ -200,16 +250,29 @@ Now we can modify our code to access postgres easily.
 
 Let's try doing some TDD for our database.
 
-Our project, "demo", required some databases for names of users, names of books, status of book check-outs, and some other stuff.  let's start with duplicating those needs in the form of unit tests.
+Our project, "demo", required some databases for names of users, names
+of books, status of book check-outs, and some other stuff.  let's
+start with duplicating those needs in the form of unit tests.
 
-For the part of our demo that resembles a library's computer system, we had a table where we stored information about our borrowers.  This is similar to typical tables in other domains that would be labeled the 'user' table.
+For the part of our demo that resembles a library's computer system,
+we had a table where we stored information about our borrowers.  This
+is similar to typical tables in other domains that would be labeled
+the 'user' table.
 
-Let's create a unit test that asserts we have a user table, and that is has the characteristics we would like to see: a user name, and an id.  Pretty basic.
+Let's create a unit test that asserts we have a user table, and that
+is has the characteristics we would like to see: a user name, and an
+id.  Pretty basic.
 
 The most simplistic way to articulate this is as follows:
 
   Let there be a table named "users"
   Let it consist of a column for id and for the user name.
 
-We would like some way to go between this naive articulation of what we desire, and a realistic and complete automated test to assert it.  I consider various ways to do this.  Perhaps I could have a normal jUnit test that connects to a database and asserts that.  Or I could run a script from the command line.
+We would like some way to go between this naive articulation of what
+we desire, and a realistic and complete automated test to assert it.
+I consider various ways to do this.  Perhaps I could have a normal
+jUnit test that connects to a database and asserts that.  Or I could
+run a script from the command line.
 
+
+// vim: ai:tw=70
