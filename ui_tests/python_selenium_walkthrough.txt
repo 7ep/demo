@@ -54,9 +54,18 @@ Let's get some information about the page, like it's title.  Easy:
 	>>> driver.title
 	'Web Demo'
 	
-Let's print that:
+Let's assert that:
 
-	print("driver title content is " + driver.title)
+	assert "Web Demo" in driver.title
+
+This should return nothing, indicating success.  Let's try it with something that's not there:
+
+	>>> assert "Foo" in driver.title
+	Traceback (most recent call last):
+	  File "<stdin>", line 1, in <module>
+	AssertionError
+
+Ah!  an error returned.
 	
 Let's try out adding some text to a field.  The first thing we have to do is select the field.  There are various ways to do this, but just to jump ahead, here's the way to select the input for the login username, and assign it to a variable called "login_username_field"
 
@@ -98,68 +107,12 @@ Now we've simulated the actions of a user typing in their username and password 
 
 Several of the following steps are going to seem familiar at this point.  But let's step through them slowly and carefully.
 
-	login_button = driver.find_element_by_id("login_submit")
+login_button = driver.find_element_by_id("login_submit")
 
 Again, as before, no message should be indicated, meaning we have selected an element on the page.
 
 Now, we're going to send a click to that button:
 
-	login_button.click()
-
-This should cause your browser to jump to another page.  On that page we have a result element with an id of "result".  Let's get that value and assert something about it.
-
-	result_field = driver.find_element_by_id("result")
-	
-We can see what value is in that element:
-
-	>>> result_field.text
-	'Result: access denied'
-	
-And we can print its value:
-
-	print("result field content is " + result_field.text)
-	
-Now we can close our browser:
-
-	driver.close()
-	
-
-	
-We've stepped through, watching actions take place in real time, giving us a good sense of where we are and how things work.  Presume for a moment that we have been adding working lines to a file as we've gone.  That file would look like a bit like this (I added some sleeps so it doesn't go by too fast):
-
-
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-import time
-
-driver = webdriver.Chrome()
-driver.get("localhost:8888/demo")
-
-print("driver title content is " + driver.title)
-
-login_username_field = driver.find_element_by_id("login_username")
-login_username_field.send_keys("someuser")
-
-login_password_field = driver.find_element_by_id("login_password")
-login_password_field.send_keys("somepass")
-
-login_button = driver.find_element_by_id("login_submit")
-time.sleep(2)
 login_button.click()
 
-# now we have moved to the result page
-
-result_field = driver.find_element_by_id("result")
-print("result field content is " + result_field.text)
-time.sleep(3)
-driver.close()
-
-
-Put that text in its own file, called test.py and run it as follows:
-
-	python test.py
-
-
-	
-
-	
+This should cause your browser to jump to another page.
