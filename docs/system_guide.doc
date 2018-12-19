@@ -248,31 +248,5 @@ You should see something like this:
 
 Now we can modify our code to access postgres easily.  
 
-Let's try doing some TDD for our database.
-
-Our project, "demo", required some databases for names of users, names
-of books, status of book check-outs, and some other stuff.  let's
-start with duplicating those needs in the form of unit tests.
-
-For the part of our demo that resembles a library's computer system,
-we had a table where we stored information about our borrowers.  This
-is similar to typical tables in other domains that would be labeled
-the 'user' table.
-
-Let's create a unit test that asserts we have a user table, and that
-is has the characteristics we would like to see: a user name, and an
-id.  Pretty basic.
-
-The most simplistic way to articulate this is as follows:
-
-  Let there be a table named "users"
-  Let it consist of a column for id and for the user name.
-
-We would like some way to go between this naive articulation of what
-we desire, and a realistic and complete automated test to assert it.
-I consider various ways to do this.  Perhaps I could have a normal
-jUnit test that connects to a database and asserts that.  Or I could
-run a script from the command line.
-
 
 // vim: ai:tw=70
