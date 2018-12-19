@@ -9,6 +9,15 @@ plugins {
 
     // this allows AutoValue to work with Intellij
     id 'org.inferred.processors' version '1.2.18'
+
+    // provides access to a database versioning tool.
+    id "org.flywaydb.flyway" version "5.2.4"
+}
+
+flyway {
+    url = 'jdbc:postgresql://localhost:5432/library'
+    driver = 'org.postgresql.Driver'
+    user = "brk"
 }
 
 repositories {
@@ -38,6 +47,11 @@ dependencies {
     annotationProcessor "com.google.auto.value:auto-value:1.6.2"
 
     compile group: 'me.gosimple', name: 'nbvcxz', version: '1.4.2'
+
+    // gives us a driver to connect to postgresql
+    // https://mvnrepository.com/artifact/org.postgresql/postgresql
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
+
 }
 
 // configure jetty to run on port 8888 when we run "./gradlew appRun"
