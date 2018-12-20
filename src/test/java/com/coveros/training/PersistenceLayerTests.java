@@ -16,6 +16,11 @@ import java.util.Properties;
  */
 public class PersistenceLayerTests {
 
+    // TODO: come up for more sophisticated method to specify directory than absolute path.
+    private static final String RESTORE_SCRIPTS_PATH = "C:\\Users\\byron\\demo\\db_sample_files\\";
+    // TODO: how to make path to pg_restore more sophisticated?  Should each dev need to alter this?
+    private static final String PATH_TO_PG_RESTORE = "C:\\Program Files\\PostgreSQL\\10\\bin\\pg_restore.exe";
+
     private Connection createConnection() {
         String url = "jdbc:postgresql://localhost/training";
         Properties props = new Properties();
@@ -29,7 +34,7 @@ public class PersistenceLayerTests {
         }
         return conn;
     }
-    
+
     /**
      * assert that there is a way to store a borrower
      * in a database.  We don't actually care how this happens,
@@ -38,7 +43,7 @@ public class PersistenceLayerTests {
      */
     @Test
     public void testShouldSaveBorrowerToDatabase() {
-        setDatabaseStateEmpty();
+        setDatabaseState("sample_db_v1.dump");
         final Connection connection = createConnection();
         PersistenceLayer pl = new PersistenceLayer(connection);
 
@@ -47,16 +52,27 @@ public class PersistenceLayerTests {
         Assert.assertEquals(1, id);
     }
 
+    @Test
+    public void testShouldUupdateBorrowerToDatabase() {
+        setDatabaseState("one_person_in_table_already_v1.dump");
+        final Connection connection = createConnection();
+        PersistenceLayer pl = new PersistenceLayer(connection);
+
+        pl.updateBorrower(1, "bob");
+
+        String name = pl.getBorrowerName(1);
+        Assert.assertEquals("bob", name);
+    }
+
     /**
      * use a "restore" command to set the database into a state
      * of empty tables.  This operation must happen very quickly.
      */
-    private void setDatabaseStateEmpty() {
+    private void setDatabaseState(String restoreScriptName) {
         Runtime r = Runtime.getRuntime();
         Process p;
         String[] cmd = {
-                // TODO: how to make path to pg_restore more sophisticated?  Should each dev need to alter this?
-                "C:\\Program Files\\PostgreSQL\\10\\bin\\pg_restore.exe",
+                PATH_TO_PG_RESTORE,
                 "--host", "localhost",
                 "--port", "5432",
                 "--username", "postgres",
@@ -64,12 +80,13 @@ public class PersistenceLayerTests {
                 "--role", "postgres",
                 "--no-password",
                 "--clean",  // necessary to enable running again and again without problems.
-                // TODO: come up for more sophisticated method to specify directory than absolute path.
-                "C:\\Users\\byron\\demo\\db_sample_files\\sample_db_v1.dump"
+                RESTORE_SCRIPTS_PATH + restoreScriptName
         };
         try {
             p = r.exec(cmd);
-        } catch (IOException e) {
+            // following command is necessary to cause the system to wait until the command is done.
+            p.waitFor();
+        } catch (Exception e) {
             // stop the world if this breaks, and fix it.
             e.printStackTrace();
         }
