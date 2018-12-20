@@ -19,6 +19,7 @@ flyway {
     driver = 'org.postgresql.Driver'
     user = "postgres"
     password = "postgres"
+    schemas = ['administrative', 'library', 'auth']
 }
 
 repositories {
