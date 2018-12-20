@@ -17,15 +17,15 @@ public class PersistenceLayerTests {
 
     private static final String RESTORE_SCRIPTS_PATH = "C:\\Users\\byron\\demo\\db_sample_files\\";
     private static final String PATH_TO_PG_RESTORE = "C:\\Program Files\\PostgreSQL\\10\\bin\\pg_restore.exe";
+    private static final String DATABASE_URL = "jdbc:postgresql://localhost/training";
 
     private Connection createConnection() {
-        String url = "jdbc:postgresql://localhost/training";
         Properties props = new Properties();
         props.setProperty("user","postgres");
         props.setProperty("password","postgres");
         Connection conn;
         try {
-            conn = DriverManager.getConnection(url, props);
+            conn = DriverManager.getConnection(DATABASE_URL, props);
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
