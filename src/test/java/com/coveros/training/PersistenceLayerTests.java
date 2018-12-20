@@ -29,6 +29,7 @@ public class PersistenceLayerTests {
         }
         return conn;
     }
+    
     /**
      * assert that there is a way to store a borrower
      * in a database.  We don't actually care how this happens,
@@ -54,6 +55,7 @@ public class PersistenceLayerTests {
         Runtime r = Runtime.getRuntime();
         Process p;
         String[] cmd = {
+                // TODO: how to make path to pg_restore more sophisticated?  Should each dev need to alter this?
                 "C:\\Program Files\\PostgreSQL\\10\\bin\\pg_restore.exe",
                 "--host", "localhost",
                 "--port", "5432",
@@ -62,6 +64,7 @@ public class PersistenceLayerTests {
                 "--role", "postgres",
                 "--no-password",
                 "--clean",  // necessary to enable running again and again without problems.
+                // TODO: come up for more sophisticated method to specify directory than absolute path.
                 "C:\\Users\\byron\\demo\\db_sample_files\\sample_db_v1.dump"
         };
         try {
