@@ -230,6 +230,8 @@ it easier to access.  Still in the psql client, run this command:
 
   postgres=# CREATE ROLE brk WITH SUPERUSER LOGIN;
   CREATE ROLE
+  
+View your new role by typing \dg
 
 Log out of psql by running typing \q and pressing enter.
 
@@ -246,7 +248,19 @@ You should see something like this:
 
   postgres=#
 
-Now we can modify our code to access postgres easily.  
+One last thing.  We'll modify the Postgresql configuration file so it trusts everyone implicitly, making it less secure but easier to work with.  Yet again, something you wouldn't want to do on a production system!  But we're not working with a production system, we want things to be easy.
+
+In the directory where the data files are kept is a file called pg_hba.conf.  On my Centos7 Linux box I find it in /var/lib/pgsql/10/data.  On my Windows box it is at C:\Program Files\PostgreSQL\10\data.
+
+Modify this file.  Towards the end of the file you will see some lines like this:
+
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            md5
+# IPv6 local connections:
+host    all             all             ::1/128                 ident
+
+Change the values in the column METHOD to "trust" instead of "md5" or "ident".  That will make the database trust whoever accesses it locally, implicitly and completely.  This means you don't need to provide passwords when running commands anymore, though you still need to have roles within the database.
 
 
 // vim: ai:tw=70
