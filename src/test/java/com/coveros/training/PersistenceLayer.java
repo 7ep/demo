@@ -13,7 +13,7 @@ public class PersistenceLayer {
     public long saveNewBorrower(String borrowerName) {
         try (PreparedStatement st =
                      connection.prepareStatement(
-                             "INSERT INTO Person (name) VALUES (?);",
+                             "INSERT INTO library.Person (name) VALUES (?);",
                              Statement.RETURN_GENERATED_KEYS) ) {
             st.setString(1, borrowerName);
             st.executeUpdate();

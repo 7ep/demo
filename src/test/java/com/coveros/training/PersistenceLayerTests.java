@@ -3,6 +3,7 @@ package com.coveros.training;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,7 +17,7 @@ import java.util.Properties;
 public class PersistenceLayerTests {
 
     private Connection createConnection() {
-        String url = "jdbc:postgresql://localhost/library";
+        String url = "jdbc:postgresql://localhost/training";
         Properties props = new Properties();
         props.setProperty("user","postgres");
         props.setProperty("password","postgres");
@@ -50,8 +51,28 @@ public class PersistenceLayerTests {
      * of empty tables.  This operation must happen very quickly.
      */
     private void setDatabaseStateEmpty() {
-      // TODO
+        Runtime r = Runtime.getRuntime();
+        Process p;
+        String[] cmd = {
+                "C:\\Program Files\\PostgreSQL\\10\\bin\\pg_restore.exe",
+                "--host", "localhost",
+                "--port", "5432",
+                "--username", "postgres",
+                "--dbname", "training",
+                "--role", "postgres",
+                "--no-password",
+                "--clean",  // necessary to enable running again and again without problems.
+                "C:\\Users\\byron\\demo\\db_sample_files\\sample_db_v1.dump"
+        };
+        try {
+            p = r.exec(cmd);
+        } catch (IOException e) {
+            // stop the world if this breaks, and fix it.
+            e.printStackTrace();
+        }
     }
+
+
 
 
 }
