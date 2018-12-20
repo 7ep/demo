@@ -262,5 +262,13 @@ host    all             all             ::1/128                 ident
 
 Change the values in the column METHOD to "trust" instead of "md5" or "ident".  That will make the database trust whoever accesses it locally, implicitly and completely.  This means you don't need to provide passwords when running commands anymore, though you still need to have roles within the database.
 
+In order to create backups of the database, run this command:
+
+ (make sure to come up with an apt DESCRIPTION and a VERSION for this command)
+
+pg_dump -Fc training > <DESCRIPTION>_<VERSION>.dump
+
+The restore command is exemplified in our tests.  See
+
 
 // vim: ai:tw=70
