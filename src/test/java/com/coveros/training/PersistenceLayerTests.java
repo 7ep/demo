@@ -3,7 +3,6 @@ package com.coveros.training;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,9 +15,7 @@ import java.util.Properties;
  */
 public class PersistenceLayerTests {
 
-    // TODO: come up for more sophisticated method to specify directory than absolute path.
     private static final String RESTORE_SCRIPTS_PATH = "C:\\Users\\byron\\demo\\db_sample_files\\";
-    // TODO: how to make path to pg_restore more sophisticated?  Should each dev need to alter this?
     private static final String PATH_TO_PG_RESTORE = "C:\\Program Files\\PostgreSQL\\10\\bin\\pg_restore.exe";
 
     private Connection createConnection() {
