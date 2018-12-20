@@ -1,4 +1,4 @@
 create table PERSON (
-    ID int not null,
-    NAME varchar(100) not null
+    id serial PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
 );

@@ -17,7 +17,8 @@ plugins {
 flyway {
     url = 'jdbc:postgresql://localhost:5432/library'
     driver = 'org.postgresql.Driver'
-    user = "brk"
+    user = "postgres"
+    password = "postgres"
 }
 
 repositories {
