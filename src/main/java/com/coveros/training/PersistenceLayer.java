@@ -1,6 +1,9 @@
 package com.coveros.training;
 
 import java.sql.*;
+import java.util.Properties;
+
+import static com.coveros.training.Constants.DATABASE_URL;
 
 class PersistenceLayer {
 
@@ -8,6 +11,19 @@ class PersistenceLayer {
 
     PersistenceLayer(Connection connection) {
         this.connection = connection;
+    }
+
+    static Connection createConnection() {
+        Properties props = new Properties();
+        props.setProperty("user","postgres");
+        props.setProperty("password","postgres");
+        Connection conn;
+        try {
+            conn = DriverManager.getConnection(DATABASE_URL, props);
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        return conn;
     }
 
     /**
@@ -69,6 +85,29 @@ class PersistenceLayer {
                 return resultSet.getString(1);
             } else {
                 throw new RuntimeException("Failed to get Borrower name");
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /**
+     * Searches for a borrower by name.  Returns full details
+     * if found.  null if not found.
+     * @param borrowerName the name of a borrower.
+     */
+    BorrowerData searchBorrowerDataByName(String borrowerName) {
+        try (PreparedStatement st =
+                     connection.prepareStatement(
+                             "SELECT id, name FROM library.Person WHERE name = ?;") ) {
+            st.setString(1, borrowerName);
+            final ResultSet resultSet = st.executeQuery();
+            if (resultSet.next()) {
+                long id = resultSet.getLong(1);
+                String name = resultSet.getString(2);
+                return BorrowerData.create(id, name);
+            } else {
+                return null;
             }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Connection;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -24,10 +25,11 @@ public class LibraryLendServlet extends HttpServlet {
         final OffsetDateTime now = Instant.now().atOffset(ZoneOffset.UTC);
         request.setAttribute("date", now.toString());
 
+        final Connection connection = PersistenceLayer.createConnection();
+        final PersistenceLayer persistenceLayer = new PersistenceLayer(connection);
         final DatabaseUtils booksDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_BOOKS_DATABASE_NAME);
         final DatabaseUtils lendingDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_LENDING_DATABASE);
-        final DatabaseUtils borrowersDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_BORROWER_DATABASE_NAME);
-        LibraryUtils libraryUtils = new LibraryUtils(borrowersDb, booksDb, lendingDb);
+        LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer, booksDb, lendingDb);
 
         final LibraryActionResults libraryActionResults = libraryUtils.lendBook(book, borrower, now);
 

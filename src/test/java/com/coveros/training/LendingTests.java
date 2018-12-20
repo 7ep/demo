@@ -1,7 +1,9 @@
 package com.coveros.training;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -15,14 +17,28 @@ public class LendingTests {
     private final static String BORROWER_A = "borrower_a";
     private final static String BORROWER_B = "borrower_b";
     private final static String BOOK = "Some book";
+    private final static BorrowerData SAMPLE_BORROWER = BorrowerData.create(1, "sample_borrower");
+    private PersistenceLayer mockPersistenceLayer;
+    private LibraryUtils libraryUtils;
 
+    /**
+     * Take care of some stuff before we can get into the interesting work.
+     *
+     * We'll create a mock PersistenceLayer object that we can modify as need
+     * be for our tests.  We'll also initialize our other "databases"
+     */
+    @Before
+    public void init() {
+        mockPersistenceLayer = Mockito.mock(PersistenceLayer.class);
+        libraryUtils = initializeLibraryUtils(mockPersistenceLayer);
+    }
 
     /**
      * If a borrower and a book are registered, a user should be able to borrow it.
      */
     @Test
     public void shouldLendToUser() {
-        final LibraryUtils libraryUtils = initializeLibraryUtils();
+        mockThatBorrowerExists();
         libraryUtils.registerBorrower(BORROWER_A);
         libraryUtils.registerBook(BOOK);
         final LibraryActionResults libraryActionResults = libraryUtils.lendBook(BOOK, BORROWER_A, BORROW_DATE);
@@ -34,7 +50,6 @@ public class LendingTests {
      */
     @Test
     public void shouldRegisterBorrower() {
-        final LibraryUtils libraryUtils = initializeLibraryUtils();
         final LibraryActionResults result = libraryUtils.registerBorrower(BORROWER_A);
         Assert.assertEquals(LibraryActionResults.SUCCESS, result);
     }
@@ -44,7 +59,6 @@ public class LendingTests {
      */
     @Test
     public void shouldRegisterBook() {
-        final LibraryUtils libraryUtils = initializeLibraryUtils();
         final LibraryActionResults result = libraryUtils.registerBook(BOOK);
         Assert.assertEquals(LibraryActionResults.SUCCESS, result);
     }
@@ -55,7 +69,6 @@ public class LendingTests {
      */
     @Test
     public void testShouldNotLendIfBorrowerNotRegistered() {
-        final LibraryUtils libraryUtils = initializeLibraryUtils();
         libraryUtils.registerBook(BOOK);
         // note that we aren't registering the borrower here
         final LibraryActionResults result = libraryUtils.lendBook(BOOK, BORROWER_A, BORROW_DATE);
@@ -69,7 +82,6 @@ public class LendingTests {
      */
     @Test
     public void testShouldNotLendIfBookNotRegistered() {
-        final LibraryUtils libraryUtils = initializeLibraryUtils();
         libraryUtils.registerBorrower(BORROWER_A);
         // note that we aren't registering the book here
         final LibraryActionResults result = libraryUtils.lendBook(BOOK, BORROWER_A, BORROW_DATE);
@@ -81,8 +93,7 @@ public class LendingTests {
      */
     @Test
     public void shouldNotLendIfCurrentlyBorrowed() {
-        final LibraryUtils libraryUtils = initializeLibraryUtils();
-        libraryUtils.registerBorrower(BORROWER_A);
+        mockThatBorrowerExists();
         libraryUtils.registerBorrower(BORROWER_B);
         libraryUtils.registerBook(BOOK);
 
@@ -96,18 +107,27 @@ public class LendingTests {
     }
 
     /**
+     * Mock out the call to search for a borrower - cause the system
+     * to determine that we did indeed find a borrower.
+     */
+    private void mockThatBorrowerExists() {
+        Mockito
+                .when(mockPersistenceLayer.searchBorrowerDataByName(Mockito.any()))
+                .thenReturn(SAMPLE_BORROWER);
+    }
+
+    /**
      * Set up the databases, clear them, initialize the Library Utility with them.
      */
-    private LibraryUtils initializeLibraryUtils() {
-        DatabaseUtils borrowersDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_BORROWER_DATABASE_NAME);
+    private LibraryUtils initializeLibraryUtils(PersistenceLayer mockPersistenceLayer) {
+        PersistenceLayerTests.setDatabaseState("sample_db_v1.dump");
         DatabaseUtils lendingDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_LENDING_DATABASE);
         DatabaseUtils booksDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_BOOKS_DATABASE_NAME);
 
-        borrowersDb.clearDatabaseContents();
         lendingDb.clearDatabaseContents();
         booksDb.clearDatabaseContents();
 
-        return new LibraryUtils(borrowersDb, booksDb, lendingDb);
+        return new LibraryUtils(mockPersistenceLayer, booksDb, lendingDb);
     }
 
 }

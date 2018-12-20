@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Connection;
 
 @WebServlet(name = "LibraryRegisterBorrowerServlet", urlPatterns = {"registerborrower"}, loadOnStartup = 1)
 public class LibraryRegisterBorrowerServlet extends HttpServlet {
@@ -16,8 +17,9 @@ public class LibraryRegisterBorrowerServlet extends HttpServlet {
         final String borrower = request.getParameter("borrower");
         request.setAttribute("borrower", borrower);
 
-        final DatabaseUtils borrowersDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_BORROWER_DATABASE_NAME);
-        LibraryUtils libraryUtils = new LibraryUtils(borrowersDb, null, null);
+        final Connection connection = PersistenceLayer.createConnection();
+        final PersistenceLayer persistenceLayer = new PersistenceLayer(connection);
+        LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer, null, null);
 
         final LibraryActionResults libraryActionResults = libraryUtils.registerBorrower(borrower);
 
