@@ -10,6 +10,11 @@ class PersistenceLayer {
         this.connection = connection;
     }
 
+    /**
+     * This command saves a borrower to our table and generates a new id for them.
+     * @param borrowerName the name of the borrower.
+     * @return the generated id
+     */
     long saveNewBorrower(String borrowerName) {
         try (PreparedStatement st =
                      connection.prepareStatement(
@@ -30,6 +35,12 @@ class PersistenceLayer {
         }
     }
 
+    /**
+     * If we already have a borrower, this command allows us to change
+     * their values (except for their id)
+     * @param id the id of a borrower (a constant)
+     * @param borrowerName the name of a borrower, which we can change.
+     */
     void updateBorrower(long id, String borrowerName) {
         try (PreparedStatement st =
                      connection.prepareStatement(
@@ -43,6 +54,11 @@ class PersistenceLayer {
     }
 
 
+    /**
+     * Given the id for a borrower, this command returns their name.
+     * @param id a borrower's id.
+     * @return the borrower's name.
+     */
     String getBorrowerName(int id) {
         try (PreparedStatement st =
                      connection.prepareStatement(
