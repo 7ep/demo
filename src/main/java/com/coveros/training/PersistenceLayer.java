@@ -32,6 +32,7 @@ class PersistenceLayer {
      * @return the generated id
      */
     long saveNewBorrower(String borrowerName) {
+        CheckUtils.checkStringNotNull(borrowerName);
         try (PreparedStatement st =
                      connection.prepareStatement(
                              "INSERT INTO library.Person (name) VALUES (?);",
@@ -42,6 +43,7 @@ class PersistenceLayer {
             long newId;
             if (generatedKeys.next()) {
                 newId = generatedKeys.getLong(1);
+                assert(newId > 0);
             } else {
                 throw new RuntimeException("failed to save a new Borrower");
             }
@@ -58,6 +60,8 @@ class PersistenceLayer {
      * @param borrowerName the name of a borrower, which we can change.
      */
     void updateBorrower(long id, String borrowerName) {
+        CheckUtils.checkStringNotNull(borrowerName);
+        CheckUtils.checkIntParamNotNull(id);
         try (PreparedStatement st =
                      connection.prepareStatement(
                              "UPDATE library.Person SET name = ? WHERE id = ?;") ) {
@@ -69,13 +73,13 @@ class PersistenceLayer {
         }
     }
 
-
     /**
      * Given the id for a borrower, this command returns their name.
      * @param id a borrower's id.
      * @return the borrower's name.
      */
     String getBorrowerName(int id) {
+        CheckUtils.checkIntParamNotNull(id);
         try (PreparedStatement st =
                      connection.prepareStatement(
                              "SELECT name FROM library.Person WHERE id = ?;") ) {
@@ -97,6 +101,7 @@ class PersistenceLayer {
      * @param borrowerName the name of a borrower.
      */
     BorrowerData searchBorrowerDataByName(String borrowerName) {
+        CheckUtils.checkStringNotNull(borrowerName);
         try (PreparedStatement st =
                      connection.prepareStatement(
                              "SELECT id, name FROM library.Person WHERE name = ?;") ) {
