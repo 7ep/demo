@@ -37,7 +37,7 @@ public class RegisterServlet extends HttpServlet {
         }
     }
 
-    protected RegistrationResult processRegistration(String username, String password) {
+    RegistrationResult processRegistration(String username, String password) {
         final DatabaseUtils authDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.AUTH_DATABASE_NAME);
         final RegistrationUtils registrationUtils = new RegistrationUtils(authDb);
         return registrationUtils.processRegistration(username, password);

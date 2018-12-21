@@ -1,3 +1,13 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.jaredsburrows:gradle-checker-framework-plugin:0.2.2'
+    }
+}
+
 plugins {
     id 'war'
 
@@ -12,15 +22,12 @@ plugins {
 
     // provides access to a database versioning tool.
     id "org.flywaydb.flyway" version "5.2.4"
+
 }
 
-flyway {
-    url = 'jdbc:postgresql://localhost:5432/training'
-    driver = 'org.postgresql.Driver'
-    user = "postgres"
-    password = "postgres"
-    schemas = ['administrative', 'library', 'auth']
-}
+// the checker framework adds a bunch of type annotations that
+// can insure safer coding practices.  See https://checkerframework.org/manual/
+apply plugin: 'com.jaredsburrows.checkerframework'
 
 repositories {
     jcenter()
@@ -30,7 +37,7 @@ repositories {
 dependencies {
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 
-    // the cucumber stuff we'll need.
+    // the cucumber stuff we'll need.  Cucumber is a BDD tool.
     testCompile 'io.cucumber:cucumber-java:3.0.2'
     testCompile 'io.cucumber:cucumber-junit:3.0.2'
 
@@ -40,19 +47,24 @@ dependencies {
     // mockito, for mocking objects in our unit tests
     testCompile 'org.mockito:mockito-core:2.7.19'
 
-    // a tool to help assure that equals and hashcode were implemented correctly.
-    testCompile group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.0'
-
-    // autoValue is a cool tool that makes it safe and easy to write
-    // value types.  See https://github.com/google/auto/tree/master/value
-    compile "com.google.auto.value:auto-value-annotations:1.6.2"
-    annotationProcessor "com.google.auto.value:auto-value:1.6.2"
-
+    // nbvcxz is a tool to determine how robust a password is.  See
+    // https://github.com/GoSimpleLLC/nbvcxz
     compile group: 'me.gosimple', name: 'nbvcxz', version: '1.4.2'
 
     // gives us a driver to connect to postgresql
     // https://mvnrepository.com/artifact/org.postgresql/postgresql
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
+
+    // the glorious equalsverifier.  This is a tool that tests the contract
+    // for equals and hashcode are met.  It's very strict.  Because it's very
+    // strict, it forces us to create very safe, very solid code.
+    // https://mvnrepository.com/artifact/nl.jqno.equalsverifier/equalsverifier
+    testCompile group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.0.3'
+
+    // The commons-lang3 package has some utility classes that are very helpful
+    // for those interested in safer coding.  Particularly, the equalsbuilder and hashcodebuilder.
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
 
 }
 
@@ -85,4 +97,19 @@ cucumberReports {
 // this way, when we run test or build we get all our cucumber too.
 test.finalizedBy(cucumber)
 cucumber.finalizedBy(generateCucumberReports)
+
+flyway {
+    url = 'jdbc:postgresql://localhost:5432/training'
+    driver = 'org.postgresql.Driver'
+    user = "postgres"
+    password = "postgres"
+    schemas = ['administrative', 'library', 'auth']
+}
+
+checkerFramework {
+    checkers = [
+            'org.checkerframework.checker.units.UnitsChecker',
+            'org.checkerframework.checker.nullness.NullnessChecker'
+    ]
+}
 

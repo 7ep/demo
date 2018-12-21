@@ -6,5 +6,6 @@ public enum LibraryActionResults {
     BOOK_NOT_REGISTERED,
     BORROWER_NOT_REGISTERED,
     BOOK_CHECKED_OUT, // someone already has this book checked out.
-    SUCCESS
+    SUCCESS,
+    NULL // may be used when initializing a variable of this type
 }

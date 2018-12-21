@@ -2,7 +2,7 @@ package com.coveros.training;
 
 import java.time.OffsetDateTime;
 
-public class LibraryUtils {
+class LibraryUtils {
 
     private final PersistenceLayer persistence;
     private final DatabaseUtils booksDb;
@@ -14,17 +14,22 @@ public class LibraryUtils {
         this.lendingDb = lendingDb;
     }
 
+    static LibraryUtils createEmpty() {
+        return new LibraryUtils(new PersistenceLayer(new EmptyConnection()), DatabaseUtils.createEmpty(), DatabaseUtils.createEmpty());
+    }
+
     LibraryActionResults lendBook(String book, String borrower, OffsetDateTime borrowTime) {
-        if (booksDb.searchDatabaseForKey(book) == null) return LibraryActionResults.BOOK_NOT_REGISTERED;
-        if (persistence.searchBorrowerDataByName(borrower) == null) return LibraryActionResults.BORROWER_NOT_REGISTERED;
-        if (lendingDb.searchDatabaseForKey(book) != null) return LibraryActionResults.BOOK_CHECKED_OUT;
+        if (booksDb.searchDatabaseForKey(book).isEmpty()) return LibraryActionResults.BOOK_NOT_REGISTERED;
+        if (persistence.searchBorrowerDataByName(borrower).equals(BorrowerData.createEmpty())) return LibraryActionResults.BORROWER_NOT_REGISTERED;
+        if (StringUtils.isNotEmpty(lendingDb.searchDatabaseForKey(book))) return LibraryActionResults.BOOK_CHECKED_OUT;
         lendingDb.saveTextToFile(book + " " + borrower + " " + borrowTime);
         return LibraryActionResults.SUCCESS;
     }
 
     LibraryActionResults registerBorrower(String borrower) {
         final BorrowerData borrowerDetails = persistence.searchBorrowerDataByName(borrower);
-        if (borrowerDetails != null) return LibraryActionResults.ALREADY_REGISTERED_BORROWER;
+        final boolean borrowerWasFound = !borrowerDetails.equals(BorrowerData.createEmpty());
+        if (borrowerWasFound) return LibraryActionResults.ALREADY_REGISTERED_BORROWER;
 
         persistence.saveNewBorrower(borrower);
         return LibraryActionResults.SUCCESS;
@@ -32,13 +37,10 @@ public class LibraryUtils {
 
     LibraryActionResults registerBook(String book) {
         final String bookDetails = booksDb.searchDatabaseForKey(book);
-        if (bookDetails != null) return LibraryActionResults.ALREADY_REGISTERED_BOOK;
+        if (! bookDetails.isEmpty()) return LibraryActionResults.ALREADY_REGISTERED_BOOK;
 
         booksDb.saveTextToFile(book);
         return LibraryActionResults.SUCCESS;
     }
 
-    public String queryBookInfo(String myBook) {
-        return lendingDb.searchDatabaseForKey(myBook);
-    }
 }

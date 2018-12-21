@@ -17,9 +17,11 @@ public class LibraryRegisterBorrowerServlet extends HttpServlet {
         final String borrower = request.getParameter("borrower");
         request.setAttribute("borrower", borrower);
 
+        final DatabaseUtils booksDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_BOOKS_DATABASE_NAME);
+        final DatabaseUtils lendingDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_LENDING_DATABASE);
         final Connection connection = PersistenceLayer.createConnection();
         final PersistenceLayer persistenceLayer = new PersistenceLayer(connection);
-        LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer, null, null);
+        LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer, booksDb, lendingDb);
 
         final LibraryActionResults libraryActionResults = libraryUtils.registerBorrower(borrower);
 

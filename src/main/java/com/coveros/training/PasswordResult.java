@@ -1,18 +1,31 @@
 package com.coveros.training;
 
-import com.google.auto.value.AutoValue;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-@AutoValue
-abstract class PasswordResult {
+final class PasswordResult {
 
-    public static final String BASIC_PASSWORD_CHECKS_FAILED = "BASIC_PASSWORD_CHECKS_FAILED";
+    final PasswordResultEnums status;
+    private final Double entropy;
+    final String timeToCrackOffline;
+    private final String timeToCrackOnline;
+    private final String message;
 
-    static PasswordResult create(PasswordResultEnums status,
+    private static final String BASIC_PASSWORD_CHECKS_FAILED = "BASIC_PASSWORD_CHECKS_FAILED";
+
+    PasswordResult(PasswordResultEnums status,
                                  Double entropy,
                                  String timeToCrackOffline,
                                  String timeToCrackOnline,
                                  String message) {
-        return new AutoValue_PasswordResult(status, entropy, timeToCrackOffline, timeToCrackOnline, message);
+
+        this.status = status;
+        this.entropy = entropy;
+        this.timeToCrackOffline = timeToCrackOffline;
+        this.timeToCrackOnline = timeToCrackOnline;
+        this.message = message;
     }
 
     /**
@@ -20,12 +33,48 @@ abstract class PasswordResult {
      * the password field fail.  Like passing an empty string, for example.
      */
     static PasswordResult createDefault(PasswordResultEnums resultStatus) {
-        return create(resultStatus, 0d, "", "",  BASIC_PASSWORD_CHECKS_FAILED);
+        return new PasswordResult(resultStatus, 0d, "", "",  BASIC_PASSWORD_CHECKS_FAILED);
     }
 
-    abstract PasswordResultEnums status();
-    abstract Double entropy();
-    abstract String timeToCrackOffline();
-    abstract String timeToCrackOnline();
-    abstract String message();
+    /**
+     * Return this to represent an empty result.  Used primarily
+     * when we are initializing a variable and don't want to use null.
+     */
+    static PasswordResult createEmpty() {
+        return new PasswordResult(PasswordResultEnums.NULL, 0d, "", "",  "");
+    }
+
+
+    public final boolean equals(@Nullable Object obj) {
+        if (obj == null) { return false; }
+        if (obj == this) { return true; }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        PasswordResult rhs = (PasswordResult) obj;
+        return new EqualsBuilder()
+                .append(status, rhs.status)
+                .append(entropy, rhs.entropy)
+                .append(timeToCrackOffline, rhs.timeToCrackOffline)
+                .append(timeToCrackOnline, rhs.timeToCrackOnline)
+                .append(message, rhs.message)
+                .isEquals();
+    }
+
+    public final int hashCode() {
+        // you pick a hard-coded, randomly chosen, non-zero, odd number
+        // ideally different for each class
+        return new HashCodeBuilder(15, 33).
+                append(status).
+                append(entropy).
+                append(timeToCrackOffline).
+                append(timeToCrackOnline).
+                append(message).
+                toHashCode();
+    }
+
+    public final String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
 }

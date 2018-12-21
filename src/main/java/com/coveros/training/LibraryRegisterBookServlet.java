@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Connection;
 
 @WebServlet(name = "LibraryRegisterBookServlet", urlPatterns = {"registerbook"}, loadOnStartup = 1)
 public class LibraryRegisterBookServlet extends HttpServlet {
@@ -16,7 +17,9 @@ public class LibraryRegisterBookServlet extends HttpServlet {
         request.setAttribute("book", book);
 
         final DatabaseUtils booksDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_BOOKS_DATABASE_NAME);
-        LibraryUtils libraryUtils = new LibraryUtils(null, booksDb, null);
+        final DatabaseUtils lendingDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_LENDING_DATABASE);
+        final PersistenceLayer persistenceLayer = new PersistenceLayer(new EmptyConnection());
+        LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer, booksDb, lendingDb);
 
         final LibraryActionResults libraryActionResults = libraryUtils.registerBook(book);
 

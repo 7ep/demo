@@ -10,6 +10,8 @@ import java.time.Month;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
+import static org.mockito.Mockito.when;
+
 public class LendingTests {
 
 
@@ -17,9 +19,9 @@ public class LendingTests {
     private final static String BORROWER_A = "borrower_a";
     private final static String BORROWER_B = "borrower_b";
     private final static String BOOK = "Some book";
-    private final static BorrowerData SAMPLE_BORROWER = BorrowerData.create(1, "sample_borrower");
-    private PersistenceLayer mockPersistenceLayer;
-    private LibraryUtils libraryUtils;
+    private final static BorrowerData SAMPLE_BORROWER = new BorrowerData(1, "sample_borrower");
+    private PersistenceLayer mockPersistenceLayer = Mockito.mock(PersistenceLayer.class);
+    private LibraryUtils libraryUtils = LibraryUtils.createEmpty();
 
     /**
      * Take care of some stuff before we can get into the interesting work.
@@ -39,7 +41,6 @@ public class LendingTests {
     @Test
     public void shouldLendToUser() {
         mockThatBorrowerExists();
-        libraryUtils.registerBorrower(BORROWER_A);
         libraryUtils.registerBook(BOOK);
         final LibraryActionResults libraryActionResults = libraryUtils.lendBook(BOOK, BORROWER_A, BORROW_DATE);
         Assert.assertEquals(LibraryActionResults.SUCCESS, libraryActionResults);
@@ -50,8 +51,13 @@ public class LendingTests {
      */
     @Test
     public void shouldRegisterBorrower() {
+        mockBorrowerNotRegistered(mockPersistenceLayer);
         final LibraryActionResults result = libraryUtils.registerBorrower(BORROWER_A);
         Assert.assertEquals(LibraryActionResults.SUCCESS, result);
+    }
+
+    private static void mockBorrowerNotRegistered(PersistenceLayer mockPersistenceLayer) {
+        when(mockPersistenceLayer.searchBorrowerDataByName(BORROWER_A)).thenReturn(BorrowerData.createEmpty());
     }
 
     /**
@@ -70,6 +76,7 @@ public class LendingTests {
     @Test
     public void testShouldNotLendIfBorrowerNotRegistered() {
         libraryUtils.registerBook(BOOK);
+        mockBorrowerNotRegistered(mockPersistenceLayer);
         // note that we aren't registering the borrower here
         final LibraryActionResults result = libraryUtils.lendBook(BOOK, BORROWER_A, BORROW_DATE);
         Assert.assertEquals(LibraryActionResults.BORROWER_NOT_REGISTERED, result);
@@ -82,7 +89,7 @@ public class LendingTests {
      */
     @Test
     public void testShouldNotLendIfBookNotRegistered() {
-        libraryUtils.registerBorrower(BORROWER_A);
+        mockThatBorrowerExists();
         // note that we aren't registering the book here
         final LibraryActionResults result = libraryUtils.lendBook(BOOK, BORROWER_A, BORROW_DATE);
         Assert.assertEquals(LibraryActionResults.BOOK_NOT_REGISTERED, result);
@@ -94,7 +101,6 @@ public class LendingTests {
     @Test
     public void shouldNotLendIfCurrentlyBorrowed() {
         mockThatBorrowerExists();
-        libraryUtils.registerBorrower(BORROWER_B);
         libraryUtils.registerBook(BOOK);
 
         // Alice can check it out...
@@ -111,16 +117,14 @@ public class LendingTests {
      * to determine that we did indeed find a borrower.
      */
     private void mockThatBorrowerExists() {
-        Mockito
-                .when(mockPersistenceLayer.searchBorrowerDataByName(Mockito.any()))
-                .thenReturn(SAMPLE_BORROWER);
+        when(mockPersistenceLayer.searchBorrowerDataByName(Mockito.any()))
+                .thenReturn(LendingTests.SAMPLE_BORROWER);
     }
 
     /**
      * Set up the databases, clear them, initialize the Library Utility with them.
      */
     private LibraryUtils initializeLibraryUtils(PersistenceLayer mockPersistenceLayer) {
-        PersistenceLayerTests.setDatabaseState("sample_db_v1.dump");
         DatabaseUtils lendingDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_LENDING_DATABASE);
         DatabaseUtils booksDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_BOOKS_DATABASE_NAME);
 

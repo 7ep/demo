@@ -6,15 +6,10 @@ package com.coveros.training;
  */
 class CheckUtils {
 
-    static void checkIntParamNotNull(long parameter) {
+    static void checkIntParamPositive(long parameter) {
         if (parameter <= 0) {
             throw new IllegalArgumentException("int value must be 1 or above.");
         }
     }
 
-    static void checkStringNotNull(String parameter) {
-        if (StringUtils.isNullOrEmpty(parameter)) {
-            throw new IllegalArgumentException("String value cannot be null or empty");
-        }
-    }
 }

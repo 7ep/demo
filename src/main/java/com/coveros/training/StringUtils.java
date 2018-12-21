@@ -1,16 +1,25 @@
 package com.coveros.training;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Some simple helper methods for Strings.
  */
 class StringUtils {
 
     /**
-     * Simply checks if the string is null or empty.
-     * @param s the string
-     * @return a boolean value for whether the String in question is null or empty (empty meaning size of 0)
+     * checks the String you pass in; if it's null, return an empty String.
+     * Otherwise, return the unchanged string.
      */
-    static boolean isNullOrEmpty(String s) {
-        return (s == null || s.isEmpty());
+    static String makeNotNullable(@Nullable String s) {
+        return s == null ? "" : s;
+    }
+
+    /**
+     * A simple helper method to avoid having a exclamation mark
+     * to represent "not"
+     */
+    static boolean isNotEmpty(String s) {
+        return !s.isEmpty();
     }
 }

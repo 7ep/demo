@@ -12,12 +12,12 @@ import static org.mockito.Mockito.*;
 
 public class RegisterServletTest {
 
-    public static final RegistrationResult EMPTY_USERNAME = RegistrationResult.create(false, RegistrationStatusEnums.EMPTY_USERNAME.toString());
-    public static final RegistrationResult SUCCESSFUL_REGISTRATION = RegistrationResult.create(true, RegistrationStatusEnums.SUCCESSFULLY_REGISTERED.toString());
-    private HttpServletRequest request;
-    private HttpServletResponse response;
-    private RequestDispatcher requestDispatcher;
-    private RegisterServlet registerServlet;
+    private static final RegistrationResult EMPTY_USERNAME = new RegistrationResult(false, RegistrationStatusEnums.EMPTY_USERNAME.toString());
+    private static final RegistrationResult SUCCESSFUL_REGISTRATION = new RegistrationResult(true, RegistrationStatusEnums.SUCCESSFULLY_REGISTERED.toString());
+    private HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+    private HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+    private RequestDispatcher requestDispatcher = Mockito.mock(RequestDispatcher.class);
+    private RegisterServlet registerServlet = Mockito.mock(RegisterServlet.class);
 
     @Before
     public void before() {

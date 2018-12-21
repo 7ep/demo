@@ -14,16 +14,13 @@ import static com.coveros.training.database_backup_constants.SAMPLE_DB_V1_DUMP;
 
 public class BookCheckOutStepDefs {
 
-    private String myBook;
-    private String myBorrower;
-    private OffsetDateTime borrowTime;
-    private OffsetDateTime jan_1st = OffsetDateTime.of(LocalDateTime.of(2018, Month.JANUARY, 1, 0, 0), ZoneOffset.UTC);
-    private DatabaseUtils borrowersDb;
-    private DatabaseUtils booksDb;
-    private DatabaseUtils lendingDb;
-    private LibraryUtils libraryUtils;
-    private OffsetDateTime Jan_2nd = OffsetDateTime.of(LocalDateTime.of(2018, Month.JANUARY, 2, 0, 0), ZoneOffset.UTC);
-    private LibraryActionResults libraryActionResults;
+    private String myBook = "";
+    private String myBorrower = "";
+    private final OffsetDateTime jan_1st = OffsetDateTime.of(LocalDateTime.of(2018, Month.JANUARY, 1, 0, 0), ZoneOffset.UTC);
+    private DatabaseUtils lendingDb = DatabaseUtils.createEmpty();
+    private LibraryUtils libraryUtils = LibraryUtils.createEmpty();
+    private final OffsetDateTime Jan_2nd = OffsetDateTime.of(LocalDateTime.of(2018, Month.JANUARY, 2, 0, 0), ZoneOffset.UTC);
+    private LibraryActionResults libraryActionResults = LibraryActionResults.NULL;
 
     /**
      * Set up the databases, clear them, initialize the Library Utility with them.
@@ -31,7 +28,7 @@ public class BookCheckOutStepDefs {
     private void initializeEmptyDatabaseAndUtility() {
         PersistenceLayerTests.setDatabaseState(SAMPLE_DB_V1_DUMP);
         lendingDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_LENDING_DATABASE);
-        booksDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_BOOKS_DATABASE_NAME);
+        DatabaseUtils booksDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_BOOKS_DATABASE_NAME);
 
         lendingDb.clearDatabaseContents();
         booksDb.clearDatabaseContents();
@@ -57,7 +54,7 @@ public class BookCheckOutStepDefs {
 
     @When("^they try to check out the book on \"([^\"]*)\"$")
     public void theyTryToCheckOutTheBookOn(String date) {
-        borrowTime = OffsetDateTime.of(LocalDate.parse(date, DateTimeFormatter.ofPattern("MMMM dd, yyyy")).atStartOfDay(), ZoneOffset.UTC);
+        OffsetDateTime borrowTime = OffsetDateTime.of(LocalDate.parse(date, DateTimeFormatter.ofPattern("MMMM dd, yyyy")).atStartOfDay(), ZoneOffset.UTC);
         libraryUtils.lendBook(myBook, myBorrower, borrowTime);
     }
 

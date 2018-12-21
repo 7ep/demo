@@ -1,23 +1,17 @@
 package com.coveros.training;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import io.cucumber.datatable.DataTable;
 import org.junit.Assert;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RegistrationStepDefs {
 
-    public static final RegistrationResult ALREADY_REGISTERED = RegistrationResult.create(false, RegistrationStatusEnums.ALREADY_REGISTERED.toString());
-    String myUsername;
-    RegistrationResult myRegistrationResult;
-    private RegistrationUtils registrationUtils;
-    private LoginUtils loginUtils;
-    private PasswordResult passwordResult;
+    private static final RegistrationResult ALREADY_REGISTERED = new RegistrationResult(false, RegistrationStatusEnums.ALREADY_REGISTERED.toString());
+    private String myUsername = "";
+    private RegistrationResult myRegistrationResult = RegistrationResult.createEmpty();
+    private RegistrationUtils registrationUtils = RegistrationUtils.createEmpty();
+    private PasswordResult passwordResult = PasswordResult.createEmpty();
 
     /**
      * create objects for registration and login, and clear the database.
@@ -26,11 +20,11 @@ public class RegistrationStepDefs {
         final DatabaseUtils authDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.AUTH_DATABASE_NAME);
         authDb.clearDatabaseContents();
         registrationUtils = new RegistrationUtils(authDb);
-        loginUtils = new LoginUtils(authDb);
+        LoginUtils loginUtils = new LoginUtils(authDb);
     }
 
     // a password used that will suffice as a typical password
-    private static String TYPICAL_PASSWORD = "LpcVWwRkWSNVH";
+    private final static String TYPICAL_PASSWORD = "LpcVWwRkWSNVH";
 
     @Given("^a user \"([^\"]*)\" is not currently registered in the system$")
     public void aUserIsNotCurrentlyRegisteredInTheSystem(String username) {
@@ -86,7 +80,7 @@ public class RegistrationStepDefs {
     }
 
     @Given("^a user is in the midst of registering for an account$")
-    public void aUserIsInTheMidstOfRegisteringForAnAccount() throws Throwable {
+    public void aUserIsInTheMidstOfRegisteringForAnAccount() {
         // just a comment.  No state needs to be set up.
     }
 
@@ -97,6 +91,6 @@ public class RegistrationStepDefs {
 
     @Then("^the system returns that the password has insufficient entropy, taking this long to crack: (.*)$")
     public void theSystemReturnsThatThePasswordHasInsufficientEntropyTakingThisLongToCrackTime_to_crack(String timeToCrack) {
-        Assert.assertEquals(timeToCrack, passwordResult.timeToCrackOffline());
+        Assert.assertEquals(timeToCrack, passwordResult.timeToCrackOffline);
     }
 }

@@ -13,19 +13,13 @@ public class RegistrationUtilsTests {
     @Test
     public void testShouldFailOnShortPassword() {
         final PasswordResult result = RegistrationUtils.isPasswordGood("abc");
-        Assert.assertEquals(TOO_SHORT, result.status());
+        Assert.assertEquals(TOO_SHORT, result.status);
     }
 
     @Test
     public void testShouldFailOnEmptyPassword_EmptyString() {
         final PasswordResult result = RegistrationUtils.isPasswordGood("");
-        Assert.assertEquals(EMPTY_PASSWORD, result.status());
-    }
-
-    @Test
-    public void testShouldFailOnEmptyPassword_NullValue() {
-        final PasswordResult result = RegistrationUtils.isPasswordGood(null);
-        Assert.assertEquals(EMPTY_PASSWORD, result.status());
+        Assert.assertEquals(EMPTY_PASSWORD, result.status);
     }
 
     /**
@@ -38,13 +32,13 @@ public class RegistrationUtilsTests {
         final List<String> badPasswords = Arrays.asList("abc123", "abc123horse", "abc123horsestaples", "typical_password_123");
         for (String password : badPasswords) {
             final PasswordResult result = RegistrationUtils.isPasswordGood(password);
-            Assert.assertEquals(INSUFFICIENT_ENTROPY, result.status());
+            Assert.assertEquals(INSUFFICIENT_ENTROPY, result.status);
         }
     }
 
     @Test
     public void testShouldHaveSufficientEntropyInPassword() {
         final PasswordResult result = RegistrationUtils.isPasswordGood("LpcVWwRkWSNVH");
-        Assert.assertEquals(SUCCESS, result.status());
+        Assert.assertEquals(SUCCESS, result.status);
     }
 }

@@ -76,8 +76,8 @@ public class PersistenceLayerTests {
 
         BorrowerData bd = pl.searchBorrowerDataByName("alice");
 
-        Assert.assertEquals("alice", bd.name());
-        Assert.assertEquals(1, bd.id());
+        Assert.assertEquals("alice", bd.name);
+        Assert.assertEquals(1, bd.id);
     }
 
     /**

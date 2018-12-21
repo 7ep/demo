@@ -7,35 +7,39 @@ import me.gosimple.nbvcxz.scoring.TimeEstimate;
 import static com.coveros.training.PasswordResultEnums.*;
 import static com.coveros.training.RegistrationStatusEnums.*;
 
-public class RegistrationUtils {
+class RegistrationUtils {
 
     private final DatabaseUtils authDb;
 
-    public RegistrationUtils(DatabaseUtils authDb) {
+    RegistrationUtils(DatabaseUtils authDb) {
         this.authDb = authDb;
     }
 
-    public RegistrationResult processRegistration(String username, String password) {
+    RegistrationResult processRegistration(String username, String password) {
         if (isUserInDatabase(username)) {
-            return RegistrationResult.create(false, ALREADY_REGISTERED.toString());
+            return new RegistrationResult(false, ALREADY_REGISTERED.toString());
         }
 
         return registerUser(username, password);
+    }
+
+    static RegistrationUtils createEmpty() {
+        return new RegistrationUtils(DatabaseUtils.createEmpty());
     }
 
     private RegistrationResult registerUser(String username, String password) {
 
         // first we check if the username is empty
         boolean isUsernameEmpty = username == null || username.isEmpty();
-        if (isUsernameEmpty) return RegistrationResult.create(false, EMPTY_USERNAME.toString());
+        if (isUsernameEmpty) return new RegistrationResult(false, EMPTY_USERNAME.toString());
 
         // then we check if the password is good.
         final PasswordResult passwordResult = isPasswordGood(password);
-        if (passwordResult.status() != SUCCESS) return RegistrationResult.create(false, passwordResult.toString());
+        if (passwordResult.status != SUCCESS) return new RegistrationResult(false, passwordResult.toString());
 
         // finally, we try saving to the database.
         saveToDatabase(username, password);
-        return RegistrationResult.create(true, SUCCESSFULLY_REGISTERED.toString());
+        return new RegistrationResult(true, SUCCESSFULLY_REGISTERED.toString());
     }
 
     /**
@@ -43,8 +47,7 @@ public class RegistrationUtils {
      *
      * See implementation for criteria.
      */
-    protected static PasswordResult isPasswordGood(String password) {
-        if (password == null) return PasswordResult.createDefault(EMPTY_PASSWORD);
+    static PasswordResult isPasswordGood(String password) {
         if (password.isEmpty()) return PasswordResult.createDefault(EMPTY_PASSWORD);
         if (password.length() < 6) return PasswordResult.createDefault(TOO_SHORT);
 
@@ -56,13 +59,13 @@ public class RegistrationUtils {
         final Double entropy = result.getEntropy();
         String timeToCrackOff = TimeEstimate.getTimeToCrackFormatted(result, "OFFLINE_BCRYPT_12");
         String timeToCrackOn = TimeEstimate.getTimeToCrackFormatted(result, "ONLINE_THROTTLED");
-        if (!result.isMinimumEntropyMet()) return PasswordResult.create(INSUFFICIENT_ENTROPY, entropy, timeToCrackOff, timeToCrackOn, suggestions);;
+        if (!result.isMinimumEntropyMet()) return new PasswordResult(INSUFFICIENT_ENTROPY, entropy, timeToCrackOff, timeToCrackOn, suggestions);
 
-        return PasswordResult.create(SUCCESS, entropy, timeToCrackOff, timeToCrackOn, result.getFeedback().getResult());
+        return new PasswordResult(SUCCESS, entropy, timeToCrackOff, timeToCrackOn, result.getFeedback().getResult());
     }
 
     public boolean isUserInDatabase(String username) {
-        return authDb.searchDatabaseForKey(username) != null;
+        return StringUtils.isNotEmpty(authDb.searchDatabaseForKey(username));
     }
 
     private void saveToDatabase(String username, String password) {

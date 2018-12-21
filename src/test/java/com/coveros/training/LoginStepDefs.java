@@ -1,6 +1,5 @@
 package com.coveros.training;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -8,9 +7,9 @@ import org.junit.Assert;
 
 public class LoginStepDefs {
 
-    Boolean isRegisteredUser;
-    private RegistrationUtils registrationUtils;
-    private LoginUtils loginUtils;
+    private boolean isRegisteredUser;
+    private RegistrationUtils registrationUtils = RegistrationUtils.createEmpty();
+    private LoginUtils loginUtils = LoginUtils.createEmpty();
 
     /**
      * create objects for registration and login, and clear the database.
@@ -41,7 +40,7 @@ public class LoginStepDefs {
 
 
     @When("^when a user authenticates with \"([^\"]*)\" and \"([^\"]*)\"$")
-    public void whenAUserAuthenticatesWithAnd(String username, String password) throws Throwable {
+    public void whenAUserAuthenticatesWithAnd(String username, String password){
         isRegisteredUser = loginUtils.isUserRegistered(username, password);
     }
 

@@ -7,14 +7,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.StringTokenizer;
-import java.util.regex.Matcher;
 
 public class DatabaseUtils {
-    public static String AUTH_DATABASE_NAME = "authentication.txt";
-    public static String LIBRARY_BORROWER_DATABASE_NAME = "borrowers.txt";
-    public static String LIBRARY_BOOKS_DATABASE_NAME = "books.txt";
-    public static String LIBRARY_LENDING_DATABASE = "lending.txt";
+    final static String AUTH_DATABASE_NAME = "authentication.txt";
+    final static String LIBRARY_BOOKS_DATABASE_NAME = "books.txt";
+    final static String LIBRARY_LENDING_DATABASE = "lending.txt";
 
     // the database we are currently pointing at.
     private final String databaseName;
@@ -27,15 +26,19 @@ public class DatabaseUtils {
         this.databaseName = databaseName;
     }
 
+    static DatabaseUtils createEmpty() {
+        return new DatabaseUtils("");
+    }
+
     /**
      * Scan through the lines of the file, return the first line
      * that has this key.
      */
-    public String searchDatabaseForKey(String key) {
+    String searchDatabaseForKey(String key) {
         try {
             File database = new File(databaseName);
             if (!database.exists() || database.isDirectory()) {
-                return null;
+                return "";
             }
             try (BufferedReader br = new BufferedReader(new FileReader(database))) {
                 String line;
@@ -43,7 +46,7 @@ public class DatabaseUtils {
                     if (line.contains(key)) return line;
                 }
                 // if we get to this point, we never found the key
-                return null;
+                return "";
             }
         } catch(Exception ex) {
             throw new RuntimeException(ex);
@@ -54,14 +57,14 @@ public class DatabaseUtils {
      * save text to a file.  If the file exists, append.  If
      * the file doesn't exist, create a new file.
      */
-    public void saveTextToFile(String text) {
+    void saveTextToFile(String text) {
         try {
             final Path path = Paths.get(databaseName);
             StandardOpenOption openOption = Files.exists(path) ?
                     StandardOpenOption.APPEND :
                     StandardOpenOption.CREATE;
             Files.write(path,
-                    Arrays.asList(text),
+                    Collections.singletonList(text),
                     StandardCharsets.UTF_8,
                     openOption);
         } catch (final IOException ioe) {
@@ -69,7 +72,7 @@ public class DatabaseUtils {
         }
     }
 
-    public boolean isUsernameAndPasswordInDatabase(String username, String password) {
+    boolean isUsernameAndPasswordInDatabase(String username, String password) {
         try {
             File database = new File(databaseName);
             try (BufferedReader br = new BufferedReader(new FileReader(database))) {
@@ -93,8 +96,8 @@ public class DatabaseUtils {
     /**
      * clears the database.  Mostly used by the test system.
      */
-    public void clearDatabaseContents() {
-        PrintWriter pw = null;
+    void clearDatabaseContents() {
+        PrintWriter pw;
         try {
             pw = new PrintWriter(databaseName);
         } catch (FileNotFoundException e) {
