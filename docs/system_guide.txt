@@ -248,11 +248,19 @@ You should see something like this:
 
   postgres=#
 
-One last thing.  We'll modify the Postgresql configuration file so it trusts everyone implicitly, making it less secure but easier to work with.  Yet again, something you wouldn't want to do on a production system!  But we're not working with a production system, we want things to be easy.
+One last thing.  We'll modify the Postgresql configuration file so it
+trusts everyone implicitly, making it less secure but easier to work
+with.  Yet again, something you wouldn't want to do on a production
+system!  But we're not working with a production system, we want
+things to be easy.
 
-In the directory where the data files are kept is a file called pg_hba.conf.  On my Centos7 Linux box I find it in /var/lib/pgsql/10/data.  On my Windows box it is at C:\Program Files\PostgreSQL\10\data.
+In the directory where the data files are kept is a file called
+pg_hba.conf.  On my Centos7 Linux box I find it in
+/var/lib/pgsql/10/data.  On my Windows box it is at C:\Program
+Files\PostgreSQL\10\data.
 
-Modify this file.  Towards the end of the file you will see some lines like this:
+Modify this file.  Towards the end of the file you will see some lines
+like this:
 
 # TYPE  DATABASE        USER            ADDRESS                 METHOD
 # IPv4 local connections:
@@ -260,15 +268,21 @@ host    all             all             127.0.0.1/32            md5
 # IPv6 local connections:
 host    all             all             ::1/128                 ident
 
-Change the values in the column METHOD to "trust" instead of "md5" or "ident".  That will make the database trust whoever accesses it locally, implicitly and completely.  This means you don't need to provide passwords when running commands anymore, though you still need to have roles within the database.
+Change the values in the column METHOD to "trust" instead of "md5" or
+"ident".  That will make the database trust whoever accesses it
+locally, implicitly and completely.  This means you don't need to
+provide passwords when running commands anymore, though you still need
+to have roles within the database.
 
 In order to create backups of the database, run this command:
 
- (make sure to come up with an apt DESCRIPTION and a VERSION for this command)
+ (make sure to come up with an apt DESCRIPTION and a VERSION for this
+ command)
 
 pg_dump -Fc training > <DESCRIPTION>_<VERSION>.dump
 
 The restore command is exemplified in our tests.  See
+setDatabaseState in PersistenceLayerTests.
 
 
 // vim: ai:tw=70
