@@ -3,6 +3,8 @@ package com.coveros.training;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -87,6 +89,7 @@ public class PersistenceLayerTests {
     static void setDatabaseState(String restoreScriptName) {
         Runtime r = Runtime.getRuntime();
         Process p;
+        String restoreScriptPath = Paths.get(RESTORE_SCRIPTS_PATH , restoreScriptName).toString();
         String[] cmd = {
                 PATH_TO_PG_RESTORE,
                 "--host", "localhost",
@@ -96,19 +99,26 @@ public class PersistenceLayerTests {
                 "--role", "postgres",
                 "--no-password",
                 "--clean",  // necessary to enable running again and again without problems.
-                RESTORE_SCRIPTS_PATH + restoreScriptName
+                restoreScriptPath
         };
         try {
+            checkThatFileExists(restoreScriptPath);
             p = r.exec(cmd);
             // following command is necessary to cause the system to wait until the command is done.
             p.waitFor();
         } catch (Exception e) {
             // stop the world if this breaks, and fix it.
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
-
+    private static void checkThatFileExists(String restoreScriptPath) {
+        File tmpDir = new File(restoreScriptPath);
+        boolean exists = tmpDir.exists();
+        if (! exists) {
+            throw new RuntimeException("the path to the script was incorrect: " + restoreScriptPath);
+        }
+    }
 
 
 }
