@@ -19,16 +19,12 @@ pipeline {
 
     stage('Test') {
       steps {
-        sh './gradlew cucumber'
         sh './gradlew test'
-        sh 'cp -a build/reports/bdd/cucumber-html-reports/* /var/www/cucumber/'
-        sh 'cp -a build/reports/tests/test/* /var/www/unittest/'
       }
 
       post {
         always {
           junit 'build/test-results/test/*.xml'
-
         }
       }
 
