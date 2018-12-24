@@ -139,6 +139,10 @@ git:
 
 $ sudo yum -y install git
 
+Postgresql:
+
+(see the documentation for installing Postgresql in system_guide.txt.  see DATABASE_INSTALL there)
+
 Now let's enable the Jenkins repository:
 
 $ curl --silent --location http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo | sudo tee /etc/yum.repos.d/jenkins.repo
@@ -253,6 +257,7 @@ $ chmod 775 /home/brk
      In Script Path: jenkins/Jenkinsfile
 
      Click save
+
 
 
 
