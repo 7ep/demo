@@ -4,7 +4,7 @@ pipeline {
 
 
   environment {
-    DEMO_PROJECT_HOME   = ${env.WORKSPACE}
+    DEMO_PROJECT_HOME   =  '${env.WORKSPACE}'
     POSTGRES_BIN_DIR    = '/usr/pgsql-10/bin'
   }
 
