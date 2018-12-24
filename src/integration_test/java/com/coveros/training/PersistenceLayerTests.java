@@ -99,6 +99,8 @@ public class PersistenceLayerTests {
                 RESTORE_SCRIPTS_PATH + restoreScriptName
         };
         try {
+            System.out.println("Restoring database... ");
+            System.out.println("Using command: " + cmd);
             p = r.exec(cmd);
             // following command is necessary to cause the system to wait until the command is done.
             p.waitFor();
