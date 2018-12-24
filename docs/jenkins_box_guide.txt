@@ -1,0 +1,423 @@
+create a console-only virtual machine for our Jenkins server.
+
+1. Create new box on VirtualBox version 5.2.12 r122591 (Qt5.6.2)
+
+2. Give it 1024 megabytes of ram and 4 gigabytes of hard drive storage
+
+(only do the following if you haven't already created "training_network")
+3. in File -> Preferences, click on Network, and click the icon on the
+right to create a new network.  Double click on the newly created
+network and rename it training_network, and click OK.)
+
+in settings:
+  Put the Centos7 dvd in its virtual drive...
+  
+  in the network tab, make it attached to: NAT network, and then
+    I selected a name: training_network (a network we previously created)
+
+Start it up.
+
+Choose "install Centos 7".  (It defaults to "test this media and
+install centos7", but it's a virtual machine, so just press the up
+arrow and choose "install centos 7".)
+
+Choose English for the languages.
+
+Under system, click on "installation destination" and then click Done
+on the page it opens up.  (it defaults properly)
+
+Click on the network & Host name icon and toggle it from off to on,
+then click Done.
+
+Click on the "Begin Installation" button in the bottom right.
+
+While it is installing, you will see options to set the root password
+and create a user.  We're not too concerned about security, since this
+box is just for educational purposes.  However, it won't let you
+complete installation until you create a user.  Make a user for
+yourself.  I recommend enabling it as an administrator user (check the
+box) and make it not require a password (uncheck that box).
+
+Finally, it finishes, and you can click the button labeled "reboot".  Do so.
+
+Once it finishes rebooting, you will see a console window waiting for
+you to enter your username.  It should look like this:
+
+---------------------------------------------------
+
+CentOS Linux 7 (Core)
+Kernel 3.10.0-693.el7.x86_64 on an x86_64
+
+localhost login: _
+
+---------------------------------------------------
+
+I find that working in that console is a pain.  So the first thing we
+want to do is make sure we can access this using ssh and then we'll
+communicate with our machine solely through that protocol.
+
+
+
+First, log in as the user you created.  You didn't set a password, so
+you shouldn't need to enter a password for it.  It's an admin user, so
+you can just run sudo <whatever> to act as root.
+
+First, let's turn off the firewall and SELinux (its security system).
+It's a pain in the rear, and remember, this is for educational
+purposes, so security is *not* a concern.  Ease of use is.  
+
+$ #turn off the firewall and disable it
+$ sudo systemctl stop firewalld
+$ sudo systemctl disable firewalld
+
+To disable SELinux, open /etc/selinux/config and set SELINUX mode to
+disabled.  You can do that with an editor, or you can run this
+command:
+
+sudo sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+
+Let's also change the settings on sshd (the ssh daemon) so it will
+allow us to log in without a password.  Edit the file at
+/etc/ssh/sshd_config and change the value of a parameter:
+
+#PermitEmptyPasswords no
+
+becomes
+
+PermitEmptyPasswords yes
+
+or you can run this command:
+
+sudo sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords yes/' /etc/ssh/sshd_config
+
+now, reboot.
+
+$ sudo reboot
+
+
+run this:
+
+  $ ip addr
+  
+It should show you the network details.  You are looking for the ip
+address this box was assigned by the network.  It should resemble this
+value: 10.0.2.15/24
+
+(One interesting note: I found that when going through these steps,
+that VirtualBox had reset my network settings for this box to basic
+NAT, rather than Nat Network like I previously had set.  If that
+happens to you, just go back into the box's settings and reset it to
+NAT Network.  This will also probably change the ip address of the
+box, so you may need to run ip addr again to see what it is now.)
+
+Once you have that, click on the menu item File -> Preferences ->
+Network and double-click on training_network, and click on the "Port
+Forwarding" button.  Add a new row, as follows (modify for your ip
+address)
+
++-------+----------+---------+-----------+-----------+------------+
+| Name  | Protocol | Host IP | Host Port | Guest IP  | Guest Port |
++-------+----------+---------+-----------+-----------+------------+
+| ssh   | TCP      |         | 2222      | 10.0.2.15 | 22         |
++-------+----------+---------+-----------+-----------+------------+
+|jenkins| TCP      |         | 8080      | 10.0.2.15 | 8080       |
++-------+----------+---------+-----------+-----------+------------+
+
+Then click all the OK buttons to close the windows.
+
+You should be able to ssh into your centos box by running ssh against
+localhost at 2222.
+
+
+From here on out, all commands should be run from ssh.
+
+Let's install Java:
+
+$ sudo yum -y install java-1.8.0-openjdk-devel
+
+git:
+
+$ sudo yum -y install git
+
+Now let's enable the Jenkins repository:
+
+$ curl --silent --location http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo | sudo tee /etc/yum.repos.d/jenkins.repo
+$ sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
+$ sudo yum install jenkins
+$ sudo systemctl start jenkins
+$ sudo systemctl enable jenkins
+
+In your browser, go to Jenkins at this URL: localhost:8080
+
+Follow the prompts, install Jenkins.  You may choose to install the
+recommended plugins, but I customized mine and chose the following:
+
+GitHub Branch Source Plugin
+Gradle Plugin
+Pipeline
+Timestamper
+Workplace Cleanup Plugin
+
+(I chose the minimal possible plugins to lower the memory footprint)
+
+I created an admin with the following characteristics:
+username: admin
+password: admin
+email: admin@test.com
+
+After that, I rebooted the Jenkins box.  You may find this necessary - I found that
+after following the preceeding steps, Jenkins would hang until I rebooted it.
+
+
+Now that Jenkins is up and running, let's make this same box
+our Git repo, so that Git can easily notify Jenkins when it
+receives a push.
+
+First, go to your home directory:
+
+$ cd
+
+Create a directory to store the repo:
+
+$ mkdir demo
+$ cd demo
+
+Make a "bare" git repo:
+
+$ git init --bare
+
+Push your current repo to that location as the new central repo.  Back
+in the directory where you have been working with Demo, run these commands:
+
+the following will remove the Github origin
+$ git remote remove origin
+
+this will add your new repository location as "origin":
+$ git remote add origin ssh://YOUR_USER_NAME@localhost:2222/home/YOUR_USER_NAME/demo
+
+this will push all your branches to that repo
+$ git push --set-upstream --all origin
+
+Now, we want to have the ability to notify Jenkins whenever we push
+to our new repo.  Jenkins has a capability of running builds whenever
+a certain endpoint is hit.  But, like all things, it's not that easy because
+of security considerations.  Here's the howto:
+
+Log into Jenkins and go to the configuration page for the command-line-interface (CLI):
+
+http://localhost:8080/cli/
+
+This is the link to download the CLI tool:
+
+http://localhost:8080/jnlpJars/jenkins-cli.jar
+
+download that to your home directory on the repo server, because we're going to
+use that tool in one of our Git hooks:
+
+$ curl http://localhost:8080/jnlpJars/jenkins-cli.jar >  ~/jenkins-cli.jar
+
+Now, create the following file, at /home/YOUR_USER_NAME/demo/hooks/post-receive
+
+------------------------ FILE START
+#!/bin/sh
+
+exec java -jar ~/jenkins-cli.jar -s http://localhost:8080/ -auth admin:admin build demo
+------------------------ FILE END
+
+make that file executable:
+
+$ chmod 775 /home/YOUR_USER_NAME/demo/hooks/post-receive
+
+And now we'll try running it.  Back in the browser, in Jenkins, create a new job.  Give it
+the name "Demo" and make it a "pipeline" job and click OK.  Then scroll down and click save.
+
+You should find yourself on the Pipeline page for the "demo" project.  Back in the command
+line, run this to kick off a build in Jenkins:
+
+$ ~/demo/hooks/post-receive
+
+You should observe a new build appear in the webpage in Jenkins.  If so, you have configured
+it properly.  Whenever you push a branch, it will now run Jenkins.  That's pretty close to perfect.
+
+Now let's modify our pipeline so it does some actual work.
+- as a prerequisite (so Jenkins can access the repo), run this command:
+$ chmod 775 /home/brk
+- In Jenkins, on the pipeline page for Demo, click on Configure.
+- Under Pipeline, click on the dropdown and select Pipeline script from SCM.
+- on the dropdown next to SCM, select Git.
+- fill in these values:
+     In Repositories:
+     Repository URL: /home/YOUR_USER_NAME/demo
+     In Branches to Build:
+     Branch specifier: /refs/heads/with_database
+     In Script Path: jenkins/Jenkinsfile
+
+     Click save
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Let's pull down our demo project now.
+
+$ git clone https://github.com/7ep/demo.git
+
+$ cd demo
+
+$ ./gradlew appRun
+
+It will take a while to pull down some packages from the internet, but
+when it's done you should see something like this:
+
+  Starting a Gradle Daemon (subsequent builds will be faster)
+  15:00:09 INFO  Jetty 9.2.24.v20180105 started and listening on port 8888
+  15:00:09 INFO  demo runs at:
+  15:00:09 INFO    http://localhost:8888/demo
+
+  > Task :appRun
+  Press any key to stop the server.
+  <===========--> 88% EXECUTING [2m 26s]
+  > :appRun
+  > IDLE
+
+In order to access the application from our host, we will want to open
+up a port forwarding between our system and the guest.  Go to
+virtualbox and to the menu bar, and go to File -> preferences ->
+Network.  Double-click on "training_network" and click on Port
+forwarding, and add this new rule (adjust the ip address per your
+machine):
+
++-------+----------+---------+-----------+-----------+------------+
+| Name  | Protocol | Host IP | Host Port | Guest IP  | Guest Port |
++-------+----------+---------+-----------+-----------+------------+
+| ssh   | TCP      |         | 8888      | 10.0.2.15 | 8888       |
++-------+----------+---------+-----------+-----------+------------+
+
+Once you click OK to close all the windows, you should be able to open
+up a url to the application from the host machine:
+
+http://localhost:8888/demo/
+
+Voila!
+
+Let's add a few more features.  
+
+Let's add vim, which is a handier editor.
+
+$ sudo yum -y install vim
+
+Let's install a browser that can run in the console.
+
+$ sudo yum -y install lynx
+
+Let's add a database, since we'll plan to use a real database for the
+next sprint instead of a text file.
+
+$ sudo yum install https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-7-x86_64/pgdg-centos10-10-2.noarch.rpm
+$ sudo yum install postgresql10
+$ sudo yum install postgresql10-server
+
+$ sudo /usr/pgsql-10/bin/postgresql-10-setup initdb
+$ sudo systemctl start postgresql-10
+
+There is a command to start up the database on boot.  We won't use
+that for now - we want everything to be intentional.  If we need a
+database, we'll need to start it ourselves.  For reference, the
+command to have it start on boot is sudo systemctl enable
+postgresql-10.
+
+Recall that this is all educational, so security isn't the slightest
+concern.  So what we will do here is make the database easily
+accessible so we can work with it.  Dealing with security is a pain,
+by definition, so we'll skip that in this exercise.
+
+First, we'll switch to being the user "postgres":
+
+$ sudo su - postgres
+
+Then, we'll open the postgresql client:
+
+$ psql
+
+We should see something like this:
+
+  -bash-4.2$ psql
+  psql (9.2.24, server 10.6)
+  Type "help" for help.
+
+  postgres=#
+  
+Alright, we know the database is up and we can access it.  Let's make
+it easier to access.  Still in the psql client, run this command:
+
+  postgres=# CREATE ROLE brk WITH SUPERUSER LOGIN;
+  CREATE ROLE
+  
+View your new role by typing \dg
+
+Log out of psql by running typing \q and pressing enter.
+
+exit out of being postgres and be your original user again.  Try to
+access the psql client from there:
+
+$ psql postgres
+
+You should see something like this:
+
+  [brk@localhost demo]$ psql postgres
+  psql (9.2.24)
+  Type "help" for help.
+
+  postgres=#
+
+One last thing.  We'll modify the Postgresql configuration file so it
+trusts everyone implicitly, making it less secure but easier to work
+with.  Yet again, something you wouldn't want to do on a production
+system!  But we're not working with a production system, we want
+things to be easy.
+
+In the directory where the data files are kept is a file called
+pg_hba.conf.  On my Centos7 Linux box I find it in
+/var/lib/pgsql/10/data.  On my Windows box it is at C:\Program
+Files\PostgreSQL\10\data.
+
+Modify this file.  Towards the end of the file you will see some lines
+like this:
+
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            md5
+# IPv6 local connections:
+host    all             all             ::1/128                 ident
+
+Change the values in the column METHOD to "trust" instead of "md5" or
+"ident".  That will make the database trust whoever accesses it
+locally, implicitly and completely.  This means you don't need to
+provide passwords when running commands anymore, though you still need
+to have roles within the database.
+
+In order to create backups of the database, run this command:
+
+ (make sure to come up with an apt DESCRIPTION and a VERSION for this
+ command)
+
+pg_dump -Fc training > <DESCRIPTION>_<VERSION>.dump
+
+The restore command is exemplified in our tests.  See
+setDatabaseState in PersistenceLayerTests.
+
+
+// vim: ai:tw=70
