@@ -68,6 +68,11 @@ dependencies {
 
 }
 
+sourceSets.test.java {
+    srcDir 'src/integration_test/java'
+    srcDir 'src/unit_test/java'
+}
+
 // configure jetty to run on port 8888 when we run "./gradlew appRun"
 gretty {
     httpPort = 8888
@@ -80,7 +85,7 @@ task cucumber {
         javaexec {
             main = "cucumber.api.cli.Main"
             classpath = configurations.testRuntimeClasspath + sourceSets.main.output + sourceSets.test.output
-            args = ['--monochrome', '--plugin', 'pretty', '--plugin', 'json:build/bdd/file.json', '--glue', 'com.coveros.training', 'src/test/resources']
+            args = ['--monochrome', '--plugin', 'pretty', '--plugin', 'json:build/bdd/file.json', '--glue', 'com.coveros.training', 'src/integration_test/resources']
         }
     }
 }
@@ -106,6 +111,9 @@ flyway {
     schemas = ['administrative', 'library', 'auth']
 }
 
+// Checker framework is our way to disallow nulls throughout our code,
+// which is a great way to avoid a lot of potential bugs.
+// See https://checkerframework.org/manual/
 checkerFramework {
     checkers = [
             'org.checkerframework.checker.units.UnitsChecker',
