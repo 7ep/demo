@@ -28,7 +28,7 @@ class Constants {
 
     // POSTGRES_BIN_DIR must be set to the directory for Postgresql's binaries.
     // for example, on Windows it's C:\Program Files\PostgreSQL\10\bin\
-    static final String PATH_TO_PG_RESTORE = Paths.get(getEnvironmentVariable("POSTGRES_BIN_DIR") , "pg_restore.exe").toString();
+    static final String PATH_TO_PG_RESTORE = Paths.get(getEnvironmentVariable("POSTGRES_BIN_DIR") , "pg_restore").toString();
 
     // we'll default to the following URL for our Poostgresql database, unless
     // it is set in the environment differently.
