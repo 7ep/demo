@@ -188,12 +188,15 @@ Let's install a browser that can run in the console.
 
 $ sudo yum -y install lynx
 
+DATABASE_INSTALL
+----------------
+
 Let's add a database, since we'll plan to use a real database for the
 next sprint instead of a text file.
 
-$ sudo yum install https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-7-x86_64/pgdg-centos10-10-2.noarch.rpm
-$ sudo yum install postgresql10
-$ sudo yum install postgresql10-server
+$ sudo yum install -y https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-7-x86_64/pgdg-centos10-10-2.noarch.rpm
+$ sudo yum install -y postgresql10
+$ sudo yum install -y postgresql10-server
 
 $ sudo /usr/pgsql-10/bin/postgresql-10-setup initdb
 $ sudo systemctl start postgresql-10
@@ -201,8 +204,7 @@ $ sudo systemctl start postgresql-10
 There is a command to start up the database on boot.  We won't use
 that for now - we want everything to be intentional.  If we need a
 database, we'll need to start it ourselves.  For reference, the
-command to have it start on boot is sudo systemctl enable
-postgresql-10.
+command to have it start on boot is sudo systemctl enable postgresql-10.
 
 Recall that this is all educational, so security isn't the slightest
 concern.  So what we will do here is make the database easily
@@ -228,7 +230,7 @@ We should see something like this:
 Alright, we know the database is up and we can access it.  Let's make
 it easier to access.  Still in the psql client, run this command:
 
-  postgres=# CREATE ROLE brk WITH SUPERUSER LOGIN;
+  postgres=# CREATE ROLE YOUR_USER_NAME WITH SUPERUSER LOGIN;
   CREATE ROLE
   
 View your new role by typing \dg
