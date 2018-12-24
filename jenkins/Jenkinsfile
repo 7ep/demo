@@ -12,14 +12,15 @@ pipeline {
 
     stage('Build') {
       steps {
-        sh './gradlew clean assemble'
+        sh 'gradle clean assemble'
+        sh 'gradle flywayMigrate -i'
       }
     }
 
     stage('Test') {
       steps {
-        sh './gradlew cucumber'
-        sh './gradlew test'
+        sh 'gradle cucumber'
+        sh 'gradle test'
         sh 'cp -a build/reports/bdd/cucumber-html-reports/* /var/www/cucumber/'
         sh 'cp -a build/reports/tests/test/* /var/www/unittest/'
       }
