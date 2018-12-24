@@ -1,5 +1,7 @@
 package com.coveros.training;
 
+import java.nio.file.Paths;
+
 /**
  * These values are important and dependent on correctly set
  * environment variables.
@@ -22,11 +24,11 @@ class Constants {
 
     // DEMO_PROJECT_HOME is the absolute path to the demo project.
     // For example, C:\Users\byron\demo\
-    static final String RESTORE_SCRIPTS_PATH = getEnvironmentVariable("DEMO_PROJECT_HOME") + "\\db_sample_files\\";
+    static final String RESTORE_SCRIPTS_PATH = Paths.get( getEnvironmentVariable("DEMO_PROJECT_HOME"), "db_sample_files").toString();
 
     // POSTGRES_BIN_DIR must be set to the directory for Postgresql's binaries.
     // for example, on Windows it's C:\Program Files\PostgreSQL\10\bin\
-    static final String PATH_TO_PG_RESTORE = getEnvironmentVariable("POSTGRES_BIN_DIR") + "\\pg_restore.exe";
+    static final String PATH_TO_PG_RESTORE = Paths.get(getEnvironmentVariable("POSTGRES_BIN_DIR") , "pg_restore.exe").toString();
 
     // we'll default to the following URL for our Poostgresql database, unless
     // it is set in the environment differently.
