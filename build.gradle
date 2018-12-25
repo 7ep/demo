@@ -23,6 +23,8 @@ plugins {
     // provides access to a database versioning tool.
     id "org.flywaydb.flyway" version "5.2.4"
 
+    // scans our code for static analysis
+    id "org.sonarqube" version "2.6.2"
 }
 
 // the checker framework adds a bunch of type annotations that
