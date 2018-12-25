@@ -283,7 +283,7 @@ In order to create backups of the database, run this command:
 
 pg_dump -Fc training > <DESCRIPTION>_<VERSION>.dump
 
-The restore command is exemplified in our tests.  See
+The restore command is demonstrated in our tests.  See
 setDatabaseState in PersistenceLayerTests.
 
 
