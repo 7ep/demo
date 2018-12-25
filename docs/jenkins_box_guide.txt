@@ -2,7 +2,7 @@ create a console-only virtual machine for our Jenkins server.
 
 1. Create new box on VirtualBox version 5.2.12 r122591 (Qt5.6.2)
 
-2. Give it 1024 megabytes of ram and 4 gigabytes of hard drive storage
+2. Give it 4096 megabytes of ram and 12 gigabytes of hard drive storage
 
 (only do the following if you haven't already created "training_network")
 3. in File -> Preferences, click on Network, and click the icon on the
@@ -147,20 +147,20 @@ Now let's enable the Jenkins repository:
 
 $ curl --silent --location http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo | sudo tee /etc/yum.repos.d/jenkins.repo
 $ sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
-$ sudo yum install jenkins
+$ sudo yum install -y jenkins
 $ sudo systemctl start jenkins
 $ sudo systemctl enable jenkins
 
 In your browser, go to Jenkins at this URL: localhost:8080
 
 Follow the prompts, install Jenkins.  You may choose to install the
-recommended plugins, but I customized mine and chose the following:
+recommended plugins, but I customized mine.  I started by selecting
+the "none" link at the top, which unchecked all the plugins.  Then I chose the following:
 
-GitHub Branch Source Plugin
-Gradle Plugin
-Pipeline
-Timestamper
-Workplace Cleanup Plugin
+Under Build Tools: Gradle
+Under Build Analysis and Reporting: Junit
+Under Pipelines and Continuous Delivery: Pipeline, Pipeline: Stage View
+Under Source Code Management: Git
 
 (I chose the minimal possible plugins to lower the memory footprint)
 
@@ -202,25 +202,19 @@ $ git remote add origin ssh://YOUR_USER_NAME@localhost:2222/home/YOUR_USER_NAME/
 this will push all your branches to that repo
 $ git push --set-upstream --all origin
 
+make our home directory accessible by the Jenkins user:
+$ chmod 775 /home/brk
+
 Now, we want to have the ability to notify Jenkins whenever we push
 to our new repo.  Jenkins has a capability of running builds whenever
 a certain endpoint is hit.  But, like all things, it's not that easy because
 of security considerations.  Here's the howto:
 
-Log into Jenkins and go to the configuration page for the command-line-interface (CLI):
+Download the command-line-interface (CLI) tool from Jenkins:
 
-http://localhost:8080/cli/
+curl http://localhost:8080/jnlpJars/jenkins-cli.jar > ~/jenkins-cli.jar
 
-This is the link to download the CLI tool:
-
-http://localhost:8080/jnlpJars/jenkins-cli.jar
-
-download that to your home directory on the repo server, because we're going to
-use that tool in one of our Git hooks:
-
-$ curl http://localhost:8080/jnlpJars/jenkins-cli.jar >  ~/jenkins-cli.jar
-
-Now, create the following file, at /home/YOUR_USER_NAME/demo/hooks/post-receive
+Now, create the following file, at ~/demo/hooks/post-receive
 
 ------------------------ FILE START
 #!/bin/sh
@@ -230,7 +224,7 @@ exec java -jar ~/jenkins-cli.jar -s http://localhost:8080/ -auth admin:admin bui
 
 make that file executable:
 
-$ chmod 775 /home/YOUR_USER_NAME/demo/hooks/post-receive
+$ chmod 775 ~/demo/hooks/post-receive
 
 And now we'll try running it.  Back in the browser, in Jenkins, create a new job.  Give it
 the name "Demo" and make it a "pipeline" job and click OK.  Then scroll down and click save.
@@ -245,7 +239,6 @@ it properly.  Whenever you push a branch, it will now run Jenkins.  That's prett
 
 Now let's modify our pipeline so it does some actual work.
 - as a prerequisite (so Jenkins can access the repo), run this command:
-$ chmod 775 /home/brk
 - In Jenkins, on the pipeline page for Demo, click on Configure.
 - Under Pipeline, click on the dropdown and select Pipeline script from SCM.
 - on the dropdown next to SCM, select Git.
@@ -253,10 +246,44 @@ $ chmod 775 /home/brk
      In Repositories:
      Repository URL: /home/YOUR_USER_NAME/demo
      In Branches to Build:
-     Branch specifier: /refs/heads/with_database
+     Branch specifier: refs/heads/with_database
      In Script Path: jenkins/Jenkinsfile
 
      Click save
+
+
+Now that our Jenkins pipeline is running, and we have a Git repo, and
+we have a database running, let's throw in another application - SonarQube!
+
+download it to your home directory:
+
+$ curl https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-7.5.zip > ~/sonarqube-7.5.zip
+
+install the unzip command:
+
+$ sudo yum install -y unzip
+
+make a new directory and unzip it to there
+(importantly, don't do this as root.  It will fail):
+
+$ mkdir ~/sonarqube
+$ sudo unzip ~/sonarqube-7.5.zip -d ~/sonarqube/
+
+start up sonarqube:
+
+$ ~/sonarqube/sonarqube-7.5/bin/linux-x86-64/sonar.sh console
+
+Check to see if Sonarqube it up and running.  go to http://localhost:9000
+and check if you see the Sonarqube dashboard.
+
+If that is up and running, let's go back to Jenkins and install a
+plugin so we can run SonarQube on our code from there.  Go to:
+
+http://localhost:8080/pluginManager/available
+
+and search for Sonarqube in the top right.  You should see "SonarQube scanner"
+as an option.  Check that, then Install without restart.
+
 
 
 
