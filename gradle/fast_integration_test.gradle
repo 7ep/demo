@@ -1,0 +1,42 @@
+sourceSets {
+    fastIntegrationTest {
+        java.srcDir 'src/integration_test/java'
+        resources.srcDir 'src/integration_test/resources'
+    }
+}
+
+dependencies {
+    fastIntegrationTestCompile sourceSets.main.output
+    fastIntegrationTestCompile sourceSets.test.output
+
+    fastIntegrationTestCompile configurations.compile
+    fastIntegrationTestCompile configurations.testCompile
+
+    fastIntegrationTestRuntime configurations.runtime
+    fastIntegrationTestRuntime configurations.testRuntime
+}
+
+task fastIntegrationTest(type: Test) {
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = 'Runs the integration tests.'
+    testClassesDirs = sourceSets.fastIntegrationTest.output.classesDirs
+    classpath = sourceSets.fastIntegrationTest.runtimeClasspath
+    maxHeapSize = '1024m'
+    outputs.upToDateWhen { false }
+    binResultsDir = file("$buildDir/integration-test-results/binary/integrationTest")
+    mustRunAfter test
+}
+
+check.dependsOn fastIntegrationTest
+
+//gradle.projectsEvaluated {
+//    def quickTasks = []
+//
+//    gradle.rootProject.allprojects.each { project ->
+//        quickTasks.addAll(project.tasks.findAll { it.name == 'test' })
+//    }
+//
+//    quickTasks.each { task ->
+//        project.tasks.fastIntegrationTest.mustRunAfter task
+//    }
+//}

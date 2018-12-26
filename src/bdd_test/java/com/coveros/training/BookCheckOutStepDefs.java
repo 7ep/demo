@@ -1,6 +1,5 @@
 package com.coveros.training;
 
-import com.coveros.training.*;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;

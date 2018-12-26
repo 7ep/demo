@@ -14,6 +14,7 @@ public class RegisterServletTest {
 
     private static final RegistrationResult EMPTY_USERNAME = new RegistrationResult(false, RegistrationStatusEnums.EMPTY_USERNAME.toString());
     private static final RegistrationResult SUCCESSFUL_REGISTRATION = new RegistrationResult(true, RegistrationStatusEnums.SUCCESSFULLY_REGISTERED.toString());
+    private static final String RESULT_JSP = "result.jsp";
     private HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
     private HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
     private RequestDispatcher requestDispatcher = Mockito.mock(RequestDispatcher.class);
@@ -39,13 +40,13 @@ public class RegisterServletTest {
         mockRequestParam("username", "");
         mockRequestParam("password", "");
         mockRegisterUserToReturnSomeResponse(EMPTY_USERNAME);
-        mockRequestDispatcherForExpectedRedirection("result.jsp");
+        mockRequestDispatcherForExpectedRedirection(RESULT_JSP);
 
         // do the post
         registerServlet.doPost(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(request).getRequestDispatcher("result.jsp");
+        verify(request).getRequestDispatcher(RESULT_JSP);
     }
 
     /**
@@ -60,13 +61,13 @@ public class RegisterServletTest {
         mockRequestParam("username", "Alice");
         mockRequestParam("password", "password123");
         mockRegisterUserToReturnSomeResponse(SUCCESSFUL_REGISTRATION);
-        mockRequestDispatcherForExpectedRedirection("result.jsp");
+        mockRequestDispatcherForExpectedRedirection(RESULT_JSP);
 
         // do the post
         registerServlet.doPost(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(request).getRequestDispatcher("result.jsp");
+        verify(request).getRequestDispatcher(RESULT_JSP);
     }
 
 

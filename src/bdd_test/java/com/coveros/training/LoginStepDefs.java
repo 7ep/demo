@@ -1,8 +1,5 @@
 package com.coveros.training;
 
-import com.coveros.training.DatabaseUtils;
-import com.coveros.training.LoginUtils;
-import com.coveros.training.RegistrationUtils;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;

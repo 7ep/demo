@@ -1,35 +1,28 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-
-    dependencies {
-        classpath 'com.jaredsburrows:gradle-checker-framework-plugin:0.2.2'
-    }
-}
-
 plugins {
     id 'war'
 
     // gretty is a gradle plugin to make it easy to run a server and hotswap code at runtime.
     id 'org.gretty' version '2.2.0'
 
-    // provides Cucumber reporting
-    id "com.github.spacialcircumstances.gradle-cucumber-reporting" version "0.0.15"
-
-    // this allows AutoValue to work with Intellij
-    id 'org.inferred.processors' version '1.2.18'
-
     // provides access to a database versioning tool.
     id "org.flywaydb.flyway" version "5.2.4"
 
     // scans our code for static analysis
     id "org.sonarqube" version "2.6.2"
+
+    // provides Cucumber reporting
+    id "com.github.spacialcircumstances.gradle-cucumber-reporting" version "0.0.15"
 }
 
 // the checker framework adds a bunch of type annotations that
 // can insure safer coding practices.  See https://checkerframework.org/manual/
-apply plugin: 'com.jaredsburrows.checkerframework'
+apply from: "$rootDir/gradle/checkerframework.gradle"
+
+// including our script plugin for running our integration tests
+apply from: "$rootDir/gradle/fast_integration_test.gradle"
+
+// including our script plugin for running BDD-type tests
+apply from: "$rootDir/gradle/bdd_test.gradle"
 
 repositories {
     jcenter()
@@ -38,10 +31,6 @@ repositories {
 
 dependencies {
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
-
-    // the cucumber stuff we'll need.  Cucumber is a BDD tool.
-    testCompile 'io.cucumber:cucumber-java:3.0.2'
-    testCompile 'io.cucumber:cucumber-junit:3.0.2'
 
     // junit, for running unit tests
     testCompile 'junit:junit:4.12'
@@ -67,24 +56,11 @@ dependencies {
     // for those interested in safer coding.  Particularly, the equalsbuilder and hashcodebuilder.
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
-
 }
 
 // configure jetty to run on port 8888 when we run "./gradlew appRun"
 gretty {
     httpPort = 8888
-}
-
-// some of the configuration for running Cucumber BDD
-task cucumber {
-    dependsOn test
-    doLast {
-        javaexec {
-            main = "cucumber.api.cli.Main"
-            classpath = configurations.testRuntimeClasspath + sourceSets.main.output + sourceSets.test.output
-            args = ['--monochrome', '--plugin', 'pretty', '--plugin', 'json:build/bdd/file.json', '--glue', 'com.coveros.training', 'src/integration_test/resources']
-        }
-    }
 }
 
 // configuration for the cucumber reports.
@@ -103,13 +79,5 @@ flyway {
     schemas = ['administrative', 'library', 'auth']
 }
 
-// Checker framework is our way to disallow nulls throughout our code,
-// which is a great way to avoid a lot of potential bugs.
-// See https://checkerframework.org/manual/
-checkerFramework {
-    checkers = [
-            'org.checkerframework.checker.units.UnitsChecker',
-            'org.checkerframework.checker.nullness.NullnessChecker'
-    ]
-}
+
 
