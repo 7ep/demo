@@ -28,7 +28,7 @@ pipeline {
       }
       post {
         always {
-          junit 'build/test-results/test/*.xml'
+          junit 'build/test-results/unitTest/*.xml'
         }
       }
     }
@@ -41,11 +41,11 @@ pipeline {
 
     stage('Integration Tests') {
       steps {
-        sh './gradlew test'
+        sh './gradlew fastIntegrationTest'
       }
       post {
         always {
-          junit 'build/test-results/test/*.xml'
+          junit 'build/test-results/integrationTest/*.xml'
         }
       }
     }
