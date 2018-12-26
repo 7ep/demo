@@ -12,6 +12,9 @@ plugins {
 
     // provides Cucumber reporting
     id "com.github.spacialcircumstances.gradle-cucumber-reporting" version "0.0.15"
+
+    // provides unit test coverage
+    id 'jacoco'
 }
 
 // the checker framework adds a bunch of type annotations that
@@ -77,6 +80,19 @@ flyway {
     user = "postgres"
     password = "postgres"
     schemas = ['administrative', 'library', 'auth']
+}
+
+jacoco {
+    toolVersion = "0.8.2"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
 }
 
 
