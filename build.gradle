@@ -70,11 +70,6 @@ dependencies {
 
 }
 
-sourceSets.test.java {
-    srcDir 'src/integration_test/java'
-    srcDir 'src/unit_test/java'
-}
-
 // configure jetty to run on port 8888 when we run "./gradlew appRun"
 gretty {
     httpPort = 8888
