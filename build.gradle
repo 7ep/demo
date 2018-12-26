@@ -100,11 +100,6 @@ cucumberReports {
     testTasksFinalizedByReport = false
 }
 
-// configure test to run cucumber, followed by cucumber reports.
-// this way, when we run test or build we get all our cucumber too.
-test.finalizedBy(cucumber)
-cucumber.finalizedBy(generateCucumberReports)
-
 flyway {
     url = 'jdbc:postgresql://localhost:5432/training'
     driver = 'org.postgresql.Driver'

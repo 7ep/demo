@@ -34,6 +34,14 @@ pipeline {
       }
     }
 
+    stage('BDD Tests' {
+      steps {
+        sh './gradlew cucumber'
+        sh './gradlew generateCucumberReports'
+      }
+
+    }
+
   }
 
 }
