@@ -38,15 +38,16 @@ class PersistenceLayer {
                              Statement.RETURN_GENERATED_KEYS) ) {
             st.setString(1, borrowerName);
             st.executeUpdate();
-            final ResultSet generatedKeys = st.getGeneratedKeys();
-            long newId;
-            if (generatedKeys.next()) {
-                newId = generatedKeys.getLong(1);
-                assert(newId > 0);
-            } else {
-                throw new RuntimeException("failed to save a new Borrower");
+            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                long newId;
+                if (generatedKeys.next()) {
+                    newId = generatedKeys.getLong(1);
+                    assert (newId > 0);
+                } else {
+                    throw new RuntimeException("failed to save a new Borrower");
+                }
+                return newId;
             }
-            return newId;
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -82,12 +83,13 @@ class PersistenceLayer {
                      connection.prepareStatement(
                              "SELECT name FROM library.Person WHERE id = ?;") ) {
             st.setLong(1, id);
-            final ResultSet resultSet = st.executeQuery();
-            if (resultSet.next()) {
-                final String name = resultSet.getString(1);
-                return StringUtils.makeNotNullable(name);
-            } else {
-                throw new RuntimeException("Failed to get Borrower name");
+            try (ResultSet resultSet = st.executeQuery()) {
+                if (resultSet.next()) {
+                    final String name = resultSet.getString(1);
+                    return StringUtils.makeNotNullable(name);
+                } else {
+                    throw new RuntimeException("Failed to get Borrower name");
+                }
             }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
@@ -104,13 +106,14 @@ class PersistenceLayer {
                      connection.prepareStatement(
                              "SELECT id, name FROM library.Person WHERE name = ?;") ) {
             st.setString(1, borrowerName);
-            final ResultSet resultSet = st.executeQuery();
-            if (resultSet.next()) {
-                long id = resultSet.getLong(1);
-                String name = StringUtils.makeNotNullable(resultSet.getString(2));
-                return new BorrowerData(id, name);
-            } else {
-                return BorrowerData.createEmpty();
+            try (ResultSet resultSet = st.executeQuery()) {
+                if (resultSet.next()) {
+                    long id = resultSet.getLong(1);
+                    String name = StringUtils.makeNotNullable(resultSet.getString(2));
+                    return new BorrowerData(id, name);
+                } else {
+                    return BorrowerData.createEmpty();
+                }
             }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
