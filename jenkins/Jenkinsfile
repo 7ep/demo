@@ -34,12 +34,11 @@ pipeline {
       }
     }
 
-    stage('BDD Tests' {
+    stage('BDD Tests') {
       steps {
         sh './gradlew cucumber'
         sh './gradlew generateCucumberReports'
       }
-
     }
 
   }
