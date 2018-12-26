@@ -28,7 +28,7 @@ pipeline {
       }
       post {
         always {
-          junit 'build/test-results/unitTest/*.xml'
+          junit 'build/test-results/test/*.xml'
         }
       }
     }
@@ -45,7 +45,7 @@ pipeline {
       }
       post {
         always {
-          junit 'build/test-results/integrationTest/*.xml'
+          junit 'build/test-results/test/*.xml'
         }
       }
     }
