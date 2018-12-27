@@ -61,6 +61,9 @@ First, log in as the user you created.  You didn't set a password, so
 you shouldn't need to enter a password for it.  It's an admin user, so
 you can just run sudo <whatever> to act as root.
 
+DISABLE FIREWALL
+----------------
+
 First, let's turn off the firewall and SELinux (its security system).
 It's a pain in the rear, and remember, this is for educational
 purposes, so security is *not* a concern.  Ease of use is.  
@@ -69,11 +72,17 @@ $ #turn off the firewall and disable it
 $ sudo systemctl stop firewalld
 $ sudo systemctl disable firewalld
 
+DISABLE SELINUX
+---------------
+
 To disable SELinux, open /etc/selinux/config and set SELINUX mode to
 disabled.  You can do that with an editor, or you can run this
 command:
 
 sudo sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+
+ENABLE SSH WITH NO PASSWORD
+---------------------------
 
 Let's also change the settings on sshd (the ssh daemon) so it will
 allow us to log in without a password.  Edit the file at
@@ -93,6 +102,9 @@ now, reboot.
 
 $ sudo reboot
 
+
+PORT FORWARDING
+---------------
 
 run this:
 
