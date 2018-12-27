@@ -1,0 +1,54 @@
+making a box for UI-level testing box
+
+Create a new system with 3072 megabytes of ram and 12 gigs hard drive.
+
+Alter its settings:
+  Put it on the same NAT network as the other boxes
+  Put the CentOS7 disc in the virtual drive.
+
+Start the server.
+
+Choose to install Centos7.  (No need to check the media first)
+
+Choose English as the language
+Click Installation Destination and click Done on the followup screen to return
+Click Network & Hostname and toggle the network "ON" on the following page, then click Done.
+Click Software selection and choose KDE Plasma Workspaces, then click Done
+Click Begin Installation
+Click on User Creation.  Provide information for a user, and select to make the user an administrator and to *not* require a password.
+
+... wait for the install to complete...
+
+reboot.
+
+Click on Licensing.  Accept.  Click Done.  Click Finish Installation.
+
+Login.
+
+Right-click the screen and click on Konsole to get a command-line terminal.
+
+Disable the firewall (see DISABLE FIREWALL in system_guide.txt)
+Disable SELinux (see DISABLE SELINUX in system_guide.txt)
+Allow no-password login in ssh (see ENABLE SSH WITH NO PASSWORD in system_guide.txt)
+
+reboot. login.
+
+Open another command-line terminal by right-clicking and choosing Konsole.
+Set up port forwarding (see PORT FORWARDING in system_guide.txt), with one variation:
+  name it "ssh_UI_test_box" and give it a host port of 3322.
+
+Install Chrome:
+
+ $ sudo yum install -y wget
+ $ wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+ $ sudo yum localinstall -y google-chrome-stable_current_x86_64.rpm
+
+Start Chrome by selecting it from the bottom left-hand button and entering
+the text "Chrome", then click on the icon.  Choose a means of securing information,
+and get through until you see the chrome://welcome page.  Test it by going to Google.com
+
+
+
+
+
+
