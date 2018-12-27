@@ -308,10 +308,37 @@ change the ownership of the sonarqube directory to sonarqube's user:
 
 $ chown -R sonarqube:sonarqube /opt/sonarqube
 
-enable and start the service:
+add a link in /usr/bin for sonar:
 
-$ sudo systemctl enable sonarqube.service
-$ sudo systemctl start sonarqube.service
+$ sudo ln -s /opt/sonarqube/bin/linux-x86-64/sonar.sh /usr/bin/sonar
+
+Create the file /etc/init.d/sonar with this content:
+
+------------------------------- FILE START
+#!/bin/sh
+#
+# rc file for SonarQube
+#
+# chkconfig: 345 96 10
+# description: SonarQube system (www.sonarsource.org)
+#
+### BEGIN INIT INFO
+# Provides: sonar
+# Required-Start: $network
+# Required-Stop: $network
+# Default-Start: 3 4 5
+# Default-Stop: 0 1 2 6
+# Short-Description: SonarQube system (www.sonarsource.org)
+# Description: SonarQube system (www.sonarsource.org)
+### END INIT INFO
+
+/usr/bin/sonar $*
+------------------------------- FILE END
+
+Register Sonarqube to start at boot:
+
+$ sudo chmod 755 /etc/init.d/sonar
+$ sudo chkconfig --add sonar
 
 You can view the logs for Sonarqube running at /var/log/messages.  It may take
 a few minutes, but watch to see if Sonarqube is up and running.
@@ -459,7 +486,11 @@ $ sudo yum install -y wget
 
 Then, get Flyway installed:
 
-$ wget -qO- https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/5.2.4/flyway-commandline-5.2.4-linux-x64.tar.gz | tar xvz && sudo ln -s `pwd`/flyway-5.2.4/flyway /usr/local/bin
+$ wget https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/5.2.4/flyway-commandline-5.2.4-linux-x64.tar.gz
+$ tar zxf flyway-commandline-5.2.4-linux-x64.tar.gz
+$ sudo mv flyway-5.2.4 /opt/flyway
+$ sudo chmod 755 /opt/flyway/flyway
+
 
 
 

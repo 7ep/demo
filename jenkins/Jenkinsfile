@@ -71,7 +71,7 @@ pipeline {
 
     stage('Run database migration on the test environment') {
       steps {
-        sh 'flyway migrate -driver=org.postgresql.Driver -user=postgres -password=postgres -schemas=administrative,library,auth -url=jdbc:postgresql://10.0.2.16/training'
+        sh '/opt/flyway/flyway migrate -driver=org.postgresql.Driver -user=postgres -password=postgres -schemas=administrative,library,auth -url=jdbc:postgresql://10.0.2.16/training'
       }
     }
 
