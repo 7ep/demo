@@ -28,7 +28,12 @@ register_button.click()
 
 
 title = driver.title
-assert "Registered Page" in title
+try:
+    assert "Registered Page" in title
+except AssertionError:
+    print("assertion failed")
+    driver.close()
+    exit()
 
 time.sleep(1)
 
