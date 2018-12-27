@@ -16,12 +16,6 @@ pipeline {
       }
     }
 
-    stage('Database migration') {
-      steps {
-        sh './gradlew flywayMigrate -i'
-      }
-    }
-
     stage('Unit Tests') {
       steps {
         sh './gradlew test'
@@ -36,6 +30,12 @@ pipeline {
     stage('Static Analysis') {
       steps {
         sh './gradlew sonarqube'
+      }
+    }
+
+    stage('Database migration') {
+      steps {
+        sh './gradlew flywayMigrate -i'
       }
     }
 
