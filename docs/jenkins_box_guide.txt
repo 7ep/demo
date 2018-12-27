@@ -262,7 +262,8 @@ Now let's modify our pipeline so it does some actual work.
 $ chmod 775 /home/brk
 
 - In Jenkins, on the pipeline page for Demo, click on Configure.
-- Check the box labeled "Do not allow concurrent builds"
+- Check the box labeled "Do not allow concurrent builds".  (We don't want race conditions
+    in our pipeline, and we don't want excessive memory usage on this demo machine)
 - Under Pipeline, click on the dropdown and select Pipeline script from SCM.
 - on the dropdown next to SCM, select Git.
 - fill in these values:
