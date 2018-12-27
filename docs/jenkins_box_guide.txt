@@ -259,7 +259,10 @@ it properly.  Whenever you push a branch, it will now run Jenkins.  That's prett
 
 Now let's modify our pipeline so it does some actual work.
 - as a prerequisite (so Jenkins can access the repo), run this command:
+$ chmod 775 /home/brk
+
 - In Jenkins, on the pipeline page for Demo, click on Configure.
+- Check the box labeled "Do not allow concurrent builds"
 - Under Pipeline, click on the dropdown and select Pipeline script from SCM.
 - on the dropdown next to SCM, select Git.
 - fill in these values:
