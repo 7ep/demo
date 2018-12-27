@@ -214,7 +214,7 @@ the following will remove the Github origin
 $ git remote remove origin
 
 this will add your new repository location as "origin":
-$ git remote add origin ssh://YOUR_USER_NAME@localhost:2222/home/YOUR_USER_NAME/demo
+$ git remote add origin ssh://YOUR_USER_NAME@localhost:3001/home/YOUR_USER_NAME/demo
 
 this will push all your branches to that repo
 $ git push --set-upstream --all origin
@@ -336,7 +336,7 @@ plugin so we can run SonarQube on our code from there.  Go to:
 http://localhost:3002/pluginManager/available
 
 and search for Sonarqube in the top right.  You should see "SonarQube scanner"
-as an option.  Check that, then Install without restart.
+as an option.  Check that on, then Install without restart.
 
 
 INSTALL WEB SERVER
