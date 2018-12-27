@@ -1,0 +1,21 @@
+pipeline {
+
+  agent any
+
+
+  environment {
+    DEMO_PROJECT_HOME   =  "${env.WORKSPACE}"
+    POSTGRES_BIN_DIR    = '/usr/pgsql-10/bin'
+  }
+
+  stages {
+
+    stage('Analyze security of dependencies') {
+      steps {
+         sh './gradlew dependencyCheckAnalyze'
+      }
+    }
+
+  }
+
+}
