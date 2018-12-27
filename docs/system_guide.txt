@@ -140,9 +140,14 @@ localhost at 2222.
 
 From here on out, all commands should be run from ssh.
 
+INSTALL JAVA
+------------
 Let's install Java:
 
 $ sudo yum -y install java-1.8.0-openjdk-devel
+
+INSTALL GIT
+-----------
 
 git:
 
