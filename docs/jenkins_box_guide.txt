@@ -101,41 +101,40 @@ run this:
   
 It should show you the network details.  You are looking for the ip
 address this box was assigned by the network.  It should resemble this
-value: 10.0.2.15/24
+value: 10.0.2.16/24
 
-(One interesting note: I found that when going through these steps,
-that VirtualBox had reset my network settings for this box to basic
-NAT, rather than Nat Network like I previously had set.  If that
-happens to you, just go back into the box's settings and reset it to
-NAT Network.  This will also probably change the ip address of the
-box, so you may need to run ip addr again to see what it is now.)
+CONFIGURE PORT FORWARDING
+-------------------------
 
 Once you have that, click on the menu item File -> Preferences ->
 Network and double-click on training_network, and click on the "Port
 Forwarding" button.  Add a new row, as follows (modify for your ip
 address)
 
-+-------+----------+---------+-----------+-----------+------------+
-| Name  | Protocol | Host IP | Host Port | Guest IP  | Guest Port |
-+-------+----------+---------+-----------+-----------+------------+
-| ssh   | TCP      |         | 2222      | 10.0.2.15 | 22         |
-+-------+----------+---------+-----------+-----------+------------+
-|jenkins| TCP      |         | 8080      | 10.0.2.15 | 8080       |
-+-------+----------+---------+-----------+-----------+------------+
++--------------+----------+---------+-----------+-----------+------------+
+| Name         | Protocol | Host IP | Host Port | Guest IP  | Guest Port |
++--------------+----------+---------+-----------+-----------+------------+
+| box1_ssh     | TCP      |         | 2001      | 10.0.2.15 | 22         |
++--------------+----------+---------+-----------+-----------+------------+
+| box2_ssh     | TCP      |         | 3001      | 10.0.2.16 | 22         |
++--------------+----------+---------+-----------+-----------+------------+
+
 
 Then click all the OK buttons to close the windows.
 
 You should be able to ssh into your centos box by running ssh against
-localhost at 2222.
+localhost at 3001.
 
 
 From here on out, all commands should be run from ssh.
 
-Let's install Java:
+INSTALL JAVA
+------------
 
 $ sudo yum -y install java-1.8.0-openjdk-devel
 
-git:
+INSTALL GIT
+-----------
 
 $ sudo yum -y install git
 
@@ -143,7 +142,10 @@ Postgresql:
 
 (see the documentation for installing Postgresql in system_guide.txt.  see DATABASE_INSTALL there)
 
-Now let's enable the Jenkins repository:
+INSTALLING JENKINS
+------------------
+
+Jenkins is our tool for running continuous integration.
 
 $ curl --silent --location http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo | sudo tee /etc/yum.repos.d/jenkins.repo
 $ sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
@@ -151,7 +153,20 @@ $ sudo yum install -y jenkins
 $ sudo systemctl start jenkins
 $ sudo systemctl enable jenkins
 
-In your browser, go to Jenkins at this URL: localhost:8080
+We'll need to modify port forwarding again. (see CONFIGURE PORT FORWARDING for
+more detail).  Add a row:
+
++--------------+----------+---------+-----------+-----------+------------+
+| Name         | Protocol | Host IP | Host Port | Guest IP  | Guest Port |
++--------------+----------+---------+-----------+-----------+------------+
+| box1_ssh     | TCP      |         | 2001      | 10.0.2.15 | 22         |
++--------------+----------+---------+-----------+-----------+------------+
+| box2_ssh     | TCP      |         | 3001      | 10.0.2.16 | 22         |
++--------------+----------+---------+-----------+-----------+------------+
+| box2_jenkins | TCP      |         | 3002      | 10.0.2.16 | 8080       |
++--------------+----------+---------+-----------+-----------+------------+
+
+In your browser, go to Jenkins at this URL: localhost:3002
 
 Follow the prompts, install Jenkins.  You may choose to install the
 recommended plugins, but I customized mine.  I started by selecting
@@ -170,8 +185,10 @@ password: admin
 email: admin@test.com
 
 After that, I rebooted the Jenkins box.  You may find this necessary - I found that
-after following the preceeding steps, Jenkins would hang until I rebooted it.
+after following the preceding steps, Jenkins would hang until I rebooted it.
 
+MAKE A GIT REPO
+---------------
 
 Now that Jenkins is up and running, let's make this same box
 our Git repo, so that Git can easily notify Jenkins when it
@@ -208,7 +225,10 @@ $ chmod 775 /home/brk
 Now, we want to have the ability to notify Jenkins whenever we push
 to our new repo.  Jenkins has a capability of running builds whenever
 a certain endpoint is hit.  But, like all things, it's not that easy because
-of security considerations.  Here's the howto:
+of security considerations.  Here's the breakdown:
+
+CONFIGURE PIPELINE TO RUN AT GIT RECEIVE
+----------------------------------------
 
 Download the command-line-interface (CLI) tool from Jenkins:
 
@@ -255,6 +275,9 @@ Now let's modify our pipeline so it does some actual work.
 Now that our Jenkins pipeline is running, and we have a Git repo, and
 we have a database running, let's throw in another application - SonarQube!
 
+INSTALL SONARQUBE
+-----------------
+
 download it to your home directory:
 
 $ curl https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-7.5.zip > ~/sonarqube-7.5.zip
@@ -289,15 +312,128 @@ $ sudo systemctl start sonarqube.service
 You can view the logs for Sonarqube running at /var/log/messages.  It may take
 a few minutes, but watch to see if Sonarqube is up and running.
 
-go to http://localhost:9000 and check if you see the Sonarqube dashboard.
+
+We'll need to modify port forwarding again. (see CONFIGURE PORT FORWARDING for
+more detail).  Add a row:
+
++--------------+----------+---------+-----------+-----------+------------+
+| Name         | Protocol | Host IP | Host Port | Guest IP  | Guest Port |
++--------------+----------+---------+-----------+-----------+------------+
+| box1_ssh     | TCP      |         | 2001      | 10.0.2.15 | 22         |
++--------------+----------+---------+-----------+-----------+------------+
+| box2_ssh     | TCP      |         | 3001      | 10.0.2.16 | 22         |
++--------------+----------+---------+-----------+-----------+------------+
+| box2_jenkins | TCP      |         | 3002      | 10.0.2.16 | 8080       |
++--------------+----------+---------+-----------+-----------+------------+
+| box2_sonar   | TCP      |         | 3003      | 10.0.2.16 | 9000       |
++--------------+----------+---------+-----------+-----------+------------+
+
+go to http://localhost:3003 and check if you see the Sonarqube dashboard.
 
 If that is up and running, let's go back to Jenkins and install a
 plugin so we can run SonarQube on our code from there.  Go to:
 
-http://localhost:8080/pluginManager/available
+http://localhost:3002/pluginManager/available
 
 and search for Sonarqube in the top right.  You should see "SonarQube scanner"
 as an option.  Check that, then Install without restart.
+
+
+INSTALL WEB SERVER
+------------------
+
+In preparation for having a web server on port 80, let's add another port
+forwarding rule(see CONFIGURE PORT FORWARDING for more detail).  Add a row:
+
++--------------+----------+---------+-----------+-----------+------------+
+| Name         | Protocol | Host IP | Host Port | Guest IP  | Guest Port |
++--------------+----------+---------+-----------+-----------+------------+
+| box1_ssh     | TCP      |         | 2001      | 10.0.2.15 | 22         |
++--------------+----------+---------+-----------+-----------+------------+
+| box2_ssh     | TCP      |         | 3001      | 10.0.2.16 | 22         |
++--------------+----------+---------+-----------+-----------+------------+
+| box2_jenkins | TCP      |         | 3002      | 10.0.2.16 | 8080       |
++--------------+----------+---------+-----------+-----------+------------+
+| box2_sonar   | TCP      |         | 3003      | 10.0.2.16 | 9000       |
++--------------+----------+---------+-----------+-----------+------------+
+| box2_80      | TCP      |         | 3004      | 10.0.2.16 | 80         |
++--------------+----------+---------+-----------+-----------+------------+
+
+create and edit a new file at /etc/yum.repos.d/bintray-tatsushid-h2o-rpm.repo
+
+-------------------- FILE START
+#bintray-tatsushid-h2o-rpm - packages by tatsushid from Bintray
+[bintray-tatsushid-h2o-rpm]
+name=bintray-tatsushid-h2o-rpm
+baseurl=https://dl.bintray.com/tatsushid/h2o-rpm/centos/$releasever/$basearch/
+gpgcheck=0
+repo_gpgcheck=0
+enabled=1
+--------------------- FILE ENDS
+
+install it:
+$ sudo yum install h2o
+
+Once the installation finishes successfully, you can see a
+configuration file at /etc/h2o/h2o.conf.
+
+Edit that file, make it as follows.  Make sure to set the user to your
+username.  That way, the web server is guaranteed to have access to the
+files it needs.  "file.dirlisting: ON" means that if you go to the URL
+without specifying a page, it will show you the contents of the directory.
+
+The value in file.dir is meant to point to the place where we are storing the
+output of our Cucumber report generation.  This way, you can view the status of
+your BDD tests.
+
+-------------------------------------- FILE START
+user: YOUR_USER_NAME
+file.dirlisting: ON
+hosts:
+  "localhost:80":
+    listen:
+      port: 80
+      host: 0.0.0.0
+    paths:
+      "/":
+        file.dir: /var/lib/jenkins/workspace/demo/build/reports/bdd/cucumber-html-reports/
+access-log: /var/log/h2o/access.log
+error-log: /var/log/h2o/error.log
+pid-file: /var/run/h2o/h2o.pid
+-------------------------------------- FILE END
+
+To start h2o:
+
+$ sudo systemctl enable h2o.service
+$ sudo systemctl start h2o.service
+
+To view a cucumber report, go to http://localhost:4003/overview-features.html
+
+Let's put this link on our pipeline page in Jenkins.  To do so,
+first install the Sidebar-Link plugin.  Go to:
+
+http://localhost:4001/pluginManager/available
+
+and search for "sidebar".  Choose Sidebar Link and Install without restart.
+
+Now go back to your pipeline, here:
+
+http://localhost:4001/job/demo/configure
+
+and find the checkbox labeled "Sidebar links".  Check it on. Add a link.  Enter this:
+
+http://localhost:4003/overview-features.html
+
+For the link text, enter: "Cucumber report".
+
+Click Save.
+
+You should now see "Cucumber report" among the links on the left for your pipeline.
+Click the link and make sure it goes where it should.
+
+
+
+
 
 
 

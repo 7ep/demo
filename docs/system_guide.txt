@@ -114,28 +114,24 @@ It should show you the network details.  You are looking for the ip
 address this box was assigned by the network.  It should resemble this
 value: 10.0.2.15/24
 
-(One interesting note: I found that when going through these steps,
-that VirtualBox had reset my network settings for this box to basic
-NAT, rather than Nat Network like I previously had set.  If that
-happens to you, just go back into the box's settings and reset it to
-NAT Network.  This will also probably change the ip address of the
-box, so you may need to run ip addr again to see what it is now.)
+CONFIGURE PORT FORWARDING
+-------------------------
 
 Once you have that, click on the menu item File -> Preferences ->
 Network and double-click on training_network, and click on the "Port
 Forwarding" button.  Add a new row, as follows (modify for your ip
 address)
 
-+-------+----------+---------+-----------+-----------+------------+
-| Name  | Protocol | Host IP | Host Port | Guest IP  | Guest Port |
-+-------+----------+---------+-----------+-----------+------------+
-| ssh   | TCP      |         | 2222      | 10.0.2.15 | 22         |
-+-------+----------+---------+-----------+-----------+------------+
++----------+----------+---------+-----------+-----------+------------+
+| Name     | Protocol | Host IP | Host Port | Guest IP  | Guest Port |
++----------+----------+---------+-----------+-----------+------------+
+| box1_ssh | TCP      |         | 2001      | 10.0.2.15 | 22         |
++----------+----------+---------+-----------+-----------+------------+
 
 Then click all the OK buttons to close the windows.
 
 You should be able to ssh into your centos box by running ssh against
-localhost at 2222.
+localhost at 2001.
 
 
 From here on out, all commands should be run from ssh.
