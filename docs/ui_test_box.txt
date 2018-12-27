@@ -47,7 +47,7 @@ Start Chrome by selecting it from the bottom left-hand button and entering
 the text "Chrome", then click on the icon.  Choose a means of securing information,
 and get through until you see the chrome://welcome page.  Test it by going to Google.com
 
-
+The system will need a Database.  Install.  See DATABASE_INSTALL in system_guide.txt
 
 
 
