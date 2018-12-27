@@ -263,6 +263,10 @@ You should see something like this:
 
   postgres=#
 
+create our database:
+
+$ createdb training
+
 One last thing.  We'll modify the Postgresql configuration file so it
 trusts everyone implicitly, making it less secure but easier to work
 with.  Yet again, something you wouldn't want to do on a production

@@ -446,6 +446,22 @@ For the name, enter: SonarQube
 
 Save.
 
+INSTALLING FLYWAY
+-----------------
+
+you'll need Flyway for database migration commands when deploying to downstream environments.
+
+To do so:
+
+first, install wget
+
+$ sudo yum install -y wget
+
+Then, get Flyway installed:
+
+$ wget -qO- https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/5.2.4/flyway-commandline-5.2.4-linux-x64.tar.gz | tar xvz && sudo ln -s `pwd`/flyway-5.2.4/flyway /usr/local/bin
+
+
 
 
 

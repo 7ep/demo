@@ -49,6 +49,18 @@ and get through until you see the chrome://welcome page.  Test it by going to Go
 
 The system will need a Database.  Install.  See DATABASE_INSTALL in system_guide.txt
 
+We also want to make this database able to be hit from outside the
+box, so we can restore and run database migrations on it
+from outside.  To do that, first, open the configuration file:
+
+$ sudo vim /var/lib/pgsql/10/data/postgresql.conf
+
+then, replace line
+
+listen_addresses = 'localhost'
+    with
+listen_addresses = '*'
+
 Get Java installed.  See INSTALL JAVA in system_guide.txt
 
 Install Python Pip, Selenium, and Behave:
