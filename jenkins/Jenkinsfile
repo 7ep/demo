@@ -72,7 +72,8 @@ pipeline {
 
     stage('Run on test') {
       steps {
-        sh 'ssh brk@10.0.2.16 start_in_background.sh'
+        sh 'ssh brk@10.0.2.16 demo/stop.sh'
+        sh 'ssh brk@10.0.2.16 demo/start.sh &'
       }
     }
 
