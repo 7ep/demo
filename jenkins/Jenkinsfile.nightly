@@ -1,3 +1,7 @@
+// This file is meant to be run nightly, since it takes a long time to run, and
+// doesn't have to be run on each build.
+
+// its purpose is to highlight dependencies that are security risks.
 pipeline {
 
   agent any
