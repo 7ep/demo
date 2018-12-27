@@ -15,6 +15,10 @@ plugins {
 
     // provides unit test coverage
     id 'jacoco'
+
+    // Dependency Check analyzes the dependencies for potential security issues.
+    // see https://plugins.gradle.org/plugin/org.owasp.dependencycheck
+    id "org.owasp.dependencycheck" version "4.0.1"
 }
 
 // the checker framework adds a bunch of type annotations that
