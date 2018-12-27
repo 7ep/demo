@@ -88,6 +88,12 @@ pipeline {
       }
     }
 
+    stage('Run UI Tests') {
+      steps {
+        sh 'ssh brk@10.0.2.16 ./start_ui_tests.sh'
+      }
+    }
+
   }
 
 }
