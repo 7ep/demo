@@ -57,6 +57,25 @@ pipeline {
       }
     }
 
+    stage('Build deployable') {
+      steps {
+        sh './gradlew buildProduct'
+      }
+    }
+
+    stage('Deploy to test') {
+      steps {
+        sh 'scp /var/lib/jenkins/workspace/demo/build/output/demo brk@10.0.2.16:~/'
+        sh 'scp /var/lib/jenkins/workspace/demo/scripts/start_in_background.sh brk@10.0.2.16:~/'
+      }
+    }
+
+    stage('Run on test') {
+      steps {
+        sh 'ssh brk@10.0.2.16 start_in_background.sh'
+      }
+    }
+
   }
 
 }
