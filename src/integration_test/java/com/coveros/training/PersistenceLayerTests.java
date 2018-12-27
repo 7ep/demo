@@ -11,8 +11,8 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import static com.coveros.training.Constants.DATABASE_URL;
-import static com.coveros.training.Constants.PATH_TO_PG_RESTORE;
-import static com.coveros.training.Constants.RESTORE_SCRIPTS_PATH;
+import static com.coveros.training.TestConstants.PATH_TO_PG_RESTORE;
+import static com.coveros.training.TestConstants.RESTORE_SCRIPTS_PATH;
 import static com.coveros.training.database_backup_constants.ONE_PERSON_IN_TABLE_ALREADY_V1_DUMP;
 import static com.coveros.training.database_backup_constants.SAMPLE_DB_V1_DUMP;
 
