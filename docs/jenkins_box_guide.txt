@@ -2,7 +2,7 @@ create a console-only virtual machine for our Jenkins server.
 
 1. Create new box on VirtualBox version 5.2.12 r122591 (Qt5.6.2)
 
-2. Give it 2048 megabytes of ram and 12 gigabytes of hard drive storage
+2. Give it 4096 megabytes of ram and 12 gigabytes of hard drive storage
 
 (only do the following if you haven't already created "training_network")
 3. in File -> Preferences, click on Network, and click the icon on the
