@@ -49,6 +49,20 @@ and get through until you see the chrome://welcome page.  Test it by going to Go
 
 The system will need a Database.  Install.  See DATABASE_INSTALL in system_guide.txt
 
+Get Java installed.  See INSTALL JAVA in system_guide.txt
+
+Install Python Pip, Selenium, and Behave:
+
+$ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+$ sudo python get-pip.py
+$ sudo pip install behave
+$ sudo pip install selenium
+
+Download Chromedriver from here: http://chromedriver.chromium.org/downloads
+
+Download and unzip it on your path.  I recommend a place that is
+already on your path, /usr/local/sbin
+
 
 
 
