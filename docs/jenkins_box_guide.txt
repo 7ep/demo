@@ -269,12 +269,27 @@ make a new directory and unzip it to there
 $ mkdir ~/sonarqube
 $ sudo unzip ~/sonarqube-7.5.zip -d ~/sonarqube/
 
-start up sonarqube:
+move the directory to opt:
 
-$ ~/sonarqube/sonarqube-7.5/bin/linux-x86-64/sonar.sh console
+$ mv ~/sonarqube/sonarqube-7.5 /opt/sonarqube
 
-Check to see if Sonarqube it up and running.  go to http://localhost:9000
-and check if you see the Sonarqube dashboard.
+create a sonarqube user:
+
+$ adduser sonarqube
+
+change the ownership of the sonarqube directory to sonarqube's user:
+
+$ chown -R sonarqube:sonarqube /opt/sonarqube
+
+enable and start the service:
+
+$ sudo systemctl enable sonarqube.service
+$ sudo systemctl start sonarqube.service
+
+You can view the logs for Sonarqube running at /var/log/messages.  It may take
+a few minutes, but watch to see if Sonarqube is up and running.
+
+go to http://localhost:9000 and check if you see the Sonarqube dashboard.
 
 If that is up and running, let's go back to Jenkins and install a
 plugin so we can run SonarQube on our code from there.  Go to:
@@ -283,7 +298,6 @@ http://localhost:8080/pluginManager/available
 
 and search for Sonarqube in the top right.  You should see "SonarQube scanner"
 as an option.  Check that, then Install without restart.
-
 
 
 
