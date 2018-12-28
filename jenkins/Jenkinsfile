@@ -90,7 +90,8 @@ pipeline {
 
     stage('Run UI Tests') {
       steps {
-        sh 'ssh brk@10.0.2.16 demo_tests/ui_tests/start_ui_tests.sh'
+        sh 'ssh brk@10.0.2.16 chmod 775 demo_tests/ui_tests/run_behave.sh'
+        sh 'ssh brk@10.0.2.16 demo_tests/ui_tests/run_behave.sh'
       }
     }
 
