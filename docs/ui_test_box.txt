@@ -69,6 +69,7 @@ $ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 $ sudo python get-pip.py
 $ sudo pip install behave
 $ sudo pip install selenium
+$ sudo pip install pyhamcrest
 
 Download Chromedriver from here: http://chromedriver.chromium.org/downloads
 
