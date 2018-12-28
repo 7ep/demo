@@ -33,14 +33,9 @@ pipeline {
       }
     }
 
-    stage('Database migration') {
-      steps {
-        sh './gradlew flywayMigrate -i'
-      }
-    }
-
     stage('Integration Tests') {
       steps {
+        sh './gradlew flywayMigrate -i'
         sh './gradlew fastIntegrationTest'
       }
       post {
@@ -50,46 +45,27 @@ pipeline {
       }
     }
 
-    stage('BDD Tests') {
+    stage('Automated Acceptance Tests') {
       steps {
         sh './gradlew cucumber'
         sh './gradlew generateCucumberReports'
       }
     }
 
-    stage('Build deployable') {
-      steps {
-        sh './gradlew buildProduct'
-      }
-    }
-
-    stage('Restore database on test environment') {
-      steps {
-        sh 'pg_restore --host=10.0.2.16 --port=5432 --username=postgres --dbname training --no-password --clean /var/lib/jenkins/workspace/demo/db_sample_files/one_person_in_table_already_v1.dump'
-      }
-    }
-
-    stage('Run database migration on the test environment') {
-      steps {
-        sh '/opt/flyway/flyway migrate -driver=org.postgresql.Driver -user=postgres -password=postgres -schemas=administrative,library,auth -url=jdbc:postgresql://10.0.2.16/training'
-      }
-    }
-
     stage('Deploy to test') {
       steps {
+        sh 'pg_restore --host=10.0.2.16 --port=5432 --username=postgres --dbname training --no-password --clean /var/lib/jenkins/workspace/demo/db_sample_files/one_person_in_table_already_v1.dump'
+        sh '/opt/flyway/flyway migrate -driver=org.postgresql.Driver -user=postgres -password=postgres -schemas=administrative,library,auth -url=jdbc:postgresql://10.0.2.16/training'
+        sh './gradlew buildProduct'
         sh 'scp -r /var/lib/jenkins/workspace/demo/build/output/demo brk@10.0.2.16:~/'
-      }
-    }
 
-    stage('Run on test') {
-      steps {
         sh 'ssh brk@10.0.2.16 demo/stop.sh'
         sh 'ssh brk@10.0.2.16 demo/start.sh &'
         sh 'sleep 25'
       }
     }
 
-    stage('Run UI Tests') {
+    stage('UI Tests') {
       steps {
         sh 'ssh brk@10.0.2.16 demo_tests/ui_tests/run_behave.sh'
       }
