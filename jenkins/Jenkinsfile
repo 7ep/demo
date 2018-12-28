@@ -85,6 +85,7 @@ pipeline {
       steps {
         sh 'ssh brk@10.0.2.16 demo/stop.sh'
         sh 'ssh brk@10.0.2.16 demo/start.sh &'
+        sh 'sleep 10'
       }
     }
 
