@@ -308,37 +308,34 @@ change the ownership of the sonarqube directory to sonarqube's user:
 
 $ chown -R sonarqube:sonarqube /opt/sonarqube
 
-add a link in /usr/bin for sonar:
-
-$ sudo ln -s /opt/sonarqube/bin/linux-x86-64/sonar.sh /usr/bin/sonar
-
-Create the file /etc/init.d/sonar with this content:
+Create the file /etc/systemd/system/sonar.service with this content:
 
 ------------------------------- FILE START
-#!/bin/sh
-#
-# rc file for SonarQube
-#
-# chkconfig: 345 96 10
-# description: SonarQube system (www.sonarsource.org)
-#
-### BEGIN INIT INFO
-# Provides: sonar
-# Required-Start: $network
-# Required-Stop: $network
-# Default-Start: 3 4 5
-# Default-Stop: 0 1 2 6
-# Short-Description: SonarQube system (www.sonarsource.org)
-# Description: SonarQube system (www.sonarsource.org)
-### END INIT INFO
+[Unit]
+Description=SonarQube service
+After=syslog.target network.target
 
-/usr/bin/sonar $*
+[Service]
+Type=simple
+User=sonarqube
+Group=sonarqube
+PermissionsStartOnly=true
+ExecStart=/bin/nohup /bin/java -Xms32m -Xmx32m -Djava.net.preferIPv4Stack=true -jar /opt/sonarqube/lib/sonar-application-7.5.jar
+StandardOutput=syslog
+LimitNOFILE=65536
+LimitNPROC=8192
+TimeoutStartSec=5
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
 ------------------------------- FILE END
 
-Register Sonarqube to start at boot:
+Start Sonarqube and register it to start at boot:
 
-$ sudo chmod 755 /etc/init.d/sonar
-$ sudo chkconfig --add sonar
+$ systemctl start sonar
+$ systemctl enable sonar
 
 You can view the logs for Sonarqube running at /var/log/messages.  It may take
 a few minutes, but watch to see if Sonarqube is up and running.
