@@ -11,7 +11,7 @@ Feature: Authenticating to the system
         Then it indicates I am successfully registered
 
     Scenario: Registering as an existing user (negative case)
-        Given I am registered as "Byron"
+        Given I am registered as "Byron" with a password of "OAh8Wq8CajGZwURSXI8uSS"
         When I try to register again
         Then it indicates I am already registered
 
