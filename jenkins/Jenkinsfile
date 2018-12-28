@@ -58,7 +58,7 @@ pipeline {
         sh '/opt/flyway/flyway migrate -driver=org.postgresql.Driver -user=postgres -password=postgres -schemas=administrative,library,auth -url=jdbc:postgresql://10.0.2.16/training'
         sh './gradlew buildProduct'
         sh 'scp -r /var/lib/jenkins/workspace/demo/build/output/demo brk@10.0.2.16:~/'
-
+        sh 'scp /var/lib/jenkins/workspace/demo/scripts/start_in_background.sh brk@10.0.2.16:~/demo'
         sh 'ssh brk@10.0.2.16 demo/stop.sh'
         sh 'ssh brk@10.0.2.16 demo/start.sh &'
         sh 'sleep 25'
