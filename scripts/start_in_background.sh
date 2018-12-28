@@ -6,13 +6,18 @@
 
 # if it doesn't find that, it assumes it's not running and 
 # tries to start it.
+
+# get the directory of where this script is located
+# we will use it to call further scripts.
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
 if ss -nat|grep 8888 ; then
    echo "gretty running.  About to stop it.."
-   ./stop.sh
+   $DIR/stop.sh
    echo "now starting again..."
-   ./start.sh &
+   $DIR/start.sh &
 else
    echo "gretty not running.  Starting it..."
-   ./start.sh &
+   $DIR/start.sh &
 fi
 
