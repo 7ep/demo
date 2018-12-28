@@ -58,7 +58,7 @@ pipeline {
         sh 'scp -r /var/lib/jenkins/workspace/demo/build/output/demo brk@10.0.2.16:~/'
         sh 'scp /var/lib/jenkins/workspace/demo/scripts/start_in_background.sh brk@10.0.2.16:~/demo'
         sh 'ssh brk@10.0.2.16 rm -fr demo_tests'
-        sh 'ssh brk@10.0.2.16 git clone brk@10.0.2.14:~/demo demo_tests'
+        sh 'ssh brk@10.0.2.16 git clone brk@10.0.2.14:~/demo demo_tests --branch with_database'
         sh 'pg_restore --host=10.0.2.16 --port=5432 --username=postgres --dbname training --no-password --clean /var/lib/jenkins/workspace/demo/db_sample_files/one_person_in_table_already_v1.dump'
         sh '/opt/flyway/flyway migrate -driver=org.postgresql.Driver -user=postgres -password=postgres -schemas=administrative,library,auth -url=jdbc:postgresql://10.0.2.16/training'
         sh 'sleep 10'
