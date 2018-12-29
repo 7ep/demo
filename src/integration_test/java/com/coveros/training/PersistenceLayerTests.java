@@ -13,8 +13,7 @@ import java.util.Properties;
 import static com.coveros.training.Constants.DATABASE_URL;
 import static com.coveros.training.TestConstants.PATH_TO_PG_RESTORE;
 import static com.coveros.training.TestConstants.RESTORE_SCRIPTS_PATH;
-import static com.coveros.training.database_backup_constants.ONE_PERSON_IN_TABLE_ALREADY_V1_DUMP;
-import static com.coveros.training.database_backup_constants.SAMPLE_DB_V1_DUMP;
+import static com.coveros.training.database_backup_constants.*;
 
 /**
  * Test that we have a persistence layer that we can easily mock out.
@@ -44,7 +43,7 @@ public class PersistenceLayerTests {
      */
     @Test
     public void testShouldSaveBorrowerToDatabase() {
-        setDatabaseState(SAMPLE_DB_V1_DUMP);
+        setDatabaseState(INITIAL_STATE_V2_DUMP);
         final Connection connection = createConnection();
         PersistenceLayer pl = new PersistenceLayer(connection);
 
@@ -60,7 +59,7 @@ public class PersistenceLayerTests {
      */
     @Test
     public void testShouldUupdateBorrowerToDatabase() {
-        setDatabaseState(ONE_PERSON_IN_TABLE_ALREADY_V1_DUMP);
+        setDatabaseState(ONE_PERSON_IN_BORROWER_TABLE_V2_DUMP);
         final Connection connection = createConnection();
         PersistenceLayer pl = new PersistenceLayer(connection);
 
@@ -72,11 +71,11 @@ public class PersistenceLayerTests {
 
     @Test
     public void testShouldBeAbleToSearchBorrowerByName() {
-        setDatabaseState(ONE_PERSON_IN_TABLE_ALREADY_V1_DUMP);
+        setDatabaseState(ONE_PERSON_IN_BORROWER_TABLE_V2_DUMP);
         final Connection connection = createConnection();
         PersistenceLayer pl = new PersistenceLayer(connection);
 
-        BorrowerData bd = pl.searchBorrowerDataByName("alice");
+        Borrower bd = pl.searchBorrowerDataByName("alice");
 
         Assert.assertEquals("alice", bd.name);
         Assert.assertEquals(1, bd.id);

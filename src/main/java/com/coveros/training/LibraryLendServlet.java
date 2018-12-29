@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
@@ -22,16 +24,16 @@ public class LibraryLendServlet extends HttpServlet {
         final String borrower = request.getParameter("borrower");
         request.setAttribute("borrower", borrower);
 
-        final OffsetDateTime now = Instant.now().atOffset(ZoneOffset.UTC);
+        final Date now = Date.valueOf(LocalDate.now());
         request.setAttribute("date", now.toString());
 
         final Connection connection = PersistenceLayer.createConnection();
         final PersistenceLayer persistenceLayer = new PersistenceLayer(connection);
-        final DatabaseUtils booksDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_BOOKS_DATABASE_NAME);
-        final DatabaseUtils lendingDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_LENDING_DATABASE);
-        LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer, booksDb, lendingDb);
+        LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer);
 
-        final LibraryActionResults libraryActionResults = libraryUtils.lendBook(book, borrower, now);
+        final Book book1 = libraryUtils.searchForBookByTitle(book);
+        final Borrower borrower1 = libraryUtils.searchForBorrowerByName(borrower);
+        final LibraryActionResults libraryActionResults = libraryUtils.lendBook(book1, borrower1, now);
 
         request.setAttribute("result", libraryActionResults.toString());
         request.getRequestDispatcher("result.jsp").forward(request, response);

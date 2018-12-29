@@ -9,10 +9,10 @@ import static com.coveros.training.RegistrationStatusEnums.*;
 
 class RegistrationUtils {
 
-    private final DatabaseUtils authDb;
+    private final PersistenceLayer persistenceLayer;
 
-    RegistrationUtils(DatabaseUtils authDb) {
-        this.authDb = authDb;
+    RegistrationUtils(PersistenceLayer persistenceLayer) {
+        this.persistenceLayer = persistenceLayer;
     }
 
     RegistrationResult processRegistration(String username, String password) {
@@ -24,7 +24,7 @@ class RegistrationUtils {
     }
 
     static RegistrationUtils createEmpty() {
-        return new RegistrationUtils(DatabaseUtils.createEmpty());
+        return new RegistrationUtils(new PersistenceLayer(new EmptyConnection()));
     }
 
     private RegistrationResult registerUser(String username, String password) {
@@ -37,7 +37,13 @@ class RegistrationUtils {
         final PasswordResult passwordResult = isPasswordGood(password);
         if (passwordResult.status != SUCCESS) return new RegistrationResult(false, passwordResult.toString());
 
-        // finally, we try saving to the database.
+        // then we check if the username already exists
+        final User user = persistenceLayer.searchForUserByName(username);
+        if (!user.isEmpty()) {
+            return new RegistrationResult(false, ALREADY_REGISTERED.toString());
+        }
+
+        // at this point, we feel assured it's ok to save to the database.
         saveToDatabase(username, password);
         return new RegistrationResult(true, SUCCESSFULLY_REGISTERED.toString());
     }
@@ -64,12 +70,13 @@ class RegistrationUtils {
         return new PasswordResult(SUCCESS, entropy, timeToCrackOff, timeToCrackOn, result.getFeedback().getResult());
     }
 
-    public boolean isUserInDatabase(String username) {
-        return StringUtils.isNotEmpty(authDb.searchDatabaseForKey(username));
+    boolean isUserInDatabase(String username) {
+        return ! persistenceLayer.searchForUserByName(username).isEmpty();
     }
 
     private void saveToDatabase(String username, String password) {
-        authDb.saveTextToFile(username + " " + password);
+        final long userId = persistenceLayer.saveNewUser(username);
+        persistenceLayer.updateUserWithPassword(userId, password);
     }
 
 }

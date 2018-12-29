@@ -5,6 +5,8 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 
+import static com.coveros.training.database_backup_constants.INITIAL_STATE_V2_DUMP;
+
 public class RegistrationStepDefs {
 
     private static final RegistrationResult ALREADY_REGISTERED = new RegistrationResult(false, RegistrationStatusEnums.ALREADY_REGISTERED.toString());
@@ -17,10 +19,9 @@ public class RegistrationStepDefs {
      * create objects for registration and login, and clear the database.
      */
     private void initializeDatabaseAccess() {
-        final DatabaseUtils authDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.AUTH_DATABASE_NAME);
-        authDb.clearDatabaseContents();
-        registrationUtils = new RegistrationUtils(authDb);
-        LoginUtils loginUtils = new LoginUtils(authDb);
+        PersistenceLayerTests.setDatabaseState(INITIAL_STATE_V2_DUMP);
+        final PersistenceLayer persistenceLayer = new PersistenceLayer(DataUtils.createConnection());
+        registrationUtils = new RegistrationUtils(persistenceLayer);
     }
 
     // a password used that will suffice as a typical password

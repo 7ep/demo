@@ -16,10 +16,9 @@ public class LibraryRegisterBookServlet extends HttpServlet {
         final String book = request.getParameter("book");
         request.setAttribute("book", book);
 
-        final DatabaseUtils booksDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_BOOKS_DATABASE_NAME);
-        final DatabaseUtils lendingDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.LIBRARY_LENDING_DATABASE);
-        final PersistenceLayer persistenceLayer = new PersistenceLayer(new EmptyConnection());
-        LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer, booksDb, lendingDb);
+        final Connection connection = PersistenceLayer.createConnection();
+        final PersistenceLayer persistenceLayer = new PersistenceLayer(connection);
+        LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer);
 
         final LibraryActionResults libraryActionResults = libraryUtils.registerBook(book);
 

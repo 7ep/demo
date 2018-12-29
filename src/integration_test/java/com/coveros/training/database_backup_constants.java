@@ -12,4 +12,8 @@ class database_backup_constants {
      */
     static final String ONE_PERSON_IN_TABLE_ALREADY_V1_DUMP = "one_person_in_table_already_v1.dump";
 
+    static final String INITIAL_STATE_V2_DUMP = "initial_empty_state_v2.dump";
+
+    static final String ONE_PERSON_IN_BORROWER_TABLE_V2_DUMP = "one_person_in_borrower_table_v2.dump";
+
 }

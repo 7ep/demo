@@ -5,6 +5,8 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 
+import java.sql.Connection;
+
 public class LoginStepDefs {
 
     private boolean isRegisteredUser;
@@ -15,10 +17,10 @@ public class LoginStepDefs {
      * create objects for registration and login, and clear the database.
      */
     private void initializeDatabaseAccess() {
-        final DatabaseUtils authDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.AUTH_DATABASE_NAME);
-        authDb.clearDatabaseContents();
-        registrationUtils = new RegistrationUtils(authDb);
-        loginUtils = new LoginUtils(authDb);
+        final Connection connection = DataUtils.createConnection();
+        final PersistenceLayer persistenceLayer = new PersistenceLayer(connection);
+        registrationUtils = new RegistrationUtils(persistenceLayer);
+        loginUtils = new LoginUtils(persistenceLayer);
     }
 
     @Given("^\"([^\"]*)\" is registered in the system with the password \"([^\"]*)\"$")

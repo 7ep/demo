@@ -15,11 +15,4 @@ class StringUtils {
         return s == null ? "" : s;
     }
 
-    /**
-     * A simple helper method to avoid having a exclamation mark
-     * to represent "not"
-     */
-    static boolean isNotEmpty(String s) {
-        return !s.isEmpty();
-    }
 }

@@ -1,46 +1,58 @@
 package com.coveros.training;
 
+import java.sql.Date;
 import java.time.OffsetDateTime;
 
 class LibraryUtils {
 
     private final PersistenceLayer persistence;
-    private final DatabaseUtils booksDb;
-    private final DatabaseUtils lendingDb;
 
-    LibraryUtils(PersistenceLayer persistence, DatabaseUtils booksDb, DatabaseUtils lendingDb) {
+    LibraryUtils(PersistenceLayer persistence) {
         this.persistence = persistence;
-        this.booksDb = booksDb;
-        this.lendingDb = lendingDb;
     }
 
     static LibraryUtils createEmpty() {
-        return new LibraryUtils(new PersistenceLayer(new EmptyConnection()), DatabaseUtils.createEmpty(), DatabaseUtils.createEmpty());
+        return new LibraryUtils(new PersistenceLayer(new EmptyConnection()));
     }
 
-    LibraryActionResults lendBook(String book, String borrower, OffsetDateTime borrowTime) {
-        if (booksDb.searchDatabaseForKey(book).isEmpty()) return LibraryActionResults.BOOK_NOT_REGISTERED;
-        if (persistence.searchBorrowerDataByName(borrower).equals(BorrowerData.createEmpty())) return LibraryActionResults.BORROWER_NOT_REGISTERED;
-        if (StringUtils.isNotEmpty(lendingDb.searchDatabaseForKey(book))) return LibraryActionResults.BOOK_CHECKED_OUT;
-        lendingDb.saveTextToFile(book + " " + borrower + " " + borrowTime);
+    LibraryActionResults lendBook(Book book, Borrower borrower, Date borrowDate) {
+        if (book.isEmpty()) return LibraryActionResults.BOOK_NOT_REGISTERED;
+
+        if (borrower.isEmpty()) return LibraryActionResults.BORROWER_NOT_REGISTERED;
+
+        final Loan loan = persistence.searchForLoan(book);
+        if (!loan.isEmpty()) return LibraryActionResults.BOOK_CHECKED_OUT;
+
+        persistence.createLoan(book, borrower, borrowDate);
         return LibraryActionResults.SUCCESS;
     }
 
     LibraryActionResults registerBorrower(String borrower) {
-        final BorrowerData borrowerDetails = persistence.searchBorrowerDataByName(borrower);
-        final boolean borrowerWasFound = !borrowerDetails.equals(BorrowerData.createEmpty());
+        final Borrower borrowerDetails = persistence.searchBorrowerDataByName(borrower);
+        final boolean borrowerWasFound = !borrowerDetails.equals(Borrower.createEmpty());
         if (borrowerWasFound) return LibraryActionResults.ALREADY_REGISTERED_BORROWER;
 
         persistence.saveNewBorrower(borrower);
         return LibraryActionResults.SUCCESS;
     }
 
-    LibraryActionResults registerBook(String book) {
-        final String bookDetails = booksDb.searchDatabaseForKey(book);
-        if (! bookDetails.isEmpty()) return LibraryActionResults.ALREADY_REGISTERED_BOOK;
+    LibraryActionResults registerBook(String bookTitle) {
+        final Book book = persistence.searchBooksByTitle(bookTitle);
+        if (! book.isEmpty()) return LibraryActionResults.ALREADY_REGISTERED_BOOK;
 
-        booksDb.saveTextToFile(book);
+        persistence.saveNewBook(bookTitle);
         return LibraryActionResults.SUCCESS;
     }
 
+    Loan searchForLoan(Book book) {
+        return persistence.searchForLoan(book);
+    }
+
+    Borrower searchForBorrowerByName(String borrowerName) {
+        return persistence.searchBorrowerDataByName(borrowerName);
+    }
+
+    public Book searchForBookByTitle(String title) {
+        return persistence.searchBooksByTitle(title);
+    }
 }

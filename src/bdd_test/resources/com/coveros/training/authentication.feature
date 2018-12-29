@@ -8,26 +8,26 @@ Feature: As a user of the system, I want to be able to authenticate myself, so I
 
   @login
   Scenario: Entering proper credentials authenticates a user to the system.
-    Given "alice" is registered in the system with the password "LpcVWwRkWSNVH"
-    When when a user authenticates with "alice" and "LpcVWwRkWSNVH"
+    Given "adam" is registered in the system with the password "LpcVWwRkWSNVH"
+    When when a user authenticates with "adam" and "LpcVWwRkWSNVH"
     Then The system decides that they are authenticated.
 
   @login
   Scenario Outline: Entering invalid credentials fails to authenticate a user to the system.
-    Given "alice" is registered in the system with the password "LpcVWwRkWSNVH"
+    Given "adam" is registered in the system with the password "LpcVWwRkWSNVH"
     When when a user authenticates with "<username>" and "<password>"
     Then The system decides that they are not authenticated, because <note>
     Examples:
       | username      |    password     | note                                          |
-      | alice         | lpcvwwrkwsnvh   | the password is correct, but all lower-case   |
-      | aliceee       | LpcVWwRkWSNVH   | we used an incorrect username                 |
-      | alice         |                 | we used an empty password                     |
-      | alice         | LpcVWwR         | we used a shortened version of the password   |
+      | adam         | lpcvwwrkwsnvh   | the password is correct, but all lower-case   |
+      | adamee       | LpcVWwRkWSNVH   | we used an incorrect username                 |
+      | adam         |                 | we used an empty password                     |
+      | adam         | LpcVWwR         | we used a shortened version of the password   |
       | ALICE         | LpcVWwRkWSNVH   | the username was made all upper-case          |
 
   @registration
   Scenario: A user registers themselves to the system with a good password
-    Given a user "alice" is not currently registered in the system
+    Given a user "adam" is not currently registered in the system
     When they register with that username and use the password "lpcvwwrkwsnvh"
     Then they become registered
 
@@ -47,7 +47,7 @@ Feature: As a user of the system, I want to be able to authenticate myself, so I
 
   @registration
   Scenario Outline: A user is unable to register due to blatantly bad password
-    Given a user "alice" is not currently registered in the system
+    Given a user "adam" is not currently registered in the system
     When they enter their username and provide a poor password of <password>
     Then they fail to register and the system indicates a response: <response>
     Examples:
@@ -61,6 +61,6 @@ Feature: As a user of the system, I want to be able to authenticate myself, so I
 
   @registration
   Scenario: A user is unable to register due to the username already existing
-    Given a username of "alice" is registered
+    Given a username of "adam" is registered
     When a user tries to register with that same name
     Then the system indicates a failure to register

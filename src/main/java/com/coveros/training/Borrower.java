@@ -13,7 +13,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * Note that we make our fields public because they are final,
  * so there's no need to have methods wrapping them.
  */
-final class BorrowerData {
+final class Borrower {
 
     /**
      * The identifier for this borrower in the database.
@@ -25,13 +25,13 @@ final class BorrowerData {
      */
     final String name;
 
-    BorrowerData (long id, String name) {
+    Borrower(long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    static BorrowerData createEmpty() {
-        return new BorrowerData(0, "");
+    static Borrower createEmpty() {
+        return new Borrower(0, "");
     }
 
     public final boolean equals(@Nullable Object obj) {
@@ -40,7 +40,7 @@ final class BorrowerData {
         if (obj.getClass() != getClass()) {
             return false;
         }
-        BorrowerData rhs = (BorrowerData) obj;
+        Borrower rhs = (Borrower) obj;
         return new EqualsBuilder()
                 .append(id, rhs.id)
                 .append(name, rhs.name)
@@ -60,4 +60,7 @@ final class BorrowerData {
         return ToStringBuilder.reflectionToString(this);
     }
 
+    public boolean isEmpty() {
+        return this.equals(Borrower.createEmpty());
+    }
 }

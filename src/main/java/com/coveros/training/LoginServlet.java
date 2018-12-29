@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Connection;
 
 @WebServlet(name = "LoginServlet", urlPatterns = {"login"}, loadOnStartup = 1) 
 public class LoginServlet extends HttpServlet {
@@ -29,8 +30,9 @@ public class LoginServlet extends HttpServlet {
         String username = putUsernameInRequest(request);
         String password = putPasswordInRequest(request);
 
-        final DatabaseUtils authDb = DatabaseUtils.obtainDatabaseAccess(DatabaseUtils.AUTH_DATABASE_NAME);
-        final LoginUtils loginUtils = new LoginUtils(authDb);
+        final Connection connection = PersistenceLayer.createConnection();
+        final PersistenceLayer persistenceLayer = new PersistenceLayer(connection);
+        final LoginUtils loginUtils = new LoginUtils(persistenceLayer);
         final Boolean userRegistered = loginUtils.isUserRegistered(username, password);
         String responseText = userRegistered ? "access granted" : "access denied";
         request.setAttribute("result", responseText);
