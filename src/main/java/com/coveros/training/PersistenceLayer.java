@@ -22,8 +22,9 @@ class PersistenceLayer {
         props.setProperty("password","postgres");
         Connection conn;
         try {
+            Class.forName("org.postgresql.Driver");
             conn = DriverManager.getConnection(DATABASE_URL, props);
-        } catch (SQLException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             throw new RuntimeException(ex);
         }
         return conn;
