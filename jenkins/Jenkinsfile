@@ -55,16 +55,16 @@ pipeline {
     stage('Deploy to test') {
       steps {
         // move the web app to the box in the proper place.
-        sh 'scp ~/workspace/demo/build/libs/demo.war brk@10.0.2.16:~/demo.war'
-        sh 'ssh brk@10.0.2.16 sudo mv demo.war /opt/tomcat/webapps/'
+        sh 'scp /var/lib/jenkins/workspace/demo/build/libs/demo.war brk@uitestbox:~/demo.war'
+        sh 'ssh brk@uitestbox sudo mv demo.war /opt/tomcat/webapps/'
 
         // need demo_tests on the box, that's where we have the UI tests located.
-        sh 'ssh brk@10.0.2.16 rm -fr demo_tests'
-        sh 'ssh brk@10.0.2.16 git clone brk@10.0.2.14:~/demo demo_tests --branch with_database'
+        sh 'ssh brk@uitestbox rm -fr demo_tests'
+        sh 'ssh brk@uitestbox git clone brk@jenkinsbox:~/demo demo_tests --branch with_database'
 
         // restore to a known point, then run migration.  Clean and simple.
-        sh 'pg_restore --host=10.0.2.16 --port=5432 --username=postgres --dbname training --no-password --clean ~/workspace/demo/db_sample_files/initial_empty_state_v2.dump'
-        sh '/opt/flyway/flyway migrate -driver=org.postgresql.Driver -user=postgres -password=postgres -schemas=administrative,library,auth -url=jdbc:postgresql://10.0.2.16/training -locations=filesystem:~/workspace/demo/src/main/resources/db/migration'
+        sh 'pg_restore --host=uitestbox --port=5432 --username=postgres --dbname training --no-password --clean /var/lib/jenkins/workspace/demo/db_sample_files/initial_empty_state_v2.dump'
+        sh '/opt/flyway/flyway migrate -driver=org.postgresql.Driver -user=postgres -password=postgres -schemas=administrative,library,auth -url=jdbc:postgresql://uitestbox/training -locations=filesystem:/var/lib/jenkins/workspace/demo/src/main/resources/db/migration'
 
         // need a little time to wait for Tomcat to initialize the application...
         sh 'sleep 5'
@@ -75,7 +75,7 @@ pipeline {
     // when it comes to experimentation with UI tests.  You can try things and see how they work out.
     stage('UI Tests') {
       steps {
-        sh 'ssh brk@10.0.2.16 demo_tests/ui_tests/run_behave.sh'
+        sh 'ssh brk@uitestbox demo_tests/ui_tests/run_behave.sh'
       }
     }
 
