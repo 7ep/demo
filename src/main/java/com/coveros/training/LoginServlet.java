@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 
-@WebServlet(name = "LoginServlet", urlPatterns = {"login"}, loadOnStartup = 1) 
+@WebServlet(name = "LoginServlet", urlPatterns = {"/login"}, loadOnStartup = 1)
 public class LoginServlet extends HttpServlet {
 
     private String putUsernameInRequest(HttpServletRequest request) {

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 
-@WebServlet(name = "LibraryRegisterBookServlet", urlPatterns = {"registerbook"}, loadOnStartup = 1)
+@WebServlet(name = "LibraryRegisterBookServlet", urlPatterns = {"/registerbook"}, loadOnStartup = 1)
 public class LibraryRegisterBookServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

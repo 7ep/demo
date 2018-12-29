@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "MathServlet", urlPatterns = {"math"}, loadOnStartup = 1) 
+@WebServlet(name = "MathServlet", urlPatterns = {"/math"}, loadOnStartup = 1)
 public class MathServlet extends HttpServlet {
 
     private int putNumberInRequest(String itemName, HttpServletRequest request) {

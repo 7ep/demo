@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-@WebServlet(name = "LibraryLendServlet", urlPatterns = {"lend"}, loadOnStartup = 1)
+@WebServlet(name = "LibraryLendServlet", urlPatterns = {"/lend"}, loadOnStartup = 1)
 public class LibraryLendServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

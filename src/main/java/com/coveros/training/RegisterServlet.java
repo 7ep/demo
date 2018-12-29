@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 
-@WebServlet(name = "RegisterServlet", urlPatterns = {"register"}, loadOnStartup = 1)
+@WebServlet(name = "RegisterServlet", urlPatterns = {"/register"}, loadOnStartup = 1)
 public class RegisterServlet extends HttpServlet {
 
     private String putUsernameInRequest(HttpServletRequest request) {
