@@ -69,6 +69,7 @@ def step_impl(context):
 def step_impl(context, username, password):
     context.username = username
     context.password = password
+    __register_user(context, context.username, context.password)
     pass
 
 
