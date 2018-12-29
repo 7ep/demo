@@ -77,5 +77,62 @@ Download and unzip it on your path.  I recommend a place that is
 already on your path, /usr/local/sbin
 
 
+install Tomcat 9:
+$ wget http://www.gtlib.gatech.edu/pub/apache/tomcat/tomcat-9/v9.0.14/bin/apache-tomcat-9.0.14.tar.gz
+$ sudo mv apache-tomcat-9.0.14 /opt/tomcat
+$ sudo useradd -r tomcat --shell /bin/false
+$ sudo chown -R tomcat:tomcat /opt/tomcat/
+
+at /etc/systemd/system/tomcat.service create this file:
+
+
+---------------------------------- FILE START
+[Unit]
+Description=Apache Tomcat 9
+After=syslog.target network.target
+
+[Service]
+User=tomcat
+Group=tomcat
+Type=forking
+Environment=CATALINA_PID=/opt/tomcat/tomcat.pid
+Environment=CATALINA_HOME=/opt/tomcat
+Environment=CATALINA_BASE=/opt/tomcat
+ExecStart=/opt/tomcat/bin/startup.sh
+ExecStop=/opt/tomcat/bin/shutdown.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+---------------------------------- FILE END
+
+Save the file and run the following command to reload the systemd manager configuration
+$ sudo systemctl daemon-reload
+
+Now you can start the Apache Tomcat 9 server and enable it to start on boot time
+
+$ sudo systemctl start tomcat
+$ sudo systemctl enable tomcat
+
+Tomcat will start serving on port 8080 on the machine.  Add a port forwarding
+rule for it:
+
++--------------+----------+---------+-----------+-----------+------------+
+| Name         | Protocol | Host IP | Host Port | Guest IP  | Guest Port |
++--------------+----------+---------+-----------+-----------+------------+
+| box1_ssh     | TCP      |         | 2001      | 10.0.2.15 | 22         |
++--------------+----------+---------+-----------+-----------+------------+
+| box2_ssh     | TCP      |         | 3001      | 10.0.2.16 | 22         |
++--------------+----------+---------+-----------+-----------+------------+
+| box2_jenkins | TCP      |         | 3002      | 10.0.2.16 | 8080       |
++--------------+----------+---------+-----------+-----------+------------+
+| box2_sonar   | TCP      |         | 3003      | 10.0.2.16 | 9000       |
++--------------+----------+---------+-----------+-----------+------------+
+| box2_80      | TCP      |         | 3004      | 10.0.2.16 | 80         |
++--------------+----------+---------+-----------+-----------+------------+
+| ui_ssh       | TCP      |         | 4001      | 10.0.2.16 | 22         |
++--------------+----------+---------+-----------+-----------+------------+
+| ui_8080      | TCP      |         | 4002      | 10.0.2.16 | 80         |
++--------------+----------+---------+-----------+-----------+------------+
 
 
