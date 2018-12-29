@@ -90,6 +90,13 @@ or you can run this command:
 
 sudo sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords yes/' /etc/ssh/sshd_config
 
+Set the hostname:
+
+$ sudo vim /etc/hostname and
+set its contents to:
+
+uitestbox
+
 now, reboot.
 
 $ sudo reboot
@@ -489,6 +496,15 @@ $ sudo mv flyway-5.2.4 /opt/flyway
 $ sudo chmod 755 /opt/flyway/flyway
 
 
+ADD HOSTS FILE FOR OTHER BOXES
+------------------------------
+
+Add an entry to the ui tests box:
+
+$ sudo vim /etc/hosts
+
+and add this line:
+  IP_ADDRESS_GOES_HERE    uitestbox
 
 
 
