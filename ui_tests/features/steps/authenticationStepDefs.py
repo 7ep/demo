@@ -7,7 +7,6 @@ one_user_registered = 'alice password123'
 
 @given('I am not registered')
 def step_impl(context):
-    __reset_database(empty_database)
     pass
 
 
@@ -68,7 +67,6 @@ def step_impl(context):
 
 @given('I am registered as "{username}" with a password of "{password}"')
 def step_impl(context, username, password):
-    __reset_database(username + ' ' + password)
     context.username = username
     context.password = password
     pass
@@ -88,7 +86,6 @@ def step_impl(context):
 
 @given('There is no user with the username "{username}"')
 def step_impl(context, username):
-    __reset_database(empty_database)
     context.username = username
     pass
 
@@ -105,6 +102,3 @@ def step_impl(context):
     assert_that(result.text, contains_string('access denied'))
 
 
-def __reset_database(contents):
-    with open('..\\authentication.txt', 'w') as f:
-        f.write(contents)
