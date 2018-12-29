@@ -19,7 +19,7 @@ def step_impl(context, username_text, password_text):
 
 def __register_user(context, username_text, password_text):
     driver = context.driver
-    driver.get("http://localhost:8888/demo")
+    driver.get("http://localhost:8080/demo")
     username = driver.find_element_by_id("register_username")
     username.clear()
     username.send_keys(username_text)
@@ -31,7 +31,7 @@ def __register_user(context, username_text, password_text):
 
 def __login_user(context, username_text, password_text):
     driver = context.driver
-    driver.get("http://localhost:8888/demo")
+    driver.get("http://localhost:8080/demo")
     username = driver.find_element_by_id("login_username")
     username.clear()
     username.send_keys(username_text)
