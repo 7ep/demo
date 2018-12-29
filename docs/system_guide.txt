@@ -98,6 +98,28 @@ or you can run this command:
 
 sudo sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords yes/' /etc/ssh/sshd_config
 
+DISABLE STRICT HOST KEY CHECKING
+--------------------------------
+
+change the setting in ssh_config to not ask about host keys.  This needs to be done
+because many of the conversations between our boxes will use ssh, and will halt
+and ask the user if the host isn't current trusted.  Problem with that is
+everything is automated, there isn't anyone to answer yes.  This should fix that.
+
+edit /etc/ssh/ssh_config:
+
+There is a line:
+# StrictHostKeyChecking ask
+
+Uncomment it and change it to "no"":
+
+StrictHostKeyChecking no
+
+
+
+
+
+
 now, reboot.
 
 $ sudo reboot

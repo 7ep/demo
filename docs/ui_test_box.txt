@@ -30,6 +30,7 @@ Right-click the screen and click on Konsole to get a command-line terminal.
 Disable the firewall (see DISABLE FIREWALL in system_guide.txt)
 Disable SELinux (see DISABLE SELINUX in system_guide.txt)
 Allow no-password login in ssh (see ENABLE SSH WITH NO PASSWORD in system_guide.txt)
+Disable strict host key checking (see DISABLE STRICT HOST KEY CHECKING in system_guide.txt)
 
 
 Set the hostname:

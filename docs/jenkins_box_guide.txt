@@ -76,19 +76,8 @@ command:
 
 sudo sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 
-Let's also change the settings on sshd (the ssh daemon) so it will
-allow us to log in without a password.  Edit the file at
-/etc/ssh/sshd_config and change the value of a parameter:
-
-#PermitEmptyPasswords no
-
-becomes
-
-PermitEmptyPasswords yes
-
-or you can run this command:
-
-sudo sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords yes/' /etc/ssh/sshd_config
+Allow no-password login in ssh (see ENABLE SSH WITH NO PASSWORD in system_guide.txt)
+Disable strict host key checking (see DISABLE STRICT HOST KEY CHECKING in system_guide.txt)
 
 Set the hostname:
 
