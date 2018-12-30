@@ -1,5 +1,6 @@
 package com.coveros.training;
 
+import com.coveros.training.domainobjects.User;
 import me.gosimple.nbvcxz.Nbvcxz;
 import me.gosimple.nbvcxz.scoring.Result;
 import me.gosimple.nbvcxz.scoring.TimeEstimate;

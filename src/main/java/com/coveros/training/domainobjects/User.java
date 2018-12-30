@@ -1,4 +1,4 @@
-package com.coveros.training;
+package com.coveros.training.domainobjects;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -9,19 +9,19 @@ public class User {
   /**
    * The username of the user
    */
-  final String name;
+  public final String name;
 
   /**
    * The identifier of the user in the database
    */
-  final long id;
+  public final long id;
 
   public User(String name, long id) {
     this.name = name;
     this.id = id;
   }
 
-  static User createEmpty() {
+  public static User createEmpty() {
     return new User("", 0);
   }
 
@@ -47,7 +47,7 @@ public class User {
         toHashCode();
   }
 
-  boolean isEmpty() {
+  public boolean isEmpty() {
     return this.equals(User.createEmpty());
   }
 }
