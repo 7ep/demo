@@ -1,43 +1,41 @@
-package com.coveros.training;
+package com.coveros.training.domainobjects;
 
-import com.coveros.training.domainobjects.Book;
-import com.coveros.training.domainobjects.Borrower;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.sql.Date;
 
-class Loan {
+public class Loan {
 
   /**
    * The date the book was checked out.
    */
-  final java.sql.Date checkoutDate;
+  public final java.sql.Date checkoutDate;
 
   /**
    * The book that is checked out
    */
-  final Book book;
+  public final Book book;
 
   /**
    * The borrower that has this book
    */
-  final Borrower borrower;
+  public final Borrower borrower;
 
   /**
    * The identifier of this loan in our database
    */
-  final long id;
+  public final long id;
 
-  Loan(Book book, Borrower borrower, long id, Date checkoutDate) {
+  public Loan(Book book, Borrower borrower, long id, Date checkoutDate) {
     this.book = book;
     this.borrower = borrower;
     this.id = id;
     this.checkoutDate = checkoutDate;
   }
 
-  static Loan createEmpty() {
+  public static Loan createEmpty() {
     return new Loan(Book.createEmpty(), Borrower.createEmpty(), 0, new Date(0));
   }
 
@@ -66,7 +64,7 @@ class Loan {
   }
 
 
-  boolean isEmpty() {
+  public boolean isEmpty() {
     return this.equals(Loan.createEmpty());
   }
 }
