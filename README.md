@@ -25,10 +25,10 @@ On Windows
 
 
 Screenshots:
-![alt Cucumber report](https://raw.githubusercontent.com/7ep/demo/master/screenshots/cucumber_report.png)
-![Feature file](https://raw.githubusercontent.com/7ep/demo/master/screenshots/feature_file.png)
-![Jenkins pipeline](https://raw.githubusercontent.com/7ep/demo/master/screenshots/jenkins_pipeline.png)
-![Webapp](https://raw.githubusercontent.com/7ep/demo/master/screenshots/webapp.png)
+![alt Cucumber report](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/cucumber_report.png)
+![Feature file](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/feature_file.png)
+![Jenkins pipeline](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/jenkins_pipeline.png)
+![Webapp](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/webapp.png)
 
 
 For convenience, there is a docker-compose file which will start up
