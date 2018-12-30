@@ -1,11 +1,11 @@
 package com.coveros.training;
 
+import com.coveros.training.domainobjects.Book;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.sql.Date;
-import java.time.Instant;
 
 class Loan {
 

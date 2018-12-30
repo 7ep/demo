@@ -1,5 +1,7 @@
 package com.coveros.training;
 
+import com.coveros.training.domainobjects.Book;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

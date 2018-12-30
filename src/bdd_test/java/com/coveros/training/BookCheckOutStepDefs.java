@@ -1,5 +1,6 @@
 package com.coveros.training;
 
+import com.coveros.training.domainobjects.Book;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -12,7 +13,6 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 
 import static com.coveros.training.database_backup_constants.INITIAL_STATE_V2_DUMP;
-import static com.coveros.training.database_backup_constants.SAMPLE_DB_V1_DUMP;
 
 public class BookCheckOutStepDefs {
 

@@ -1,27 +1,27 @@
-package com.coveros.training;
+package com.coveros.training.domainobjects;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-class Book {
+public class Book {
 
   /**
    * The title of the book
    */
-  final String title;
+  public final String title;
 
   /**
    * The identifier number in our database
    */
-  final long id;
+  public final long id;
 
-  Book(String title, long id) {
+  public Book(String title, long id) {
     this.title = title;
     this.id = id;
   }
 
-  static Book createEmpty() {
+  public static Book createEmpty() {
     return new Book("", 0);
   }
 
@@ -48,7 +48,7 @@ class Book {
   }
 
 
-  boolean isEmpty() {
+  public boolean isEmpty() {
     return this.equals(Book.createEmpty());
   }
 
