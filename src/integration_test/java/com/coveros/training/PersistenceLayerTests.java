@@ -1,5 +1,6 @@
 package com.coveros.training;
 
+import com.coveros.training.domainobjects.Borrower;
 import org.junit.Assert;
 import org.junit.Test;
 

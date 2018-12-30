@@ -1,6 +1,7 @@
 package com.coveros.training;
 
 import com.coveros.training.domainobjects.Book;
+import com.coveros.training.domainobjects.Borrower;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

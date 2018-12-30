@@ -1,6 +1,7 @@
 package com.coveros.training;
 
 import com.coveros.training.domainobjects.Book;
+import com.coveros.training.domainobjects.Borrower;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.checkerframework.checker.nullness.qual.Nullable;

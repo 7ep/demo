@@ -1,5 +1,6 @@
 package com.coveros.training;
 
+import com.coveros.training.domainobjects.Borrower;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Assert;
 import org.junit.Test;

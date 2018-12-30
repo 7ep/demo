@@ -1,4 +1,4 @@
-package com.coveros.training;
+package com.coveros.training.domainobjects;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -13,24 +13,24 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * Note that we make our fields public because they are final,
  * so there's no need to have methods wrapping them.
  */
-final class Borrower {
+public final class Borrower {
 
     /**
      * The identifier for this borrower in the database.
      */
-    final long id;
+    public final long id;
 
     /**
      * The name of the borrower
      */
-    final String name;
+    public final String name;
 
-    Borrower(long id, String name) {
+    public Borrower(long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    static Borrower createEmpty() {
+    public static Borrower createEmpty() {
         return new Borrower(0, "");
     }
 
