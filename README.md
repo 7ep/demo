@@ -2,7 +2,8 @@
 
 Please note that this branch has had nearly all functionality 
 removed in order to prepare for exercises.  See the branch
-called "complete" for the functional version.
+called "complete" for the functional version.  See the branch "with_database"
+for a more fully-featured system with database (Postgresql) integration.
 
 #### dependencies: 
     Java 8.  
