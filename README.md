@@ -22,6 +22,11 @@ On Linux
 On Windows
 
     gradlew appRun
+    
+#### If you want to make it sing
+
+Follow the directions to create a Jenkins box and a UI-testing-box, per the instructions
+in docs.  
 
 
 Screenshots:
