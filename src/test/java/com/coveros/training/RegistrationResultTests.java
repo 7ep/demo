@@ -1,10 +1,11 @@
 package com.coveros.training;
 
+import com.coveros.training.domainobjects.RegistrationResult;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.coveros.training.PasswordResultEnums.EMPTY_PASSWORD;
+import static com.coveros.training.domainobjects.PasswordResultEnums.EMPTY_PASSWORD;
 
 public class RegistrationResultTests {
 

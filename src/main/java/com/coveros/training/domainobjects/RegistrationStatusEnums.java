@@ -1,4 +1,4 @@
-package com.coveros.training;
+package com.coveros.training.domainobjects;
 
 public enum RegistrationStatusEnums {
     ALREADY_REGISTERED,

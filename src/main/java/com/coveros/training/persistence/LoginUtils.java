@@ -1,18 +1,18 @@
-package com.coveros.training;
+package com.coveros.training.persistence;
 
-class LoginUtils {
+public class LoginUtils {
 
     private final PersistenceLayer persistenceLayer;
 
-    LoginUtils(PersistenceLayer persistenceLayer) {
+    public LoginUtils(PersistenceLayer persistenceLayer) {
         this.persistenceLayer = persistenceLayer;
     }
 
-    boolean isUserRegistered(String username, String password) {
+    public boolean isUserRegistered(String username, String password) {
         return persistenceLayer.areCredentialsValid(username, password);
     }
 
-    static LoginUtils createEmpty() {
+    public static LoginUtils createEmpty() {
         return new LoginUtils(new PersistenceLayer(new EmptyConnection()));
     }
 

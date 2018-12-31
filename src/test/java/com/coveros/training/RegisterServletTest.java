@@ -1,5 +1,7 @@
 package com.coveros.training;
 
+import com.coveros.training.domainobjects.RegistrationResult;
+import com.coveros.training.domainobjects.RegistrationStatusEnums;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;

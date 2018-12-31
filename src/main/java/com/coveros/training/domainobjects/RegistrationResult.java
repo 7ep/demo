@@ -1,21 +1,21 @@
-package com.coveros.training;
+package com.coveros.training.domainobjects;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-final class RegistrationResult {
+public final class RegistrationResult {
 
     private final boolean wasSuccessfullyRegistered;
     private final String message;
 
-    RegistrationResult(boolean wasSuccessfullyRegistered, String message) {
+    public RegistrationResult(boolean wasSuccessfullyRegistered, String message) {
         this.wasSuccessfullyRegistered = wasSuccessfullyRegistered;
         this.message = message;
     }
 
-    static RegistrationResult createEmpty() {
+    public static RegistrationResult createEmpty() {
         return new RegistrationResult(false, "");
     }
 

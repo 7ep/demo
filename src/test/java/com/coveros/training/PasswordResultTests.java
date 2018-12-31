@@ -1,5 +1,7 @@
 package com.coveros.training;
 
+import com.coveros.training.domainobjects.PasswordResult;
+import com.coveros.training.domainobjects.PasswordResultEnums;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Assert;
 import org.junit.Test;

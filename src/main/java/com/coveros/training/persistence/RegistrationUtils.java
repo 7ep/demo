@@ -1,22 +1,24 @@
-package com.coveros.training;
+package com.coveros.training.persistence;
 
+import com.coveros.training.domainobjects.PasswordResult;
+import com.coveros.training.domainobjects.RegistrationResult;
 import com.coveros.training.domainobjects.User;
 import me.gosimple.nbvcxz.Nbvcxz;
 import me.gosimple.nbvcxz.scoring.Result;
 import me.gosimple.nbvcxz.scoring.TimeEstimate;
 
-import static com.coveros.training.PasswordResultEnums.*;
-import static com.coveros.training.RegistrationStatusEnums.*;
+import static com.coveros.training.domainobjects.PasswordResultEnums.*;
+import static com.coveros.training.domainobjects.RegistrationStatusEnums.*;
 
-class RegistrationUtils {
+public class RegistrationUtils {
 
     private final PersistenceLayer persistenceLayer;
 
-    RegistrationUtils(PersistenceLayer persistenceLayer) {
+    public RegistrationUtils(PersistenceLayer persistenceLayer) {
         this.persistenceLayer = persistenceLayer;
     }
 
-    RegistrationResult processRegistration(String username, String password) {
+    public RegistrationResult processRegistration(String username, String password) {
         if (isUserInDatabase(username)) {
             return new RegistrationResult(false, ALREADY_REGISTERED.toString());
         }
@@ -24,7 +26,7 @@ class RegistrationUtils {
         return registerUser(username, password);
     }
 
-    static RegistrationUtils createEmpty() {
+    public static RegistrationUtils createEmpty() {
         return new RegistrationUtils(new PersistenceLayer(new EmptyConnection()));
     }
 
@@ -54,7 +56,7 @@ class RegistrationUtils {
      *
      * See implementation for criteria.
      */
-    static PasswordResult isPasswordGood(String password) {
+    public static PasswordResult isPasswordGood(String password) {
         if (password.isEmpty()) return PasswordResult.createDefault(EMPTY_PASSWORD);
         if (password.length() < 6) return PasswordResult.createDefault(TOO_SHORT);
 
@@ -71,7 +73,7 @@ class RegistrationUtils {
         return new PasswordResult(SUCCESS, entropy, timeToCrackOff, timeToCrackOn, result.getFeedback().getResult());
     }
 
-    boolean isUserInDatabase(String username) {
+    public boolean isUserInDatabase(String username) {
         return ! persistenceLayer.searchForUserByName(username).isEmpty();
     }
 

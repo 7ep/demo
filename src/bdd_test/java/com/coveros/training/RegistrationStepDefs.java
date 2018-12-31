@@ -1,5 +1,11 @@
 package com.coveros.training;
 
+import com.coveros.training.domainobjects.PasswordResult;
+import com.coveros.training.domainobjects.RegistrationResult;
+import com.coveros.training.domainobjects.RegistrationStatusEnums;
+import com.coveros.training.persistence.PersistenceLayer;
+import com.coveros.training.persistence.PersistenceLayerTests;
+import com.coveros.training.persistence.RegistrationUtils;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;

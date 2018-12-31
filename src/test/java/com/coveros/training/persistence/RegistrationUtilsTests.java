@@ -1,12 +1,13 @@
-package com.coveros.training;
+package com.coveros.training.persistence;
 
+import com.coveros.training.domainobjects.PasswordResult;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.coveros.training.PasswordResultEnums.*;
+import static com.coveros.training.domainobjects.PasswordResultEnums.*;
 
 public class RegistrationUtilsTests {
 

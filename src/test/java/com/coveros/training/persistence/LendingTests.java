@@ -1,18 +1,14 @@
-package com.coveros.training;
+package com.coveros.training.persistence;
 
-import com.coveros.training.domainobjects.Book;
-import com.coveros.training.domainobjects.Borrower;
-import com.coveros.training.domainobjects.Loan;
+import com.coveros.training.domainobjects.*;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.sql.Date;
 import java.time.*;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class LendingTests {
 
@@ -24,30 +20,25 @@ public class LendingTests {
     private final static Book SAMPLE_BOOK = new Book(TITLE, 1);
     private final static Borrower SAMPLE_BORROWER_A = new Borrower(1, BORROWER_A_NAME);
     private final static Borrower SAMPLE_BORROWER_B = new Borrower(1, BORROWER_B_NAME);
-    private PersistenceLayer mockPersistenceLayer = Mockito.mock(PersistenceLayer.class);
-    private LibraryUtils libraryUtils = LibraryUtils.createEmpty();
-
-    /**
-     * Take care of some stuff before we can get into the interesting work.
-     *
-     * We'll create a mock PersistenceLayer object that we can modify as need
-     * be for our tests.  We'll also initialize our other "databases"
-     */
-    @Before
-    public void init() {
-        mockPersistenceLayer = Mockito.mock(PersistenceLayer.class);
-        libraryUtils = initializeLibraryUtils(mockPersistenceLayer);
-
-    }
+    private LibraryUtils libraryUtils = Mockito.spy(LibraryUtils.class);
 
     /**
      * If a borrower and a book are registered, a user should be able to borrow it.
      */
     @Test
     public void shouldLendToUser() {
-        Mockito.when(mockPersistenceLayer.searchForLoan(SAMPLE_BOOK)).thenReturn(Loan.createEmpty());
+        mockSearchForLoan();
+        mockThatLoanIsCreated(SAMPLE_BOOK, SAMPLE_BORROWER_A, BORROW_DATE);
         final LibraryActionResults libraryActionResults = libraryUtils.lendBook(SAMPLE_BOOK, SAMPLE_BORROWER_A, BORROW_DATE);
         Assert.assertEquals(LibraryActionResults.SUCCESS, libraryActionResults);
+    }
+
+    private void mockThatLoanIsCreated(Book book, Borrower borrower, Date borrowDate) {
+        Mockito.doNothing().when(libraryUtils).createLoan(book, borrower, borrowDate);
+    }
+
+    void mockSearchForLoan() {
+        Mockito.doReturn(Loan.createEmpty()).when(libraryUtils).searchForLoan(SAMPLE_BOOK);
     }
 
     /**
@@ -55,13 +46,18 @@ public class LendingTests {
      */
     @Test
     public void shouldRegisterBorrower() {
-        mockBorrowerNotRegistered(mockPersistenceLayer);
+        mockBorrowerNotRegistered(BORROWER_A_NAME);
+        mockThatNewBorrowerGetsSaved(BORROWER_A_NAME);
         final LibraryActionResults result = libraryUtils.registerBorrower(BORROWER_A_NAME);
         Assert.assertEquals(LibraryActionResults.SUCCESS, result);
     }
 
-    private static void mockBorrowerNotRegistered(PersistenceLayer mockPersistenceLayer) {
-        when(mockPersistenceLayer.searchBorrowerDataByName(BORROWER_A_NAME)).thenReturn(Borrower.createEmpty());
+    private void mockThatNewBorrowerGetsSaved(String borrowerAName) {
+        doNothing().when(libraryUtils).saveNewBorrower(borrowerAName);
+    }
+
+    private void mockBorrowerNotRegistered(String borrower) {
+        doReturn(Borrower.createEmpty()).when(libraryUtils).searchForBorrowerByName(borrower);
     }
 
     /**
@@ -69,13 +65,18 @@ public class LendingTests {
      */
     @Test
     public void shouldRegisterBook() {
-        mockThatBookNotRegistered();
+        mockThatBookNotRegistered(TITLE);
+        mockThatNewBookGetsSaved(TITLE);
         final LibraryActionResults result = libraryUtils.registerBook(TITLE);
         Assert.assertEquals(LibraryActionResults.SUCCESS, result);
     }
 
-    private void mockThatBookNotRegistered() {
-        Mockito.when(mockPersistenceLayer.searchBooksByTitle(TITLE)).thenReturn(Book.createEmpty());
+    private void mockThatNewBookGetsSaved(String title) {
+        doNothing().when(libraryUtils).saveNewBook(title);
+    }
+
+    private void mockThatBookNotRegistered(String title) {
+        doReturn(Book.createEmpty()).when(libraryUtils).searchForBookByTitle(title);
     }
 
     /**
@@ -103,7 +104,8 @@ public class LendingTests {
      */
     @Test
     public void shouldNotLendIfCurrentlyBorrowed() {
-        Mockito.when(mockPersistenceLayer.searchForLoan(SAMPLE_BOOK)).thenReturn( new Loan(SAMPLE_BOOK, SAMPLE_BORROWER_B, 1, BORROW_DATE));
+        mockSearchForLoan();
+        Mockito.when(libraryUtils.searchForLoan(SAMPLE_BOOK)).thenReturn( new Loan(SAMPLE_BOOK, SAMPLE_BORROWER_B, 1, BORROW_DATE));
         final LibraryActionResults libraryActionResults_bob = libraryUtils.lendBook(SAMPLE_BOOK, SAMPLE_BORROWER_B, BORROW_DATE);
         Assert.assertEquals(LibraryActionResults.BOOK_CHECKED_OUT, libraryActionResults_bob);
     }

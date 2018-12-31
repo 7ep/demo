@@ -1,5 +1,7 @@
-package com.coveros.training;
+package com.coveros.training.persistence;
 
+import com.coveros.training.CheckUtils;
+import com.coveros.training.StringUtils;
 import com.coveros.training.domainobjects.Book;
 import com.coveros.training.domainobjects.Borrower;
 import com.coveros.training.domainobjects.Loan;
@@ -13,15 +15,19 @@ import java.util.Properties;
 
 import static com.coveros.training.Constants.DATABASE_URL;
 
-class PersistenceLayer {
+public class PersistenceLayer {
 
     private final Connection connection;
 
-    PersistenceLayer(Connection connection) {
+    public PersistenceLayer(Connection connection) {
         this.connection = connection;
     }
 
-    static Connection createConnection() {
+    public static PersistenceLayer createEmpty() {
+        return new PersistenceLayer(new EmptyConnection());
+    }
+
+    public static Connection createConnection() {
         Properties props = new Properties();
         props.setProperty("user","postgres");
         props.setProperty("password","postgres");
@@ -130,7 +136,7 @@ class PersistenceLayer {
         }
     }
 
-    public Book searchBooksByTitle(String bookTitle) {
+    Book searchBooksByTitle(String bookTitle) {
         try (PreparedStatement st =
                  connection.prepareStatement(
                      "SELECT id FROM library.book WHERE title = ?;") ) {
@@ -148,7 +154,7 @@ class PersistenceLayer {
         }
     }
 
-    public long createLoan(Book book, Borrower borrower, Date borrowDate) {
+    long createLoan(Book book, Borrower borrower, Date borrowDate) {
         try (PreparedStatement st =
                  connection.prepareStatement(
                      "INSERT INTO library.loan (book, borrower, borrow_date) VALUES (?, ?, ?);",
@@ -172,7 +178,7 @@ class PersistenceLayer {
         }
     }
 
-    public long saveNewBook(String bookTitle) {
+    long saveNewBook(String bookTitle) {
         try (PreparedStatement st =
                  connection.prepareStatement(
                      "INSERT INTO library.book (title) VALUES (?);",
@@ -194,7 +200,7 @@ class PersistenceLayer {
         }
     }
 
-    public User searchForUserByName(String username) {
+    User searchForUserByName(String username) {
         try (PreparedStatement st =
                  connection.prepareStatement(
                      "SELECT id  FROM auth.user WHERE name = ?;") ) {
@@ -212,7 +218,7 @@ class PersistenceLayer {
         }
     }
 
-    public boolean areCredentialsValid(String username, String password) {
+    boolean areCredentialsValid(String username, String password) {
         try (PreparedStatement st =
                  connection.prepareStatement(
                      "SELECT id FROM auth.user WHERE name = ? AND password_hash = ?;") ) {
@@ -233,7 +239,7 @@ class PersistenceLayer {
         }
     }
 
-    public long saveNewUser(String username) {
+    long saveNewUser(String username) {
         try (PreparedStatement st =
                  connection.prepareStatement(
                      "INSERT INTO auth.user (name) VALUES (?);",
@@ -255,7 +261,7 @@ class PersistenceLayer {
         }
     }
 
-    public void updateUserWithPassword(long id, String password) {
+    void updateUserWithPassword(long id, String password) {
         CheckUtils.checkIntParamPositive(id);
         try (PreparedStatement st =
                  connection.prepareStatement(
@@ -281,7 +287,7 @@ class PersistenceLayer {
         }
     }
 
-    public Loan searchForLoan(Book book) {
+    Loan searchForLoan(Book book) {
         try (PreparedStatement st =
                  connection.prepareStatement(
                      "select loan.id, loan.borrow_date, loan.borrower, bor.name FROM library.loan loan JOIN library.borrower bor ON bor.id = loan.id WHERE loan.book = ?;") ) {

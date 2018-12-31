@@ -1,5 +1,9 @@
 package com.coveros.training;
 
+import com.coveros.training.domainobjects.RegistrationResult;
+import com.coveros.training.persistence.PersistenceLayer;
+import com.coveros.training.persistence.RegistrationUtils;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

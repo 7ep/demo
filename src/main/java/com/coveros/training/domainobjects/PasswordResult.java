@@ -1,21 +1,21 @@
-package com.coveros.training;
+package com.coveros.training.domainobjects;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-final class PasswordResult {
+public final class PasswordResult {
 
-    final PasswordResultEnums status;
-    private final Double entropy;
-    final String timeToCrackOffline;
-    private final String timeToCrackOnline;
-    private final String message;
+    public final PasswordResultEnums status;
+    public final Double entropy;
+    public final String timeToCrackOffline;
+    public final String timeToCrackOnline;
+    public final String message;
 
     private static final String BASIC_PASSWORD_CHECKS_FAILED = "BASIC_PASSWORD_CHECKS_FAILED";
 
-    PasswordResult(PasswordResultEnums status,
+    public PasswordResult(PasswordResultEnums status,
                                  Double entropy,
                                  String timeToCrackOffline,
                                  String timeToCrackOnline,
@@ -32,7 +32,7 @@ final class PasswordResult {
      * Return this if any of our very basic attempt to validate
      * the password field fail.  Like passing an empty string, for example.
      */
-    static PasswordResult createDefault(PasswordResultEnums resultStatus) {
+    public static PasswordResult createDefault(PasswordResultEnums resultStatus) {
         return new PasswordResult(resultStatus, 0d, "", "",  BASIC_PASSWORD_CHECKS_FAILED);
     }
 
@@ -40,7 +40,7 @@ final class PasswordResult {
      * Return this to represent an empty result.  Used primarily
      * when we are initializing a variable and don't want to use null.
      */
-    static PasswordResult createEmpty() {
+    public static PasswordResult createEmpty() {
         return new PasswordResult(PasswordResultEnums.NULL, 0d, "", "",  "");
     }
 

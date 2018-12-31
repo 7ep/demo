@@ -1,6 +1,7 @@
-package com.coveros.training;
+package com.coveros.training.persistence;
 
 import com.coveros.training.domainobjects.Borrower;
+import com.coveros.training.persistence.PersistenceLayer;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -86,7 +87,7 @@ public class PersistenceLayerTests {
      * use a "restore" command to set the database into a state
      * of empty tables.  This operation must happen very quickly.
      */
-    static void setDatabaseState(String restoreScriptName) {
+    public static void setDatabaseState(String restoreScriptName) {
         Runtime r = Runtime.getRuntime();
         Process p;
         String restoreScriptPath = Paths.get(RESTORE_SCRIPTS_PATH , restoreScriptName).toString();

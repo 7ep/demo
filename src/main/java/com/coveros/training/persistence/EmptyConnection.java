@@ -1,4 +1,4 @@
-package com.coveros.training;
+package com.coveros.training.persistence;
 
 import java.sql.*;
 import java.util.Map;

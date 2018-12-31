@@ -2,7 +2,7 @@ package com.coveros.training;
 
 import java.nio.file.Paths;
 
-class TestConstants {
+public class TestConstants {
 
     /**
      * This is a wrapper about System.getenv, except that we will
@@ -20,10 +20,10 @@ class TestConstants {
 
     // DEMO_PROJECT_HOME is the absolute path to the demo project.
     // For example, C:\Users\byron\demo\
-    static final String RESTORE_SCRIPTS_PATH = Paths.get( getEnvironmentVariable("DEMO_PROJECT_HOME"), "db_sample_files").toString();
+    public static final String RESTORE_SCRIPTS_PATH = Paths.get( getEnvironmentVariable("DEMO_PROJECT_HOME"), "db_sample_files").toString();
 
     // POSTGRES_BIN_DIR must be set to the directory for Postgresql's binaries.
     // for example, on Windows it's C:\Program Files\PostgreSQL\10\bin\
-    static final String PATH_TO_PG_RESTORE = Paths.get(getEnvironmentVariable("POSTGRES_BIN_DIR") , "pg_restore").toString();
+    public static final String PATH_TO_PG_RESTORE = Paths.get(getEnvironmentVariable("POSTGRES_BIN_DIR") , "pg_restore").toString();
 
 }
