@@ -68,6 +68,75 @@ public class PersistenceLayer {
         }
     }
 
+
+    long createLoan(Book book, Borrower borrower, Date borrowDate) {
+        try (PreparedStatement st =
+                 connection.prepareStatement(
+                     "INSERT INTO library.loan (book, borrower, borrow_date) VALUES (?, ?, ?);",
+                     Statement.RETURN_GENERATED_KEYS) ) {
+            st.setLong(1, book.id);
+            st.setLong(2, borrower.id);
+            st.setDate(3, borrowDate);
+            st.executeUpdate();
+            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                long newId;
+                if (generatedKeys.next()) {
+                    newId = generatedKeys.getLong(1);
+                    assert (newId > 0);
+                } else {
+                    throw new RuntimeException("failed to create a new book loan");
+                }
+                return newId;
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    long saveNewBook(String bookTitle) {
+        try (PreparedStatement st =
+                 connection.prepareStatement(
+                     "INSERT INTO library.book (title) VALUES (?);",
+                     Statement.RETURN_GENERATED_KEYS) ) {
+            st.setString(1, bookTitle);
+            st.executeUpdate();
+            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                long newId;
+                if (generatedKeys.next()) {
+                    newId = generatedKeys.getLong(1);
+                    assert (newId > 0);
+                } else {
+                    throw new RuntimeException("failed to create a new book");
+                }
+                return newId;
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    long saveNewUser(String username) {
+        try (PreparedStatement st =
+                 connection.prepareStatement(
+                     "INSERT INTO auth.user (name) VALUES (?);",
+                     Statement.RETURN_GENERATED_KEYS) ) {
+            st.setString(1, username);
+            st.executeUpdate();
+            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                long newId;
+                if (generatedKeys.next()) {
+                    newId = generatedKeys.getLong(1);
+                    assert (newId > 0);
+                } else {
+                    throw new RuntimeException("failed to create a new user");
+                }
+                return newId;
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     /**
      * If we already have a borrower, this command allows us to change
      * their values (except for their id)
@@ -154,52 +223,6 @@ public class PersistenceLayer {
         }
     }
 
-    long createLoan(Book book, Borrower borrower, Date borrowDate) {
-        try (PreparedStatement st =
-                 connection.prepareStatement(
-                     "INSERT INTO library.loan (book, borrower, borrow_date) VALUES (?, ?, ?);",
-                     Statement.RETURN_GENERATED_KEYS) ) {
-            st.setLong(1, book.id);
-            st.setLong(2, borrower.id);
-            st.setDate(3, borrowDate);
-            st.executeUpdate();
-            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
-                long newId;
-                if (generatedKeys.next()) {
-                    newId = generatedKeys.getLong(1);
-                    assert (newId > 0);
-                } else {
-                    throw new RuntimeException("failed to create a new book loan");
-                }
-                return newId;
-            }
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    long saveNewBook(String bookTitle) {
-        try (PreparedStatement st =
-                 connection.prepareStatement(
-                     "INSERT INTO library.book (title) VALUES (?);",
-                     Statement.RETURN_GENERATED_KEYS) ) {
-            st.setString(1, bookTitle);
-            st.executeUpdate();
-            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
-                long newId;
-                if (generatedKeys.next()) {
-                    newId = generatedKeys.getLong(1);
-                    assert (newId > 0);
-                } else {
-                    throw new RuntimeException("failed to create a new book");
-                }
-                return newId;
-            }
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
     User searchForUserByName(String username) {
         try (PreparedStatement st =
                  connection.prepareStatement(
@@ -233,28 +256,6 @@ public class PersistenceLayer {
                 } else {
                     return false;
                 }
-            }
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    long saveNewUser(String username) {
-        try (PreparedStatement st =
-                 connection.prepareStatement(
-                     "INSERT INTO auth.user (name) VALUES (?);",
-                     Statement.RETURN_GENERATED_KEYS) ) {
-            st.setString(1, username);
-            st.executeUpdate();
-            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
-                long newId;
-                if (generatedKeys.next()) {
-                    newId = generatedKeys.getLong(1);
-                    assert (newId > 0);
-                } else {
-                    throw new RuntimeException("failed to create a new user");
-                }
-                return newId;
             }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
