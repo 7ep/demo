@@ -79,6 +79,15 @@ pipeline {
       }
     }
 
+    // This is the stage where we deploy to production.  If any test
+    // fails, we won't get here.  Note that we aren't really doing anything - this
+    // is a token step, to indicate whether we would have deployed or not.  Nothing actually
+    // happens, since this is a demo project.
+    stage('Deploy to prod')
+      steps {
+        // nothing here.
+      }
+
   }
 
 }
