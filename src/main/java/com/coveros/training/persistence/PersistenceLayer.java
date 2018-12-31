@@ -59,7 +59,7 @@ public class PersistenceLayer {
                     newId = generatedKeys.getLong(1);
                     assert (newId > 0);
                 } else {
-                    throw new RuntimeException("failed to save a new Borrower");
+                    throw new RuntimeException("failed INSERT");
                 }
                 return newId;
             }
@@ -84,7 +84,7 @@ public class PersistenceLayer {
                     newId = generatedKeys.getLong(1);
                     assert (newId > 0);
                 } else {
-                    throw new RuntimeException("failed to create a new book loan");
+                    throw new RuntimeException("failed INSERT");
                 }
                 return newId;
             }
@@ -106,7 +106,7 @@ public class PersistenceLayer {
                     newId = generatedKeys.getLong(1);
                     assert (newId > 0);
                 } else {
-                    throw new RuntimeException("failed to create a new book");
+                    throw new RuntimeException("failed INSERT");
                 }
                 return newId;
             }
@@ -128,7 +128,7 @@ public class PersistenceLayer {
                     newId = generatedKeys.getLong(1);
                     assert (newId > 0);
                 } else {
-                    throw new RuntimeException("failed to create a new user");
+                    throw new RuntimeException("failed INSERT");
                 }
                 return newId;
             }
