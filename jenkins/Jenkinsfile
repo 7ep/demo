@@ -85,7 +85,8 @@ pipeline {
     // happens, since this is a demo project.
     stage('Deploy to prod') {
       steps {
-        // nothing here.
+        // just a token operation while we pretend to deploy
+        sh 'sleep 5'
       }
     }
 
