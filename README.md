@@ -22,13 +22,18 @@ On Linux
 On Windows
 
     gradlew appRun
+    
+#### If you want to make it sing
+
+Follow the directions to create a Jenkins box and a UI-testing-box, per the instructions
+in docs.  
 
 
 Screenshots:
-![alt Cucumber report](https://raw.githubusercontent.com/7ep/demo/master/screenshots/cucumber_report.png)
-![Feature file](https://raw.githubusercontent.com/7ep/demo/master/screenshots/feature_file.png)
-![Jenkins pipeline](https://raw.githubusercontent.com/7ep/demo/master/screenshots/jenkins_pipeline.png)
-![Webapp](https://raw.githubusercontent.com/7ep/demo/master/screenshots/webapp.png)
+![alt Cucumber report](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/cucumber_report.png)
+![Feature file](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/feature_file.png)
+![Jenkins pipeline](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/jenkins_pipeline.png)
+![Webapp](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/webapp.png)
 
 
 For convenience, there is a docker-compose file which will start up
