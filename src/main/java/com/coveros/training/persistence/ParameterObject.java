@@ -1,23 +1,36 @@
 package com.coveros.training.persistence;
 
-import com.coveros.training.domainobjects.Book;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * a POJO container for the parameters for the {@link SqlData} object.
+ */
 public class ParameterObject {
 
-    final Object data;
-    final Class type;
+  /**
+   * The data we are injecting into the SQL statement
+   */
+  final Object data;
 
-    public ParameterObject(Object data, Class type) {
-      this.data = data;
-      this.type = type;
-    }
+  /**
+   * The type of the data we are injecting into the SQL statement (e.g. Integer, String, etc.)
+   */
+  final Class type;
+
+  public ParameterObject(Object data, Class type) {
+    this.data = data;
+    this.type = type;
+  }
 
   public final boolean equals(@Nullable Object obj) {
-    if (obj == null) { return false; }
-    if (obj == this) { return true; }
+    if (obj == null) {
+      return false;
+    }
+    if (obj == this) {
+      return true;
+    }
     if (obj.getClass() != getClass()) {
       return false;
     }
