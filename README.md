@@ -28,17 +28,26 @@ On Windows
 Follow the directions to create a Jenkins box and a UI-testing-box, per the instructions
 in docs.  
 
-
-Screenshots:
-![alt Cucumber report](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/cucumber_report.png)
-![Feature file](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/feature_file.png)
-![Jenkins pipeline](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/jenkins_pipeline.png)
-![Webapp](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/webapp.png)
-
-
 For convenience, there is a docker-compose file which will start up
 Jenkins. The path to the Jenkinsfile is jenkins/Jenkinsfile.  In order
 to run Jenkins you will need both Docker and docker-compose installed.
 
 Also, see the ui_tests directory to see what can be done with a little
 Python and Selenium, using Behave to run BDD tests.
+
+Cool features:
+* Instructions for setting up virtual machines (with VirtualBox).
+* A fully functioning demonstration CI/CD pipeline using Jenkins.
+* Beginnings of a pretty neat micro-ORM (See PersistenceLayer.java and SqlData.java).
+* Uses Gretty (https://github.com/akhikhl/gretty) which allows us to hot swap Java code at runtime.
+* Incorporates static analysis using SonarQube
+* Reviews security of the dependencies on a nightly basis using Dependency Check
+* Disallows use of null (unless you provide an annotation), preventing a whole class of errors.
+* A nice head start of good tests of various types - unit tests, integration tests, automated acceptance tests, UI tests
+
+
+Screenshots:
+![alt Cucumber report](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/cucumber_report.png)
+![Feature file](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/feature_file.png)
+![Jenkins pipeline](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/jenkins_pipeline.png)
+![Webapp](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/webapp.png)
