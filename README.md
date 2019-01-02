@@ -25,15 +25,8 @@ On Windows
     
 #### If you want to make it sing
 
-Follow the directions to create a Jenkins box and a UI-testing-box, per the instructions
+Follow the directions to [create a Jenkins box](https://github.com/7ep/demo/blob/with_database/docs/jenkins_box_guide.txt) and [a UI-testing-box](https://github.com/7ep/demo/blob/with_database/docs/ui_test_box.txt), per the instructions
 in docs.  
-
-For convenience, there is a docker-compose file which will start up
-Jenkins. The path to the Jenkinsfile is jenkins/Jenkinsfile.  In order
-to run Jenkins you will need both Docker and docker-compose installed.
-
-Also, see the ui_tests directory to see what can be done with a little
-Python and Selenium, using Behave to run BDD tests.
 
 Cool features:
 * Instructions for setting up virtual machines (with VirtualBox).
