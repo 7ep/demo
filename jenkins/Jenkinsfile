@@ -16,6 +16,12 @@ pipeline {
       }
     }
 
+    stage('Static Analysis') {
+      steps {
+        sh './gradlew sonarqube'
+      }
+    }
+
     stage('Unit Tests') {
       steps {
         sh './gradlew test'
@@ -24,12 +30,6 @@ pipeline {
         always {
           junit 'build/test-results/test/*.xml'
         }
-      }
-    }
-
-    stage('Static Analysis') {
-      steps {
-        sh './gradlew sonarqube'
       }
     }
 
