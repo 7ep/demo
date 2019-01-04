@@ -1,6 +1,15 @@
 making a box for UI-level testing box
 
-Create a new system with 3072 megabytes of ram and 12 gigs hard drive.
+(First create the Jenkins box.  See jenkins_box_guide.txt, then come back)
+
+In VirtualBox, click on New.
+
+Create a new system "Centos7_uitestbox"
+
+Make sure to choose Mac osX 64 bit for the operating system.  It's not a Mac, but for
+some reason this makes mouse integration work beautifully.
+
+Set it to use 3072 megabytes of ram and 12 gigs hard drive.
 
 Alter its settings:
   Put it on the same NAT network as the other boxes
@@ -12,10 +21,10 @@ Choose to install Centos7.  (No need to check the media first)
 
 Choose English as the language
 Click Installation Destination and click Done on the followup screen to return
-Click Network & Hostname and toggle the network "ON" on the following page, then click Done.
+Click Network & Hostname and toggle the network "ON", and set Host name to "uitestbox", then click Done.
 Click Software selection and choose KDE Plasma Workspaces, then click Done
 Click Begin Installation
-Click on User Creation.  Provide information for a user, and select to make the user an administrator and to *not* require a password.
+Click on User Creation.  Provide information for a user (see CREATE USER DURING INSTALL in jenkins_box_guide.txt)
 
 ... wait for the install to complete...
 
@@ -27,24 +36,21 @@ Login.
 
 Right-click the screen and click on Konsole to get a command-line terminal.
 
-Disable the firewall (see DISABLE FIREWALL in system_guide.txt)
-Disable SELinux (see DISABLE SELINUX in system_guide.txt)
-Allow no-password login in ssh (see ENABLE SSH WITH NO PASSWORD in system_guide.txt)
-Disable strict host key checking (see DISABLE STRICT HOST KEY CHECKING in system_guide.txt)
+Disable the firewall (see DISABLE FIREWALL in jenkins_box_guide.txt)
+Disable SELinux (see DISABLE SELINUX in jenkins_box_guide.txt)
+Allow no-password login in ssh (see ENABLE SSH WITH NO PASSWORD in jenkins_box_guide.txt)
+Disable strict host key checking (see DISABLE STRICT HOST KEY CHECKING in jenkins_box_guide.txt)
 
+reboot.  Login.
 
-Set the hostname:
+Open another Konsole by right-clicking.
 
-$ sudo vim /etc/hostname and
-set its contents to:
+get the ip address of this box (see GET SYSTEM IP ADDRESS in jenkins_box_guide.txt)
 
-uitestbox
+Set up port forwarding (see CONFIGURE PORT FORWARDING in jenkins_box_guide.txt), with one variation:
+  name it "uitestbox_ssh" and give it a host port of 4001.
 
-reboot. login.
-
-Open another command-line terminal by right-clicking and choosing Konsole.
-Set up port forwarding (see PORT FORWARDING in system_guide.txt), with one variation:
-  name it "ssh_UI_test_box" and give it a host port of 4001.
+Now you can connect to your uitestbox by SSH.  Do so.
 
 Install Chrome:
 
@@ -54,10 +60,17 @@ Install Chrome:
 
 Start Chrome by selecting it from the bottom left-hand button and entering
 the text "Chrome", then click on the icon.  Choose a means of securing information,
+(I used Classic, blowfish encrypted file because it was easier to set up.  Remember,
+you aren't doing anything on this box but UI testing)
 and get through until you see the chrome://welcome page.  Test it by going to Google.com
 
-The system will need a Database.  Install.  See DATABASE_INSTALL in system_guide.txt
+Get Java installed.  See INSTALL JAVA in jenkins_box_guide.txt
 
+Get Git installed.  See INSTALL GIT in jenkins_box_guide.txt
+
+The system will need a Database.  Install.  See DATABASE_INSTALL in jenkins_box_guide.txt
+
+Following the database install...
 We also want to make this database able to be hit from outside the
 box, so we can restore and run database migrations on it
 from outside.  To do that, first, open the configuration file:
@@ -70,29 +83,35 @@ listen_addresses = 'localhost'
     with
 listen_addresses = '*'
 
-Get Java installed.  See INSTALL JAVA in system_guide.txt
+
 
 Install Python Pip, Selenium, and Behave:
 
-$ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-$ sudo python get-pip.py
+$ curl https://bootstrap.pypa.io/get-pip.py -o ~/get-pip.py
+$ sudo python ~/get-pip.py
 $ sudo pip install behave
 $ sudo pip install selenium
 $ sudo pip install pyhamcrest
 
-Download Chromedriver from here: http://chromedriver.chromium.org/downloads
+Download Chromedriver from here: http://chromedriver.chromium.org/downloads.  At the
+time of writing this, the URL went as follows:
+
+$ sudo curl https://chromedriver.storage.googleapis.com/2.45/chromedriver_linux64.zip > ~/chromedriver_linux64.zip
 
 Download and unzip it on your path.  I recommend a place that is
 already on your path, /usr/local/sbin
 
+$ sudo unzip ~/chromedriver_linux64.zip -d /usr/local/sbin
+
 
 install Tomcat 9:
 $ wget http://www.gtlib.gatech.edu/pub/apache/tomcat/tomcat-9/v9.0.14/bin/apache-tomcat-9.0.14.tar.gz
+$ tar zxf apache-tomcat-9.0.14.tar.gz
 $ sudo mv apache-tomcat-9.0.14 /opt/tomcat
 $ sudo useradd -r tomcat --shell /bin/false
 $ sudo chown -R tomcat:tomcat /opt/tomcat/
 
-at /etc/init.d/tomcat9c create this file:
+at /etc/init.d/tomcat9 create this file:
 
 
 ---------------------------------- FILE START
@@ -133,6 +152,12 @@ esac
 
 ---------------------------------- FILE END
 
+Change its permissions
+$ sudo chmod 755 /etc/init.d/tomcat9
+
+Add it to chkconfig
+
+$ sudo chkconfig tomcat9 on
 
 Now you can start the Apache Tomcat 9 server and enable it to start on boot time
 
@@ -140,24 +165,22 @@ $ sudo systemctl start tomcat9
 $ sudo systemctl enable tomcat9
 
 Tomcat will start serving on port 8080 on the machine.  Add a port forwarding
-rule for it:
+rule for port 8080 for it:
 
 +--------------+----------+---------+-----------+-----------+------------+
 | Name         | Protocol | Host IP | Host Port | Guest IP  | Guest Port |
 +--------------+----------+---------+-----------+-----------+------------+
-| box1_ssh     | TCP      |         | 2001      | 10.0.2.15 | 22         |
+| box2_ssh     | TCP      |         | 3001      | 10.0.2.4  | 22         |
 +--------------+----------+---------+-----------+-----------+------------+
-| box2_ssh     | TCP      |         | 3001      | 10.0.2.16 | 22         |
+| box2_jenkins | TCP      |         | 3002      | 10.0.2.4  | 8080       |
 +--------------+----------+---------+-----------+-----------+------------+
-| box2_jenkins | TCP      |         | 3002      | 10.0.2.16 | 8080       |
+| box2_sonar   | TCP      |         | 3003      | 10.0.2.4  | 9000       |
 +--------------+----------+---------+-----------+-----------+------------+
-| box2_sonar   | TCP      |         | 3003      | 10.0.2.16 | 9000       |
+| box2_80      | TCP      |         | 3004      | 10.0.2.5  | 80         |
 +--------------+----------+---------+-----------+-----------+------------+
-| box2_80      | TCP      |         | 3004      | 10.0.2.16 | 80         |
+| ui_ssh       | TCP      |         | 4001      | 10.0.2.5  | 22         |
 +--------------+----------+---------+-----------+-----------+------------+
-| ui_ssh       | TCP      |         | 4001      | 10.0.2.16 | 22         |
-+--------------+----------+---------+-----------+-----------+------------+
-| ui_8080      | TCP      |         | 4002      | 10.0.2.16 | 80         |
+| ui_8080      | TCP      |         | 4002      | 10.0.2.5  | 80         |
 +--------------+----------+---------+-----------+-----------+------------+
 
 
@@ -170,4 +193,6 @@ Add an entry to the ui tests box:
 $ sudo vim /etc/hosts
 
 and add this line:
-  IP_ADDRESS_GOES_HERE    jenkinsbox
+  IP_ADDRESS_FOR_JENKINSBOX    jenkinsbox
+
+(Now, go to the other box and set its host to point to uitestbox)
