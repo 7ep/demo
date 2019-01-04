@@ -685,9 +685,42 @@ and add this line:
   IP_ADDRESS_FOR_UIBOX    uitestbox
 
 
+NIGHTLY SECURITY CHECK
+----------------------
 
+There is a jenkinsfile for a nightly security check.  This check
+scans the dependencies of the project for any issues that have
+been published.  Because this list does not get updated very often,
+and because it takes 10 minutes to run the scan, it is most appropriate to run
+separately on a rare basis.  For this reason we will configure it to run
+once a day.  To set up this pipeline:
 
+Go here to create a new Jenkins job:
 
+http://localhost:3002/view/all/newJob
+
+name the job "demo nightly" and select Pipeline, then click OK.
+
+Check the box marked "Discard old builds"
+  Strategy: Log rotation
+  Max # of builds to keep: 5
+
+Check the box for "Do not allow concurrent builds."
+
+Under Build Triggers, check the box for "Build periodically", and
+set the following:
+
+Schedule: @midnight
+
+Under Pipeline Definition, choose Pipeline Script from SCM.
+  SCM: Git
+    Repository URL: /home/cuser/demo/
+    Branch Specifier: refs/heads/with_database
+    Script Path: jenkins/Jenkinsfile.nightly
+
+Save.
+
+Click on Build Now to see this run.  It should take about 10 minutes.
 
 
 

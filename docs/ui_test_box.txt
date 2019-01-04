@@ -204,3 +204,33 @@ and add this line:
   IP_ADDRESS_FOR_JENKINSBOX    jenkinsbox
 
 (Now, go to the other box and set its host to point to uitestbox)
+
+
+INSTALLING OWASP-ZAP
+--------------------
+$ wget https://download.opensuse.org/repositories/home:cabelo/CentOS_7/home:cabelo.repo
+$ sudo mv home:cabelo.repo /etc/yum.repos.d/home_cabelo.repo
+$ sudo yum install -y owasp-zap
+
+Start zap like Chrome - go to the icon in the bottom left of the screen and search
+for Zap.  When it appears, click it.  You'll need to accept the agreement to continue.
+
+Choose *not* to persist the ZAP session, and check the box to remember the choice.  Then
+Click on Start.
+
+On the menu bar, under Help, click on "Check for updates..." and update as suggested.
+
+Change the port number so it doesn't interfere with our demo application:
+
+Open ZAP, Tools--> Options --> local proxy
+Change the default 8080 port to 8888 and click Ok.
+
+In order to test out Zap, in the Quick Start tab, enter the following URL
+
+URL to attack: http://localhost:8080/demo
+
+Then, click Attack.
+
+To do the same thing from the command line, run this:
+
+/usr/share/owasp-zap/zap.sh -cmd -quickurl http://localhost:8080/demo
