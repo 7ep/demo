@@ -21,7 +21,8 @@ public class LibraryRegisterBorrowerServlet extends HttpServlet {
         final String borrower = request.getParameter("borrower");
         request.setAttribute("borrower", borrower);
 
-        final PersistenceLayer persistenceLayer = new PersistenceLayer();
+        final Connection connection = PersistenceLayer.createConnection();
+        final PersistenceLayer persistenceLayer = new PersistenceLayer(connection);
         LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer);
 
         final LibraryActionResults libraryActionResults = libraryUtils.registerBorrower(borrower);

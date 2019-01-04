@@ -3,7 +3,6 @@ package com.coveros.training;
 import com.coveros.training.domainobjects.LibraryActionResults;
 import com.coveros.training.persistence.LibraryUtils;
 import com.coveros.training.persistence.PersistenceLayer;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,8 +20,8 @@ public class LibraryRegisterBookServlet extends HttpServlet {
         final String book = request.getParameter("book");
         request.setAttribute("book", book);
 
-        final ComboPooledDataSource comboPooledDataSource = PersistenceLayer.createComboPooledDataSource();
-        final PersistenceLayer persistenceLayer = new PersistenceLayer(comboPooledDataSource);
+        final Connection connection = PersistenceLayer.createConnection();
+        final PersistenceLayer persistenceLayer = new PersistenceLayer(connection);
         LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer);
 
         final LibraryActionResults libraryActionResults = libraryUtils.registerBook(book);

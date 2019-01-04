@@ -43,7 +43,8 @@ public class RegisterServlet extends HttpServlet {
     }
 
     RegistrationResult processRegistration(String username, String password) {
-        final PersistenceLayer persistenceLayer = new PersistenceLayer();
+        final Connection connection = PersistenceLayer.createConnection();
+        final PersistenceLayer persistenceLayer = new PersistenceLayer(connection);
         final RegistrationUtils registrationUtils = new RegistrationUtils(persistenceLayer);
         return registrationUtils.processRegistration(username, password);
     }

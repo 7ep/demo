@@ -26,7 +26,7 @@ public class RegistrationStepDefs {
      */
     private void initializeDatabaseAccess() {
         PersistenceLayerTests.setDatabaseState(INITIAL_STATE_V2_DUMP);
-        final PersistenceLayer persistenceLayer = new PersistenceLayer();
+        final PersistenceLayer persistenceLayer = new PersistenceLayer(DataUtils.createConnection());
         registrationUtils = new RegistrationUtils(persistenceLayer);
     }
 

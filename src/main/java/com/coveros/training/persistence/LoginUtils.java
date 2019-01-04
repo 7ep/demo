@@ -13,7 +13,7 @@ public class LoginUtils {
     }
 
     public static LoginUtils createEmpty() {
-        return new LoginUtils(PersistenceLayer.createEmpty());
+        return new LoginUtils(new PersistenceLayer(new EmptyConnection()));
     }
 
 }

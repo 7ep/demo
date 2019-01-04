@@ -46,7 +46,8 @@ public class PersistenceLayerTests {
     @Test
     public void testShouldSaveBorrowerToDatabase() {
         setDatabaseState(INITIAL_STATE_V2_DUMP);
-        PersistenceLayer pl = new PersistenceLayer();
+        final Connection connection = createConnection();
+        PersistenceLayer pl = new PersistenceLayer(connection);
 
         long id = pl.saveNewBorrower("alice");
 
@@ -61,7 +62,8 @@ public class PersistenceLayerTests {
     @Test
     public void testShouldUupdateBorrowerToDatabase() {
         setDatabaseState(ONE_PERSON_IN_BORROWER_TABLE_V2_DUMP);
-        PersistenceLayer pl = new PersistenceLayer();
+        final Connection connection = createConnection();
+        PersistenceLayer pl = new PersistenceLayer(connection);
 
         pl.updateBorrower(1, "bob");
 
@@ -72,7 +74,8 @@ public class PersistenceLayerTests {
     @Test
     public void testShouldBeAbleToSearchBorrowerByName() {
         setDatabaseState(ONE_PERSON_IN_BORROWER_TABLE_V2_DUMP);
-        PersistenceLayer pl = new PersistenceLayer();
+        final Connection connection = createConnection();
+        PersistenceLayer pl = new PersistenceLayer(connection);
 
         Borrower bd = pl.searchBorrowerDataByName("alice");
 
