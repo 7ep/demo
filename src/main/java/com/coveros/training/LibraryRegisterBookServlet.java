@@ -20,8 +20,7 @@ public class LibraryRegisterBookServlet extends HttpServlet {
         final String book = request.getParameter("book");
         request.setAttribute("book", book);
 
-        final Connection connection = PersistenceLayer.createConnection();
-        final PersistenceLayer persistenceLayer = new PersistenceLayer(connection);
+        final PersistenceLayer persistenceLayer = new PersistenceLayer();
         LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer);
 
         final LibraryActionResults libraryActionResults = libraryUtils.registerBook(book);

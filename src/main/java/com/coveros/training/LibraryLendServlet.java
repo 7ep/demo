@@ -30,8 +30,7 @@ public class LibraryLendServlet extends HttpServlet {
         final Date now = Date.valueOf(LocalDate.now());
         request.setAttribute("date", now.toString());
 
-        final Connection connection = PersistenceLayer.createConnection();
-        final PersistenceLayer persistenceLayer = new PersistenceLayer(connection);
+        final PersistenceLayer persistenceLayer = new PersistenceLayer();
         LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer);
 
         final Book book1 = libraryUtils.searchForBookByTitle(book);

@@ -34,8 +34,7 @@ public class BookCheckOutStepDefs {
      */
     private void initializeEmptyDatabaseAndUtility() {
         PersistenceLayerTests.setDatabaseState(INITIAL_STATE_V2_DUMP);
-        final Connection connection = PersistenceLayer.createConnection();
-        final PersistenceLayer persistenceLayer = new PersistenceLayer(connection);
+        final PersistenceLayer persistenceLayer = new PersistenceLayer();
         libraryUtils = new LibraryUtils(persistenceLayer);
     }
 
