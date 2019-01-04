@@ -447,6 +447,9 @@ Now let's modify our pipeline so it does some actual work.
 $ chmod 775 /home/cuser
 
 - In Jenkins, on the pipeline page for Demo, click on Configure.
+- Check the box for "discard old builds",
+    Strategy: log rotation
+    Max # of builds to keep: 5
 - Check the box labeled "Do not allow concurrent builds".  (We don't want race conditions
     in our pipeline, and we don't want excessive memory usage on this demo machine)
 - Under Pipeline, click on the dropdown and select Pipeline script from SCM.
