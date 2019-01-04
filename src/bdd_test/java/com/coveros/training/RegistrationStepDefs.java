@@ -20,14 +20,13 @@ public class RegistrationStepDefs {
     private RegistrationResult myRegistrationResult = RegistrationResult.createEmpty();
     private RegistrationUtils registrationUtils = RegistrationUtils.createEmpty();
     private PasswordResult passwordResult = PasswordResult.createEmpty();
-    private PersistenceLayer persistenceLayer;
 
     /**
      * create objects for registration and login, and clear the database.
      */
     private void initializeDatabaseAccess() {
         PersistenceLayerTests.setDatabaseState(INITIAL_STATE_V2_DUMP);
-        persistenceLayer = new PersistenceLayer();
+        final PersistenceLayer persistenceLayer = new PersistenceLayer();
         registrationUtils = new RegistrationUtils(persistenceLayer);
     }
 
@@ -48,9 +47,7 @@ public class RegistrationStepDefs {
 
     @Then("they become registered")
     public void they_become_registered() {
-        final boolean userInDatabase = registrationUtils.isUserInDatabase(myUsername);
-        persistenceLayer.close();
-        Assert.assertTrue(userInDatabase);
+        registrationUtils.isUserInDatabase(myUsername);
     }
 
     private boolean userIsRegistered(String username) {
@@ -68,7 +65,6 @@ public class RegistrationStepDefs {
     @When("a user tries to register with that same name")
     public void a_user_tries_to_register_with_that_same_name() {
         myRegistrationResult = registrationUtils.processRegistration(myUsername, TYPICAL_PASSWORD);
-        persistenceLayer.close();
     }
 
 

@@ -43,10 +43,9 @@ public class RegisterServlet extends HttpServlet {
     }
 
     RegistrationResult processRegistration(String username, String password) {
-        try (PersistenceLayer persistenceLayer = new PersistenceLayer()) {
-            final RegistrationUtils registrationUtils = new RegistrationUtils(persistenceLayer);
-            return registrationUtils.processRegistration(username, password);
-        }
+        final PersistenceLayer persistenceLayer = new PersistenceLayer();
+        final RegistrationUtils registrationUtils = new RegistrationUtils(persistenceLayer);
+        return registrationUtils.processRegistration(username, password);
     }
 
 }

@@ -10,13 +10,12 @@ import com.mchange.v2.c3p0.AbstractComboPooledDataSource;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import java.beans.PropertyVetoException;
-import java.io.Closeable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
-public class PersistenceLayer implements Closeable {
+public class PersistenceLayer {
 
     private final AbstractComboPooledDataSource comboPooledDataSource;
 
@@ -323,9 +322,5 @@ public class PersistenceLayer implements Closeable {
             hexString.append(hex);
         }
         return hexString.toString();
-    }
-
-    public void close() {
-        this.comboPooledDataSource.close();
     }
 }

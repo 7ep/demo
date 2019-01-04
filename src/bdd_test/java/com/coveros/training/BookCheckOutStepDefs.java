@@ -28,14 +28,13 @@ public class BookCheckOutStepDefs {
     private LibraryUtils libraryUtils = LibraryUtils.createEmpty();
     private final Date Jan_2nd = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 2));
     private LibraryActionResults libraryActionResults = LibraryActionResults.NULL;
-    private PersistenceLayer persistenceLayer;
 
     /**
      * Set up the databases, clear them, initialize the Library Utility with them.
      */
     private void initializeEmptyDatabaseAndUtility() {
         PersistenceLayerTests.setDatabaseState(INITIAL_STATE_V2_DUMP);
-        persistenceLayer = new PersistenceLayer();
+        final PersistenceLayer persistenceLayer = new PersistenceLayer();
         libraryUtils = new LibraryUtils(persistenceLayer);
     }
 
@@ -63,7 +62,6 @@ public class BookCheckOutStepDefs {
     public void theSystemIndicatesTheBookIsLoanedToThemOnThatDate() {
         final Loan loan = libraryUtils.searchForLoan(myBook);
         Assert.assertTrue(loan.checkoutDate.equals(Date.valueOf("2018-01-31")));
-        persistenceLayer.close();
     }
 
     @When("^they try to check out the book$")
@@ -75,7 +73,6 @@ public class BookCheckOutStepDefs {
     public void theSystemIndicatesTheBookIsLoanedToThemOnSomeDate() {
         final Loan loan = libraryUtils.searchForLoan(myBook);
         Assert.assertTrue(loan.checkoutDate.equals(Date.valueOf("2018-01-31")));
-        persistenceLayer.close();
     }
 
     @Given("^an individual, \"([^\"]*)\", is not registered$")
@@ -94,7 +91,6 @@ public class BookCheckOutStepDefs {
     @Then("^the system indicates that they are not registered$")
     public void theSystemIndicatesThatHeIsNotRegistered() {
         Assert.assertEquals(LibraryActionResults.BORROWER_NOT_REGISTERED, libraryActionResults);
-        persistenceLayer.close();
     }
 
     @Given("^and a book, \"([^\"]*)\" is already checked out to \"([^\"]*)\"$")
@@ -114,7 +110,6 @@ public class BookCheckOutStepDefs {
     @Then("^the system indicates that the book is not available$")
     public void theSystemIndicatesThatTheBookIsNotAvailable() {
         Assert.assertEquals(LibraryActionResults.BOOK_CHECKED_OUT, libraryActionResults);
-        persistenceLayer.close();
     }
 
 

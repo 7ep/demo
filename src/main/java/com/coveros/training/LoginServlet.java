@@ -2,7 +2,6 @@ package com.coveros.training;
 
 import com.coveros.training.persistence.LoginUtils;
 import com.coveros.training.persistence.PersistenceLayer;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,13 +33,11 @@ public class LoginServlet extends HttpServlet {
         String username = putUsernameInRequest(request);
         String password = putPasswordInRequest(request);
 
-        try (final PersistenceLayer persistenceLayer = new PersistenceLayer()) {
-            final LoginUtils loginUtils = new LoginUtils(persistenceLayer);
-            final Boolean userRegistered = loginUtils.isUserRegistered(username, password);
-
-            String responseText = userRegistered ? "access granted" : "access denied";
-            request.setAttribute("result", responseText);
-        }
+        final PersistenceLayer persistenceLayer = new PersistenceLayer();
+        final LoginUtils loginUtils = new LoginUtils(persistenceLayer);
+        final Boolean userRegistered = loginUtils.isUserRegistered(username, password);
+        String responseText = userRegistered ? "access granted" : "access denied";
+        request.setAttribute("result", responseText);
         request.getRequestDispatcher("result.jsp").forward(request, response);
     }
 

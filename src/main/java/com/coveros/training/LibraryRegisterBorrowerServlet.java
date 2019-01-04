@@ -21,13 +21,12 @@ public class LibraryRegisterBorrowerServlet extends HttpServlet {
         final String borrower = request.getParameter("borrower");
         request.setAttribute("borrower", borrower);
 
-        try (PersistenceLayer persistenceLayer = new PersistenceLayer()) {
-            LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer);
+        final PersistenceLayer persistenceLayer = new PersistenceLayer();
+        LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer);
 
-            final LibraryActionResults libraryActionResults = libraryUtils.registerBorrower(borrower);
+        final LibraryActionResults libraryActionResults = libraryUtils.registerBorrower(borrower);
 
-            request.setAttribute("result", libraryActionResults);
-        }
+        request.setAttribute("result", libraryActionResults);
         request.getRequestDispatcher("result.jsp").forward(request, response);
     }
 }
