@@ -5,6 +5,7 @@ import com.coveros.training.domainobjects.Borrower;
 import com.coveros.training.domainobjects.LibraryActionResults;
 import com.coveros.training.persistence.LibraryUtils;
 import com.coveros.training.persistence.PersistenceLayer;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,14 +31,15 @@ public class LibraryLendServlet extends HttpServlet {
         final Date now = Date.valueOf(LocalDate.now());
         request.setAttribute("date", now.toString());
 
-        final PersistenceLayer persistenceLayer = new PersistenceLayer();
-        LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer);
+        try (PersistenceLayer persistenceLayer = new PersistenceLayer()) {
+            LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer);
 
-        final Book book1 = libraryUtils.searchForBookByTitle(book);
-        final Borrower borrower1 = libraryUtils.searchForBorrowerByName(borrower);
-        final LibraryActionResults libraryActionResults = libraryUtils.lendBook(book1, borrower1, now);
+            final Book book1 = libraryUtils.searchForBookByTitle(book);
+            final Borrower borrower1 = libraryUtils.searchForBorrowerByName(borrower);
+            final LibraryActionResults libraryActionResults = libraryUtils.lendBook(book1, borrower1, now);
 
-        request.setAttribute("result", libraryActionResults.toString());
+            request.setAttribute("result", libraryActionResults.toString());
+        }
         request.getRequestDispatcher("result.jsp").forward(request, response);
     }
 }

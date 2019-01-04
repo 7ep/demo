@@ -24,19 +24,6 @@ import static com.coveros.training.database_backup_constants.*;
  */
 public class PersistenceLayerTests {
 
-    private Connection createConnection() {
-        Properties props = new Properties();
-        props.setProperty("user","postgres");
-        props.setProperty("password","postgres");
-        Connection conn;
-        try {
-            conn = DriverManager.getConnection(DATABASE_URL, props);
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-        return conn;
-    }
-
     /**
      * assert that there is a way to store a borrower
      * in a database.  We don't actually care how this happens,
@@ -46,11 +33,12 @@ public class PersistenceLayerTests {
     @Test
     public void testShouldSaveBorrowerToDatabase() {
         setDatabaseState(INITIAL_STATE_V2_DUMP);
-        PersistenceLayer pl = new PersistenceLayer();
+        try (PersistenceLayer pl = new PersistenceLayer()) {
 
-        long id = pl.saveNewBorrower("alice");
+            long id = pl.saveNewBorrower("alice");
 
-        Assert.assertEquals(1, id);
+            Assert.assertEquals(1, id);
+        }
     }
 
     /**
@@ -61,23 +49,26 @@ public class PersistenceLayerTests {
     @Test
     public void testShouldUupdateBorrowerToDatabase() {
         setDatabaseState(ONE_PERSON_IN_BORROWER_TABLE_V2_DUMP);
-        PersistenceLayer pl = new PersistenceLayer();
+        try (PersistenceLayer pl = new PersistenceLayer()){
 
-        pl.updateBorrower(1, "bob");
+            pl.updateBorrower(1, "bob");
 
-        String name = pl.getBorrowerName(1);
-        Assert.assertEquals("bob", name);
+            String name = pl.getBorrowerName(1);
+            Assert.assertEquals("bob", name);
+        }
+
     }
 
     @Test
     public void testShouldBeAbleToSearchBorrowerByName() {
         setDatabaseState(ONE_PERSON_IN_BORROWER_TABLE_V2_DUMP);
-        PersistenceLayer pl = new PersistenceLayer();
+        try (PersistenceLayer pl = new PersistenceLayer()) {
 
-        Borrower bd = pl.searchBorrowerDataByName("alice");
+            Borrower bd = pl.searchBorrowerDataByName("alice");
 
-        Assert.assertEquals("alice", bd.name);
-        Assert.assertEquals(1, bd.id);
+            Assert.assertEquals("alice", bd.name);
+            Assert.assertEquals(1, bd.id);
+        }
     }
 
     /**

@@ -15,12 +15,13 @@ public class LoginStepDefs {
     private boolean isRegisteredUser;
     private RegistrationUtils registrationUtils = RegistrationUtils.createEmpty();
     private LoginUtils loginUtils = LoginUtils.createEmpty();
+    private PersistenceLayer persistenceLayer;
 
     /**
      * create objects for registration and login, and clear the database.
      */
     private void initializeDatabaseAccess() {
-        final PersistenceLayer persistenceLayer = new PersistenceLayer();
+        persistenceLayer = new PersistenceLayer();
         registrationUtils = new RegistrationUtils(persistenceLayer);
         loginUtils = new LoginUtils(persistenceLayer);
     }
@@ -35,11 +36,13 @@ public class LoginStepDefs {
     @Then("^The system decides that they are authenticated.$")
     public void theSystemDecidesThatTheyAreAuthenticated() {
         Assert.assertTrue(isRegisteredUser);
+        persistenceLayer.close();
     }
 
     @Then("^The system decides that they are not authenticated, because .*$")
     public void theSystemDecidesThatTheyAreNotAuthenticated() {
         Assert.assertFalse(isRegisteredUser);
+        persistenceLayer.close();
     }
 
 
