@@ -17,7 +17,7 @@ public class LibraryUtils {
     public LibraryUtils() {this(PersistenceLayer.createEmpty());}
 
     public static LibraryUtils createEmpty() {
-        return new LibraryUtils(new PersistenceLayer(new EmptyConnection()));
+        return new LibraryUtils(PersistenceLayer.createEmpty());
     }
 
     public LibraryActionResults lendBook(Book book, Borrower borrower, Date borrowDate) {

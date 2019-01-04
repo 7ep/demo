@@ -20,8 +20,7 @@ public class LoginStepDefs {
      * create objects for registration and login, and clear the database.
      */
     private void initializeDatabaseAccess() {
-        final Connection connection = DataUtils.createConnection();
-        final PersistenceLayer persistenceLayer = new PersistenceLayer(connection);
+        final PersistenceLayer persistenceLayer = new PersistenceLayer();
         registrationUtils = new RegistrationUtils(persistenceLayer);
         loginUtils = new LoginUtils(persistenceLayer);
     }

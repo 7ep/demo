@@ -27,7 +27,7 @@ public class RegistrationUtils {
     }
 
     public static RegistrationUtils createEmpty() {
-        return new RegistrationUtils(new PersistenceLayer(new EmptyConnection()));
+        return new RegistrationUtils(PersistenceLayer.createEmpty());
     }
 
     private RegistrationResult registerUser(String username, String password) {
