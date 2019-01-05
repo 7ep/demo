@@ -1,5 +1,6 @@
 package com.coveros.training.persistence;
 
+import com.coveros.training.domainobjects.Book;
 import com.coveros.training.domainobjects.Borrower;
 import com.coveros.training.persistence.PersistenceLayer;
 import org.junit.Assert;
@@ -69,6 +70,10 @@ public class PersistenceLayerTests {
         Assert.assertEquals("bob", name);
     }
 
+    /**
+     * If a borrower is in the database, we should be able
+     * to find that person by their name
+     */
     @Test
     public void testShouldBeAbleToSearchBorrowerByName() {
         setDatabaseState(ONE_PERSON_IN_BORROWER_TABLE_V2_DUMP);
@@ -81,8 +86,34 @@ public class PersistenceLayerTests {
     }
 
     /**
+     * If a book is in the database, we should be able to find it by title.
+     */
+    @Test
+    public void testShouldBeAbleToSearchForBooksByTitle() {
+        setDatabaseState(ONE_BOOK_IN_DB_V2_DUMP);
+        PersistenceLayer pl = new PersistenceLayer();
+
+        Book book = pl.searchBooksByTitle("Hitchhiker's Guide to the Galaxy");
+
+        Assert.assertEquals("Hitchhiker's Guide to the Galaxy", book.title);
+        Assert.assertEquals(1, book.id);
+    }
+
+    /**
+     * A helper in the test process - put in any restore script name
+     * to get the database into that state.
+     */
+    @Test
+    public void setState() {
+        setDatabaseState(INITIAL_STATE_V2_DUMP);
+    }
+
+    /**
      * use a "restore" command to set the database into a state
      * of empty tables.  This operation must happen very quickly.
+     * To dump a database, run this command:
+     * pg_dump -Fc training > <DESCRIPTION>_<VERSION>.dump
+     * place it in the db_sample_files directory.
      */
     public static void setDatabaseState(String restoreScriptName) {
         Runtime r = Runtime.getRuntime();
