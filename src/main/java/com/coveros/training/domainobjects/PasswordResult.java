@@ -36,14 +36,6 @@ public final class PasswordResult {
         return new PasswordResult(resultStatus, 0d, "", "",  BASIC_PASSWORD_CHECKS_FAILED);
     }
 
-    /**
-     * Return this to represent an empty result.  Used primarily
-     * when we are initializing a variable and don't want to use null.
-     */
-    public static PasswordResult createEmpty() {
-        return new PasswordResult(PasswordResultEnums.NULL, 0d, "", "",  "");
-    }
-
     @Override
     public final boolean equals(@Nullable Object obj) {
         if (obj == null) { return false; }
@@ -76,6 +68,18 @@ public final class PasswordResult {
 
     public final String toString() {
         return ToStringBuilder.reflectionToString(this);
+    }
+
+    /**
+     * Return this to represent an empty result.  Used primarily
+     * when we are initializing a variable and don't want to use null.
+     */
+    public static PasswordResult createEmpty() {
+        return new PasswordResult(PasswordResultEnums.NULL, 0d, "", "",  "");
+    }
+
+    public boolean isEmpty() {
+        return this.equals(createEmpty());
     }
 
 }

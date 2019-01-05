@@ -30,10 +30,6 @@ public final class Borrower {
         this.name = name;
     }
 
-    public static Borrower createEmpty() {
-        return new Borrower(0, "");
-    }
-
     public final boolean equals(@Nullable Object obj) {
         if (obj == null) { return false; }
         if (obj == this) { return true; }
@@ -60,7 +56,11 @@ public final class Borrower {
         return ToStringBuilder.reflectionToString(this);
     }
 
+    public static Borrower createEmpty() {
+        return new Borrower(0, "");
+    }
+
     public boolean isEmpty() {
-        return this.equals(Borrower.createEmpty());
+        return this.equals(createEmpty());
     }
 }

@@ -22,10 +22,6 @@ public final class Book {
     this.id = id;
   }
 
-  public static Book createEmpty() {
-    return new Book(0, "");
-  }
-
   public final boolean equals(@Nullable Object obj) {
     if (obj == null) { return false; }
     if (obj == this) { return true; }
@@ -52,8 +48,12 @@ public final class Book {
     return ToStringBuilder.reflectionToString(this);
   }
 
+  public static Book createEmpty() {
+    return new Book(0, "");
+  }
+
   public boolean isEmpty() {
-    return this.equals(Book.createEmpty());
+    return this.equals(createEmpty());
   }
 
 }

@@ -15,10 +15,6 @@ public final class RegistrationResult {
         this.message = message;
     }
 
-    public static RegistrationResult createEmpty() {
-        return new RegistrationResult(false, "");
-    }
-
     public final boolean equals(@Nullable Object obj) {
         if (obj == null) { return false; }
         if (obj == this) { return true; }
@@ -45,4 +41,11 @@ public final class RegistrationResult {
         return ToStringBuilder.reflectionToString(this);
     }
 
+    public static RegistrationResult createEmpty() {
+        return new RegistrationResult(false, "");
+    }
+
+    public boolean isEmpty() {
+        return this.equals(createEmpty());
+    }
 }

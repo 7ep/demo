@@ -36,10 +36,6 @@ public final class Loan {
     this.checkoutDate = checkoutDate;
   }
 
-  public static Loan createEmpty() {
-    return new Loan(Book.createEmpty(), Borrower.createEmpty(), 0, new Date(0));
-  }
-
   public final boolean equals(@Nullable Object obj) {
     if (obj == null) { return false; }
     if (obj == this) { return true; }
@@ -70,7 +66,11 @@ public final class Loan {
     return ToStringBuilder.reflectionToString(this);
   }
 
+  public static Loan createEmpty() {
+    return new Loan(Book.createEmpty(), Borrower.createEmpty(), 0, new Date(0));
+  }
+
   public boolean isEmpty() {
-    return this.equals(Loan.createEmpty());
+    return this.equals(createEmpty());
   }
 }
