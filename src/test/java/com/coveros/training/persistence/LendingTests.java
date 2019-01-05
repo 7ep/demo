@@ -17,7 +17,7 @@ public class LendingTests {
     private final static String BORROWER_A_NAME = "borrower_a";
     private final static String BORROWER_B_NAME = "borrower_b";
     private final static String TITLE = "Some book";
-    private final static Book SAMPLE_BOOK = new Book(TITLE, 1);
+    private final static Book SAMPLE_BOOK = new Book(1, TITLE);
     private final static Borrower SAMPLE_BORROWER_A = new Borrower(1, BORROWER_A_NAME);
     private final static Borrower SAMPLE_BORROWER_B = new Borrower(1, BORROWER_B_NAME);
     private LibraryUtils libraryUtils = Mockito.spy(LibraryUtils.class);

@@ -2,6 +2,8 @@ package com.coveros.training.persistence;
 
 import com.coveros.training.domainobjects.Book;
 import com.coveros.training.domainobjects.Borrower;
+import com.coveros.training.domainobjects.Loan;
+import com.coveros.training.domainobjects.User;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -23,6 +25,8 @@ import static com.coveros.training.database_backup_constants.*;
 public class PersistenceLayerTests {
 
     private final static Date BORROW_DATE = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 1));
+    public static final Book DEFAULT_BOOK = new Book(1, "The DevOps Handbook");
+    public static final Borrower DEFAULT_BORROWER = new Borrower(1, "alice");
 
     /**
      * assert that there is a way to store a borrower
@@ -35,7 +39,7 @@ public class PersistenceLayerTests {
         setDatabaseState(INITIAL_STATE_V2_DUMP);
         PersistenceLayer pl = new PersistenceLayer();
 
-        long id = pl.saveNewBorrower("alice");
+        long id = pl.saveNewBorrower(DEFAULT_BORROWER.name);
 
         Assert.assertEquals(1, id);
     }
@@ -79,30 +83,43 @@ public class PersistenceLayerTests {
         setDatabaseState(ONE_BOOK_IN_DB_V2_DUMP);
         PersistenceLayer pl = new PersistenceLayer();
 
-        Book book = pl.searchBooksByTitle("Hitchhiker's Guide to the Galaxy");
+        Book book = pl.searchBooksByTitle(DEFAULT_BOOK.title);
 
-        Assert.assertEquals("Hitchhiker's Guide to the Galaxy", book.title);
+        Assert.assertEquals(DEFAULT_BOOK.title, book.title);
         Assert.assertEquals(1, book.id);
     }
 
     @Test
     public void testShouldBeAbleToSearchAUserByName() {
+        setDatabaseState(ONE_USER_IN_USERTABLE_V2_DUMP);
+        PersistenceLayer pl = new PersistenceLayer();
 
-    }
+        User user = pl.searchForUserByName("alice");
 
-    @Test
-    public void testThatCredentialsAreValid() {
-
+        Assert.assertEquals("alice", user.name);
+        Assert.assertEquals(1, user.id);
     }
 
     @Test
     public void testThatWeCanUpdateAUsersPassword() {
+        setDatabaseState(ONE_USER_IN_USERTABLE_V2_DUMP);
+        PersistenceLayer pl = new PersistenceLayer();
 
+        pl.updateUserWithPassword(1, "abc123");
+        final boolean result = pl.areCredentialsValid("alice", "abc123");
+
+        Assert.assertTrue(result);
     }
 
     @Test
     public void testWeCanSearchForALoanByABook() {
+        setDatabaseState(ONE_LOAN_ONE_BOOK_ONE_BORROWER_V2_DUMP);
+        PersistenceLayer pl = new PersistenceLayer();
 
+        Loan loan = pl.searchForLoan(DEFAULT_BOOK);
+
+        Assert.assertEquals(DEFAULT_BOOK, loan.book);
+        Assert.assertEquals(DEFAULT_BORROWER, loan.borrower);
     }
 
     @Test
@@ -129,9 +146,7 @@ public class PersistenceLayerTests {
     public void testWeCanCreateALoan() {
         setDatabaseState(ONE_BOOK_ONE_BORROWER_V2_DUMP);
         PersistenceLayer pl = new PersistenceLayer();
-        final Book book = new Book("The DevOps Handbook", 1);
-        final Borrower borrower = new Borrower(1, "alice");
-        long id = pl.createLoan(book, borrower, BORROW_DATE);
+        long id = pl.createLoan(DEFAULT_BOOK, DEFAULT_BORROWER, BORROW_DATE);
 
         Assert.assertEquals(1, id);
     }

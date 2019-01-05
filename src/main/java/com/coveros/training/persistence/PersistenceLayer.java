@@ -261,7 +261,7 @@ public class PersistenceLayer {
                 try (ResultSet resultSet = st.executeQuery()) {
                     if (resultSet.next()) {
                         long id = resultSet.getLong(1);
-                        return new Book(bookTitle, id);
+                        return new Book(id, bookTitle);
                     } else {
                         return Book.createEmpty();
                     }
