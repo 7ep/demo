@@ -20,4 +20,11 @@ public class BorrowerTests {
     static Borrower createTestBorrower() {
         return new Borrower(1, "alice");
     }
+
+    @Test
+    public void testCanCreateEmpty() {
+        final Borrower borrower = Borrower.createEmpty();
+        Assert.assertTrue(borrower.isEmpty());
+    }
+
 }

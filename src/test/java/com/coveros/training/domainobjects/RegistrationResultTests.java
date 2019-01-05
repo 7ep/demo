@@ -19,4 +19,10 @@ public class RegistrationResultTests {
         Assert.assertTrue(registrationResult.toString().contains("[wasSuccessfullyRegistered=false,message=EMPTY_PASSWORD]"));
     }
 
+    @Test
+    public void testCanCreateEmpty() {
+        final RegistrationResult registrationResult = RegistrationResult.createEmpty();
+        Assert.assertTrue(registrationResult.isEmpty());
+    }
+
 }

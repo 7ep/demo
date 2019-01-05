@@ -20,4 +20,10 @@ public class PasswordResultTests {
     static PasswordResult createTestPasswordResult() {
         return PasswordResult.createDefault(PasswordResultEnums.SUCCESS);
     }
+
+    @Test
+    public void testCanCreateEmpty() {
+        final PasswordResult passwordResult = PasswordResult.createEmpty();
+        Assert.assertTrue(passwordResult.isEmpty());
+    }
 }

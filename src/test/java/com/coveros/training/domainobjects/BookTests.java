@@ -20,4 +20,11 @@ public class BookTests {
   static Book createTestBook() {
     return new Book(1, "The DevOps Handbook");
   }
+
+  @Test
+  public void testCanCreateEmpty() {
+    final Book book = Book.createEmpty();
+    Assert.assertTrue(book.isEmpty());
+  }
+
 }

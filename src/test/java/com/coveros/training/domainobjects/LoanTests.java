@@ -25,4 +25,10 @@ public class LoanTests {
     Date borrowDate = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 1));
     return new Loan(BookTests.createTestBook(), BorrowerTests.createTestBorrower(), 1, borrowDate);
   }
+
+  @Test
+  public void testCanCreateEmpty() {
+    final Loan loan = Loan.createEmpty();
+    Assert.assertTrue(loan.isEmpty());
+  }
 }
