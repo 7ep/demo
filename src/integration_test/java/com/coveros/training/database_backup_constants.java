@@ -18,4 +18,6 @@ public class database_backup_constants {
 
     public static final String ONE_BOOK_IN_DB_V2_DUMP = "one_book_in_db_v2.dump";
 
+    public static final String ONE_BOOK_ONE_BORROWER_V2_DUMP = "one_book_and_one_borrower_v2.dump";
+
 }
