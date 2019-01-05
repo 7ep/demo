@@ -7,6 +7,12 @@ import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.logging.Logger;
 
+/**
+ * This class only exists because we want no nulls in our
+ * system.  In order to do this, we have to be able to create
+ * "empty" versions of our classes.  To create an empty String, for
+ * example, is simply "".  But an empty DataSource would look like this.
+ */
 public class EmptyDataSource implements DataSource {
   @Override
   public Connection getConnection() throws SQLException {
