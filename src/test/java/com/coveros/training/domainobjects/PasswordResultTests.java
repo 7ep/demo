@@ -8,12 +8,16 @@ public class PasswordResultTests {
 
     @Test
     public void testShouldHaveEqualsAndHashcodeImplementedCorrectly() {
-        EqualsVerifier.forClass(PasswordResult.class);
+        EqualsVerifier.forClass(PasswordResult.class).verify();
     }
 
     @Test
     public void testShouldOutputGoodString() {
-        final PasswordResult passwordResult = PasswordResult.createDefault(PasswordResultEnums.SUCCESS);
+        final PasswordResult passwordResult = createTestPasswordResult();
         Assert.assertTrue(passwordResult.toString().contains("status=SUCCESS,entropy=0.0,timeToCrackOffline=,timeToCrackOnline=,message=BASIC_PASSWORD_CHECKS_FAILED"));
+    }
+
+    static PasswordResult createTestPasswordResult() {
+        return PasswordResult.createDefault(PasswordResultEnums.SUCCESS);
     }
 }

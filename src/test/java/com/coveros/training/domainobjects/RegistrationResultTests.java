@@ -10,7 +10,7 @@ public class RegistrationResultTests {
 
     @Test
     public void testShouldHaveEqualsAndHashcodeImplementedCorrectly() {
-        EqualsVerifier.forClass(RegistrationResult.class);
+        EqualsVerifier.forClass(RegistrationResult.class).verify();
     }
 
     @Test
@@ -18,4 +18,5 @@ public class RegistrationResultTests {
         final RegistrationResult registrationResult = new RegistrationResult(false, EMPTY_PASSWORD.toString());
         Assert.assertTrue(registrationResult.toString().contains("[wasSuccessfullyRegistered=false,message=EMPTY_PASSWORD]"));
     }
+
 }

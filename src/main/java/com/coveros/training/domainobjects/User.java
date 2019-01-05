@@ -2,9 +2,10 @@ package com.coveros.training.domainobjects;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class User {
+public final class User {
 
   /**
    * The username of the user
@@ -49,5 +50,9 @@ public class User {
 
   public boolean isEmpty() {
     return this.equals(User.createEmpty());
+  }
+
+  public final String toString() {
+    return ToStringBuilder.reflectionToString(this);
   }
 }

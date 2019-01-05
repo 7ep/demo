@@ -8,12 +8,16 @@ public class BorrowerTests {
 
     @Test
     public void testShouldHaveEqualsAndHashcodeImplementedCorrectly() {
-        EqualsVerifier.forClass(Borrower.class);
+        EqualsVerifier.forClass(Borrower.class).verify();
     }
 
     @Test
     public void testShouldOutputGoodString() {
-        final Borrower borrower = new Borrower(1, "alice");
+        final Borrower borrower = createTestBorrower();
         Assert.assertTrue( borrower.toString().contains("id=1,name=alice"));
+    }
+
+    static Borrower createTestBorrower() {
+        return new Borrower(1, "alice");
     }
 }

@@ -44,7 +44,7 @@ public final class PasswordResult {
         return new PasswordResult(PasswordResultEnums.NULL, 0d, "", "",  "");
     }
 
-
+    @Override
     public final boolean equals(@Nullable Object obj) {
         if (obj == null) { return false; }
         if (obj == this) { return true; }
@@ -61,6 +61,7 @@ public final class PasswordResult {
                 .isEquals();
     }
 
+    @Override
     public final int hashCode() {
         // you pick a hard-coded, randomly chosen, non-zero, odd number
         // ideally different for each class

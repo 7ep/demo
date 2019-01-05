@@ -2,11 +2,12 @@ package com.coveros.training.domainobjects;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.sql.Date;
 
-public class Loan {
+public final class Loan {
 
   /**
    * The date the book was checked out.
@@ -50,19 +51,24 @@ public class Loan {
         .append(id, rhs.id)
         .append(book, rhs.book)
         .append(borrower, rhs.borrower)
+        .append(checkoutDate, rhs.checkoutDate)
         .isEquals();
   }
 
   public final int hashCode() {
     // you pick a hard-coded, randomly chosen, non-zero, odd number
     // ideally different for each class
-    return new HashCodeBuilder(5, 21).
-        append(book).
-        append(borrower).
-        append(id).
-        toHashCode();
+    return new HashCodeBuilder(5, 21)
+        .append(book)
+        .append(borrower)
+        .append(id)
+        .append(checkoutDate)
+        .toHashCode();
   }
 
+  public final String toString() {
+    return ToStringBuilder.reflectionToString(this);
+  }
 
   public boolean isEmpty() {
     return this.equals(Loan.createEmpty());
