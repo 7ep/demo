@@ -38,6 +38,7 @@ Cool features:
 * Disallows use of null (unless you provide an annotation), preventing a whole class of errors.
 * A nice head start of good tests of various types - unit tests, integration tests, automated acceptance tests, UI tests
 
+Note: if you have access to Coveros' Google drive, I've stored it [there](https://drive.google.com/drive/folders/1gbqE88UA5YszInP2qgDF8haa3wVEv4Rm?usp=sharing)
 
 Screenshots:
 ![alt Cucumber report](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/cucumber_report.png)
