@@ -20,9 +20,8 @@ public class LoginStepDefs {
      * create objects for registration and login, and clear the database.
      */
     private void initializeDatabaseAccess() {
-        final PersistenceLayer persistenceLayer = new PersistenceLayer();
-        registrationUtils = new RegistrationUtils(persistenceLayer);
-        loginUtils = new LoginUtils(persistenceLayer);
+        registrationUtils = new RegistrationUtils();
+        loginUtils = new LoginUtils();
     }
 
     @Given("^\"([^\"]*)\" is registered in the system with the password \"([^\"]*)\"$")

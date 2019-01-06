@@ -1,11 +1,22 @@
 package com.coveros.training.persistence;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class encapsulates some of the actions related to
+ * injecting data into a prepared SQL statement, so that
+ * we are able to summarize what we want done without
+ * all the annoying boilerplate.  See examples like {@link PersistenceLayer#saveNewBorrower}
+ */
 class SqlData {
 
   /**
@@ -43,7 +54,7 @@ class SqlData {
    *             to see what we can process.
    * @param clazz the class of the thing.  I would rather not use reflection, let's keep it above board for now.
    */
-  public void addParameter(Object data, Class clazz) {
+  void addParameter(Object data, Class clazz) {
     params.add(new ParameterObject(data, clazz));
   }
 
@@ -51,27 +62,70 @@ class SqlData {
    * Loop through the parameters that have been added and
    * serially add them to the prepared statement.
    * @param st a prepared statement
-   * @throws SQLException If anything happens during processing, we're not handling it here.
    */
-  public void applyParametersToPreparedStatement(PreparedStatement st) throws SQLException {
-    for (int i = 1; i <= params.size(); i++) {
-      ParameterObject p = params.get(i - 1);
-      if (p.type == String.class) {
-        st.setString(i, (String) p.data);
-        continue;
+  void applyParametersToPreparedStatement(PreparedStatement st) {
+    try {
+      for (int i = 1; i <= params.size(); i++) {
+        ParameterObject p = params.get(i - 1);
+        if (p.type == String.class) {
+          st.setString(i, (String) p.data);
+          continue;
+        }
+        if (p.type == Integer.class) {
+          st.setInt(i, (Integer) p.data);
+          continue;
+        }
+        if (p.type == Long.class) {
+          st.setLong(i, (Long) p.data);
+          continue;
+        }
+        if (p.type == Date.class) {
+          st.setDate(i, (Date) p.data);
+          continue;
+        }
       }
-      if (p.type == Integer.class) {
-        st.setInt(i, (Integer) p.data);
-        continue;
-      }
-      if (p.type == Long.class) {
-        st.setLong(i, (Long) p.data);
-        continue;
-      }
-      if (p.type == Date.class) {
-        st.setDate(i, (Date) p.data);
-        continue;
-      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
     }
+  }
+
+  public final boolean equals(@Nullable Object obj) {
+    if (obj == null) {
+      return false;
+    }
+    if (obj == this) {
+      return true;
+    }
+    if (obj.getClass() != getClass()) {
+      return false;
+    }
+    SqlData rhs = (SqlData) obj;
+    return new EqualsBuilder()
+        .append(description, rhs.description)
+        .append(preparedStatement, rhs.preparedStatement)
+        .append(params, rhs.params)
+        .isEquals();
+  }
+
+  public final int hashCode() {
+    // you pick a hard-coded, randomly chosen, non-zero, odd number
+    // ideally different for each class
+    return new HashCodeBuilder(53, 97)
+        .append(description)
+        .append(preparedStatement)
+        .append(params)
+        .toHashCode();
+  }
+
+  public final String toString() {
+    return ToStringBuilder.reflectionToString(this);
+  }
+
+  public static SqlData createEmpty() {
+    return new SqlData("", "");
+  }
+
+  public boolean isEmpty() {
+    return this.equals(SqlData.createEmpty());
   }
 }

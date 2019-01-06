@@ -18,6 +18,10 @@ public class RegistrationUtils {
         this.persistenceLayer = persistenceLayer;
     }
 
+    public RegistrationUtils() {
+        this(new PersistenceLayer());
+    }
+
     public RegistrationResult processRegistration(String username, String password) {
         if (isUserInDatabase(username)) {
             return new RegistrationResult(false, ALREADY_REGISTERED.toString());

@@ -15,7 +15,9 @@ public class LibraryUtils {
         this.persistence = persistence;
     }
 
-    public LibraryUtils() { this.persistence = new PersistenceLayer();}
+    public LibraryUtils() {
+        this(new PersistenceLayer());
+    }
 
     public LibraryActionResults lendBook(Book book, Borrower borrower, Date borrowDate) {
         if (book.isEmpty()) return LibraryActionResults.BOOK_NOT_REGISTERED;

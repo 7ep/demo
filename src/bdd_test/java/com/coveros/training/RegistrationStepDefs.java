@@ -26,8 +26,7 @@ public class RegistrationStepDefs {
      */
     private void initializeDatabaseAccess() {
         PersistenceLayerTests.setDatabaseState(INITIAL_STATE_V2_DUMP);
-        final PersistenceLayer persistenceLayer = new PersistenceLayer();
-        registrationUtils = new RegistrationUtils(persistenceLayer);
+        registrationUtils = new RegistrationUtils();
     }
 
     // a password used that will suffice as a typical password

@@ -2,12 +2,13 @@ package com.coveros.training.persistence;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * a POJO container for the parameters for the {@link SqlData} object.
  */
-public class ParameterObject {
+public final class ParameterObject {
 
   /**
    * The data we are injecting into the SQL statement
@@ -19,7 +20,7 @@ public class ParameterObject {
    */
   final Class type;
 
-  public ParameterObject(Object data, Class type) {
+  ParameterObject(Object data, Class type) {
     this.data = data;
     this.type = type;
   }
@@ -51,11 +52,15 @@ public class ParameterObject {
   }
 
   public static ParameterObject createEmpty() {
-    return new ParameterObject(new Object(), Class.class);
+    return new ParameterObject("", String.class);
   }
 
   public boolean isEmpty() {
     return this.equals(ParameterObject.createEmpty());
+  }
+
+  public final String toString() {
+    return ToStringBuilder.reflectionToString(this);
   }
 
 }

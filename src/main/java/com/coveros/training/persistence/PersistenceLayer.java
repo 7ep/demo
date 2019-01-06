@@ -6,6 +6,7 @@ import com.coveros.training.domainobjects.Book;
 import com.coveros.training.domainobjects.Borrower;
 import com.coveros.training.domainobjects.Loan;
 import com.coveros.training.domainobjects.User;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.postgresql.ds.PGSimpleDataSource;
@@ -373,5 +374,9 @@ public class PersistenceLayer {
 
     public boolean isEmpty() {
         return this.dataSource.getClass().equals(EmptyDataSource.class);
+    }
+
+    public final String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }
