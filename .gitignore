@@ -31,3 +31,6 @@ ui_tests/debug.log
 # and makes this directory
 generated_src/
 generated_testSrc/
+
+# another Intellij-generated file
+*.iml
