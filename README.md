@@ -28,7 +28,7 @@ On Windows
 Follow the directions to [create a Jenkins box](https://github.com/7ep/demo/blob/with_database/docs/jenkins_box_guide.txt) and [a UI-testing-box](https://github.com/7ep/demo/blob/with_database/docs/ui_test_box.txt), per the instructions
 in docs.  
 
-Cool features:
+Features:
 * Instructions for setting up virtual machines (with VirtualBox).
 * A fully functioning demonstration CI/CD pipeline using Jenkins.
 * Beginnings of a pretty neat micro-ORM (See PersistenceLayer.java and SqlData.java).
@@ -38,7 +38,8 @@ Cool features:
 * Disallows use of null (unless you provide an annotation), preventing a whole class of errors.
 * A nice head start of good tests of various types - unit tests, integration tests, automated acceptance tests, UI tests
 
-Note: if you have access to Coveros' Google drive, I've stored it [there](https://drive.google.com/drive/folders/1gbqE88UA5YszInP2qgDF8haa3wVEv4Rm?usp=sharing)
+Note: if you have access to Coveros' Google drive, I've stored an appliance for running
+ the pipeline [there](https://drive.google.com/drive/folders/1gbqE88UA5YszInP2qgDF8haa3wVEv4Rm?usp=sharing)
 
 Screenshots:
 ![alt Cucumber report](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/cucumber_report.png)
