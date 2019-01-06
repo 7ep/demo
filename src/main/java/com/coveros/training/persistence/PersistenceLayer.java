@@ -33,10 +33,6 @@ public class PersistenceLayer {
         dataSource = ds;
     }
 
-    public static PersistenceLayer createEmpty() {
-        return new PersistenceLayer(new EmptyDataSource());
-    }
-
     public static DataSource obtainDataSource() {
         try {
             // First, in the most common case, we try to get a datasource from context,
@@ -369,5 +365,13 @@ public class PersistenceLayer {
             hexString.append(hex);
         }
         return hexString.toString();
+    }
+
+    public static PersistenceLayer createEmpty() {
+        return new PersistenceLayer(new EmptyDataSource());
+    }
+
+    public boolean isEmpty() {
+        return this.dataSource.getClass().equals(EmptyDataSource.class);
     }
 }

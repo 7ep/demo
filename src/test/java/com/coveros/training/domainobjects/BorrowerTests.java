@@ -17,7 +17,7 @@ public class BorrowerTests {
         Assert.assertTrue( borrower.toString().contains("id=1,name=alice"));
     }
 
-    static Borrower createTestBorrower() {
+    public static Borrower createTestBorrower() {
         return new Borrower(1, "alice");
     }
 

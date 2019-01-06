@@ -58,4 +58,5 @@ public class EmptyDataSource implements DataSource {
   public Logger getParentLogger() throws SQLFeatureNotSupportedException {
     throw new NotImplementedException();
   }
+
 }

@@ -14,11 +14,6 @@ public class LibraryUtils {
     public LibraryUtils(PersistenceLayer persistence) {
         this.persistence = persistence;
     }
-    public LibraryUtils() {this(PersistenceLayer.createEmpty());}
-
-    public static LibraryUtils createEmpty() {
-        return new LibraryUtils(PersistenceLayer.createEmpty());
-    }
 
     public LibraryActionResults lendBook(Book book, Borrower borrower, Date borrowDate) {
         if (book.isEmpty()) return LibraryActionResults.BOOK_NOT_REGISTERED;
@@ -32,19 +27,27 @@ public class LibraryUtils {
         return LibraryActionResults.SUCCESS;
     }
 
+    /**
+     * This is here so we can extract out the portion of code
+     * that calls to the persistence layer, making it easier to test.
+     */
     void createLoan(Book book, Borrower borrower, Date borrowDate) {
         persistence.createLoan(book, borrower, borrowDate);
     }
 
     public LibraryActionResults registerBorrower(String borrower) {
         final Borrower borrowerDetails = searchForBorrowerByName(borrower);
-        final boolean borrowerWasFound = !borrowerDetails.equals(Borrower.createEmpty());
+        final boolean borrowerWasFound = ! borrowerDetails.equals(Borrower.createEmpty());
         if (borrowerWasFound) return LibraryActionResults.ALREADY_REGISTERED_BORROWER;
 
         saveNewBorrower(borrower);
         return LibraryActionResults.SUCCESS;
     }
 
+    /**
+     * This is here so we can extract out the portion of code
+     * that calls to the persistence layer, making it easier to test.
+     */
     void saveNewBorrower(String borrower) {
         persistence.saveNewBorrower(borrower);
     }
@@ -57,6 +60,10 @@ public class LibraryUtils {
         return LibraryActionResults.SUCCESS;
     }
 
+    /**
+     * This is here so we can extract out the portion of code
+     * that calls to the persistence layer, making it easier to test.
+     */
     void saveNewBook(String bookTitle) {
         persistence.saveNewBook(bookTitle);
     }
@@ -71,5 +78,13 @@ public class LibraryUtils {
 
     public Book searchForBookByTitle(String title) {
         return persistence.searchBooksByTitle(title);
+    }
+
+    public static LibraryUtils createEmpty() {
+        return new LibraryUtils(PersistenceLayer.createEmpty());
+    }
+
+    public boolean isEmpty() {
+        return persistence.isEmpty();
     }
 }

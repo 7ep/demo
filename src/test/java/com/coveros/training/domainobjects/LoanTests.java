@@ -21,7 +21,7 @@ public class LoanTests {
     Assert.assertTrue("toString was: " + loan.toString(), loan.toString().contains("title=The DevOps Handbook,id=1"));
   }
 
-  static Loan createTestLoan() {
+  public static Loan createTestLoan() {
     Date borrowDate = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 1));
     return new Loan(BookTests.createTestBook(), BorrowerTests.createTestBorrower(), 1, borrowDate);
   }

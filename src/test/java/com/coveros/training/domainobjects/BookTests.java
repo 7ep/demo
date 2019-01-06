@@ -17,7 +17,7 @@ public class BookTests {
     Assert.assertTrue("toString was: " + book.toString(), book.toString().contains("title=The DevOps Handbook,id=1"));
   }
 
-  static Book createTestBook() {
+  public static Book createTestBook() {
     return new Book(1, "The DevOps Handbook");
   }
 
