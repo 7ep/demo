@@ -2,8 +2,12 @@
 
 #### dependencies: 
     Java 8.  
+    Postgresql
 
 It *has* to be Java 8.  Don't use Java 10, it will error out because Mockito doesn't work with Java 10.
+
+Configure Postgresql using the steps at CONFIGURE POSTGRESQL in [jenkins_box_guide.txt](https://github.com/7ep/demo/blob/with_database/docs/jenkins_box_guide.txt).
+Succinctly, you want to have a database called "training", and you want access to it.
 
 #### To build with tests:
 On Linux

@@ -243,6 +243,9 @@ concern.  So what we will do here is make the database easily
 accessible so we can work with it.  Dealing with security is a pain,
 by definition, so we'll skip that in this exercise.
 
+CONFIGURE POSTGRESQL
+--------------------
+
 First, we'll run the postgresql client as "postgres"
 
 $ sudo -upostgres psql
