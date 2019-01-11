@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import static org.mockito.Mockito.*;
 
-public class RegisterServletTest {
+public class RegisterServletTests {
 
     private static final RegistrationResult EMPTY_USERNAME = new RegistrationResult(false, RegistrationStatusEnums.EMPTY_USERNAME.toString());
     private static final RegistrationResult SUCCESSFUL_REGISTRATION = new RegistrationResult(true, RegistrationStatusEnums.SUCCESSFULLY_REGISTERED.toString());
