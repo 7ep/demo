@@ -14,7 +14,6 @@ public class MathServlet extends HttpServlet {
   private static final Logger logger = LogManager.getLogger();
 
   private int putNumberInRequest(String itemName, HttpServletRequest request) {
-
     int item;
     try {
       item = Integer.parseInt(request.getParameter(itemName));
@@ -26,18 +25,23 @@ public class MathServlet extends HttpServlet {
   }
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-
     int item_a = putNumberInRequest("item_a", request);
     int item_b = putNumberInRequest("item_b", request);
 
     setResultToSum(request, item_a, item_b);
-    try {
-      request.getRequestDispatcher("result.jsp").forward(request, response);
-    } catch (Exception ex) {
-      logger.error("failed during forward: " + ex);
-    }
+    forwardToResult(request, response, logger);
   }
 
+  /**
+   * Wrapping a static method call for testing.
+   */
+  void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
+    ServletUtils.forwardToResult(request, response, logger);
+  }
+
+  /**
+   * Wrapping a request set for easier testing and clarity.
+   */
   void setResultToSum(HttpServletRequest request, int item_a, int item_b) {
     request.setAttribute("result", doAdd(item_a, item_b));
   }
