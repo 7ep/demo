@@ -1,0 +1,37 @@
+// This file is meant to be run nightly, since it takes a long time to run, and
+// doesn't have to be run on each build.
+
+// its purpose is to highlight dependencies that are security risks.
+pipeline {
+
+  agent any
+
+
+  environment {
+    DEMO_PROJECT_HOME   =  "${env.WORKSPACE}"
+    POSTGRES_BIN_DIR    = '/usr/pgsql-10/bin'
+  }
+
+  stages {
+
+    stage('Analyze security of dependencies') {
+      steps {
+         sh './gradlew dependencyCheckAnalyze'
+      }
+    }
+
+    // This is the stage where we deploy to production.  If any test
+    // fails, we won't get here.  Note that we aren't really doing anything - this
+    // is a token step, to indicate whether we would have deployed or not.  Nothing actually
+    // happens, since this is a demo project.
+    stage('Run ZAP Security scan') {
+      steps {
+        // just a token operation while we pretend to deploy
+        sh 'ssh cuser@uitestbox "/usr/share/owasp-zap/zap.sh -quickurl http://localhost:8080/demo -cmd"'
+      }
+    }
+
+
+  }
+
+}
