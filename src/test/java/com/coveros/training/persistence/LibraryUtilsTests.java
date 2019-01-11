@@ -44,6 +44,21 @@ public class LibraryUtilsTests {
     Assert.assertEquals(LibraryActionResults.SUCCESS, libraryActionResults);
   }
 
+  /**
+   * Same as {@link #testCanLendBook()} but we're hitting its wrapper.
+   */
+  @Test
+  public void testCanLendBook_wrapperMethod() {
+    Mockito.doReturn(Loan.createEmpty()).when(libraryUtils).searchForLoan(DEFAULT_BOOK);
+    Mockito.doReturn(DEFAULT_BOOK).when(libraryUtils).searchForBookByTitle(DEFAULT_BOOK.title);
+    Mockito.doReturn(DEFAULT_BORROWER).when(libraryUtils).searchForBorrowerByName(DEFAULT_BORROWER.name);
+
+    final LibraryActionResults libraryActionResults =
+        libraryUtils.lendBook(DEFAULT_BOOK.title, DEFAULT_BORROWER.name, BORROW_DATE);
+
+    Assert.assertEquals(LibraryActionResults.SUCCESS, libraryActionResults);
+  }
+
   @Test
   public void testCanRegisterBorrower() {
     Mockito.doReturn(Borrower.createEmpty()).when(libraryUtils).searchForBorrowerByName(DEFAULT_BORROWER.name);
