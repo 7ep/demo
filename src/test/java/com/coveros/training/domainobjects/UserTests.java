@@ -23,7 +23,7 @@ public class UserTests {
     Assert.assertTrue(user.isEmpty());
   }
 
-  static User createTestUser() {
+  private static User createTestUser() {
     return new User("alice", 1);
   }
 

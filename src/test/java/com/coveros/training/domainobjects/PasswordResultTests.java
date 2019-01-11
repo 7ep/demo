@@ -17,7 +17,7 @@ public class PasswordResultTests {
         Assert.assertTrue(passwordResult.toString().contains("status=SUCCESS,entropy=0.0,timeToCrackOffline=,timeToCrackOnline=,message=BASIC_PASSWORD_CHECKS_FAILED"));
     }
 
-    static PasswordResult createTestPasswordResult() {
+    private static PasswordResult createTestPasswordResult() {
         return PasswordResult.createDefault(PasswordResultEnums.SUCCESS);
     }
 

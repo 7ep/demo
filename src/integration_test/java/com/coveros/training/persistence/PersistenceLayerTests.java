@@ -25,8 +25,8 @@ import static com.coveros.training.database_backup_constants.*;
 public class PersistenceLayerTests {
 
     private final static Date BORROW_DATE = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 1));
-    public static final Book DEFAULT_BOOK = new Book(1, "The DevOps Handbook");
-    public static final Borrower DEFAULT_BORROWER = new Borrower(1, "alice");
+    private static final Book DEFAULT_BOOK = new Book(1, "The DevOps Handbook");
+    private static final Borrower DEFAULT_BORROWER = new Borrower(1, "alice");
 
     /**
      * assert that there is a way to store a borrower

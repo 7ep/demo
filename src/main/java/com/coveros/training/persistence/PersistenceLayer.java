@@ -34,7 +34,7 @@ public class PersistenceLayer {
         dataSource = ds;
     }
 
-    public static DataSource obtainDataSource() {
+    private static DataSource obtainDataSource() {
         try {
             // First, in the most common case, we try to get a datasource from context,
             // which is possibly mainly when running in a Servlet container.

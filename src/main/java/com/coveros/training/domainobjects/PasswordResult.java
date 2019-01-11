@@ -8,10 +8,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public final class PasswordResult {
 
     public final PasswordResultEnums status;
-    public final Double entropy;
+    private final Double entropy;
     public final String timeToCrackOffline;
-    public final String timeToCrackOnline;
-    public final String message;
+    private final String timeToCrackOnline;
+    private final String message;
 
     private static final String BASIC_PASSWORD_CHECKS_FAILED = "BASIC_PASSWORD_CHECKS_FAILED";
 

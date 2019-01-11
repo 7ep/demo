@@ -17,7 +17,7 @@ public class ParameterObjectTests {
     Assert.assertTrue("toString was: " + parameterObject.toString(), parameterObject.toString().contains("data=abc123,type=class java.lang.String"));
   }
 
-  public static ParameterObject createTestParameterObject() {
+  private static ParameterObject createTestParameterObject() {
     return new ParameterObject("abc123", String.class);
   }
 

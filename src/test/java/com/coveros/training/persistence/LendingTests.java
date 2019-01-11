@@ -37,7 +37,7 @@ public class LendingTests {
         Mockito.doNothing().when(libraryUtils).createLoan(book, borrower, borrowDate);
     }
 
-    void mockSearchForLoan() {
+    private void mockSearchForLoan() {
         Mockito.doReturn(Loan.createEmpty()).when(libraryUtils).searchForLoan(SAMPLE_BOOK);
     }
 

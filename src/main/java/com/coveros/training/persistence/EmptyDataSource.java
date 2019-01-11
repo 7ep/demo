@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  * "empty" versions of our classes.  To create an empty String, for
  * example, is simply "".  But an empty DataSource would look like this.
  */
-public class EmptyDataSource implements DataSource {
+class EmptyDataSource implements DataSource {
   @Override
   public Connection getConnection() throws SQLException {
     throw new NotImplementedException();

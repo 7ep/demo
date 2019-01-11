@@ -9,7 +9,7 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 public class LoginUtilsTests {
 
-  LoginUtils loginUtils;
+  private LoginUtils loginUtils;
   private PersistenceLayer mockPersistenceLayer;
 
   @Before
