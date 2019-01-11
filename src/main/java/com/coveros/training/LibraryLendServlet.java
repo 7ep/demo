@@ -1,10 +1,7 @@
 package com.coveros.training;
 
-import com.coveros.training.domainobjects.Book;
-import com.coveros.training.domainobjects.Borrower;
 import com.coveros.training.domainobjects.LibraryActionResults;
 import com.coveros.training.persistence.LibraryUtils;
-import com.coveros.training.persistence.PersistenceLayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +15,8 @@ import java.time.LocalDate;
 @WebServlet(name = "LibraryLendServlet", urlPatterns = {"/lend"}, loadOnStartup = 1)
 public class LibraryLendServlet extends HttpServlet {
 
-  private static final Logger logger = LogManager.getLogger();
+  static Logger logger = LogManager.getLogger();
+  LibraryUtils libraryUtils = new LibraryUtils();
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) {
@@ -28,18 +26,21 @@ public class LibraryLendServlet extends HttpServlet {
     final String borrower = request.getParameter("borrower");
     request.setAttribute("borrower", borrower);
 
-    final Date now = Date.valueOf(LocalDate.now());
+    final Date now = getDateNow();
     request.setAttribute("date", now.toString());
 
-    final PersistenceLayer persistenceLayer = new PersistenceLayer();
-    LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer);
-
-    final Book book1 = libraryUtils.searchForBookByTitle(book);
-    final Borrower borrower1 = libraryUtils.searchForBorrowerByName(borrower);
-    final LibraryActionResults libraryActionResults = libraryUtils.lendBook(book1, borrower1, now);
+    final LibraryActionResults libraryActionResults = libraryUtils.lendBook(book, borrower, now);
 
     request.setAttribute("result", libraryActionResults.toString());
     forwardToResult(request, response, logger);
+  }
+
+  /**
+   * Wrapping the call to get a date for now,
+   * so it's easier to stub for testing.
+   */
+  Date getDateNow() {
+    return Date.valueOf(LocalDate.now());
   }
 
   /**

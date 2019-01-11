@@ -19,6 +19,12 @@ public class LibraryUtils {
         this(new PersistenceLayer());
     }
 
+    public LibraryActionResults lendBook(String bookTitle, String borrowerName, Date borrowDate) {
+        final Book book = searchForBookByTitle(bookTitle);
+        final Borrower borrower = searchForBorrowerByName(borrowerName);
+        return lendBook(book, borrower, borrowDate);
+    }
+
     public LibraryActionResults lendBook(Book book, Borrower borrower, Date borrowDate) {
         if (book.isEmpty()) return LibraryActionResults.BOOK_NOT_REGISTERED;
 
