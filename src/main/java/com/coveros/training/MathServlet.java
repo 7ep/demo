@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "MathServlet", urlPatterns = {"/math"}, loadOnStartup = 1)
 public class MathServlet extends HttpServlet {
 
-  private static final Logger logger = LogManager.getLogger();
+  static Logger logger = LogManager.getLogger();
 
-  private int putNumberInRequest(String itemName, HttpServletRequest request) {
+  int putNumberInRequest(String itemName, HttpServletRequest request) {
     int item;
     try {
       item = Integer.parseInt(request.getParameter(itemName));
