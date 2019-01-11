@@ -13,41 +13,40 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"}, loadOnStartup = 1)
 public class LoginServlet extends HttpServlet {
 
-    private static final Logger logger = LogManager.getLogger();
+  private static final Logger logger = LogManager.getLogger();
 
-    private String putUsernameInRequest(HttpServletRequest request) {
-        String username = request.getParameter("username");
-        if (username == null) username = "EMPTY_USERNAME";
-        request.setAttribute("username", username);
-        return username;
-    }
+  private String putUsernameInRequest(HttpServletRequest request) {
+    String username = request.getParameter("username");
+    if (username == null) username = "EMPTY_USERNAME";
+    request.setAttribute("username", username);
+    return username;
+  }
 
-    private String putPasswordInRequest(HttpServletRequest request) {
-        String password = request.getParameter("password");
-        if (password == null) password = "EMPTY_PASSWORD";
-        request.setAttribute("password", password);
-        return password;
-    }
+  private String putPasswordInRequest(HttpServletRequest request) {
+    String password = request.getParameter("password");
+    if (password == null) password = "EMPTY_PASSWORD";
+    request.setAttribute("password", password);
+    return password;
+  }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response){
-        String username = putUsernameInRequest(request);
-        String password = putPasswordInRequest(request);
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    String username = putUsernameInRequest(request);
+    String password = putPasswordInRequest(request);
 
-        final PersistenceLayer persistenceLayer = new PersistenceLayer();
-        final LoginUtils loginUtils = new LoginUtils(persistenceLayer);
-        final Boolean userRegistered = loginUtils.isUserRegistered(username, password);
-        String responseText = userRegistered ? "access granted" : "access denied";
-        request.setAttribute("result", responseText);
-        forwardToResult(request, response, logger);
-    }
+    final PersistenceLayer persistenceLayer = new PersistenceLayer();
+    final LoginUtils loginUtils = new LoginUtils(persistenceLayer);
+    final Boolean userRegistered = loginUtils.isUserRegistered(username, password);
+    String responseText = userRegistered ? "access granted" : "access denied";
+    request.setAttribute("result", responseText);
+    forwardToResult(request, response, logger);
+  }
 
-    /**
-     * Wrapping a static method call for testing.
-     */
-    void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
-        ServletUtils.forwardToResult(request, response, logger);
-    }
-
+  /**
+   * Wrapping a static method call for testing.
+   */
+  void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
+    ServletUtils.forwardToResult(request, response, logger);
+  }
 
 
 }

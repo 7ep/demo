@@ -14,44 +14,44 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "RegisterServlet", urlPatterns = {"/register"}, loadOnStartup = 1)
 public class RegisterServlet extends HttpServlet {
 
-    private static final Logger logger = LogManager.getLogger();
+  private static final Logger logger = LogManager.getLogger();
 
-    private String putUsernameInRequest(HttpServletRequest request) {
-        String username = request.getParameter("username");
-        if (username == null) request.setAttribute("username", "EMPTY_USERNAME");
-        request.setAttribute("username", username);
-        return username;
-    }
+  private String putUsernameInRequest(HttpServletRequest request) {
+    String username = request.getParameter("username");
+    if (username == null) request.setAttribute("username", "EMPTY_USERNAME");
+    request.setAttribute("username", username);
+    return username;
+  }
 
-    private String putPasswordInRequest(HttpServletRequest request) {
-        String password = request.getParameter("password");
-        if (password == null) request.setAttribute("password", "EMPTY_PASSWORD");
-        request.setAttribute("password", password);
-        return password;
-    }
+  private String putPasswordInRequest(HttpServletRequest request) {
+    String password = request.getParameter("password");
+    if (password == null) request.setAttribute("password", "EMPTY_PASSWORD");
+    request.setAttribute("password", password);
+    return password;
+  }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-            String username = putUsernameInRequest(request);
-            String password = putPasswordInRequest(request);
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    String username = putUsernameInRequest(request);
+    String password = putPasswordInRequest(request);
 
-            RegistrationResult registrationResult = processRegistration(username, password);
+    RegistrationResult registrationResult = processRegistration(username, password);
 
-            request.setAttribute("result", registrationResult.toString());
-        forwardToResult(request, response, logger);
-    }
+    request.setAttribute("result", registrationResult.toString());
+    forwardToResult(request, response, logger);
+  }
 
-    /**
-     * Wrapping a static method call for testing.
-     */
-    void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
-        ServletUtils.forwardToResult(request, response, logger);
-    }
+  /**
+   * Wrapping a static method call for testing.
+   */
+  void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
+    ServletUtils.forwardToResult(request, response, logger);
+  }
 
-    RegistrationResult processRegistration(String username, String password) {
-        final PersistenceLayer persistenceLayer = new PersistenceLayer();
-        final RegistrationUtils registrationUtils = new RegistrationUtils(persistenceLayer);
-        return registrationUtils.processRegistration(username, password);
-    }
+  RegistrationResult processRegistration(String username, String password) {
+    final PersistenceLayer persistenceLayer = new PersistenceLayer();
+    final RegistrationUtils registrationUtils = new RegistrationUtils(persistenceLayer);
+    return registrationUtils.processRegistration(username, password);
+  }
 
 }
 

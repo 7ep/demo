@@ -18,28 +18,28 @@ import java.time.LocalDate;
 @WebServlet(name = "LibraryLendServlet", urlPatterns = {"/lend"}, loadOnStartup = 1)
 public class LibraryLendServlet extends HttpServlet {
 
-    private static final Logger logger = LogManager.getLogger();
+  private static final Logger logger = LogManager.getLogger();
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        final String book = request.getParameter("book");
-        request.setAttribute("book", book);
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    final String book = request.getParameter("book");
+    request.setAttribute("book", book);
 
-        final String borrower = request.getParameter("borrower");
-        request.setAttribute("borrower", borrower);
+    final String borrower = request.getParameter("borrower");
+    request.setAttribute("borrower", borrower);
 
-        final Date now = Date.valueOf(LocalDate.now());
-        request.setAttribute("date", now.toString());
+    final Date now = Date.valueOf(LocalDate.now());
+    request.setAttribute("date", now.toString());
 
-        final PersistenceLayer persistenceLayer = new PersistenceLayer();
-        LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer);
+    final PersistenceLayer persistenceLayer = new PersistenceLayer();
+    LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer);
 
-        final Book book1 = libraryUtils.searchForBookByTitle(book);
-        final Borrower borrower1 = libraryUtils.searchForBorrowerByName(borrower);
-        final LibraryActionResults libraryActionResults = libraryUtils.lendBook(book1, borrower1, now);
+    final Book book1 = libraryUtils.searchForBookByTitle(book);
+    final Borrower borrower1 = libraryUtils.searchForBorrowerByName(borrower);
+    final LibraryActionResults libraryActionResults = libraryUtils.lendBook(book1, borrower1, now);
 
-        request.setAttribute("result", libraryActionResults.toString());
-      forwardToResult(request, response, logger);
-    }
+    request.setAttribute("result", libraryActionResults.toString());
+    forwardToResult(request, response, logger);
+  }
 
   /**
    * Wrapping a static method call for testing.
