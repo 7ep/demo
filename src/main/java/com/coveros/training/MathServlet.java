@@ -1,7 +1,8 @@
 package com.coveros.training;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(name = "MathServlet", urlPatterns = {"/math"}, loadOnStartup = 1)
 public class MathServlet extends HttpServlet {
+
+  private static final Logger logger = LogManager.getLogger();
 
     private int putNumberInRequest(String itemName, HttpServletRequest request) {
     
@@ -22,18 +25,25 @@ public class MathServlet extends HttpServlet {
         return item;
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response){
 
         int item_a = putNumberInRequest("item_a", request);
         int item_b = putNumberInRequest("item_b", request);
 
-        request.setAttribute("result", doAdd(item_a, item_b));
+      setResultToSum(request, item_a, item_b);
+      try {
         request.getRequestDispatcher("result.jsp").forward(request, response);
+      } catch (Exception ex) {
+        logger.error("failed during forward: " + ex);
+      }
     }
 
+  void setResultToSum(HttpServletRequest request, int item_a, int item_b) {
+    request.setAttribute("result", doAdd(item_a, item_b));
+  }
 
-   private int doAdd(int a, int b) {
+
+  private int doAdd(int a, int b) {
      return a + b;
    }
 }

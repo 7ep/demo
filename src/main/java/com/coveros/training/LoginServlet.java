@@ -2,17 +2,18 @@ package com.coveros.training;
 
 import com.coveros.training.persistence.LoginUtils;
 import com.coveros.training.persistence.PersistenceLayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.sql.Connection;
 
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"}, loadOnStartup = 1)
 public class LoginServlet extends HttpServlet {
+
+    private static final Logger logger = LogManager.getLogger();
 
     private String putUsernameInRequest(HttpServletRequest request) {
         String username = request.getParameter("username");
@@ -28,8 +29,7 @@ public class LoginServlet extends HttpServlet {
         return password;
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response){
         String username = putUsernameInRequest(request);
         String password = putPasswordInRequest(request);
 
@@ -38,7 +38,11 @@ public class LoginServlet extends HttpServlet {
         final Boolean userRegistered = loginUtils.isUserRegistered(username, password);
         String responseText = userRegistered ? "access granted" : "access denied";
         request.setAttribute("result", responseText);
-        request.getRequestDispatcher("result.jsp").forward(request, response);
+        try {
+            request.getRequestDispatcher("result.jsp").forward(request, response);
+        } catch (Exception ex) {
+            logger.error("failed during forward: " + ex);
+        }
     }
 
 
