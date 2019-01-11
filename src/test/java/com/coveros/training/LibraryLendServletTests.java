@@ -25,7 +25,6 @@ public class LibraryLendServletTests {
   private final LibraryUtils libraryUtils = Mockito.mock(LibraryUtils.class);
   private final HttpServletRequest request = Mockito.mock(HttpServletRequest.class, RETURNS_DEEP_STUBS);
   private final HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-  private final Logger logger = Mockito.mock(Logger.class);
 
   @Test
   public void testHappyPathPost() {
@@ -43,8 +42,8 @@ public class LibraryLendServletTests {
   @Test
   public void testDateFunction() {
     final Date dateNow = libraryLendServlet.getDateNow();
-    Assert.assertFalse(dateNow.equals(Date.valueOf(LocalDate.MIN)));
-    Assert.assertFalse(dateNow.equals(Date.valueOf(LocalDate.MAX)));
+    Assert.assertNotEquals(dateNow, Date.valueOf(LocalDate.MIN));
+    Assert.assertNotEquals(dateNow, Date.valueOf(LocalDate.MAX));
   }
 
 }

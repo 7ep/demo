@@ -110,11 +110,4 @@ public class LendingTests {
         Assert.assertEquals(LibraryActionResults.BOOK_CHECKED_OUT, libraryActionResults_bob);
     }
 
-    /**
-     * Set up the databases, clear them, initialize the Library Utility with them.
-     */
-    private LibraryUtils initializeLibraryUtils(PersistenceLayer mockPersistenceLayer) {
-        return new LibraryUtils(mockPersistenceLayer);
-    }
-
 }

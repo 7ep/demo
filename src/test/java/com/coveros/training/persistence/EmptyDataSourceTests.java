@@ -22,47 +22,47 @@ public class EmptyDataSourceTests {
   }
 
   @Test(expected = NotImplementedException.class)
-  public void testGetConnection() throws SQLException {
+  public void testGetConnection() {
     emptyDataSource.getConnection();
   }
 
   @Test(expected = NotImplementedException.class)
-  public void testGetConnectionWithParams() throws SQLException {
+  public void testGetConnectionWithParams() {
     emptyDataSource.getConnection("", "");
   }
 
   @Test(expected = NotImplementedException.class)
-  public void testUnwrap() throws SQLException {
+  public void testUnwrap() {
     emptyDataSource.unwrap(emptyDataSource.getClass());
   }
 
   @Test(expected = NotImplementedException.class)
-  public void testIsWrapperFor() throws SQLException {
+  public void testIsWrapperFor() {
     emptyDataSource.isWrapperFor(emptyDataSource.getClass());
   }
 
   @Test(expected = NotImplementedException.class)
-  public void testGetLogWriter() throws SQLException {
+  public void testGetLogWriter() {
     emptyDataSource.getLogWriter();
   }
 
   @Test(expected = NotImplementedException.class)
-  public void testSetLogWriter() throws SQLException {
+  public void testSetLogWriter() {
     emptyDataSource.setLogWriter(Mockito.mock(PrintWriter.class));
   }
 
   @Test(expected = NotImplementedException.class)
-  public void testSetLoginTimeout() throws SQLException {
+  public void testSetLoginTimeout() {
     emptyDataSource.setLoginTimeout(0);
   }
 
   @Test(expected = NotImplementedException.class)
-  public void testGetLoginTimeout() throws SQLException {
+  public void testGetLoginTimeout() {
     emptyDataSource.getLoginTimeout();
   }
 
   @Test(expected = NotImplementedException.class)
-  public void testGetParentLogger() throws SQLException {
+  public void testGetParentLogger() {
     emptyDataSource.getParentLogger();
   }
 
