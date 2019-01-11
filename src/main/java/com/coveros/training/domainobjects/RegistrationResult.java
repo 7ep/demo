@@ -7,12 +7,18 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public final class RegistrationResult {
 
-    private final boolean wasSuccessfullyRegistered;
-    private final String message;
+    public final boolean wasSuccessfullyRegistered;
+    public final RegistrationStatusEnums status;
+    public final String message;
 
-    public RegistrationResult(boolean wasSuccessfullyRegistered, String message) {
+    public RegistrationResult(boolean wasSuccessfullyRegistered, RegistrationStatusEnums status, String message) {
         this.wasSuccessfullyRegistered = wasSuccessfullyRegistered;
+        this.status = status;
         this.message = message;
+    }
+
+    public RegistrationResult(boolean wasSuccessfullyRegistered, RegistrationStatusEnums status) {
+        this(wasSuccessfullyRegistered, status, "");
     }
 
     public final boolean equals(@Nullable Object obj) {
@@ -24,6 +30,7 @@ public final class RegistrationResult {
         RegistrationResult rhs = (RegistrationResult) obj;
         return new EqualsBuilder()
                 .append(wasSuccessfullyRegistered, rhs.wasSuccessfullyRegistered)
+                .append(status, rhs.status)
                 .append(message, rhs.message)
                 .isEquals();
     }
@@ -33,6 +40,7 @@ public final class RegistrationResult {
         // ideally different for each class
         return new HashCodeBuilder(15, 33).
                 append(wasSuccessfullyRegistered).
+                append(status).
                 append(message).
                 toHashCode();
     }
@@ -42,7 +50,7 @@ public final class RegistrationResult {
     }
 
     public static RegistrationResult createEmpty() {
-        return new RegistrationResult(false, "");
+        return new RegistrationResult(false, RegistrationStatusEnums.EMPTY);
     }
 
     public boolean isEmpty() {

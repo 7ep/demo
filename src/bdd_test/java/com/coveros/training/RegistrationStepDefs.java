@@ -15,7 +15,7 @@ import static com.coveros.training.database_backup_constants.INITIAL_STATE_V2_DU
 
 public class RegistrationStepDefs {
 
-    private static final RegistrationResult ALREADY_REGISTERED = new RegistrationResult(false, RegistrationStatusEnums.ALREADY_REGISTERED.toString());
+    private static final RegistrationResult ALREADY_REGISTERED = new RegistrationResult(false, RegistrationStatusEnums.ALREADY_REGISTERED);
     private String myUsername = "";
     private RegistrationResult myRegistrationResult = RegistrationResult.createEmpty();
     private RegistrationUtils registrationUtils = RegistrationUtils.createEmpty();

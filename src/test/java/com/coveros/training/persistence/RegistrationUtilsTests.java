@@ -1,6 +1,9 @@
 package com.coveros.training.persistence;
 
 import com.coveros.training.domainobjects.PasswordResult;
+import com.coveros.training.domainobjects.RegistrationResult;
+import com.coveros.training.domainobjects.RegistrationStatusEnums;
+import com.coveros.training.domainobjects.User;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -8,8 +11,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.coveros.training.domainobjects.PasswordResultEnums.*;
+import static com.coveros.training.domainobjects.PasswordResultEnums.EMPTY_PASSWORD;
+import static com.coveros.training.domainobjects.RegistrationStatusEnums.*;
+import static org.mockito.Mockito.*;
 
 public class RegistrationUtilsTests {
+
+    public static final String GOOD_PASSWORD = "LpcVWwRkWSNVH";
+    public static final String ALICE = "alice";
+    public static final String BAD_PASSWORD = "abc";
+    private final PersistenceLayer persistenceLayer = mock(PersistenceLayer.class);
+    private final RegistrationUtils registrationUtils = new RegistrationUtils(persistenceLayer);
 
     @Test
     public void testShouldFailOnShortPassword() {
@@ -39,7 +51,66 @@ public class RegistrationUtilsTests {
 
     @Test
     public void testShouldHaveSufficientEntropyInPassword() {
-        final PasswordResult result = RegistrationUtils.isPasswordGood("LpcVWwRkWSNVH");
+        final PasswordResult result = RegistrationUtils.isPasswordGood(GOOD_PASSWORD);
         Assert.assertEquals(SUCCESS, result.status);
     }
+
+    @Test
+    public void testShouldDetermineIfUserInDatabase() {
+        when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(new User(ALICE, 1));
+        final boolean result = registrationUtils.isUserInDatabase(ALICE);
+        Assert.assertTrue(result);
+    }
+
+    /**
+     * Testing registration without hitting the actual database.
+     *
+     * The password has to be sufficient to meet the entropy stipulations.
+     *
+     * We need to mock the calls that will have been sent to the database.
+     */
+    @Test
+    public void testShouldProcessRegistration_HappyPath() {
+        // this needs to not find a user
+        when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(User.createEmpty());
+
+        final RegistrationResult registrationResult = registrationUtils.processRegistration(ALICE, GOOD_PASSWORD);
+
+        Assert.assertEquals(SUCCESSFULLY_REGISTERED, registrationResult.status);
+        Assert.assertTrue(registrationResult.wasSuccessfullyRegistered);
+    }
+
+    @Test
+    public void testShouldProcessRegistration_EmptyUsername() {
+        // this needs to not find a user
+        when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(User.createEmpty());
+
+        final RegistrationResult registrationResult = registrationUtils.processRegistration("", GOOD_PASSWORD);
+
+        Assert.assertEquals(EMPTY_USERNAME, registrationResult.status);
+        Assert.assertFalse(registrationResult.wasSuccessfullyRegistered);
+    }
+
+    @Test
+    public void testShouldProcessRegistration_BadPassword() {
+        // this needs to not find a user
+        when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(User.createEmpty());
+
+        final RegistrationResult registrationResult = registrationUtils.processRegistration(ALICE, BAD_PASSWORD);
+
+        Assert.assertEquals(RegistrationStatusEnums.BAD_PASSWORD, registrationResult.status);
+        Assert.assertFalse(registrationResult.wasSuccessfullyRegistered);
+    }
+
+    @Test
+    public void testShouldProcessRegistration_ExistingUser() {
+        // this needs to not find a user
+        when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(new User(ALICE, 1));
+
+        final RegistrationResult registrationResult = registrationUtils.processRegistration(ALICE, GOOD_PASSWORD);
+
+        Assert.assertEquals(ALREADY_REGISTERED, registrationResult.status);
+        Assert.assertFalse(registrationResult.wasSuccessfullyRegistered);
+    }
+
 }

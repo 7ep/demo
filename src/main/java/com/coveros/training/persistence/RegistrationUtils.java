@@ -2,12 +2,14 @@ package com.coveros.training.persistence;
 
 import com.coveros.training.domainobjects.PasswordResult;
 import com.coveros.training.domainobjects.RegistrationResult;
+import com.coveros.training.domainobjects.RegistrationStatusEnums;
 import com.coveros.training.domainobjects.User;
 import me.gosimple.nbvcxz.Nbvcxz;
 import me.gosimple.nbvcxz.scoring.Result;
 import me.gosimple.nbvcxz.scoring.TimeEstimate;
 
 import static com.coveros.training.domainobjects.PasswordResultEnums.*;
+import static com.coveros.training.domainobjects.PasswordResultEnums.EMPTY_PASSWORD;
 import static com.coveros.training.domainobjects.RegistrationStatusEnums.*;
 
 public class RegistrationUtils {
@@ -23,8 +25,12 @@ public class RegistrationUtils {
     }
 
     public RegistrationResult processRegistration(String username, String password) {
+        // first we check if the username is empty
+        boolean isUsernameEmpty = username == null || username.isEmpty();
+        if (isUsernameEmpty) return new RegistrationResult(false, EMPTY_USERNAME);
+
         if (isUserInDatabase(username)) {
-            return new RegistrationResult(false, ALREADY_REGISTERED.toString());
+            return new RegistrationResult(false, ALREADY_REGISTERED);
         }
 
         return registerUser(username, password);
@@ -33,26 +39,23 @@ public class RegistrationUtils {
     public static RegistrationUtils createEmpty() {
         return new RegistrationUtils(PersistenceLayer.createEmpty());
     }
+    public boolean isEmpty() { return this.persistenceLayer.equals(PersistenceLayer.createEmpty()); }
 
     private RegistrationResult registerUser(String username, String password) {
 
-        // first we check if the username is empty
-        boolean isUsernameEmpty = username == null || username.isEmpty();
-        if (isUsernameEmpty) return new RegistrationResult(false, EMPTY_USERNAME.toString());
-
         // then we check if the password is good.
         final PasswordResult passwordResult = isPasswordGood(password);
-        if (passwordResult.status != SUCCESS) return new RegistrationResult(false, passwordResult.toString());
+        if (passwordResult.status != SUCCESS) return new RegistrationResult(false, BAD_PASSWORD, passwordResult.toString());
 
         // then we check if the username already exists
         final User user = persistenceLayer.searchForUserByName(username);
         if (!user.isEmpty()) {
-            return new RegistrationResult(false, ALREADY_REGISTERED.toString());
+            return new RegistrationResult(false, ALREADY_REGISTERED);
         }
 
         // at this point, we feel assured it's ok to save to the database.
         saveToDatabase(username, password);
-        return new RegistrationResult(true, SUCCESSFULLY_REGISTERED.toString());
+        return new RegistrationResult(true, SUCCESSFULLY_REGISTERED);
     }
 
     /**
