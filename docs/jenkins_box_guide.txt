@@ -688,7 +688,7 @@ and add this line:
   IP_ADDRESS_FOR_UIBOX    uitestbox
 
 
-NIGHTLY SECURITY CHECK
+SECURITY CHECK
 ----------------------
 
 There is a jenkinsfile for a nightly security check.  This check
@@ -702,7 +702,7 @@ Go here to create a new Jenkins job:
 
 http://localhost:3002/view/all/newJob
 
-name the job "demo nightly" and select Pipeline, then click OK.
+name the job "demo_security_testing" and select Pipeline, then click OK.
 
 Check the box marked "Discard old builds"
   Strategy: Log rotation
@@ -710,16 +710,18 @@ Check the box marked "Discard old builds"
 
 Check the box for "Do not allow concurrent builds."
 
-Under Build Triggers, check the box for "Build periodically", and
-set the following:
+In Sidebar Links -
+  Link URL: http://localhost:3004/dependencycheck/dependency-check-report.html
+  Link Text: Dependency Check Report
 
-Schedule: @midnight
+Under Build Triggers, check the box for "Build after other projects are built", and
+set to watch demo.  Trigger only if build is stable.
 
 Under Pipeline Definition, choose Pipeline Script from SCM.
   SCM: Git
     Repository URL: /home/cuser/demo/
     Branch Specifier: refs/heads/with_database
-    Script Path: jenkins/Jenkinsfile.nightly
+    Script Path: jenkins/Jenkinsfile.security
 
 Save.
 
