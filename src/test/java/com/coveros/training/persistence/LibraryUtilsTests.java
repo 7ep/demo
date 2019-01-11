@@ -16,8 +16,8 @@ public class LibraryUtilsTests {
 
   private LibraryUtils libraryUtils;
   private PersistenceLayer mockPersistenceLayer;
-  private Book DEFAULT_BOOK = BookTests.createTestBook();
-  private Borrower DEFAULT_BORROWER = BorrowerTests.createTestBorrower();
+  private final Book DEFAULT_BOOK = BookTests.createTestBook();
+  private final Borrower DEFAULT_BORROWER = BorrowerTests.createTestBorrower();
   private Loan DEFAULT_LOAN = LoanTests.createTestLoan();
   private final static Date BORROW_DATE = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 1));
 

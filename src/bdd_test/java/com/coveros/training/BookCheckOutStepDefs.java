@@ -60,7 +60,7 @@ public class BookCheckOutStepDefs {
     @Then("^the system indicates the book is loaned to them on that date$")
     public void theSystemIndicatesTheBookIsLoanedToThemOnThatDate() {
         final Loan loan = libraryUtils.searchForLoan(myBook);
-        Assert.assertTrue(loan.checkoutDate.equals(Date.valueOf("2018-01-31")));
+        Assert.assertEquals(Date.valueOf("2018-01-31"), loan.checkoutDate);
     }
 
     @When("^they try to check out the book$")
@@ -71,7 +71,7 @@ public class BookCheckOutStepDefs {
     @Then("^the system indicates the book is loaned to them on some date$")
     public void theSystemIndicatesTheBookIsLoanedToThemOnSomeDate() {
         final Loan loan = libraryUtils.searchForLoan(myBook);
-        Assert.assertTrue(loan.checkoutDate.equals(Date.valueOf("2018-01-31")));
+        Assert.assertEquals( Date.valueOf("2018-01-31"), loan.checkoutDate);
     }
 
     @Given("^an individual, \"([^\"]*)\", is not registered$")

@@ -39,7 +39,7 @@ public class SqlDataTests {
 
   @Test
   public void testCanApplyParamsToPreparedStatement_Long() throws SQLException {
-    applyParam(1l, Long.class);
+    applyParam(1L, Long.class);
     Mockito.verify(preparedStatement, Mockito.times(1)).setLong(1, 1);
   }
 
@@ -61,12 +61,11 @@ public class SqlDataTests {
     Mockito.verify(preparedStatement, Mockito.times(1)).setDate(1, BORROW_DATE);
   }
 
-  private SqlData applyParam(Object o, Class clazz) {
+  private void applyParam(Object o, Class clazz) {
     final SqlData sqlData = new SqlData("just a test", "SELECT * FROM user WHERE id = ?");
     sqlData.addParameter(o, clazz);
 
     sqlData.applyParametersToPreparedStatement(preparedStatement);
-    return sqlData;
   }
 
 }

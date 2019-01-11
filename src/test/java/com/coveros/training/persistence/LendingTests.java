@@ -20,7 +20,7 @@ public class LendingTests {
     private final static Book SAMPLE_BOOK = new Book(1, TITLE);
     private final static Borrower SAMPLE_BORROWER_A = new Borrower(1, BORROWER_A_NAME);
     private final static Borrower SAMPLE_BORROWER_B = new Borrower(1, BORROWER_B_NAME);
-    private LibraryUtils libraryUtils = Mockito.spy(LibraryUtils.class);
+    private final LibraryUtils libraryUtils = Mockito.spy(LibraryUtils.class);
 
     /**
      * If a borrower and a book are registered, a user should be able to borrow it.

@@ -112,7 +112,6 @@ public class PersistenceLayer {
      * when you insert a new row of data in a table with auto-generating primary key.
      * @param sqlData see {@link SqlData}
      * @param connection a typical {@link Connection}
-     * @throws SQLException
      */
     private PreparedStatement prepareStatementWithKeys(SqlData sqlData, Connection connection) throws SQLException {
         return connection.prepareStatement(
