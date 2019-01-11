@@ -29,6 +29,7 @@ public class LoginServlet extends HttpServlet {
     return password;
   }
 
+  @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) {
     String username = putUsernameInRequest(request);
     String password = putPasswordInRequest(request);

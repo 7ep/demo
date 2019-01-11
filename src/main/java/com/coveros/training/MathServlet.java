@@ -24,11 +24,12 @@ public class MathServlet extends HttpServlet {
     return item;
   }
 
+  @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-    int item_a = putNumberInRequest("item_a", request);
-    int item_b = putNumberInRequest("item_b", request);
+    int itemA = putNumberInRequest("item_a", request);
+    int itemB = putNumberInRequest("item_b", request);
 
-    setResultToSum(request, item_a, item_b);
+    setResultToSum(request, itemA, itemB);
     forwardToResult(request, response, logger);
   }
 

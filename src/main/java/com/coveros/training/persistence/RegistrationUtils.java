@@ -2,7 +2,6 @@ package com.coveros.training.persistence;
 
 import com.coveros.training.domainobjects.PasswordResult;
 import com.coveros.training.domainobjects.RegistrationResult;
-import com.coveros.training.domainobjects.RegistrationStatusEnums;
 import com.coveros.training.domainobjects.User;
 import me.gosimple.nbvcxz.Nbvcxz;
 import me.gosimple.nbvcxz.scoring.Result;

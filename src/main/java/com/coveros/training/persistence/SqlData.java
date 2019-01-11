@@ -33,7 +33,7 @@ class SqlData {
   /**
    * The data that we will inject to the SQL statement.
    */
-  final private List<ParameterObject> params;
+  private final List<ParameterObject> params;
 
 
   SqlData(String description, String preparedStatement) {
@@ -69,19 +69,15 @@ class SqlData {
         ParameterObject p = params.get(i - 1);
         if (p.type == String.class) {
           st.setString(i, (String) p.data);
-          continue;
-        }
+        } else
         if (p.type == Integer.class) {
           st.setInt(i, (Integer) p.data);
-          continue;
-        }
+        } else
         if (p.type == Long.class) {
           st.setLong(i, (Long) p.data);
-          continue;
-        }
+        } else
         if (p.type == Date.class) {
           st.setDate(i, (Date) p.data);
-          continue;
         }
       }
     } catch (SQLException e) {

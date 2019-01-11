@@ -7,6 +7,10 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ServletUtils {
 
+  private ServletUtils() {
+    // using a private constructor to hide the implicit public one.
+  }
+
   static void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
     try {
       request.getRequestDispatcher("result.jsp").forward(request, response);

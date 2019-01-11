@@ -29,4 +29,5 @@ public class LoginUtilsTests {
     loginUtils.isUserRegistered("alice", "abc123");
     Mockito.verify(mockPersistenceLayer, times(1)).areCredentialsValid("alice", "abc123");
   }
+
 }
