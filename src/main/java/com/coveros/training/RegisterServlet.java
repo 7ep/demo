@@ -37,11 +37,14 @@ public class RegisterServlet extends HttpServlet {
             RegistrationResult registrationResult = processRegistration(username, password);
 
             request.setAttribute("result", registrationResult.toString());
-        try {
-            request.getRequestDispatcher("result.jsp").forward(request, response);
-        } catch (Exception ex) {
-            logger.error("failed during forward: " + ex);
-        }
+        forwardToResult(request, response, logger);
+    }
+
+    /**
+     * Wrapping a static method call for testing.
+     */
+    void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
+        ServletUtils.forwardToResult(request, response, logger);
     }
 
     RegistrationResult processRegistration(String username, String password) {

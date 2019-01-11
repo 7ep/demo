@@ -27,10 +27,13 @@ public class LibraryRegisterBorrowerServlet extends HttpServlet {
         final LibraryActionResults libraryActionResults = libraryUtils.registerBorrower(borrower);
 
         request.setAttribute("result", libraryActionResults);
-        try {
-            request.getRequestDispatcher("result.jsp").forward(request, response);
-        } catch (Exception ex) {
-            logger.error("failed during forward: " + ex);
-        }
+        forwardToResult(request, response, logger);
+    }
+
+    /**
+     * Wrapping a static method call for testing.
+     */
+    void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
+        ServletUtils.forwardToResult(request, response, logger);
     }
 }
