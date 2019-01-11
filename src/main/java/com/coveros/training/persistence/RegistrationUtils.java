@@ -38,7 +38,7 @@ public class RegistrationUtils {
     public static RegistrationUtils createEmpty() {
         return new RegistrationUtils(PersistenceLayer.createEmpty());
     }
-    public boolean isEmpty() { return this.persistenceLayer.equals(PersistenceLayer.createEmpty()); }
+    public boolean isEmpty() { return persistenceLayer.isEmpty(); }
 
     private RegistrationResult registerUser(String username, String password) {
 
