@@ -15,14 +15,12 @@ import javax.servlet.http.HttpServletResponse;
 public class LibraryRegisterBookServlet extends HttpServlet {
 
   private static final Logger logger = LogManager.getLogger();
+  static LibraryUtils libraryUtils = new LibraryUtils();
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) {
     final String book = request.getParameter("book");
     request.setAttribute("book", book);
-
-    final PersistenceLayer persistenceLayer = new PersistenceLayer();
-    LibraryUtils libraryUtils = new LibraryUtils(persistenceLayer);
 
     final LibraryActionResults libraryActionResults = libraryUtils.registerBook(book);
 

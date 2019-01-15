@@ -20,7 +20,7 @@ public class RegisterServletTests {
     private HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
     private HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
     private RequestDispatcher requestDispatcher = Mockito.mock(RequestDispatcher.class);
-    private RegisterServlet registerServlet = Mockito.mock(RegisterServlet.class);
+    private RegisterServlet registerServlet;
 
     @Before
     public void before() {
