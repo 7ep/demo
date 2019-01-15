@@ -45,7 +45,6 @@ public class PersistenceLayer {
             // possible if we're running tests, since in that case we're often not
             // running as a servlet with its accompanying context.
             logger.info("NamingException occurred, switching to direct Connection creation");
-            obtainDriver();
             return getSimpleDataSource();
         }
     }
@@ -63,18 +62,6 @@ public class PersistenceLayer {
     }
 
     /**
-     * Ah, the magic of Java.  This is necessary to use the driver
-     * for postgresql if we aren't in a servlet context.
-     */
-    private static void obtainDriver() {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
      * This command provides a template to execute updates (including inserts) on the database
      * @param sqlData An object that contains the necessary components to run a SQL statement.
      *                Usually contains some SQL text and some values that will be injected
@@ -87,7 +74,7 @@ public class PersistenceLayer {
                 return executeUpdateOnPreparedStatement(sqlData, st);
             }
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            throw new SqlRuntimeException(ex);
         }
     }
 
@@ -100,7 +87,7 @@ public class PersistenceLayer {
                 newId = generatedKeys.getLong(1);
                 assert (newId > 0);
             } else {
-                throw new RuntimeException("failed INSERT.  SQL was " + sqlData.description + ": " + sqlData.preparedStatement);
+                throw new SqlRuntimeException("failed INSERT.  SQL was " + sqlData.description + ": " + sqlData.preparedStatement);
             }
             return newId;
         }
@@ -217,7 +204,7 @@ public class PersistenceLayer {
                 }
             }
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            throw new SqlRuntimeException(ex);
         }
     }
 
@@ -244,7 +231,7 @@ public class PersistenceLayer {
                 }
             }
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            throw new SqlRuntimeException(ex);
         }
     }
 
@@ -264,7 +251,7 @@ public class PersistenceLayer {
                 }
             }
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            throw new SqlRuntimeException(ex);
         }
     }
 
@@ -284,7 +271,7 @@ public class PersistenceLayer {
                 }
             }
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            throw new SqlRuntimeException(ex);
         }
     }
 
@@ -307,7 +294,7 @@ public class PersistenceLayer {
                 }
             }
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            throw new SqlRuntimeException(ex);
         }
     }
 
@@ -329,7 +316,7 @@ public class PersistenceLayer {
                 password.getBytes(StandardCharsets.UTF_8));
             return bytesToHex(encodedhash);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new SqlRuntimeException(e);
         }
     }
 
@@ -353,15 +340,15 @@ public class PersistenceLayer {
                 }
             }
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            throw new SqlRuntimeException(ex);
         }
     }
 
     private static String bytesToHex(byte[] hash) {
-        StringBuffer hexString = new StringBuffer();
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
-            if(hex.length() == 1) hexString.append('0');
+        StringBuilder hexString = new StringBuilder();
+        for (byte hash1 : hash) {
+            String hex = Integer.toHexString(0xff & hash1);
+            if (hex.length() == 1) hexString.append('0');
             hexString.append(hex);
         }
         return hexString.toString();

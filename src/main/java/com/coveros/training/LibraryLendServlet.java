@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class LibraryLendServlet extends HttpServlet {
 
   static Logger logger = LogManager.getLogger();
-  LibraryUtils libraryUtils = new LibraryUtils();
+  static LibraryUtils libraryUtils = new LibraryUtils();
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) {
