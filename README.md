@@ -1,14 +1,14 @@
 ## Demo - demonstrates an application and tests
 
 Please note that this branch has had nearly all functionality 
-removed in order to prepare for exercises.  See the branch
-called "complete" for the functional version.  See the branch "with_database"
+removed in order to prepare for exercises.  See the branch [complete](https://github.com/7ep/demo/tree/complete) 
+for the fully-functioning version.  See the branch [with_database](https://github.com/7ep/demo/tree/with_database)
 for a more fully-featured system with database (Postgresql) integration.
 
 #### dependencies: 
     Java 8.  
 
-It *has* to be Java 8.  Don't use Java 10, it will error out because Mockito doesn't work with Java 10.
+Note: It has to be Java 8.  Don't use Java 10, it will error out because Mockito doesn't work with Java 10.
 
 #### To build with tests:
 On Linux
