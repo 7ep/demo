@@ -1,7 +1,6 @@
 package com.coveros.training;
 
 import com.coveros.training.persistence.LoginUtils;
-import com.coveros.training.persistence.PersistenceLayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

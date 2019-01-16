@@ -44,7 +44,7 @@ public class PersistenceLayer {
             // we'll likely get here if we couldn't find a name in the context - which is easily
             // possible if we're running tests, since in that case we're often not
             // running as a servlet with its accompanying context.
-            logger.info("NamingException occurred, switching to direct Connection creation");
+            logger.info("NamingException occurred, switching to direct Connection creation.  Exception: " + e);
             return getSimpleDataSource();
         }
     }
