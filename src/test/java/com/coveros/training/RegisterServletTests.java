@@ -2,6 +2,7 @@ package com.coveros.training;
 
 import com.coveros.training.domainobjects.RegistrationResult;
 import com.coveros.training.domainobjects.RegistrationStatusEnums;
+import com.coveros.training.persistence.RegistrationUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -28,6 +29,7 @@ public class RegisterServletTests {
       response = mock(HttpServletResponse.class);
       requestDispatcher = mock(RequestDispatcher.class);
       registerServlet = spy(new RegisterServlet());
+      RegisterServlet.registrationUtils = Mockito.mock(RegistrationUtils.class);
     } 
 
     /**
@@ -74,7 +76,7 @@ public class RegisterServletTests {
 
 
     private void mockRegisterUserToReturnSomeResponse(RegistrationResult expectedResult) {
-        doReturn(expectedResult).when(registerServlet).processRegistration(Mockito.anyString(), Mockito.anyString());
+        when(RegisterServlet.registrationUtils.processRegistration(Mockito.anyString(), Mockito.anyString())).thenReturn(new RegistrationResult(true, RegistrationStatusEnums.SUCCESSFULLY_REGISTERED));
     }
 
     private void mockRequestDispatcherForExpectedRedirection(String expectedPath) {

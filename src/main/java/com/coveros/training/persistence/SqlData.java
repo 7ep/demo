@@ -17,7 +17,7 @@ import java.util.List;
  * we are able to summarize what we want done without
  * all the annoying boilerplate.  See examples like {@link PersistenceLayer#saveNewBorrower}
  */
-class SqlData {
+final class SqlData {
 
   /**
    * A summary description of what this SQL is doing.

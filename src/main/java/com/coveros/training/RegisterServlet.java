@@ -19,6 +19,7 @@ public class RegisterServlet extends HttpServlet {
   public static final String USERNAME_PARAM = "username";
   public static final String EMPTY_USERNAME = "EMPTY_USERNAME";
   public static final String EMPTY_PASSWORD = "EMPTY_PASSWORD";
+  static RegistrationUtils registrationUtils = new RegistrationUtils();
 
   private String putUsernameInRequest(HttpServletRequest request) {
     String username = request.getParameter(USERNAME_PARAM);
@@ -39,7 +40,7 @@ public class RegisterServlet extends HttpServlet {
     String username = putUsernameInRequest(request);
     String password = putPasswordInRequest(request);
 
-    RegistrationResult registrationResult = processRegistration(username, password);
+    RegistrationResult registrationResult = registrationUtils.processRegistration(username, password);
 
     request.setAttribute("result", registrationResult.toString());
     forwardToResult(request, response, logger);
@@ -50,12 +51,6 @@ public class RegisterServlet extends HttpServlet {
    */
   void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
     ServletUtils.forwardToResult(request, response, logger);
-  }
-
-  RegistrationResult processRegistration(String username, String password) {
-    final PersistenceLayer persistenceLayer = new PersistenceLayer();
-    final RegistrationUtils registrationUtils = new RegistrationUtils(persistenceLayer);
-    return registrationUtils.processRegistration(username, password);
   }
 
 }

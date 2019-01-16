@@ -30,8 +30,8 @@ public class LoginServletTests {
   @Test
   public void testHappyPathPost() {
     when(request.getRequestDispatcher(RESULT_JSP)).thenReturn(requestDispatcher);
-    doReturn("alice").when(loginServlet).putUsernameInRequest(request);
-    doReturn("abc123").when(loginServlet).putPasswordInRequest(request);
+    when(request.getParameter("username")).thenReturn("alice");
+    when(request.getParameter("password")).thenReturn("abc123");
     when(LoginServlet.loginUtils.isUserRegistered("alice", "abc123")).thenReturn(true);
 
     loginServlet.doPost(request, response);
