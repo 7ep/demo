@@ -8,11 +8,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import javax.sql.DataSource;
 import java.io.File;
 import java.nio.file.Paths;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.Month;
 
@@ -20,6 +19,7 @@ import static com.coveros.training.TestConstants.PATH_TO_PG_RESTORE;
 import static com.coveros.training.TestConstants.RESTORE_SCRIPTS_PATH;
 import static com.coveros.training.database_backup_constants.*;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 /**
  * Test that we have a persistence layer that we can easily mock out.
@@ -164,13 +164,65 @@ public class PersistenceLayerTests {
         setDatabaseState(INITIAL_STATE_V2_DUMP);
     }
 
-    @Test(expected = SQLException.class)
+    @Test(expected = SqlRuntimeException.class)
     public void testThatExecuteUpdateOnPreparedStatementHandlesExceptions() throws SQLException {
         final PersistenceLayer persistenceLayer = new PersistenceLayer();
         final PreparedStatement preparedStatement = Mockito.mock(PreparedStatement.class);
-        doThrow(new SQLException()).when(preparedStatement).executeUpdate();
+        final ResultSet resultSet = Mockito.mock(ResultSet.class);
+        when(resultSet.next()).thenReturn(false);
+        when(preparedStatement.getGeneratedKeys()).thenReturn(resultSet);
         persistenceLayer.executeUpdateOnPreparedStatement(SqlData.createEmpty(), preparedStatement);
     }
+
+    /**
+     * Test what happens if no value is returned when we provide an
+     * id to a particular user.
+     * @throws SQLException
+     */
+    @Test
+    public void testGetBorrowerName_WhenNoValueReturned() throws SQLException {
+        final DataSource dataSource = Mockito.mock(DataSource.class);
+        final PersistenceLayer persistenceLayer = new PersistenceLayer(dataSource);
+        final Connection connection = Mockito.mock(Connection.class);
+        final PreparedStatement preparedStatement = Mockito.mock(PreparedStatement.class);
+        when(connection.prepareStatement(Mockito.anyString())).thenReturn(preparedStatement);
+        when(dataSource.getConnection()).thenReturn(connection);
+        final ResultSet resultSet = Mockito.mock(ResultSet.class);
+        when(resultSet.next()).thenReturn(false);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        final String borrowerName = persistenceLayer.getBorrowerName(1);
+
+        Assert.assertEquals("", borrowerName);;
+    }
+
+    /**
+     * Test what happens when an exception occurs in getBorrowerName
+     * @throws SQLException
+     */
+    @Test(expected = SqlRuntimeException.class)
+    public void testGetBorrowerName_WhenExceptionThrown() throws SQLException {
+        final DataSource dataSource = Mockito.mock(DataSource.class);
+        when(dataSource.getConnection()).thenThrow(new SQLException());
+        final PersistenceLayer persistenceLayer = new PersistenceLayer(dataSource);
+
+        persistenceLayer.getBorrowerName(1);
+    }
+
+    /**
+     * An exception of the right type should be thrown
+     * when an error occurs in the {@link PersistenceLayer#executeUpdateTemplate(SqlData)} method.
+     * @throws SQLException
+     */
+    @Test(expected = SqlRuntimeException.class)
+    public void testExecuteUpdateTemplate_ExceptionThrown() throws SQLException {
+        final DataSource dataSource = Mockito.mock(DataSource.class);
+        when(dataSource.getConnection()).thenThrow(new SQLException());
+        final PersistenceLayer persistenceLayer = new PersistenceLayer(dataSource);
+
+        persistenceLayer.executeUpdateTemplate(SqlData.createEmpty());
+    }
+
 
     /**
      * use a "restore" command to set the database into a state
