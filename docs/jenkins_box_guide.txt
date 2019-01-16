@@ -642,11 +642,6 @@ and find the checkbox labeled "Sidebar links".  Check it on. Add a link.  Enter 
 Link URL: http://localhost:3004/overview-features.html
 Link Text: "Cucumber report".
 
-Also add:
-
-Link URL: http://localhost:3004/dependencycheck/dependency-check-report.html
-Link Text: Dependency Check Report
-
 Click Save.
 
 You should now see "Cucumber report" among the links on the left for your pipeline.
@@ -656,8 +651,14 @@ Let's go ahead and add a link to Sonar as well.  Click on Configure again,
 and add another link under Sidebar links:
 
 Link URL: http://localhost:3003
-
 Link Text: SonarQube
+
+Save.
+
+Also, for our dependency check security plugin, add another link:
+
+Link URL: http://localhost:3004/dependencycheck/dependency-check-report.html
+Link Text: Dependency Check Report
 
 Save.
 
