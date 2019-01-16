@@ -28,15 +28,3 @@ task fastIntegrationTest(type: Test) {
 }
 
 check.dependsOn fastIntegrationTest
-
-//gradle.projectsEvaluated {
-//    def quickTasks = []
-//
-//    gradle.rootProject.allprojects.each { project ->
-//        quickTasks.addAll(project.tasks.findAll { it.name == 'test' })
-//    }
-//
-//    quickTasks.each { task ->
-//        project.tasks.fastIntegrationTest.mustRunAfter task
-//    }
-//}
