@@ -362,7 +362,4 @@ public class PersistenceLayer {
         return this.dataSource.getClass().equals(EmptyDataSource.class);
     }
 
-    public final String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
 }
