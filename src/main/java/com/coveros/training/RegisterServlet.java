@@ -1,7 +1,6 @@
 package com.coveros.training;
 
 import com.coveros.training.domainobjects.RegistrationResult;
-import com.coveros.training.persistence.PersistenceLayer;
 import com.coveros.training.persistence.RegistrationUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
