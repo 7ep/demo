@@ -78,7 +78,7 @@ public class PersistenceLayer {
         }
     }
 
-    private long executeUpdateOnPreparedStatement(SqlData sqlData, PreparedStatement st) throws SQLException {
+    long executeUpdateOnPreparedStatement(SqlData sqlData, PreparedStatement st) throws SQLException {
         sqlData.applyParametersToPreparedStatement(st);
         st.executeUpdate();
         try (ResultSet generatedKeys = st.getGeneratedKeys()) {

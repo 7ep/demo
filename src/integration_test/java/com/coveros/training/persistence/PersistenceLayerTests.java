@@ -6,16 +6,20 @@ import com.coveros.training.domainobjects.Loan;
 import com.coveros.training.domainobjects.User;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.io.File;
 import java.nio.file.Paths;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Month;
 
 import static com.coveros.training.TestConstants.PATH_TO_PG_RESTORE;
 import static com.coveros.training.TestConstants.RESTORE_SCRIPTS_PATH;
 import static com.coveros.training.database_backup_constants.*;
+import static org.mockito.Mockito.doThrow;
 
 /**
  * Test that we have a persistence layer that we can easily mock out.
@@ -158,6 +162,14 @@ public class PersistenceLayerTests {
     @Test
     public void setState() {
         setDatabaseState(INITIAL_STATE_V2_DUMP);
+    }
+
+    @Test(expected = SQLException.class)
+    public void testThatExecuteUpdateOnPreparedStatementHandlesExceptions() throws SQLException {
+        final PersistenceLayer persistenceLayer = new PersistenceLayer();
+        final PreparedStatement preparedStatement = Mockito.mock(PreparedStatement.class);
+        doThrow(new SQLException()).when(preparedStatement).executeUpdate();
+        persistenceLayer.executeUpdateOnPreparedStatement(SqlData.createEmpty(), preparedStatement);
     }
 
     /**
