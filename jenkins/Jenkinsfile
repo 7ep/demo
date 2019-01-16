@@ -27,12 +27,6 @@ pipeline {
       }
     }
 
-    stage('Static Analysis') {
-      steps {
-        sh './gradlew sonarqube'
-      }
-    }
-
     stage('Integration Tests') {
       steps {
         sh './gradlew flywayMigrate -i'
@@ -42,6 +36,12 @@ pipeline {
         always {
           junit 'build/test-results/test/*.xml'
         }
+      }
+    }
+
+    stage('Static Analysis') {
+      steps {
+        sh './gradlew sonarqube'
       }
     }
 
