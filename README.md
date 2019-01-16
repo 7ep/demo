@@ -50,3 +50,5 @@ Screenshots:
 ![Feature file](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/feature_file.png)
 ![Jenkins pipeline](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/jenkins_pipeline.png)
 ![Webapp](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/webapp.png)
+![Zap attach proxy](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/zap.png)
+![SonarQube analysis](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/sonar.png)
