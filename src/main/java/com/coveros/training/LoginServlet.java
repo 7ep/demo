@@ -14,15 +14,16 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginServlet extends HttpServlet {
 
   private static final Logger logger = LogManager.getLogger();
+  static LoginUtils loginUtils = new LoginUtils();
 
-  private String putUsernameInRequest(HttpServletRequest request) {
+  String putUsernameInRequest(HttpServletRequest request) {
     String username = request.getParameter("username");
     if (username == null) username = "EMPTY_USERNAME";
     request.setAttribute("username", username);
     return username;
   }
 
-  private String putPasswordInRequest(HttpServletRequest request) {
+  String putPasswordInRequest(HttpServletRequest request) {
     String password = request.getParameter("password");
     if (password == null) password = "EMPTY_PASSWORD";
     request.setAttribute("password", password);
@@ -34,8 +35,6 @@ public class LoginServlet extends HttpServlet {
     String username = putUsernameInRequest(request);
     String password = putPasswordInRequest(request);
 
-    final PersistenceLayer persistenceLayer = new PersistenceLayer();
-    final LoginUtils loginUtils = new LoginUtils(persistenceLayer);
     final Boolean userRegistered = loginUtils.isUserRegistered(username, password);
     String responseText = userRegistered ? "access granted" : "access denied";
     request.setAttribute("result", responseText);
