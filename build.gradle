@@ -98,18 +98,13 @@ flyway {
     schemas = ['administrative', 'library', 'auth']
 }
 
-jacoco {
-    toolVersion = "0.8.2"
-    reportsDir = file("$buildDir/customJacocoReportDir")
-}
-
 jacocoTestReport {
-    reports {
-        xml.enabled false
-        csv.enabled false
-        html.destination file("${buildDir}/jacocoHtml")
-    }
+    executionData("$buildDir/jacoco/combineCoverage.exec")
 }
 
+task combineCoverage (type: JacocoMerge) {
+    executionData = files("$buildDir/jacoco/test.exec", "$buildDir/jacoco/fastIntegrationTest.exec")
+    mustRunAfter fastIntegrationTest
+}
 
-
+check.dependsOn combineCoverage
