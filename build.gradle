@@ -117,7 +117,7 @@ check.dependsOn(jacocoTestReport)
 sonarqube {
     properties {
         property "sonar.sources", "src/main/java"
-        property "sonar.tests", "src/unit_test/java,src/integration_test/java"
+        property "sonar.tests", "src/test/java,src/integration_test/java,src/bdd_test/java"
         property "sonar.java.binaries", "build/classes/java/main"
         property "sonar.junit.reportPaths", "build/test-results/test/,build/test-results/fastIntegrationTest"
         property "sonar.jacoco.reportPaths", "build/jacoco/test.exec,build/jacoco/fastIntegrationTest.exec"
