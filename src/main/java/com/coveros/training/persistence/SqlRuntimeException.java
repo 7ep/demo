@@ -1,6 +1,6 @@
 package com.coveros.training.persistence;
 
-public class SqlRuntimeException extends RuntimeException {
+class SqlRuntimeException extends RuntimeException {
 
   public SqlRuntimeException(Exception ex) {
     super(ex);

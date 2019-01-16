@@ -73,7 +73,6 @@ public class SqlDataTests {
   /**
    * If for some reason the prepared statement throws a SQLException, we
    * will catch it and throw it as a SqlRuntimeException
-   * @throws SQLException
    */
   @Test(expected = SqlRuntimeException.class)
   public void testCanApplyParamsToPreparedStatement_NegativeCase() throws SQLException {
