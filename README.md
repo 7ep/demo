@@ -43,7 +43,7 @@ Features:
 * A nice head start of good tests of various types - unit tests, integration tests, automated acceptance tests, UI tests
 
 Note: if you have access to Coveros' Google drive, I've stored an appliance for running
- the pipeline [there](https://drive.google.com/file/d/1s1I_x-wE_jgylwu9ib9WZBRbs8Vdp_yv/view?usp=sharing)
+ the pipeline [there](https://drive.google.com/drive/folders/1gbqE88UA5YszInP2qgDF8haa3wVEv4Rm?usp=sharing)
 
 Screenshots:
 ![alt Cucumber report](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/cucumber_report.png)
