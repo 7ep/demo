@@ -19,8 +19,8 @@ import static org.mockito.Mockito.*;
 public class LibraryLendServletTests {
 
   private final static Date BORROW_DATE = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 1));
-  public static final String BOOK_TITLE = "The DevOps Handbook";
-  public static final String ALICE = "alice";
+  private static final String BOOK_TITLE = "The DevOps Handbook";
+  private static final String ALICE = "alice";
   private final LibraryLendServlet libraryLendServlet = Mockito.spy(new LibraryLendServlet());
   private final LibraryUtils libraryUtils = Mockito.mock(LibraryUtils.class);
   private final HttpServletRequest request = Mockito.mock(HttpServletRequest.class, RETURNS_DEEP_STUBS);
@@ -31,7 +31,7 @@ public class LibraryLendServletTests {
     when(request.getParameter("book")).thenReturn(BOOK_TITLE);
     when(request.getParameter("borrower")).thenReturn(ALICE);
     doReturn(BORROW_DATE).when(libraryLendServlet).getDateNow();
-    libraryLendServlet.libraryUtils = libraryUtils;
+    LibraryLendServlet.libraryUtils = libraryUtils;
     when(libraryUtils.lendBook(BOOK_TITLE, ALICE, BORROW_DATE)).thenReturn(LibraryActionResults.SUCCESS);
 
     libraryLendServlet.doPost(request, response);

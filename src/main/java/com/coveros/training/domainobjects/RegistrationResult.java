@@ -9,7 +9,7 @@ public final class RegistrationResult {
 
     public final boolean wasSuccessfullyRegistered;
     public final RegistrationStatusEnums status;
-    public final String message;
+    private final String message;
 
     public RegistrationResult(boolean wasSuccessfullyRegistered, RegistrationStatusEnums status, String message) {
         this.wasSuccessfullyRegistered = wasSuccessfullyRegistered;

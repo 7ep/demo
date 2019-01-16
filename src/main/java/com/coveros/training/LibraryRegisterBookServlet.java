@@ -24,13 +24,6 @@ public class LibraryRegisterBookServlet extends HttpServlet {
     final LibraryActionResults libraryActionResults = libraryUtils.registerBook(book);
 
     request.setAttribute("result", libraryActionResults.toString());
-    forwardToResult(request, response, logger);
-  }
-
-  /**
-   * Wrapping a static method call for testing.
-   */
-  void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
     ServletUtils.forwardToResult(request, response, logger);
   }
 

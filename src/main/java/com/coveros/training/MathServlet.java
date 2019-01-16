@@ -13,7 +13,7 @@ public class MathServlet extends HttpServlet {
 
   static Logger logger = LogManager.getLogger();
 
-  int putNumberInRequest(String itemName, HttpServletRequest request) {
+  private int putNumberInRequest(String itemName, HttpServletRequest request) {
     int item;
     try {
       item = Integer.parseInt(request.getParameter(itemName));

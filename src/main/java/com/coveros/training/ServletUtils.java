@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ServletUtils {
+class ServletUtils {
 
   private ServletUtils() {
     // using a private constructor to hide the implicit public one.

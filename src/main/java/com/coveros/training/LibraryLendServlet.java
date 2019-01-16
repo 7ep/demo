@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @WebServlet(name = "LibraryLendServlet", urlPatterns = {"/lend"}, loadOnStartup = 1)
 public class LibraryLendServlet extends HttpServlet {
 
-  static Logger logger = LogManager.getLogger();
+  private static final Logger logger = LogManager.getLogger();
   static LibraryUtils libraryUtils = new LibraryUtils();
 
   @Override
@@ -32,7 +32,7 @@ public class LibraryLendServlet extends HttpServlet {
     final LibraryActionResults libraryActionResults = libraryUtils.lendBook(book, borrower, now);
 
     request.setAttribute("result", libraryActionResults.toString());
-    forwardToResult(request, response, logger);
+    ServletUtils.forwardToResult(request, response, logger);
   }
 
   /**
@@ -43,10 +43,4 @@ public class LibraryLendServlet extends HttpServlet {
     return Date.valueOf(LocalDate.now());
   }
 
-  /**
-   * Wrapping a static method call for testing.
-   */
-  void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
-    ServletUtils.forwardToResult(request, response, logger);
-  }
 }

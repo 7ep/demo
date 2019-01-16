@@ -17,9 +17,9 @@ import static org.mockito.Mockito.*;
 
 public class RegistrationUtilsTests {
 
-    public static final String GOOD_PASSWORD = "LpcVWwRkWSNVH";
-    public static final String ALICE = "alice";
-    public static final String BAD_PASSWORD = "abc";
+    private static final String GOOD_PASSWORD = "LpcVWwRkWSNVH";
+    private static final String ALICE = "alice";
+    private static final String BAD_PASSWORD = "abc";
     private final PersistenceLayer persistenceLayer = mock(PersistenceLayer.class);
     private final RegistrationUtils registrationUtils = new RegistrationUtils(persistenceLayer);
 

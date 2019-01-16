@@ -24,13 +24,7 @@ public class LibraryRegisterBorrowerServlet extends HttpServlet {
     final LibraryActionResults libraryActionResults = libraryUtils.registerBorrower(borrower);
 
     request.setAttribute("result", libraryActionResults);
-    forwardToResult(request, response, logger);
-  }
-
-  /**
-   * Wrapping a static method call for testing.
-   */
-  void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
     ServletUtils.forwardToResult(request, response, logger);
   }
+
 }

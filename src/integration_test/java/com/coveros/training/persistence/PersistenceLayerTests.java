@@ -177,7 +177,6 @@ public class PersistenceLayerTests {
     /**
      * Test what happens if no value is returned when we provide an
      * id to a particular user.
-     * @throws SQLException
      */
     @Test
     public void testGetBorrowerName_WhenNoValueReturned() throws SQLException {
@@ -193,12 +192,11 @@ public class PersistenceLayerTests {
 
         final String borrowerName = persistenceLayer.getBorrowerName(1);
 
-        Assert.assertEquals("", borrowerName);;
+        Assert.assertEquals("", borrowerName);
     }
 
     /**
      * Test what happens when an exception occurs in getBorrowerName
-     * @throws SQLException
      */
     @Test(expected = SqlRuntimeException.class)
     public void testGetBorrowerName_WhenExceptionThrown() throws SQLException {
@@ -212,7 +210,6 @@ public class PersistenceLayerTests {
     /**
      * An exception of the right type should be thrown
      * when an error occurs in the {@link PersistenceLayer#executeUpdateTemplate(SqlData)} method.
-     * @throws SQLException
      */
     @Test(expected = SqlRuntimeException.class)
     public void testExecuteUpdateTemplate_ExceptionThrown() throws SQLException {

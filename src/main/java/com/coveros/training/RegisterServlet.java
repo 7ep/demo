@@ -13,11 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "RegisterServlet", urlPatterns = {"/register"}, loadOnStartup = 1)
 public class RegisterServlet extends HttpServlet {
 
-  public static final String PASSWORD_PARAM = "password";
+  private static final String PASSWORD_PARAM = "password";
   private static final Logger logger = LogManager.getLogger();
-  public static final String USERNAME_PARAM = "username";
-  public static final String EMPTY_USERNAME = "EMPTY_USERNAME";
-  public static final String EMPTY_PASSWORD = "EMPTY_PASSWORD";
+  private static final String USERNAME_PARAM = "username";
+  private static final String EMPTY_USERNAME = "EMPTY_USERNAME";
+  private static final String EMPTY_PASSWORD = "EMPTY_PASSWORD";
   static RegistrationUtils registrationUtils = new RegistrationUtils();
 
   private String putUsernameInRequest(HttpServletRequest request) {
@@ -48,7 +48,7 @@ public class RegisterServlet extends HttpServlet {
   /**
    * Wrapping a static method call for testing.
    */
-  void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
+  private void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
     ServletUtils.forwardToResult(request, response, logger);
   }
 

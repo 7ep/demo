@@ -15,14 +15,14 @@ public class LoginServlet extends HttpServlet {
   private static final Logger logger = LogManager.getLogger();
   static LoginUtils loginUtils = new LoginUtils();
 
-  String putUsernameInRequest(HttpServletRequest request) {
+  private String putUsernameInRequest(HttpServletRequest request) {
     String username = request.getParameter("username");
     if (username == null) username = "EMPTY_USERNAME";
     request.setAttribute("username", username);
     return username;
   }
 
-  String putPasswordInRequest(HttpServletRequest request) {
+  private String putPasswordInRequest(HttpServletRequest request) {
     String password = request.getParameter("password");
     if (password == null) password = "EMPTY_PASSWORD";
     request.setAttribute("password", password);
@@ -37,16 +37,8 @@ public class LoginServlet extends HttpServlet {
     final Boolean userRegistered = loginUtils.isUserRegistered(username, password);
     String responseText = userRegistered ? "access granted" : "access denied";
     request.setAttribute("result", responseText);
-    forwardToResult(request, response, logger);
-  }
-
-  /**
-   * Wrapping a static method call for testing.
-   */
-  void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
     ServletUtils.forwardToResult(request, response, logger);
   }
-
 
 }
 
