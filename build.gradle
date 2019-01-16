@@ -102,9 +102,24 @@ jacocoTestReport {
     executionData("$buildDir/jacoco/combineCoverage.exec")
 }
 
+// a way to combine the coverage reports for the purpose of seeing the
+// whole picture when we run jacocoTestReport
 task combineCoverage (type: JacocoMerge) {
     executionData = files("$buildDir/jacoco/test.exec", "$buildDir/jacoco/fastIntegrationTest.exec")
     mustRunAfter fastIntegrationTest
 }
 
-check.dependsOn combineCoverage
+// Add the combined report when we run check
+check.dependsOn(combineCoverage)
+check.dependsOn(jacocoTestReport)
+
+
+sonarqube {
+    properties {
+        property "sonar.sources", "src/main/java"
+        property "sonar.tests", "src/unit_test/java,src/integration_test/java"
+        property "sonar.java.binaries", "build/classes/java/main"
+        property "sonar.junit.reportPaths", "build/test-results/test/,build/test-results/fastIntegrationTest"
+        property "sonar.jacoco.reportPaths", "build/jacoco/test.exec,build/jacoco/fastIntegrationTest.exec"
+    }
+}
