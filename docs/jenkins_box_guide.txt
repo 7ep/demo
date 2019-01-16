@@ -640,8 +640,12 @@ http://localhost:3002/job/demo/configure
 and find the checkbox labeled "Sidebar links".  Check it on. Add a link.  Enter this:
 
 Link URL: http://localhost:3004/overview-features.html
-
 Link Text: "Cucumber report".
+
+Also add:
+
+Link URL: http://localhost:3004/dependencycheck/dependency-check-report.html
+Link Text: Dependency Check Report
 
 Click Save.
 
@@ -686,48 +690,6 @@ $ sudo vi /etc/hosts
 
 and add this line:
   IP_ADDRESS_FOR_UIBOX    uitestbox
-
-
-SECURITY CHECK
-----------------------
-
-There is a jenkinsfile for a nightly security check.  This check
-scans the dependencies of the project for any issues that have
-been published.  Because this list does not get updated very often,
-and because it takes 10 minutes to run the scan, it is most appropriate to run
-separately on a rare basis.  For this reason we will configure it to run
-once a day.  To set up this pipeline:
-
-Go here to create a new Jenkins job:
-
-http://localhost:3002/view/all/newJob
-
-name the job "demo_security_testing" and select Pipeline, then click OK.
-
-Check the box marked "Discard old builds"
-  Strategy: Log rotation
-  Max # of builds to keep: 5
-
-Check the box for "Do not allow concurrent builds."
-
-In Sidebar Links -
-  Link URL: http://localhost:3004/dependencycheck/dependency-check-report.html
-  Link Text: Dependency Check Report
-
-Under Build Triggers, check the box for "Build after other projects are built", and
-set to watch demo.  Trigger only if build is stable.
-
-Under Pipeline Definition, choose Pipeline Script from SCM.
-  SCM: Git
-    Repository URL: /home/cuser/demo/
-    Branch Specifier: refs/heads/with_database
-    Script Path: jenkins/Jenkinsfile.security
-
-Save.
-
-Click on Build Now to see this run.  It should take about 10 minutes.
-
-
 
 
 // vim: ai:tw=70
