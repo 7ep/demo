@@ -39,6 +39,10 @@ public class RegisterServlet extends HttpServlet {
     String username = putUsernameInRequest(request);
     String password = putPasswordInRequest(request);
 
+    // Added because SonarQube was recommending (suggested null could be passed).  Not exactly sure why.
+    username = StringUtils.makeNotNullable(username);
+    password = StringUtils.makeNotNullable(password);
+
     RegistrationResult registrationResult = registrationUtils.processRegistration(username, password);
 
     request.setAttribute("result", registrationResult.toString());
