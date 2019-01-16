@@ -640,22 +640,14 @@ http://localhost:3002/job/demo/configure
 and find the checkbox labeled "Sidebar links".  Check it on. Add a link.  Enter this:
 
 Link URL: http://localhost:3004/overview-features.html
-Link Text: "Cucumber report".
+Link Text: Cucumber report.
 
-Click Save.
-
-You should now see "Cucumber report" among the links on the left for your pipeline.
-Click the link and make sure it goes where it should.
-
-Let's go ahead and add a link to Sonar as well.  Click on Configure again,
-and add another link under Sidebar links:
+Click Add Link.
 
 Link URL: http://localhost:3003
 Link Text: SonarQube
 
-Save.
-
-Also, for our dependency check security plugin, add another link:
+Click Add Link.
 
 Link URL: http://localhost:3004/dependencycheck/dependency-check-report.html
 Link Text: Dependency Check Report
