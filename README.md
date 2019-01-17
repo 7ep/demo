@@ -42,8 +42,9 @@ Features:
 * Disallows use of null (unless you provide an annotation), preventing a whole class of errors.
 * A nice head start of good tests of various types - unit tests, integration tests, automated acceptance tests, UI tests
 
-Note: if you have access to Coveros' Google drive, I've stored an appliance for running
- the pipeline [there](https://drive.google.com/drive/folders/1gbqE88UA5YszInP2qgDF8haa3wVEv4Rm?usp=sharing)
+Note: I've stored an appliance for running
+ the pipeline [on Dropbox](https://www.dropbox.com/s/k7eb9esw2jvglhp/Demo_Pipeline_and_test_box_Appliance.ova?dl=0).
+ The Readme for the appliance is [here](https://www.dropbox.com/s/d45b04iy9qelyo1/README.docx?dl=0)
 
 Screenshots:
 ![alt Cucumber report](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/cucumber_report.png)
