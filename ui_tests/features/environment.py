@@ -41,5 +41,6 @@ def __reset_database():
     cmd = ['pg_restore', '--username=postgres', '--dbname', 'training', '--no-password', '--clean', '../db_sample_files/initial_empty_state_v2.dump']
     FNULL = open(os.devnull, 'w')
     subprocess.call(cmd, stdout=FNULL, stderr=subprocess.STDOUT)
+    FNULL.close()
     print ("          ...  FINISHED         ")
     print ("********************************\n")
