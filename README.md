@@ -28,6 +28,8 @@ Make sure you have a user called postgres.  You may need to create one:
 
     createuser postgres
     
+#### To obtain:
+    git clone --branch with_database    
 #### To build with tests:
 On Mac/Linux
 
