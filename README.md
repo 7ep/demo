@@ -15,8 +15,9 @@ It consists of a simplistic web application.  Some of the techniques exemplified
 
 #### Dependencies:
 
-[Java 8](https://www.oracle.com/technetwork/java/javase/overview/java8-2100321.html)  
-[Postgresql](https://www.postgresql.org/)
+* [Java 8](https://www.oracle.com/technetwork/java/javase/overview/java8-2100321.html)  
+* [Postgresql](https://www.postgresql.org/)
+
 ---
 It *has* to be Java 8.  Don't use Java 10, it will error out because Mockito doesn't work with Java 10.
 
