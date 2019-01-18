@@ -15,7 +15,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.Month;
 
-import static com.coveros.training.TestConstants.PATH_TO_PG_RESTORE;
+import static com.coveros.training.TestConstants.PG_RESTORE;
 import static com.coveros.training.TestConstants.RESTORE_SCRIPTS_PATH;
 import static com.coveros.training.database_backup_constants.*;
 import static org.mockito.Mockito.doThrow;
@@ -233,7 +233,7 @@ public class PersistenceLayerTests {
         Process p;
         String restoreScriptPath = Paths.get(RESTORE_SCRIPTS_PATH , restoreScriptName).toString();
         String[] cmd = {
-                PATH_TO_PG_RESTORE,
+            PG_RESTORE,
                 "--host", "localhost",
                 "--port", "5432",
                 "--username", "postgres",
