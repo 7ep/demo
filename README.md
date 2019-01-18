@@ -1,6 +1,6 @@
 ## Demo - demonstrates an application and tests
 
-####Summary:
+#### Summary:
 This is a tool for use in teaching devops best practices.  
 It consists of a simplistic web application.  Some of the techniques exemplified are:
 * Unit tests using [Junit](https://junit.org/junit5/) and [Mockito](https://site.mockito.org/), with coverage reports.
@@ -53,13 +53,13 @@ On Windows
 Follow the directions to [create a Jenkins box](https://github.com/7ep/demo/blob/with_database/docs/jenkins_box_guide.txt) and [a UI-testing-box](https://github.com/7ep/demo/blob/with_database/docs/ui_test_box.txt), per the instructions
 in docs.  
 
-######Features of the pipeline:
+###### Features of the pipeline:
 * Instructions for setting up virtual machines (with VirtualBox).
 * A fully functioning demonstration CI/CD pipeline using Jenkins.
 * Incorporates static analysis using SonarQube
 * Zap attack proxy security analysis
 * UI tests running on Chrome
-####Appliance
+#### Appliance
  I've stored an appliance for running
  the pipeline [on Dropbox](https://www.dropbox.com/s/k7eb9esw2jvglhp/Demo_Pipeline_and_test_box_Appliance.ova?dl=0).
  Details for using the appliance are [here](https://www.dropbox.com/s/d45b04iy9qelyo1/README.docx?dl=0)
