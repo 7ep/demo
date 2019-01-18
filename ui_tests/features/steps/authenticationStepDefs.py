@@ -5,6 +5,7 @@ from hamcrest import *
 empty_database = ''
 one_user_registered = 'alice password123'
 
+
 @given('I am not registered')
 def step_impl(context):
     pass
