@@ -19,8 +19,10 @@ It consists of a simplistic web application.  Some of the techniques exemplified
 * [Postgresql](https://www.postgresql.org/)
 
 ---
+#### Java notes
 It *has* to be Java 8.  Don't use Java 10, it will error out because Mockito doesn't work with Java 10.
 
+#### Postgresql notes
 Once Postgresql is installed, create a database by running this from the command line:
 
     createdb training
@@ -29,8 +31,9 @@ Make sure you have a user called postgres.  You may need to create one:
 
     createuser postgres
     
-#### To obtain:
-    git clone --branch with_database    
+#### To obtain this branch of Demo project:
+    git clone --branch with_database https://github.com/7ep/demo.git  
+    
 #### To build with tests:
 On Mac/Linux
 
