@@ -71,6 +71,12 @@ pipeline {
       }
     }
 
+    stage('API Tests') {
+      steps {
+        sh 'ssh cuser@uitestbox demo_tests/api_tests/run_api_tests.sh'
+      }
+    }
+
     // We use a different framework for UI tests, Behave, because Python rules
     // when it comes to experimentation with UI tests.  You can try things and see how they work out.
     stage('UI Tests') {
