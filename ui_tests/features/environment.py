@@ -2,15 +2,18 @@ from selenium import webdriver
 import subprocess
 import os
 
-def before_all(context):
 
+def before_all(context):
     context.driver = webdriver.Chrome()
+
 
 def before_scenario(context, scenario):
     __reset_database()
 
+
 def after_all(context):
     context.driver.close()
+
 
 def __reset_database():
     print ("\n********************************")

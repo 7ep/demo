@@ -28,6 +28,7 @@ def __register_user(context, username_text, password_text):
     submit_button = driver.find_element_by_id("register_submit")
     submit_button.click()
 
+
 def __login_user(context, username_text, password_text):
     driver = context.driver
     driver.get("http://localhost:8080/demo")
