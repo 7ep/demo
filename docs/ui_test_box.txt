@@ -75,11 +75,11 @@ We also want to make this database able to be hit from outside the
 box, so we can restore and run database migrations on it
 from outside.  To do that, first, open the configuration file:
 
-$ sudo vim /var/lib/pgsql/10/data/postgresql.conf
+$ sudo vi /var/lib/pgsql/10/data/postgresql.conf
 
 then, replace line
 
-listen_addresses = 'localhost'
+#listen_addresses = 'localhost'
     with
 listen_addresses = '*'
 
@@ -91,20 +91,55 @@ at the end of /var/lib/pgsql/10/data/pg_hba.conf, add these lines:
 host    all             all             10.0.2.255/24             trust
 
 
+INSTALL PYTHON 3
+----------------
+
+$ sudo yum install -y gcc openssl-devel bzip2-devel libffi-devel
+$ wget https://www.python.org/ftp/python/3.7.0/Python-3.7.0.tgz
+$ tar xzf Python-3.7.0.tgz
+$ cd Python-3.7.0
+$ ./configure --enable-optimizations
+$ sudo make altinstall
 
 
-Install Python Pip, Selenium, and Behave:
+EDIT ROOT'S PATH
+----------------
+
+At this point I noticed that root is missing /usr/local/bin on its path.  Add that
+
+$ echo $PATH
+/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/cuser/.local/bin:/home/cuser/bin
+
+$ sudo vi /root/.bashrc
+
+Add this line at the bottom:
+
+export PATH=/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/cuser/.local/bin:/home/cuser/bin
+
+
+INSTALL PIP
+-----------
 
 $ curl https://bootstrap.pypa.io/get-pip.py -o ~/get-pip.py
-$ sudo python ~/get-pip.py
-$ sudo pip install behave
-$ sudo pip install selenium
-$ sudo pip install pyhamcrest
+$ sudo su
+
+(do the following as root, if it starts with a hash mark)
+
+# /usr/local/bin/python3.7 ~/get-pip.py
+
+INSTALL PYTHON DEPENDENCIES
+---------------------------
+
+# pip3.7 install behave
+# pip3.7 install selenium
+# pip3.7 install pyhamcrest
+# pip3.7 install requests
+
 
 Download Chromedriver from here: http://chromedriver.chromium.org/downloads.  At the
 time of writing this, the URL went as follows:
 
-$ sudo curl https://chromedriver.storage.googleapis.com/2.45/chromedriver_linux64.zip > ~/chromedriver_linux64.zip
+$ curl https://chromedriver.storage.googleapis.com/2.45/chromedriver_linux64.zip > ~/chromedriver_linux64.zip
 
 Download and unzip it on your path.  I recommend a place that is
 already on your path, /usr/local/sbin
@@ -222,7 +257,7 @@ On the menu bar, under Help, click on "Check for updates..." and update as sugge
 
 Change the port number so it doesn't interfere with our demo application:
 
-Open ZAP, Tools--> Options --> local proxy
+Open ZAP, Tools--> Options --> local proxies
 Change the default 8080 port to 8888 and click Ok.
 
 In order to test out Zap, in the Quick Start tab, enter the following URL
