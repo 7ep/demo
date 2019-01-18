@@ -34,3 +34,6 @@ generated_testSrc/
 
 # another Intellij-generated file
 *.iml
+
+# created during python unit tests
+api_tests/__pycache__
