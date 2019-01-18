@@ -55,7 +55,7 @@ On Windows
 #### The whole shebang - a CI/CD pipeline
 
 Follow the directions to [create a Jenkins box](https://github.com/7ep/demo/blob/with_database/docs/jenkins_box_guide.txt) and [a UI-testing-box](https://github.com/7ep/demo/blob/with_database/docs/ui_test_box.txt), per the instructions
-in docs.  
+in docs.  *or*, see the appliance notes below.
 
 ###### Features of the pipeline:
 * Instructions for setting up virtual machines (with VirtualBox).
@@ -65,8 +65,8 @@ in docs.
 * UI tests running on Chrome
 #### Appliance
  I've stored an appliance for running
- the pipeline [on Dropbox](https://www.dropbox.com/s/k7eb9esw2jvglhp/Demo_Pipeline_and_test_box_Appliance.ova?dl=0).
- Details for using the appliance are [here](https://www.dropbox.com/s/d45b04iy9qelyo1/README.docx?dl=0)
+ the pipeline [here](https://www.dropbox.com/sh/vk1hi9zs0fj9xus/AABBYo766-EGGn2IH0h9awTIa?dl=0).
+ Details for using the appliance are in the README there.
 
 
 ---
