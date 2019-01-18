@@ -1,15 +1,15 @@
-How to do API testing
----------------------
+How to do manual API testing
+----------------------------
 
-curl 'http://localhost:4002/demo/math' --data 'item_a=9&item_b=7'
+curl 'http://localhost:8080/demo/math' --data 'item_a=9&item_b=7'
 
-curl 'http://localhost:4002/demo/register' --data 'username=alice&password=B65S3xNW8vXQHyjYnD72L3mejc'
-curl 'http://localhost:4002/demo/login' --data 'username=alice&password=B65S3xNW8vXQHyjYnD72L3mejc'
+curl 'http://localhost:8080/demo/register' --data 'username=alice&password=B65S3xNW8vXQHyjYnD72L3mejc'
+curl 'http://localhost:8080/demo/login' --data 'username=alice&password=B65S3xNW8vXQHyjYnD72L3mejc'
 
 
-curl 'http://localhost:4002/demo/registerbook' --data 'book=alice+in+wonderland'
-curl 'http://localhost:4002/demo/registerborrower' --data 'borrower=alice'
-curl 'http://localhost:4002/demo/lend' --data 'book=alice+in+wonderland&borrower=alice'
+curl 'http://localhost:8080/demo/registerbook' --data 'book=alice+in+wonderland'
+curl 'http://localhost:8080/demo/registerborrower' --data 'borrower=alice'
+curl 'http://localhost:8080/demo/lend' --data 'book=alice+in+wonderland&borrower=alice'
 
 
 
