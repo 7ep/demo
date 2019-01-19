@@ -1,10 +1,10 @@
-making a box for UI-level testing box
+making a box for UI-level testing
 
 (First create the Jenkins box.  See jenkins_box_guide.txt, then come back)
 
 In VirtualBox, click on New.
 
-Create a new system "Centos7_uitestbox"
+Create a new system "uitestbox"
 
 Make sure to choose Mac osX 64 bit for the operating system.  It's not a Mac, but for
 some reason this makes mouse integration work beautifully.
@@ -12,7 +12,7 @@ some reason this makes mouse integration work beautifully.
 Set it to use 3072 megabytes of ram and 12 gigs hard drive.
 
 Alter its settings:
-  Put it on the same NAT network as the other boxes
+  In Networking: Adapter 1 should be NAT, Adapter 2 should be host-only networking
   Put the CentOS7 disc in the virtual drive.
 
 Start the server.
@@ -43,14 +43,7 @@ Disable strict host key checking (see DISABLE STRICT HOST KEY CHECKING in jenkin
 
 reboot.  Login.
 
-Open another Konsole by right-clicking.
-
-get the ip address of this box (see GET SYSTEM IP ADDRESS in jenkins_box_guide.txt)
-
-Set up port forwarding (see CONFIGURE PORT FORWARDING in jenkins_box_guide.txt), with one variation:
-  name it "uitestbox_ssh" and give it a host port of 4001.
-
-Now you can connect to your uitestbox by SSH.  Do so.
+Now you can connect to your uitestbox by SSH.  Do the rest of this in ssh.
 
 Install Chrome:
 
@@ -101,40 +94,25 @@ $ cd Python-3.7.0
 $ ./configure --enable-optimizations
 $ sudo make altinstall
 
-
-EDIT ROOT'S PATH
-----------------
-
-At this point I noticed that root is missing /usr/local/bin on its path.  Add that
-
-$ echo $PATH
-/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/cuser/.local/bin:/home/cuser/bin
-
-$ sudo vi /root/.bashrc
-
-Add this line at the bottom:
-
-export PATH=/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/cuser/.local/bin:/home/cuser/bin
-
-
 INSTALL PIP
 -----------
 
 $ curl https://bootstrap.pypa.io/get-pip.py -o ~/get-pip.py
 $ sudo su
 
-(do the following as root, if it starts with a hash mark)
-
-# /usr/local/bin/python3.7 ~/get-pip.py
-
 INSTALL PYTHON DEPENDENCIES
 ---------------------------
 
+(do the following as root, if it starts with a hash mark)
+
+# /usr/local/bin/python3.7 ~/get-pip.py
 # pip3.7 install behave
 # pip3.7 install selenium
 # pip3.7 install pyhamcrest
 # pip3.7 install requests
+# exit
 
+( That will exit being root)
 
 Download Chromedriver from here: http://chromedriver.chromium.org/downloads.  At the
 time of writing this, the URL went as follows:
@@ -207,39 +185,7 @@ Now you can start the Apache Tomcat 9 server and enable it to start on boot time
 $ sudo systemctl start tomcat9
 $ sudo systemctl enable tomcat9
 
-Tomcat will start serving on port 8080 on the machine.  Add a port forwarding
-rule for port 8080 for it:
-
-+--------------+----------+---------+-----------+-----------+------------+
-| Name         | Protocol | Host IP | Host Port | Guest IP  | Guest Port |
-+--------------+----------+---------+-----------+-----------+------------+
-| box2_ssh     | TCP      |         | 3001      | 10.0.2.4  | 22         |
-+--------------+----------+---------+-----------+-----------+------------+
-| box2_jenkins | TCP      |         | 3002      | 10.0.2.4  | 8080       |
-+--------------+----------+---------+-----------+-----------+------------+
-| box2_sonar   | TCP      |         | 3003      | 10.0.2.4  | 9000       |
-+--------------+----------+---------+-----------+-----------+------------+
-| box2_80      | TCP      |         | 3004      | 10.0.2.5  | 80         |
-+--------------+----------+---------+-----------+-----------+------------+
-| ui_ssh       | TCP      |         | 4001      | 10.0.2.5  | 22         |
-+--------------+----------+---------+-----------+-----------+------------+
-| ui_8080      | TCP      |         | 4002      | 10.0.2.5  | 80         |
-+--------------+----------+---------+-----------+-----------+------------+
-
-
-
-ADD HOSTS FILE FOR OTHER BOXES
-------------------------------
-
-Add an entry to the ui tests box:
-
-$ sudo vim /etc/hosts
-
-and add this line:
-  IP_ADDRESS_FOR_JENKINSBOX    jenkinsbox
-
-(Now, go to the other box and set its host to point to uitestbox)
-
+Tomcat will start serving on port 8080 on the machine.
 
 INSTALLING OWASP-ZAP
 --------------------

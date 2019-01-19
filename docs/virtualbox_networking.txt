@@ -1,0 +1,52 @@
+Networking on the virtual machines and the host.
+------------------------------------------------
+Switched networking on the boxes. Now, they use NAT (for regular internet) as interface 1,
+and Host-Only as 2 (so we can have a conversation between the host and guests)
+
+On the Host box, I configured the Host-only network.  I specifically went into the ipv4 settings and configured them as follows:
+
+IP address: 192.168.56.2
+Subnet mask: 255.255.255.0
+Default gateway: 192.168.56.1
+
+Use the following DNS server addresses:
+Preferred DNS server: 192.168.56.1
+
+Then, on the guest machines, I used their network configuration tools.  On the console in the jenkinsbox, I used nmtui:
+
+Edit a conntection.
+(It may have been necessary to create one.  If so, here are the details.  The only thing to note is that you should change the value of the "Addresses" field - make jenkinsbox 192.168.56.101 and make uitestbox 192.168.56.102:
+
+Profile name: host-only network
+Device: 08:00:27:22:04:D9 (enp0s8)
+
+Ethernet
+IPv4 configuration <Manual>
+Addresses: 192.168.56.101/24
+Gateway: 192.168.56.1
+DNS Server: 192.168.56.1
+
+At the bottom, select [X] Automatically connect
+
+Then click ok.
+
+It should be possible to use the procedure on both machines.
+
+At this point your networking should be mostly set up.  You can test by pinging between them all.
+
+for example, on the uitestbox:  ping 192.168.56.101 (to ping jenkinsbox)
+
+Now, let's make things prettier.
+
+On jenkinsbox, edit its /etc/hosts and add a new entry to point to uitestbox:
+
+192.168.56.102 uitestbox
+
+On uitestbox, edit its /etc/hosts and add a new entry to point to jenkinsbox:
+
+192.168.56.101 jenkinsbox
+
+On the host, edit hosts and add:
+
+192.168.56.101 jenkinsbox
+192.168.56.102 uitestbox

@@ -13,7 +13,7 @@ settings should suffice.
 
 These instructions were written with VirtualBox 6:
 
-1. Open VirtualBox.  Click on New.  Name it "Centos7_Jenkins_machine".
+1. Open VirtualBox.  Click on New.  Name it "jenkinsbox".
 
 Make sure to choose Mac osX 64 bit for the operating system.  It's not a Mac, but for
 some reason this makes mouse integration work beautifully.
@@ -25,21 +25,14 @@ Click Next.
 3. Keep clicking next until it gives you a choice for hard-drive size.  Set it
    to 12 gigabytes.  Click Next.
 
-(only do the following if you haven't already created "training_network")
-
-4. in File -> Preferences, click on Network, and click the icon on the
-right to create a new network.  Double click on the newly created
-network and rename it training_network, and click OK enough times to close out
-the dialogs)
-
 in settings for the new Centos_Jenkins_machine box, do the following:
   Click on Storage and on the icon for the empty disc drive, and
   on the icon on the right, click and you should see an option to:
   "Choose Virtual Optical Disk File...".  Click that and choose the iso file
   for Centos you downloaded previously.
   
-  in the network tab, make it attached to: NAT network, and then
-    select: training_network (a network we previously created).
+  in the network tab, for adapter 1 choose NAT, and for adapter 2 choose
+  Host-Only Network.
 
   Click Ok.
 
@@ -95,13 +88,7 @@ jenkinsbox login: _
 
 ---------------------------------------------------
 
-I find that working in that console is a pain.  So the first thing we
-want to do is make sure we can access this using ssh and then we'll
-communicate with our machine solely through that protocol.
-
-
-
-First, log in as the user you created.  You didn't set a password, so
+First, log in as cuser.  You didn't set a password, so
 you shouldn't need to enter a password for it.  It's an admin user, so
 you can just run sudo <whatever> to act as root.
 
@@ -173,44 +160,15 @@ $ sudo reboot
 
 log in again.
 
-GET SYSTEM IP ADDRESS
----------------------
-
-run this:
-
-  $ ip addr | grep "inet 10"
-  
-You should get a line that looks similar to this:
-
-inet 10.0.2.4/24 brd 10.0.2.255 scope global noprefixroute dynamic enp0s17
-
-CONFIGURE PORT FORWARDING
--------------------------
-
-Once you have that, click on the menu item File -> Preferences ->
-Network and double-click on training_network, and click on the "Port
-Forwarding" button.  Add a new row, as follows (modify for your ip
-address)
-
-+----------------+----------+---------+-----------+-----------+------------+
-| Name           | Protocol | Host IP | Host Port | Guest IP  | Guest Port |
-+----------------+----------+---------+-----------+-----------+------------+
-| jenkinsbox_ssh | TCP      |         | 3001      | 10.0.2.4  | 22         |
-+----------------+----------+---------+-----------+-----------+------------+
-
-
-Then click all the OK buttons to close the windows.
-
 You should be able to ssh into your centos box by running ssh against
-localhost at 3001.
+jenkinsbox.
 
 I am using Putty, because I am on a Windows machine, but you can
 use any ssh client.
 
 Putty can be downloaded from: https://the.earth.li/~sgtatham/putty/latest/w32/putty.exe
 
-From here on out, all commands should be run from ssh. Log into the Jenkins machine
-by going to localhost at port 3001 from your host machine.
+From here on out, all commands should be run from ssh.
 
 INSTALL JAVA
 ------------
@@ -334,18 +292,7 @@ $ sudo yum install -y jenkins
 $ sudo systemctl start jenkins
 $ sudo systemctl enable jenkins
 
-We'll need to modify port forwarding again. (see CONFIGURE PORT FORWARDING for
-more detail).  Add a row:
-
-+--------------------+----------+---------+-----------+-----------+------------+
-| Name               | Protocol | Host IP | Host Port | Guest IP  | Guest Port |
-+--------------------+----------+---------+-----------+-----------+------------+
-| jenkinsbox_ssh     | TCP      |         | 3001      | 10.0.2.4  | 22         |
-+--------------------+----------+---------+-----------+-----------+------------+
-| jenkinsbox_jenkins | TCP      |         | 3002      | 10.0.2.4  | 8080       |
-+--------------------+----------+---------+-----------+-----------+------------+
-
-In your browser, go to Jenkins at this URL: http://localhost:3002
+In your browser, go to Jenkins at this URL: http://jenkinsbox:8080/
 
 You will need the password for the new Jenkins, here:
 
@@ -360,10 +307,6 @@ password: admin
 email: admin@test.com
 
 Click Save and Continue.
-
-It will show you the hostname it came up with for itself:
-
-http://localhost:3002/
 
 Click Save and Finish.
 Click Start using Jenkins
@@ -398,7 +341,7 @@ the following will remove the Github origin
 $ git remote remove origin
 
 this will add your new repository location as "origin":
-$ git remote add origin ssh://cuser@localhost:3001/home/cuser/demo
+$ git remote add origin ssh://cuser@jenkinsbox/home/cuser/demo
 
 this will push all your branches to that repo
 $ git push --set-upstream --all origin
@@ -532,26 +475,12 @@ You can view the logs for Sonarqube running at /var/log/messages.  It may take
 a few minutes, but watch to see if Sonarqube is up and running.
 
 
-We'll need to modify port forwarding again. (see CONFIGURE PORT FORWARDING for
-more detail).  Add a row:
-
-
-+--------------------+----------+---------+-----------+-----------+------------+
-| Name               | Protocol | Host IP | Host Port | Guest IP  | Guest Port |
-+--------------------+----------+---------+-----------+-----------+------------+
-| jenkinsbox_ssh     | TCP      |         | 3001      | 10.0.2.4  | 22         |
-+--------------------+----------+---------+-----------+-----------+------------+
-| jenkinsbox_jenkins | TCP      |         | 3002      | 10.0.2.4  | 8080       |
-+--------------------+----------+---------+-----------+-----------+------------+
-| jenkinsbox_sonar   | TCP      |         | 3003      | 10.0.2.4  | 9000       |
-+--------------------+----------+---------+-----------+-----------+------------+
-
-go to http://localhost:3003 and check if you see the Sonarqube dashboard.
+go to http://jenkinsbox:9000/about and check if you see the Sonarqube dashboard.
 
 If that is up and running, let's go back to Jenkins and install a
 plugin so we can run SonarQube on our code from there.  Go to:
 
-http://localhost:3002/pluginManager/available
+http://jenkinsbox:8080/pluginManager/available
 
 and search for Sonarqube in the top right.  You should see "SonarQube scanner"
 as an option.  Check that on, then Install without restart.
@@ -559,21 +488,6 @@ as an option.  Check that on, then Install without restart.
 
 INSTALL WEB SERVER
 ------------------
-
-In preparation for having a web server on port 80, let's add another port
-forwarding rule(see CONFIGURE PORT FORWARDING for more detail).  Add a row:
-
-+--------------------+----------+---------+-----------+-----------+------------+
-| Name               | Protocol | Host IP | Host Port | Guest IP  | Guest Port |
-+--------------------+----------+---------+-----------+-----------+------------+
-| jenkinsbox_ssh     | TCP      |         | 3001      | 10.0.2.4  | 22         |
-+--------------------+----------+---------+-----------+-----------+------------+
-| jenkinsbox_jenkins | TCP      |         | 3002      | 10.0.2.4  | 8080       |
-+--------------------+----------+---------+-----------+-----------+------------+
-| jenkinsbox_sonar   | TCP      |         | 3003      | 10.0.2.4  | 9000       |
-+--------------------+----------+---------+-----------+-----------+------------+
-| jenkinsbox_http    | TCP      |         | 3004      | 10.0.2.4  | 80         |
-+--------------------+----------+---------+-----------+-----------+------------+
 
 create and edit a new file at /etc/yum.repos.d/bintray-tatsushid-h2o-rpm.repo
 
@@ -624,32 +538,32 @@ $ sudo systemctl enable h2o.service
 $ sudo systemctl start h2o.service
 
 Eventually we want to be able to view a cucumber report,
-by going to http://localhost:3004/overview-features.html
+by going to http://jenkinsbox/cucumber/overview-features.html
 
 Let's put this link on our pipeline page in Jenkins.  To do so,
 first install the Sidebar-Link plugin.  Go to:
 
-http://localhost:3002/pluginManager/available
+http://jenkinsbox:8080/pluginManager/available
 
 and search for "sidebar".  Choose Sidebar Link and Install without restart.
 
 Now go back to your pipeline, here:
 
-http://localhost:3002/job/demo/configure
+http://jenkinsbox:8080/job/demo/configure
 
 and find the checkbox labeled "Sidebar links".  Check it on. Add a link.  Enter this:
 
-Link URL: http://localhost:3004/overview-features.html
+Link URL: http://jenkinsbox/cucumber/overview-features.html
 Link Text: Cucumber report.
 
 Click Add Link.
 
-Link URL: http://localhost:3003
+Link URL: http://jenkinsbox:9000/
 Link Text: SonarQube
 
 Click Add Link.
 
-Link URL: http://localhost:3004/dependencycheck/dependency-check-report.html
+Link URL: http://jenkinsbox/dependencycheck/dependency-check-report.html
 Link Text: Dependency Check Report
 
 Save.
@@ -671,18 +585,3 @@ $ wget https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/5.2.4/flyw
 $ tar zxf flyway-commandline-5.2.4-linux-x64.tar.gz
 $ sudo mv flyway-5.2.4 /opt/flyway
 $ sudo chmod 755 /opt/flyway/flyway
-
-
-ADD HOSTS FILE FOR OTHER BOXES
-------------------------------
-
-Add an entry to the ui tests box (you may not have created it yet.
-Come back here when you do)
-
-$ sudo vi /etc/hosts
-
-and add this line:
-  IP_ADDRESS_FOR_UIBOX    uitestbox
-
-
-// vim: ai:tw=70
