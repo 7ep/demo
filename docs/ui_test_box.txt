@@ -380,3 +380,10 @@ Then, click Attack.
 To do the same thing from the command line, run this:
 
 /usr/share/owasp-zap/zap.sh -cmd -quickurl http://localhost:8080/demo
+
+CUSTOMIZE HOSTS FILE
+--------------------
+
+edit the /etc/hosts and add a new entry to point to jenkinsbox:
+
+192.168.56.101 jenkinsbox

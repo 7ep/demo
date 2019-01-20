@@ -24,14 +24,22 @@ edit hosts (on Windows, it's at C:\Windows\System32\drivers\etc\hosts ) and add:
 192.168.56.101 jenkinsbox
 192.168.56.102 uitestbox
 
-ON THE GUEST MACHINE (do this later)
- ------------------------------------
+ON THE GUEST MACHINE
+------------------------------------
 
-I used their network configuration tools.
+(the following may be helpful information if there is
+an issue with the network after install is complete.  Otherwise,
+this is all optional)
+
+
 On the console in the jenkinsbox, I used nmtui:
 
+$ nmtui
+
 Edit a connection.
-(It may have been necessary to create one.  If so, here are the details.  The only thing to note is that you should change the value of the "Addresses" field - make jenkinsbox 192.168.56.101 and make uitestbox 192.168.56.102:
+(It may have been necessary to create one.  If so, here are the details.
+The only thing to note is that you should change the value of the "Addresses"
+field - make jenkinsbox 192.168.56.101 and make uitestbox 192.168.56.102:
 
 Profile name: host-only network
 Device: 08:00:27:22:04:D9 (enp0s8)
@@ -45,20 +53,3 @@ DNS Server: 192.168.56.1
 At the bottom, select [X] Automatically connect
 
 Then click ok.
-
-It should be possible to use the procedure on both machines.
-
-At this point your networking should be mostly set up.  You can test by pinging between them all.
-
-for example, on the uitestbox:  ping 192.168.56.101 (to ping jenkinsbox)
-
-Now, let's make things prettier.
-
-On jenkinsbox, edit its /etc/hosts and add a new entry to point to uitestbox:
-
-192.168.56.102 uitestbox
-
-On uitestbox, edit its /etc/hosts and add a new entry to point to jenkinsbox:
-
-192.168.56.101 jenkinsbox
-

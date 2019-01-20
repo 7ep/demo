@@ -89,6 +89,7 @@ Subnet Mask 255.255.255.0
 Default Route 192.168.56.1
 DNS 192.168.56.1
 
+
 Phew, done!  Click Done in the top left.
 
 Leave the software selection at "minimal install"
@@ -576,6 +577,13 @@ $ tar zxf flyway-commandline-5.2.4-linux-x64.tar.gz
 $ sudo mv flyway-5.2.4 /opt/flyway
 $ sudo chmod 755 /opt/flyway/flyway
 
+
+CUSTOMIZE HOSTS FILE
+--------------------
+
+Edit /etc/hosts and add a new entry to point to uitestbox:
+
+192.168.56.102 uitestbox
 
 
 CONGRATULATIONS!!!!  You're done with building the Jenkins box.  Now go over to the
