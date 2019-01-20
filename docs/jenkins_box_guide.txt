@@ -1,17 +1,21 @@
-create a console-only virtual machine for our Jenkins server.
+Console-only Jenkins, SonarQube, Git repo
+-----------------------------------------
 
 You need a few things to get started.
 
-A copy of the Centos install DVD iso:
+Download the Centos install DVD iso:
 http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-DVD-1810.iso
 
-a copy of the VirtualBox software:
+Download the VirtualBox software:
 https://www.virtualbox.org/wiki/Downloads
 
 Go ahead and install VirtualBox using its installer.  The default
-settings should suffice.
+settings will suffice.
 
-These instructions were written with VirtualBox 6:
+These instructions were tested using VirtualBox 6.
+
+Prerequisite: Modify the networking configuration.
+Follow ON THE HOST BOX in virtualbox_networking.txt
 
 1. Open VirtualBox.  Click on New.  Name it "jenkinsbox".
 
@@ -25,7 +29,7 @@ Click Next.
 3. Keep clicking next until it gives you a choice for hard-drive size.  Set it
    to 12 gigabytes.  Click Next.
 
-in settings for the new Centos_Jenkins_machine box, do the following:
+Click "settings" for the new Centos_Jenkins_machine box, do the following:
   Click on Storage and on the icon for the empty disc drive, and
   on the icon on the right, click and you should see an option to:
   "Choose Virtual Optical Disk File...".  Click that and choose the iso file
@@ -38,17 +42,54 @@ in settings for the new Centos_Jenkins_machine box, do the following:
 
 Start it up.
 
-Choose "install Centos 7".  (It defaults to "test this media and
-install centos7", but it's a virtual machine, so just press the up
-arrow and choose "install centos 7".)
+Choose "install Centos 7" instead of "test this media and
+install centos7".
 
 Choose English for the languages.
 
 Under system, click on "installation destination" and then click Done
 on the page it opens up.  (it defaults properly)
 
-Click on the network & Host name icon and toggle it from off to on,
-then change the hostname to jenkinsbox.  Click Done in the top left.
+Click on the network & Host name icon.
+
+This is an ***important*** section.  Take it slow.
+
+First, change the Host name to jenkinsbox.
+
+Then, toggle the enp0s8 network adapter to ON.  That's the NAT network, so it
+should just automatically work.
+
+But let's make sure it's configured properly.  Click on Configure for it,
+and Under the General tab, check the box next to "Automatically connect
+to this network when it is available".  Then save it.
+
+Select the enp0s17 network adapter.  This one we have to manually configure.  Click the
+[Configure...] button in the bottom right.
+
+Under the General tab, check the box next to "Automatically connect to this network when it is available"
+
+Click on the IPV4 Settings tab, and change the method from automatic to manual.
+
+Click the [Add] button.  Enter the following data:
+Address:          Netmask:           Gateway:
+192.168.56.101    255.255.255.0      192.168.56.1
+
+DNS Servers: 192.168.56.1
+
+Click on the checkbox next to "Require IPV4 addressing for this connection to complete"
+
+Click Save.
+
+toggle this adapter from off to on.  If done correctly, it should very quickly indicate "Connected"
+with some data similar to this:
+Hardware address: 08:00:27:09:16:BC
+Speed 1000 Mb/s
+IP Address 192.168.56.101
+Subnet Mask 255.255.255.0
+Default Route 192.168.56.1
+DNS 192.168.56.1
+
+Phew, done!  Click Done in the top left.
 
 Leave the software selection at "minimal install"
 
@@ -58,7 +99,7 @@ While it is installing, you will see options to set the root password
 and create a user.  We're not too concerned about security, since this
 box is just for educational purposes.  However, it won't let you
 complete installation until you create a user.  Make a user for
-yourself.
+yourself.  See the following...
 
 CREATE USER DURING INSTALL
 --------------------------
@@ -116,16 +157,7 @@ ENABLE SSH WITH NO PASSWORD
 ---------------------------
 
 Let's also change the settings on sshd (the ssh daemon) so it will
-allow us to log in without a password.  Edit the file at
-/etc/ssh/sshd_config and change the value of a parameter:
-
-#PermitEmptyPasswords no
-
-becomes
-
-PermitEmptyPasswords yes
-
-or you can run this command:
+allow us to log in without a password.
 
 sudo sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords yes/' /etc/ssh/sshd_config
 
@@ -137,31 +169,17 @@ because many of the conversations between our boxes will use ssh, and will halt
 and ask the user if the host isn't current trusted.  Problem with that is
 everything is automated, there isn't anyone to answer yes.  This should fix that.
 
-edit /etc/ssh/ssh_config:
-
-There is a line:
-# StrictHostKeyChecking ask
-
-Uncomment it and change it to "no"":
-
-StrictHostKeyChecking no
-
-
-or you can run this command:
-
-sudo sed -i 's/# StrictHostKeyChecking ask/StrictHostKeyChecking no/' /etc/ssh/ssh_config
+sudo sed -i 's/#   StrictHostKeyChecking ask/StrictHostKeyChecking no/' /etc/ssh/ssh_config
 
 
 now, reboot.
 
 $ sudo reboot
 
-(wait ...)
+You should be able to ssh into your centos box by running ssh against the url "jenkinsbox".
 
-log in again.
-
-You should be able to ssh into your centos box by running ssh against
-jenkinsbox.
+(if not, there may have been a mistake made when configuring the network settings.  Networking
+is a real pain.)
 
 I am using Putty, because I am on a Windows machine, but you can
 use any ssh client.
@@ -206,37 +224,11 @@ CONFIGURE POSTGRESQL
 
 First, we'll run the postgresql client as "postgres"
 
-$ sudo -upostgres psql
+$ sudo -upostgres psql postgres
 
-We should see something like this:
+Run this command:
 
-  -bash-4.2$ psql
-  psql (9.2.24, server 10.6)
-  Type "help" for help.
-
-  postgres=#
-
-Alright, we know the database is up and we can access it.  Let's make
-it easier to access.  Still in the psql client, run this command:
-
-  postgres=# CREATE ROLE cuser WITH SUPERUSER LOGIN;
-  CREATE ROLE
-
-View your new role by typing \dg
-
-Log out of psql by running typing \q and pressing enter.
-
-Try to access the psql client as cuser:
-
-$ psql postgres
-
-You should see something like this:
-
-  [cuser@localhost demo]$ psql postgres
-  psql (9.2.24)
-  Type "help" for help.
-
-  postgres=#
+postgres=# CREATE ROLE cuser WITH SUPERUSER LOGIN;
 
 quit psql by pressing ctrl-d or \q
 
@@ -294,7 +286,7 @@ $ sudo systemctl enable jenkins
 
 In your browser, go to Jenkins at this URL: http://jenkinsbox:8080/
 
-You will need the password for the new Jenkins, here:
+Once Jenkins boots up, you will need the password for the new Jenkins, here:
 
 $ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 
@@ -333,8 +325,7 @@ Make a "bare" git repo:
 
 $ git init --bare
 
-Push your current repo to that location as the new central repo.  Back
-in the directory where you have been working with Demo, (on the other
+Back in the directory where you have been working with Demo, (on the other
 machine) run these commands:
 
 the following will remove the Github origin
@@ -389,8 +380,6 @@ You should observe a new build appear in the webpage in Jenkins.  If so, you hav
 it properly.  Whenever you push a branch, it will now run Jenkins.  That's pretty close to perfect.
 
 Now let's modify our pipeline so it does some actual work.
-- as a prerequisite (so Jenkins can access the repo), run this command:
-$ chmod 775 /home/cuser
 
 - In Jenkins, on the pipeline page for Demo, click on Configure.
 - Check the box for "discard old builds",
@@ -409,9 +398,9 @@ $ chmod 775 /home/cuser
 
      Click save
 
-
-Now that our Jenkins pipeline is running, and we have a Git repo, and
-we have a database running, let's throw in another application - SonarQube!
+We're not quite done yet, we need to install some other parts of our system
+before this will all work.  Now that our Jenkins pipeline is running, and
+we have a Git repo, and we have a database running, let's throw in another application - SonarQube!
 
 INSTALL SONARQUBE
 -----------------
@@ -471,9 +460,10 @@ Start Sonarqube and register it to start at boot:
 $ sudo systemctl start sonar
 $ sudo systemctl enable sonar
 
-You can view the logs for Sonarqube running at /var/log/messages.  It may take
+You can view the logs for Sonarqube running at /var/log/messages.  It will take
 a few minutes, but watch to see if Sonarqube is up and running.
 
+(wait... and.. )
 
 go to http://jenkinsbox:9000/about and check if you see the Sonarqube dashboard.
 
@@ -505,16 +495,12 @@ install it:
 $ sudo yum install -y h2o
 
 Once the installation finishes successfully, you can see a
-configuration file at /etc/h2o/h2o.conf.
+configuration file at /etc/h2o/h2o.conf
 
-Edit that file, make it as follows.  Make sure to set the user to your
-username.  That way, the web server is guaranteed to have access to the
-files it needs.  "file.dirlisting: ON" means that if you go to the URL
-without specifying a page, it will show you the contents of the directory.
+Edit that file, make it as follows.
 
-The value in file.dir is meant to point to the place where we are storing the
-output of our Cucumber report generation.  This way, you can view the status of
-your BDD tests.
+("file.dirlisting: ON" means that if you go to the URL
+without specifying a page, it will show you the contents of the directory.)
 
 -------------------------------------- FILE START
 user: cuser
@@ -531,6 +517,10 @@ access-log: /var/log/h2o/access.log
 error-log: /var/log/h2o/error.log
 pid-file: /var/run/h2o/h2o.pid
 -------------------------------------- FILE END
+
+The value in file.dir is meant to point to the place where we are storing the
+output of our Cucumber report generation.  This way, you can view the status of
+your BDD tests.
 
 To start h2o:
 
@@ -585,3 +575,8 @@ $ wget https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/5.2.4/flyw
 $ tar zxf flyway-commandline-5.2.4-linux-x64.tar.gz
 $ sudo mv flyway-5.2.4 /opt/flyway
 $ sudo chmod 755 /opt/flyway/flyway
+
+
+
+CONGRATULATIONS!!!!  You're done with building the Jenkins box.  Now go over to the
+document to build the ui_test_box.

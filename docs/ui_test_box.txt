@@ -21,14 +21,78 @@ Choose to install Centos7.  (No need to check the media first)
 
 Choose English as the language
 Click Installation Destination and click Done on the followup screen to return
-Click Network & Hostname and toggle the network "ON", and set Host name to "uitestbox", then click Done.
-Click Software selection and choose KDE Plasma Workspaces, then click Done
+
+Click on the network & Host name icon.
+
+This is an ***important*** section.  Take it slow.
+
+First, change the Host name to uitestbox.
+
+Then, toggle the enp0s8 network adapter to ON.  That's the NAT network, so it
+should just automatically work.
+
+But let's make sure it's configured properly.  Click on Configure for it,
+and Under the General tab, check the box next to "Automatically connect
+to this network when it is available".  Then save it.
+
+Select the enp0s17 network adapter.  This one we have to manually configure.  Click the
+[Configure...] button in the bottom right.
+
+Under the General tab, check the box next to "Automatically connect to this network when it is available"
+
+Click on the IPV4 Settings tab, and change the method from automatic to manual.
+
+Click the [Add] button.  Enter the following data:
+Address:          Netmask:           Gateway:
+192.168.56.102    255.255.255.0      192.168.56.1
+
+DNS Servers: 192.168.56.1
+
+Click on the checkbox next to "Require IPV4 addressing for this connection to complete"
+
+Click Save.
+
+toggle this adapter from off to on.  If done correctly, it should very quickly indicate "Connected"
+with some data similar to this:
+Hardware address: 08:00:27:09:16:BC
+Speed 1000 Mb/s
+IP Address 192.168.56.102
+Subnet Mask 255.255.255.0
+Default Route 192.168.56.1
+DNS 192.168.56.1
+
+Phew, done!  Click Done in the top left.
+
+Click Software selection and choose KDE Plasma Workspaces, then click Done.  After
+doing that, it can take a while for the system to be done processing.  Wait.
+
 Click Begin Installation
-Click on User Creation.  Provide information for a user (see CREATE USER DURING INSTALL in jenkins_box_guide.txt)
+
+While it is installing, you will see options to set the root password
+and create a user.  We're not too concerned about security, since this
+box is just for educational purposes.  However, it won't let you
+complete installation until you create a user.  Make a user for
+yourself.  See the following...
+
+CREATE USER DURING INSTALL
+--------------------------
+Click on "User Creation"
+
+Full Name: Coveros User
+User name: cuser
+
+Enable it as an administrator user (check the
+box) and make it not require a password (uncheck that box).
+
+Click Done.
+
+Wait for the install to finish...
 
 ... wait for the install to complete...
 
-reboot.
+... keep waiting...
+
+click on reboot.
 
 Click on Licensing.  Accept.  Click Done.  Click Finish Installation.
 
@@ -36,14 +100,48 @@ Login.
 
 Right-click the screen and click on Konsole to get a command-line terminal.
 
-Disable the firewall (see DISABLE FIREWALL in jenkins_box_guide.txt)
-Disable SELinux (see DISABLE SELINUX in jenkins_box_guide.txt)
-Allow no-password login in ssh (see ENABLE SSH WITH NO PASSWORD in jenkins_box_guide.txt)
-Disable strict host key checking (see DISABLE STRICT HOST KEY CHECKING in jenkins_box_guide.txt)
+DISABLE FIREWALL
+----------------
 
-reboot.  Login.
+First, let's turn off the firewall and SELinux (its security system).
+It's a pain in the rear, and remember, this is for educational
+purposes, so security is *not* a concern.  Ease of use is.
 
-Now you can connect to your uitestbox by SSH.  Do the rest of this in ssh.
+$ #turn off the firewall and disable it
+$ sudo systemctl stop firewalld
+$ sudo systemctl disable firewalld
+
+DISABLE SELINUX
+---------------
+
+To disable SELinux, open /etc/selinux/config and set SELINUX mode to
+disabled.  You can do that with an editor, or you can run this
+command:
+
+sudo sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+
+ENABLE SSH WITH NO PASSWORD
+---------------------------
+
+Let's also change the settings on sshd (the ssh daemon) so it will
+allow us to log in without a password.
+
+sudo sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords yes/' /etc/ssh/sshd_config
+
+DISABLE STRICT HOST KEY CHECKING
+--------------------------------
+
+change the setting in ssh_config to not ask about host keys.  This needs to be done
+because many of the conversations between our boxes will use ssh, and will halt
+and ask the user if the host isn't current trusted.  Problem with that is
+everything is automated, there isn't anyone to answer yes.  This should fix that.
+
+sudo sed -i 's/#   StrictHostKeyChecking ask/StrictHostKeyChecking no/' /etc/ssh/ssh_config
+
+now, reboot.
+
+Now you can connect to your uitestbox by SSH.
+Do the rest of this in ssh by connecting to "uitestbox"
 
 Install Chrome:
 
@@ -57,13 +155,87 @@ the text "Chrome", then click on the icon.  Choose a means of securing informati
 you aren't doing anything on this box but UI testing)
 and get through until you see the chrome://welcome page.  Test it by going to Google.com
 
-Get Java installed.  See INSTALL JAVA in jenkins_box_guide.txt
+INSTALL JAVA
+------------
 
-Get Git installed.  See INSTALL GIT in jenkins_box_guide.txt
+$ sudo yum -y install java-1.8.0-openjdk-devel
 
-The system will need a Database.  Install.  See DATABASE_INSTALL in jenkins_box_guide.txt
+INSTALL GIT
+-----------
 
-Following the database install...
+$ sudo yum -y install git
+
+
+DATABASE_INSTALL
+----------------
+
+We'll add Postgresql
+
+$ sudo yum install -y https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-7-x86_64/pgdg-centos10-10-2.noarch.rpm
+$ sudo yum install -y postgresql10
+$ sudo yum install -y postgresql10-server
+
+$ sudo /usr/pgsql-10/bin/postgresql-10-setup initdb
+$ sudo systemctl start postgresql-10
+
+Start the database on boot:
+
+$ sudo systemctl enable postgresql-10
+
+Recall that this is all educational, so security isn't the slightest
+concern.  So what we will do here is make the database easily
+accessible so we can work with it.  Dealing with security is a pain,
+by definition, so we'll skip that in this exercise.
+
+CONFIGURE POSTGRESQL
+--------------------
+
+First, we'll run the postgresql client as "postgres"
+
+$ sudo -upostgres psql postgres
+
+Run this command:
+
+postgres=# CREATE ROLE cuser WITH SUPERUSER LOGIN;
+
+quit psql by pressing ctrl-d or \q
+
+create our database:
+
+$ createdb training
+
+One last thing.  We'll modify the Postgresql configuration file so it
+trusts everyone implicitly, making it less secure but easier to work
+with.  Yet again, something you wouldn't want to do on a production
+system!  But we're not working with a production system, we want
+things to be easy.
+
+In the directory where the data files are kept is a file called
+pg_hba.conf.  On my Centos7 Linux box I find it in
+/var/lib/pgsql/10/data/pg_hba.conf
+
+On my Windows box it is at C:\Program Files\PostgreSQL\10\data\pg_hba.conf
+
+Modify this file.  Towards the end of the file you will see some lines
+like this:
+
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            md5
+# IPv6 local connections:
+host    all             all             ::1/128                 ident
+
+at the end of the file, add this line:
+
+# everything on this subnet has access to this database
+host    all             all             10.0.2.255/24             trust
+
+Change the values in the column METHOD to "trust" instead of "md5" or
+"ident".  That will make the database trust whoever accesses it
+locally, implicitly and completely.  This means you don't need to
+provide passwords when running commands anymore, though you still need
+to have roles within the database.
+
 We also want to make this database able to be hit from outside the
 box, so we can restore and run database migrations on it
 from outside.  To do that, first, open the configuration file:
@@ -76,12 +248,6 @@ then, replace line
     with
 listen_addresses = '*'
 
-Then..
-
-at the end of /var/lib/pgsql/10/data/pg_hba.conf, add these lines:
-
-# everything on this subnet has access to this database
-host    all             all             10.0.2.255/24             trust
 
 
 INSTALL PYTHON 3
@@ -98,21 +264,16 @@ INSTALL PIP
 -----------
 
 $ curl https://bootstrap.pypa.io/get-pip.py -o ~/get-pip.py
-$ sudo su
 
 INSTALL PYTHON DEPENDENCIES
 ---------------------------
 
-(do the following as root, if it starts with a hash mark)
+$ sudo /usr/local/bin/python3.7 ~/get-pip.py
+$ sudo /usr/local/bin/pip3.7 install behave
+$ sudo /usr/local/bin/pip3.7 install selenium
+$ sudo /usr/local/bin/pip3.7 install pyhamcrest
+$ sudo /usr/local/bin/pip3.7 install requests
 
-# /usr/local/bin/python3.7 ~/get-pip.py
-# pip3.7 install behave
-# pip3.7 install selenium
-# pip3.7 install pyhamcrest
-# pip3.7 install requests
-# exit
-
-( That will exit being root)
 
 Download Chromedriver from here: http://chromedriver.chromium.org/downloads.  At the
 time of writing this, the URL went as follows:
