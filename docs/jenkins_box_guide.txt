@@ -35,8 +35,8 @@ Click "settings" for the new Centos_Jenkins_machine box, do the following:
   "Choose Virtual Optical Disk File...".  Click that and choose the iso file
   for Centos you downloaded previously.
   
-  in the network tab, for adapter 1 choose NAT, and for adapter 2 choose
-  Host-Only Network.
+in the network tab, for adapter 1 choose Host-only adapter, and for
+adapter 2 choose NAT.
 
   Click Ok.
 

@@ -12,7 +12,8 @@ some reason this makes mouse integration work beautifully.
 Set it to use 3072 megabytes of ram and 12 gigs hard drive.
 
 Alter its settings:
-  In Networking: Adapter 1 should be NAT, Adapter 2 should be host-only networking
+  in the network tab, for adapter 1 choose Host-only adapter, and for
+  adapter 2 choose NAT.
   Put the CentOS7 disc in the virtual drive.
 
 Start the server.
