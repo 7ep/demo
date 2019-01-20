@@ -228,7 +228,7 @@ host    all             all             ::1/128                 ident
 at the end of the file, add this line:
 
 # everything on this subnet has access to this database
-host    all             all             10.0.2.255/24             trust
+host    all             all             192.168.56.255/24             trust
 
 Change the values in the column METHOD to "trust" instead of "md5" or
 "ident".  That will make the database trust whoever accesses it
@@ -247,6 +247,10 @@ then, replace line
 #listen_addresses = 'localhost'
     with
 listen_addresses = '*'
+
+Finally, restart the database
+
+$ sudo systemctl restart postgresql-10.service
 
 
 
