@@ -99,6 +99,11 @@ Click on Licensing.  Accept.  Click Done.  Click Finish Installation.
 
 Login.
 
+Turn off the power saving feature (which would blank our screen).  Click the icon on
+the bottom left and search for "energy", then click on Energy Saving.  Uncheck the box
+for Screen Energy Saving on all tabs - AC Power, Batter, Low Battery.  In Battery and Low
+Battery, uncheck "Suspend Session"
+
 Right-click the screen and click on Konsole to get a command-line terminal.
 
 DISABLE FIREWALL
@@ -270,15 +275,11 @@ INSTALL PIP
 
 $ curl https://bootstrap.pypa.io/get-pip.py -o ~/get-pip.py
 
-INSTALL PYTHON DEPENDENCIES
+INSTALL PYTHON ENVIRONMENT
 ---------------------------
 
 $ sudo /usr/local/bin/python3.7 ~/get-pip.py
-$ sudo /usr/local/bin/pip3.7 install behave
-$ sudo /usr/local/bin/pip3.7 install selenium
-$ sudo /usr/local/bin/pip3.7 install pyhamcrest
-$ sudo /usr/local/bin/pip3.7 install requests
-
+$ sudo /usr/local/bin/pip3.7 install pipenv
 
 Download Chromedriver from here: http://chromedriver.chromium.org/downloads.  At the
 time of writing this, the URL went as follows:
