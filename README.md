@@ -18,6 +18,11 @@ It consists of a simplistic web application.  Some of the techniques exemplified
 * [Java 8](https://www.oracle.com/technetwork/java/javase/overview/java8-2100321.html)  
 * [Postgresql](https://www.postgresql.org/)
 
+###### Optional Dependencies:
+The following is needed for some of the optional local testing,
+like API testing and Selenium testing.
+* [Python 3.7](https://www.python.org/downloads/)
+
 ---
 #### Java notes
 It *has* to be Java 8.  Don't use Java 10, it will error out because Mockito doesn't work with Java 10.
@@ -30,6 +35,33 @@ Once Postgresql is installed, create a database by running this from the command
 Make sure you have a user called postgres.  You may need to create one:
 
     createuser postgres
+    
+#### Python notes
+To run API tests and Selenium tests, an easy way to handle its 
+dependencies is to use *pipenv*.  To get this installed, first download
+[get-pip.py](https://bootstrap.pypa.io/get-pip.py), and run
+
+    python get-pip.py
+    
+Then,
+
+   pip install pipenv
+   
+And in the demo directory,
+    
+    pipenv install   
+   
+Finally, to run (for example) our API tests or Behave tests,
+switch into one of those directories (ui_tests or api_tests) and
+run:
+
+For ui_tests:
+
+    pipenv run behave
+    
+or for api_tests:
+
+    pipenv run python -m unittest tests
     
 #### To obtain this branch of Demo project:
     git clone --branch with_database https://github.com/7ep/demo.git  
