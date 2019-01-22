@@ -45,7 +45,7 @@ dependencies is to use *pipenv*.  To get this installed, first download
     
 Then,
 
-   pip install pipenv
+    pip install pipenv
    
 And in the demo directory,
     
