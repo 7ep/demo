@@ -1,7 +1,7 @@
 ## Demo - demonstrates an application and tests
 
 #### Summary:
-This is a tool for use in teaching devops best practices.  
+This is a tool for use in teaching software development best practices.  
 It consists of a simplistic web application.  Some of the techniques exemplified are:
 * Unit tests using [Junit](https://junit.org/junit5/) and [Mockito](https://site.mockito.org/), with coverage reports.
 * BDD-style tests using gherkin
