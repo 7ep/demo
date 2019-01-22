@@ -18,7 +18,6 @@ import java.time.Month;
 import static com.coveros.training.TestConstants.PG_RESTORE;
 import static com.coveros.training.TestConstants.RESTORE_SCRIPTS_PATH;
 import static com.coveros.training.database_backup_constants.*;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 /**
