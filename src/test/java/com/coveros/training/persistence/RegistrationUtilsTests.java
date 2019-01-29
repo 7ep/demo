@@ -113,4 +113,10 @@ public class RegistrationUtilsTests {
         Assert.assertFalse(registrationResult.wasSuccessfullyRegistered);
     }
 
+    @Test
+    public void testEmptyObject() {
+        final RegistrationUtils registrationUtils = RegistrationUtils.createEmpty();
+        Assert.assertTrue(registrationUtils.isEmpty());
+    }
+
 }
