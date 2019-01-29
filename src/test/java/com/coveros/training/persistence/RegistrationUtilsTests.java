@@ -82,9 +82,6 @@ public class RegistrationUtilsTests {
 
     @Test
     public void testShouldProcessRegistration_EmptyUsername() {
-        // this needs to not find a user
-        when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(User.createEmpty());
-
         final RegistrationResult registrationResult = registrationUtils.processRegistration("", GOOD_PASSWORD);
 
         Assert.assertEquals(EMPTY_USERNAME, registrationResult.status);
