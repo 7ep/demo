@@ -3,6 +3,7 @@ UI automation cheatsheet with Python and Selenium
 start with these:
 	from selenium import webdriver
 	from selenium.webdriver.common.keys import Keys
+	from hamcrest import *
 
 to open the browser:
 	driver = webdriver.Chrome()
@@ -29,7 +30,7 @@ some element on the page to the "element" variable.  For example:
 element = driver.find_element_by_id("login_submit")
 
 check
-	assert "Registered Page" in title
+	assert_that(title, contains_string('Registered Page'))
 
 clear contents of input:
 	element.clear()
