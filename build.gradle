@@ -61,10 +61,6 @@ dependencies {
     // https://github.com/GoSimpleLLC/nbvcxz
     compile group: 'me.gosimple', name: 'nbvcxz', version: '1.4.2'
 
-    // gives us a driver to connect to postgresql
-    // https://mvnrepository.com/artifact/org.postgresql/postgresql
-    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
-
     // the glorious equalsverifier.  This is a tool that tests the contract
     // for equals and hashcode are met.  It's very strict.  Because it's very
     // strict, it forces us to create very safe, very solid code.
@@ -80,6 +76,11 @@ dependencies {
     // in our code in realtime.
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
+
+    // we'll use this as our database
+    // https://mvnrepository.com/artifact/com.h2database/h2
+    compile group: 'com.h2database', name: 'h2', version: '1.4.197'
+
 }
 
 pitest {
@@ -104,11 +105,11 @@ cucumberReports {
 }
 
 flyway {
-    url = 'jdbc:postgresql://localhost:5432/training'
-    driver = 'org.postgresql.Driver'
-    user = "postgres"
-    password = "postgres"
-    schemas = ['administrative', 'library', 'auth']
+    url = 'jdbc:h2:tcp://localhost/~/training;AUTO_SERVER=TRUE;MODE=PostgreSQL'
+    driver = 'org.h2.Driver'
+    user = "sa"
+    password = "sa"
+    schemas = ['ADMINISTRATIVE', 'LIBRARY', 'AUTH']
 }
 
 jacocoTestReport {
