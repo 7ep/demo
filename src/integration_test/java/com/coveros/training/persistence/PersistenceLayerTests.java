@@ -53,7 +53,7 @@ public class PersistenceLayerTests {
      * want to change.
      */
     @Test
-    public void testShouldUupdateBorrowerToDatabase() {
+    public void testShouldUpdateBorrowerToDatabase() {
         setDatabaseState(ONE_PERSON_IN_BORROWER_TABLE_V2_DUMP);
         PersistenceLayer pl = new PersistenceLayer();
 
