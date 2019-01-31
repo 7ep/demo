@@ -216,11 +216,17 @@ public class PersistenceLayerTests {
         persistenceLayer.executeUpdateTemplate(SqlData.createEmpty());
     }
 
+    /**
+     * This can be run here, simply put @Test on top.
+     */
     public void runBackup() {
         PersistenceLayer pl = new PersistenceLayer();
         pl.runBackup("db_sample_files/v2_one_loan.sql");
     }
 
+    /**
+     * This can be run here, simply put @Test on top.
+     */
     public void setState() {
         runRestoreOneBookOneBorrower();
     }
