@@ -25,7 +25,7 @@ public class RegistrationStepDefs {
      * create objects for registration and login, and clear the database.
      */
     private void initializeDatabaseAccess() {
-        PersistenceLayerTests.setDatabaseState(INITIAL_STATE_V2_DUMP);
+        PersistenceLayerTests.runRestoreEmpty();
         registrationUtils = new RegistrationUtils();
     }
 

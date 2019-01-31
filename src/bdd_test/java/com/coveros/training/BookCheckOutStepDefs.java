@@ -33,7 +33,7 @@ public class BookCheckOutStepDefs {
      * Set up the databases, clear them, initialize the Library Utility with them.
      */
     private void initializeEmptyDatabaseAndUtility() {
-        PersistenceLayerTests.setDatabaseState(INITIAL_STATE_V2_DUMP);
+        PersistenceLayerTests.runRestoreEmpty();
         libraryUtils = new LibraryUtils();
     }
 
