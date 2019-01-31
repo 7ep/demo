@@ -48,6 +48,10 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    localDeps
+}
+
 dependencies {
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 
@@ -79,8 +83,35 @@ dependencies {
 
     // we'll use this as our database
     // https://mvnrepository.com/artifact/com.h2database/h2
-    compile group: 'com.h2database', name: 'h2', version: '1.4.197'
+    localDeps group: 'com.h2database', name: 'h2', version: '1.4.197'
 
+    compile configurations.localDeps
+
+}
+
+task copyToLib(type: Copy) {
+    from configurations.localDeps
+    into "$buildDir/lib"
+}
+
+task startDatabase(type: JavaExec) {
+    dependsOn 'copyToLib'
+    classpath = files("$buildDir/lib/h2-1.4.197.jar")
+
+    main = 'org.h2.tools.Server'
+
+    // arguments to pass to the application
+    args '-tcpAllowOthers'
+}
+
+task stopDatabase(type: JavaExec) {
+    dependsOn 'copyToLib'
+    classpath = files("$buildDir/lib/h2-1.4.197.jar")
+
+    main = 'org.h2.tools.Server'
+
+    // arguments to pass to the application
+    args '-tcpShutdown','tcp://localhost:9092'
 }
 
 pitest {
@@ -105,7 +136,7 @@ cucumberReports {
 }
 
 flyway {
-    url = 'jdbc:h2:tcp://localhost/~/training;AUTO_SERVER=TRUE;MODE=PostgreSQL'
+    url = 'jdbc:h2:tcp://localhost/./training;AUTO_SERVER=TRUE;MODE=PostgreSQL'
     driver = 'org.h2.Driver'
     user = "sa"
     password = "sa"
