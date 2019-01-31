@@ -55,7 +55,7 @@ public class PersistenceLayer {
         final org.h2.jdbcx.JdbcDataSource ds = new org.h2.jdbcx.JdbcDataSource();
         ds.setUser("sa");
         ds.setPassword("sa");
-        ds.setUrl("jdbc:h2:tcp://localhost/~/training;AUTO_SERVER=TRUE;MODE=PostgreSQL");
+        ds.setUrl("jdbc:h2:tcp://localhost/./training;AUTO_SERVER=TRUE;MODE=PostgreSQL");
         return ds;
     }
 
@@ -374,4 +374,28 @@ public class PersistenceLayer {
         return this.dataSource.getClass().equals(EmptyDataSource.class);
     }
 
+    public void runBackup(String backupFileName) {
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement st = connection.prepareStatement("SCRIPT TO ?")) {
+                st.setString(1, backupFileName);
+                st.execute();
+            }
+        } catch (SQLException ex) {
+            throw new SqlRuntimeException(ex);
+        }
+    }
+
+    public void runRestore(String backupFileName) {
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement st = connection.prepareStatement("DROP SCHEMA IF EXISTS ADMINISTRATIVE CASCADE;DROP SCHEMA IF EXISTS AUTH CASCADE;DROP SCHEMA IF EXISTS LIBRARY CASCADE;")) {
+                st.execute();
+            }
+            try (PreparedStatement st = connection.prepareStatement("RUNSCRIPT FROM ?")) {
+                st.setString(1, backupFileName);
+                st.execute();
+            }
+        } catch (SQLException ex) {
+            throw new SqlRuntimeException(ex);
+        }
+    }
 }
