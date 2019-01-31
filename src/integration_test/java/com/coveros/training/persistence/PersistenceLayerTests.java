@@ -9,15 +9,10 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import javax.sql.DataSource;
-import java.io.File;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.Month;
 
-import static com.coveros.training.TestConstants.PG_RESTORE;
-import static com.coveros.training.TestConstants.RESTORE_SCRIPTS_PATH;
-import static com.coveros.training.database_backup_constants.*;
 import static org.mockito.Mockito.when;
 
 /**
@@ -39,7 +34,7 @@ public class PersistenceLayerTests {
      */
     @Test
     public void testShouldSaveBorrowerToDatabase() {
-        setDatabaseState(INITIAL_STATE_V2_DUMP);
+        runRestoreEmpty();
         PersistenceLayer pl = new PersistenceLayer();
 
         long id = pl.saveNewBorrower(DEFAULT_BORROWER.name);
@@ -54,7 +49,7 @@ public class PersistenceLayerTests {
      */
     @Test
     public void testShouldUpdateBorrowerToDatabase() {
-        setDatabaseState(ONE_PERSON_IN_BORROWER_TABLE_V2_DUMP);
+        runRestoreOneBookOneBorrower();
         PersistenceLayer pl = new PersistenceLayer();
 
         pl.updateBorrower(1, "bob");
@@ -69,7 +64,7 @@ public class PersistenceLayerTests {
      */
     @Test
     public void testShouldBeAbleToSearchBorrowerByName() {
-        setDatabaseState(ONE_PERSON_IN_BORROWER_TABLE_V2_DUMP);
+        runRestoreOneBookOneBorrower();
         PersistenceLayer pl = new PersistenceLayer();
 
         Borrower bd = pl.searchBorrowerDataByName("alice");
@@ -83,7 +78,7 @@ public class PersistenceLayerTests {
      */
     @Test
     public void testShouldBeAbleToSearchForBooksByTitle() {
-        setDatabaseState(ONE_BOOK_IN_DB_V2_DUMP);
+        runRestoreOneBookOneBorrower();
         PersistenceLayer pl = new PersistenceLayer();
 
         Book book = pl.searchBooksByTitle(DEFAULT_BOOK.title);
@@ -94,7 +89,7 @@ public class PersistenceLayerTests {
 
     @Test
     public void testShouldBeAbleToSearchAUserByName() {
-        setDatabaseState(ONE_USER_IN_USERTABLE_V2_DUMP);
+        runRestoreOneUser();
         PersistenceLayer pl = new PersistenceLayer();
 
         User user = pl.searchForUserByName("alice");
@@ -105,7 +100,7 @@ public class PersistenceLayerTests {
 
     @Test
     public void testThatWeCanUpdateAUsersPassword() {
-        setDatabaseState(ONE_USER_IN_USERTABLE_V2_DUMP);
+        runRestoreOneUser();
         PersistenceLayer pl = new PersistenceLayer();
 
         pl.updateUserWithPassword(1, "abc123");
@@ -115,8 +110,19 @@ public class PersistenceLayerTests {
     }
 
     @Test
+    public void testWeCanCreateLoan() {
+        runRestoreOneBookOneBorrower();
+        PersistenceLayer pl = new PersistenceLayer();
+
+        final long loanId = pl.createLoan(DEFAULT_BOOK, DEFAULT_BORROWER, BORROW_DATE);
+
+        Assert.assertEquals(1, loanId);
+    }
+
+
+    @Test
     public void testWeCanSearchForALoanByABook() {
-        setDatabaseState(ONE_LOAN_ONE_BOOK_ONE_BORROWER_V2_DUMP);
+        runRestoreOneLoan();
         PersistenceLayer pl = new PersistenceLayer();
 
         Loan loan = pl.searchForLoan(DEFAULT_BOOK);
@@ -127,7 +133,7 @@ public class PersistenceLayerTests {
 
     @Test
     public void testWeCanSaveANewUser() {
-        setDatabaseState(INITIAL_STATE_V2_DUMP);
+        runRestoreEmpty();
         PersistenceLayer pl = new PersistenceLayer();
 
         long id = pl.saveNewUser("alice");
@@ -137,7 +143,7 @@ public class PersistenceLayerTests {
 
     @Test
     public void testWeCanSaveABook(){
-        setDatabaseState(INITIAL_STATE_V2_DUMP);
+        runRestoreEmpty();
         PersistenceLayer pl = new PersistenceLayer();
 
         long id = pl.saveNewBook("The DevOps Handbook");
@@ -147,30 +153,21 @@ public class PersistenceLayerTests {
 
     @Test
     public void testWeCanCreateALoan() {
-        setDatabaseState(ONE_BOOK_ONE_BORROWER_V2_DUMP);
+        runRestoreOneBookOneBorrower();
         PersistenceLayer pl = new PersistenceLayer();
         long id = pl.createLoan(DEFAULT_BOOK, DEFAULT_BORROWER, BORROW_DATE);
 
         Assert.assertEquals(1, id);
     }
 
-    /**
-     * A helper in the test process - put in any restore script name
-     * to get the database into that state.
-     */
-    @Test
-    public void setState() {
-        setDatabaseState(INITIAL_STATE_V2_DUMP);
-    }
-
     @Test(expected = SqlRuntimeException.class)
-    public void testThatExecuteUpdateOnPreparedStatementHandlesExceptions() throws SQLException {
+    public void testThatExecuteInsertOnPreparedStatementHandlesExceptions() throws SQLException {
         final PersistenceLayer persistenceLayer = new PersistenceLayer();
         final PreparedStatement preparedStatement = Mockito.mock(PreparedStatement.class);
         final ResultSet resultSet = Mockito.mock(ResultSet.class);
         when(resultSet.next()).thenReturn(false);
         when(preparedStatement.getGeneratedKeys()).thenReturn(resultSet);
-        persistenceLayer.executeUpdateOnPreparedStatement(SqlData.createEmpty(), preparedStatement);
+        persistenceLayer.executeInsertOnPreparedStatement(SqlData.createEmpty(), preparedStatement);
     }
 
     /**
@@ -219,46 +216,34 @@ public class PersistenceLayerTests {
         persistenceLayer.executeUpdateTemplate(SqlData.createEmpty());
     }
 
-
-    /**
-     * use a "restore" command to set the database into a state
-     * of empty tables.  This operation must happen very quickly.
-     * To dump a database, run this command:
-     * pg_dump -Fc training > <DESCRIPTION>_<VERSION>.dump
-     * place it in the db_sample_files directory.
-     */
-    public static void setDatabaseState(String restoreScriptName) {
-        Runtime r = Runtime.getRuntime();
-        Process p;
-        String restoreScriptPath = Paths.get(RESTORE_SCRIPTS_PATH , restoreScriptName).toString();
-        String[] cmd = {
-            PG_RESTORE,
-                "--host", "localhost",
-                "--port", "5432",
-                "--username", "postgres",
-                "--dbname", "training",
-                "--role", "postgres",
-                "--no-password",
-                "--clean",  // necessary to enable running again and again without problems.
-                restoreScriptPath
-        };
-        try {
-            checkThatFileExists(restoreScriptPath);
-            p = r.exec(cmd);
-            // following command is necessary to cause the system to wait until the command is done.
-            p.waitFor();
-        } catch (Exception e) {
-            // stop the world if this breaks, and fix it.
-            throw new RuntimeException(e);
-        }
+    public void runBackup() {
+        PersistenceLayer pl = new PersistenceLayer();
+        pl.runBackup("db_sample_files/v2_one_loan.sql");
     }
 
-    private static void checkThatFileExists(String restoreScriptPath) {
-        File tmpDir = new File(restoreScriptPath);
-        boolean exists = tmpDir.exists();
-        if (! exists) {
-            throw new RuntimeException("the path to the script was incorrect: " + restoreScriptPath);
-        }
+    public void setState() {
+        runRestoreOneBookOneBorrower();
+    }
+
+    public static void runRestoreEmpty() {
+        runRestore("db_sample_files/v2_empty_schema.sql");
+    }
+
+    public static void runRestoreOneBookOneBorrower() {
+        runRestore("db_sample_files/v2_one_book_one_borrower.sql");
+    }
+
+    public static void runRestoreOneUser() {
+        runRestore("db_sample_files/v2_one_user.sql");
+    }
+
+    public static void runRestoreOneLoan() {
+        runRestore("db_sample_files/v2_one_loan.sql");
+    }
+
+    public static void runRestore(String scriptName) {
+        PersistenceLayer pl = new PersistenceLayer();
+        pl.runRestore(scriptName);
     }
 
 
