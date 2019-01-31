@@ -37,3 +37,6 @@ generated_testSrc/
 
 # created during python unit tests
 api_tests/__pycache__
+
+# the h2 database files
+*.db
