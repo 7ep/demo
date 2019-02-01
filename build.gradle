@@ -94,24 +94,11 @@ task copyToLib(type: Copy) {
     into "$buildDir/lib"
 }
 
-task startDatabase(type: JavaExec) {
+// starts the database - ctrl+c to stop it.  Will also try to cause a 
+// browser tab to open to the H2 console.
+task startDatabase(type: Exec) {
     dependsOn 'copyToLib'
-    classpath = files("$buildDir/lib/h2-1.4.197.jar")
-
-    main = 'org.h2.tools.Server'
-
-    // arguments to pass to the application
-    args '-tcpAllowOthers'
-}
-
-task stopDatabase(type: JavaExec) {
-    dependsOn 'copyToLib'
-    classpath = files("$buildDir/lib/h2-1.4.197.jar")
-
-    main = 'org.h2.tools.Server'
-
-    // arguments to pass to the application
-    args '-tcpShutdown','tcp://localhost:9092'
+    commandLine 'java','-cp','build/lib/h2-1.4.197.jar','org.h2.tools.Server','-tcpAllowOthers'
 }
 
 pitest {
