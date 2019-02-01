@@ -85,8 +85,11 @@ dependencies {
     // https://mvnrepository.com/artifact/com.h2database/h2
     localDeps group: 'com.h2database', name: 'h2', version: '1.4.197'
 
+    // so we can put a copy of h2 in a convenient place
     compile configurations.localDeps
 
+    // so we can programmatically run flyway at startup
+    compile "org.flywaydb:flyway-core:5.2.4"
 }
 
 task copyToLib(type: Copy) {
