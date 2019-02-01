@@ -64,8 +64,8 @@ pipeline {
         sh 'ssh cuser@uitestbox pipenv install'
 
         // restore to a known point, then run migration.  Clean and simple.
-        sh 'pg_restore --host=uitestbox --port=5432 --username=postgres --dbname training --no-password --clean /var/lib/jenkins/workspace/demo/db_sample_files/initial_empty_state_v2.dump'
-        sh '/opt/flyway/flyway migrate -driver=org.postgresql.Driver -user=postgres -password=postgres -schemas=administrative,library,auth -url=jdbc:postgresql://uitestbox/training -locations=filesystem:/var/lib/jenkins/workspace/demo/src/main/resources/db/migration'
+        sh 'curl http://uitestbox:8080/demo/dbclear'
+        sh 'ssh cuser@uitestbox "cd demo_tests ; ./gradlew flywayMigrate -i"'
 
         // need a little time to wait for Tomcat to initialize the application...
         sh 'sleep 5'
