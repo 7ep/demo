@@ -96,9 +96,15 @@ task copyToLib(type: Copy) {
 
 // starts the database - ctrl+c to stop it.  Will also try to cause a 
 // browser tab to open to the H2 console.
-task startDatabase(type: Exec) {
+task startDb(type: Exec) {
     dependsOn 'copyToLib'
-    commandLine 'java','-cp','build/lib/h2-1.4.197.jar','org.h2.tools.Server','-tcpAllowOthers'
+    commandLine 'javaw','-cp','build/lib/h2-1.4.197.jar','org.h2.tools.Server','-tcpAllowOthers'
+}
+
+// starts the h2 console
+task startConsole(type: Exec) {
+    dependsOn 'copyToLib'
+    commandLine 'javaw','-cp','build/lib/h2-1.4.197.jar','org.h2.tools.Console'
 }
 
 pitest {
@@ -123,12 +129,14 @@ cucumberReports {
 }
 
 flyway {
-    url = 'jdbc:h2:tcp://localhost/./training;AUTO_SERVER=TRUE;MODE=PostgreSQL'
+    url = 'jdbc:h2:~/training;MODE=PostgreSQL;AUTO_SERVER=TRUE'
     driver = 'org.h2.Driver'
     user = "sa"
     password = "sa"
     schemas = ['ADMINISTRATIVE', 'LIBRARY', 'AUTH']
 }
+
+build.dependsOn flywayMigrate
 
 jacocoTestReport {
     executionData("$buildDir/jacoco/combineCoverage.exec")

@@ -56,7 +56,7 @@
             username="sa"
             password="sa"
             driverClassName="org.h2.Driver"
-            url="jdbc:h2:tcp://localhost/./training;AUTO_SERVER=TRUE;MODE=PostgreSQL"
+            url="jdbc:h2:~/training;MODE=PostgreSQL;AUTO_SERVER=TRUE"
             testWhileIdle="true"
             testOnBorrow="true"
             testOnReturn="false"
