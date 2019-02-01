@@ -16,7 +16,6 @@ It consists of a simplistic web application.  Some of the techniques exemplified
 #### Dependencies:
 
 * [Java 8](https://www.oracle.com/technetwork/java/javase/overview/java8-2100321.html)  
-* [Postgresql](https://www.postgresql.org/)
 
 ###### Optional Dependencies:
 The following is needed for some of the optional local testing,
@@ -26,15 +25,6 @@ like API testing and Selenium testing.
 ---
 #### Java notes
 It *has* to be Java 8.  Don't use Java 10, it will error out because Mockito doesn't work with Java 10.
-
-#### Postgresql notes
-Once Postgresql is installed, create a database by running this from the command line:
-
-    createdb training
-
-Make sure you have a user called postgres.  You may need to create one:
-
-    createuser postgres
     
 #### Python notes
 To run API tests and Selenium tests, an easy way to handle its 
