@@ -63,10 +63,6 @@ pipeline {
         sh 'ssh cuser@uitestbox git clone cuser@jenkinsbox:~/demo demo_tests --branch master'
         sh 'ssh cuser@uitestbox pipenv install'
 
-        // restore to a known point, then run migration.  Clean and simple.
-        sh 'curl http://uitestbox:8080/demo/dbutils?choice=dropallschemas'
-        sh 'ssh cuser@uitestbox "cd demo_tests ; ./gradlew flywayMigrate -i"'
-
         // need a little time to wait for Tomcat to initialize the application...
         sh 'sleep 5'
       }
