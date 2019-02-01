@@ -319,7 +319,7 @@ Now let's modify our pipeline so it does some actual work.
      In Repositories:
      Repository URL: /home/cuser/demo
      In Branches to Build:
-     Branch specifier: refs/heads/with_database
+     Branch specifier: refs/heads/master
      In Script Path: jenkins/Jenkinsfile
 
      Click save

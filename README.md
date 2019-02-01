@@ -52,10 +52,7 @@ For ui_tests:
 or for api_tests:
 
     pipenv run python -m unittest tests
-    
-#### To obtain this branch of Demo project:
-    git clone --branch with_database https://github.com/7ep/demo.git  
-    
+
 #### To build with tests:
 On Mac/Linux
 
@@ -76,7 +73,7 @@ On Windows
     
 #### The whole shebang - a CI/CD pipeline
 
-Follow the directions to [create a Jenkins box](https://github.com/7ep/demo/blob/with_database/docs/jenkins_box_guide.txt) and [a UI-testing-box](https://github.com/7ep/demo/blob/with_database/docs/ui_test_box.txt), per the instructions
+Follow the directions to [create a Jenkins box](https://github.com/7ep/demo/blob/master/docs/jenkins_box_guide.txt) and [a UI-testing-box](https://github.com/7ep/demo/blob/master/docs/ui_test_box.txt), per the instructions
 in docs.  *or*, see the appliance notes below.
 
 ###### Features of the pipeline:
@@ -94,9 +91,9 @@ in docs.  *or*, see the appliance notes below.
 ---
 
 ##Screenshots:
-![alt Cucumber report](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/cucumber_report.png)
-![Feature file](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/feature_file.png)
-![Jenkins pipeline](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/jenkins_pipeline.png)
-![Webapp](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/webapp.png)
-![Zap attach proxy](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/zap.png)
-![SonarQube analysis](https://raw.githubusercontent.com/7ep/demo/with_database/screenshots/sonar.png)
+![alt Cucumber report](https://raw.githubusercontent.com/7ep/demo/master/screenshots/cucumber_report.png)
+![Feature file](https://raw.githubusercontent.com/7ep/demo/master/screenshots/feature_file.png)
+![Jenkins pipeline](https://raw.githubusercontent.com/7ep/demo/master/screenshots/jenkins_pipeline.png)
+![Webapp](https://raw.githubusercontent.com/7ep/demo/master/screenshots/webapp.png)
+![Zap attach proxy](https://raw.githubusercontent.com/7ep/demo/master/screenshots/zap.png)
+![SonarQube analysis](https://raw.githubusercontent.com/7ep/demo/master/screenshots/sonar.png)
