@@ -1,7 +1,5 @@
 import unittest
 import requests
-import subprocess
-import os
 
 SERVER = "localhost"
 URL = "http://%s:8080" % SERVER

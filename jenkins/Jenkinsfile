@@ -60,7 +60,7 @@ pipeline {
 
         // need demo_tests on the box, that's where we have the UI tests located.
         sh 'ssh cuser@uitestbox rm -fr demo_tests'
-        sh 'ssh cuser@uitestbox git clone cuser@jenkinsbox:~/demo demo_tests --branch with_database'
+        sh 'ssh cuser@uitestbox git clone cuser@jenkinsbox:~/demo demo_tests --branch master'
         sh 'ssh cuser@uitestbox pipenv install'
 
         // restore to a known point, then run migration.  Clean and simple.
