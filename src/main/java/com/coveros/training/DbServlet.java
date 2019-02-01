@@ -9,23 +9,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "DbServlet", urlPatterns = {"/dbclear"}, loadOnStartup = 1)
+@WebServlet(name = "DbServlet", urlPatterns = {"/dbutils"}, loadOnStartup = 1)
 public class DbServlet extends HttpServlet {
 
   static Logger logger = LogManager.getLogger();
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    final String choice = request.getParameter("choice");
     final PersistenceLayer persistenceLayer = new PersistenceLayer();
-    persistenceLayer.runRestore("db_sample_files/v2_empty_schema.sql");
-    request.setAttribute("result", "database cleared");
-    forwardToResult(request, response, logger);
-  }
+    if (choice == "dropallschemas") {
+      persistenceLayer.dropAllSchemas();
+      request.setAttribute("result", "schemas dropped");
+    }
+    else if (choice.equals("restore")) {
+      persistenceLayer.runRestore("db_sample_files/v2_empty_schema.sql");
+      request.setAttribute("result", "database restored");
+    }
 
-  /**
-   * Wrapping a static method call for testing.
-   */
-  void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
     ServletUtils.forwardToResult(request, response, logger);
   }
 

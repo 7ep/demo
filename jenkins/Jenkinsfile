@@ -64,7 +64,7 @@ pipeline {
         sh 'ssh cuser@uitestbox pipenv install'
 
         // restore to a known point, then run migration.  Clean and simple.
-        sh 'curl http://uitestbox:8080/demo/dbclear'
+        sh 'curl http://uitestbox:8080/demo/dbutils?choice=dropallschemas'
         sh 'ssh cuser@uitestbox "cd demo_tests ; ./gradlew flywayMigrate -i"'
 
         // need a little time to wait for Tomcat to initialize the application...
