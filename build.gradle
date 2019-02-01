@@ -129,14 +129,14 @@ cucumberReports {
 }
 
 flyway {
-    url = 'jdbc:h2:~/training;MODE=PostgreSQL;AUTO_SERVER=TRUE'
+    url = 'jdbc:h2:~/training;MODE=PostgreSQL'
     driver = 'org.h2.Driver'
     user = "sa"
     password = "sa"
     schemas = ['ADMINISTRATIVE', 'LIBRARY', 'AUTH']
 }
 
-build.dependsOn flywayMigrate
+compileJava.dependsOn flywayMigrate
 
 jacocoTestReport {
     executionData("$buildDir/jacoco/combineCoverage.exec")

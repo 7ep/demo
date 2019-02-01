@@ -8,7 +8,7 @@
 
     <context-param>
         <param-name>db.url</param-name>
-        <param-value>jdbc:h2:~/training;MODE=PostgreSQL;AUTO_SERVER=TRUE</param-value>
+        <param-value>jdbc:h2:~/training;MODE=PostgreSQL</param-value>
     </context-param>
     <context-param>
         <param-name>db.user</param-name>
