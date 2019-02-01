@@ -1,7 +1,8 @@
 from selenium import webdriver
-import subprocess
-import os
+import requests
 
+SERVER = "localhost"
+URL = "http://%s:8080" % SERVER
 
 # used as a simple object during console runs,
 # to experiment.  typical incantation is:
@@ -36,11 +37,4 @@ def __close_browser(context):
 
 
 def __reset_database():
-    print ("\n********************************")
-    print ("         RUNNING RESTORE...     ")
-    cmd = ['pg_restore', '--username=postgres', '--dbname', 'training', '--no-password', '--clean', '../db_sample_files/initial_empty_state_v2.dump']
-    FNULL = open(os.devnull, 'w')
-    subprocess.call(cmd, stdout=FNULL, stderr=subprocess.STDOUT)
-    FNULL.close()
-    print ("          ...  FINISHED         ")
-    print ("********************************\n")
+    requests.get("%s/demo/dbclear" % URL)

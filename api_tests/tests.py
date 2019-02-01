@@ -11,15 +11,7 @@ class TestStringMethods(unittest.TestCase):
 
     @staticmethod
     def __reset_database():
-        cmd = ['pg_restore',
-               '--username=postgres',
-               ('--host=%s' % SERVER),
-               '--dbname=training',
-               '--no-password',
-               '--clean', '../db_sample_files/initial_empty_state_v2.dump']
-        FNULL = open(os.devnull, 'w')
-        subprocess.call(cmd, stdout=FNULL, stderr=subprocess.STDOUT)
-        FNULL.close()
+        r = requests.get("%s/demo/dbclear" % URL)
 
     def test_math_api(self):
         r = requests.post("%s/demo/math" % URL, data = {'item_a': '9', 'item_b': '7'})
