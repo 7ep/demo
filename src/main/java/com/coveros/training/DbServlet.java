@@ -18,7 +18,7 @@ public class DbServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response) {
     final String choice = request.getParameter("choice");
     final PersistenceLayer persistenceLayer = new PersistenceLayer();
-    if (choice == "dropallschemas") {
+    if (choice.equals("dropallschemas")) {
       persistenceLayer.dropAllSchemas();
       request.setAttribute("result", "schemas dropped");
     }
