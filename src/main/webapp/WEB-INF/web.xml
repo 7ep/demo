@@ -8,7 +8,7 @@
 
     <context-param>
         <param-name>db.url</param-name>
-        <param-value>jdbc:h2:~/training;MODE=PostgreSQL</param-value>
+        <param-value>jdbc:h2:mem:training;MODE=PostgreSQL;DB_CLOSE_DELAY=-1</param-value>
     </context-param>
     <context-param>
         <param-name>db.user</param-name>

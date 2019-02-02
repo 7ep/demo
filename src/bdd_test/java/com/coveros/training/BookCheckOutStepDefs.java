@@ -5,20 +5,17 @@ import com.coveros.training.domainobjects.Borrower;
 import com.coveros.training.domainobjects.LibraryActionResults;
 import com.coveros.training.domainobjects.Loan;
 import com.coveros.training.persistence.LibraryUtils;
-import com.coveros.training.persistence.PersistenceLayer;
-import com.coveros.training.persistence.PersistenceLayerTests;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 
-import java.sql.Connection;
 import java.sql.Date;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 
-import static com.coveros.training.database_backup_constants.INITIAL_STATE_V2_DUMP;
+import static com.coveros.training.persistence.PersistenceLayer.cleanAndMigrateDatabase;
 
 public class BookCheckOutStepDefs {
 
@@ -33,7 +30,7 @@ public class BookCheckOutStepDefs {
      * Set up the databases, clear them, initialize the Library Utility with them.
      */
     private void initializeEmptyDatabaseAndUtility() {
-        PersistenceLayerTests.runRestoreEmpty();
+        cleanAndMigrateDatabase();
         libraryUtils = new LibraryUtils();
     }
 

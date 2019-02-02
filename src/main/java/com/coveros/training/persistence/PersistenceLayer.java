@@ -8,6 +8,7 @@ import com.coveros.training.domainobjects.Loan;
 import com.coveros.training.domainobjects.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.flywaydb.core.Flyway;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -42,7 +43,7 @@ public class PersistenceLayer {
             // we'll likely get here if we couldn't find a name in the context - which is easily
             // possible if we're running tests, since in that case we're often not
             // running as a servlet with its accompanying context.
-            logger.info("NamingException occurred, switching to direct Connection creation.  Exception: " + e);
+            logger.info("NamingException occurred, switching to simple datasource creation.  Exception: " + e);
             return getSimpleDataSource();
         }
     }
@@ -55,7 +56,7 @@ public class PersistenceLayer {
         final org.h2.jdbcx.JdbcDataSource ds = new org.h2.jdbcx.JdbcDataSource();
         ds.setUser("sa");
         ds.setPassword("sa");
-        ds.setUrl("jdbc:h2:~/training;MODE=PostgreSQL");
+        ds.setUrl("jdbc:h2:mem:training;MODE=PostgreSQL;DB_CLOSE_DELAY=-1");
         return ds;
     }
 
@@ -75,7 +76,7 @@ public class PersistenceLayer {
         }
     }
 
-    long executeInsertTemplate(SqlData sqlData) {
+    private long executeInsertTemplate(SqlData sqlData) {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st = prepareStatementWithKeys(sqlData, connection)) {
                 return executeInsertOnPreparedStatement(sqlData, st);
@@ -100,7 +101,7 @@ public class PersistenceLayer {
         }
     }
 
-    void executeUpdateOnPreparedStatement(SqlData sqlData, PreparedStatement st) throws SQLException {
+    private void executeUpdateOnPreparedStatement(SqlData sqlData, PreparedStatement st) throws SQLException {
         sqlData.applyParametersToPreparedStatement(st);
         st.executeUpdate();
     }
@@ -374,7 +375,12 @@ public class PersistenceLayer {
         return this.dataSource.getClass().equals(EmptyDataSource.class);
     }
 
-    public void runBackup(String backupFileName) {
+    /**
+     * Records the current state of the database as a SQL script,
+     * used later for restoring by something like {@link #runRestore(String)}
+     * @param backupFileName the path to the sql script, based in the project home directory.
+     */
+    void runBackup(String backupFileName) {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st = connection.prepareStatement("SCRIPT TO ?")) {
                 st.setString(1, backupFileName);
@@ -385,9 +391,16 @@ public class PersistenceLayer {
         }
     }
 
-    public void runRestore(String backupFileName) {
+    /**
+     * Runs a database restore script.
+     * @param backupFileName the path to the sql script, based in the project home directory.
+     */
+    void runRestore(String backupFileName) {
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement st = connection.prepareStatement("DROP SCHEMA IF EXISTS ADMINISTRATIVE CASCADE;DROP SCHEMA IF EXISTS AUTH CASCADE;DROP SCHEMA IF EXISTS LIBRARY CASCADE;")) {
+            try (PreparedStatement st = connection.prepareStatement(
+                "DROP SCHEMA IF EXISTS ADMINISTRATIVE CASCADE;" +
+                    "DROP SCHEMA IF EXISTS AUTH CASCADE;" +
+                    "DROP SCHEMA IF EXISTS LIBRARY CASCADE;")) {
                 st.execute();
             }
             try (PreparedStatement st = connection.prepareStatement("RUNSCRIPT FROM ?")) {
@@ -398,4 +411,18 @@ public class PersistenceLayer {
             throw new SqlRuntimeException(ex);
         }
     }
+
+    /**
+     * Cleans the database and runs the scripts to update it
+     * to the most current version.
+     */
+    public static void cleanAndMigrateDatabase() {
+        Flyway flyway = Flyway.configure()
+            .schemas("ADMINISTRATIVE", "LIBRARY", "AUTH")
+            .dataSource(obtainDataSource())
+            .load();
+        flyway.clean();
+        flyway.migrate();
+    }
+
 }

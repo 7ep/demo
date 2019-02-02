@@ -3,15 +3,13 @@ package com.coveros.training;
 import com.coveros.training.domainobjects.PasswordResult;
 import com.coveros.training.domainobjects.RegistrationResult;
 import com.coveros.training.domainobjects.RegistrationStatusEnums;
-import com.coveros.training.persistence.PersistenceLayer;
-import com.coveros.training.persistence.PersistenceLayerTests;
 import com.coveros.training.persistence.RegistrationUtils;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 
-import static com.coveros.training.database_backup_constants.INITIAL_STATE_V2_DUMP;
+import static com.coveros.training.persistence.PersistenceLayer.cleanAndMigrateDatabase;
 
 public class RegistrationStepDefs {
 
@@ -25,7 +23,7 @@ public class RegistrationStepDefs {
      * create objects for registration and login, and clear the database.
      */
     private void initializeDatabaseAccess() {
-        PersistenceLayerTests.runRestoreEmpty();
+        cleanAndMigrateDatabase();
         registrationUtils = new RegistrationUtils();
     }
 

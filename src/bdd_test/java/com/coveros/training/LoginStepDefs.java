@@ -1,14 +1,13 @@
 package com.coveros.training;
 
 import com.coveros.training.persistence.LoginUtils;
-import com.coveros.training.persistence.PersistenceLayer;
 import com.coveros.training.persistence.RegistrationUtils;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 
-import java.sql.Connection;
+import static com.coveros.training.persistence.PersistenceLayer.cleanAndMigrateDatabase;
 
 public class LoginStepDefs {
 
@@ -20,6 +19,7 @@ public class LoginStepDefs {
      * create objects for registration and login, and clear the database.
      */
     private void initializeDatabaseAccess() {
+        cleanAndMigrateDatabase();
         registrationUtils = new RegistrationUtils();
         loginUtils = new LoginUtils();
     }
