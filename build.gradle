@@ -121,6 +121,7 @@ pitest {
 gretty {
     httpPort = 8080
     servletContainer = 'tomcat8'
+    contextPath = "/demo"
 }
 
 // configuration for the cucumber reports.
