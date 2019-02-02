@@ -208,8 +208,7 @@ install Tomcat 9:
 $ wget http://www.gtlib.gatech.edu/pub/apache/tomcat/tomcat-9/v9.0.14/bin/apache-tomcat-9.0.14.tar.gz
 $ tar zxf apache-tomcat-9.0.14.tar.gz
 $ sudo mv apache-tomcat-9.0.14 /opt/tomcat
-$ sudo useradd tomcat
-$ passwd -d tomcat
+$ sudo useradd -r tomcat --shell /bin/false
 $ sudo chown -R tomcat:tomcat /opt/tomcat/
 
 at /etc/init.d/tomcat9 create this file:
