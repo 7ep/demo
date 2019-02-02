@@ -12,8 +12,6 @@ public class WebAppListener implements ServletContextListener {
 
   @Override
   public void contextInitialized ( ServletContextEvent sce ) {
-    final PersistenceLayer persistenceLayer = new PersistenceLayer();
-    persistenceLayer.dropAllSchemas();
     Flyway flyway = Flyway.configure()
         .schemas("ADMINISTRATIVE", "LIBRARY", "AUTH")
         .dataSource("jdbc:h2:~/training", "sa", "sa")
