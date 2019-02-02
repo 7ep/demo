@@ -486,25 +486,6 @@ Link Text: Dependency Check Report
 
 Save.
 
-INSTALLING FLYWAY
------------------
-
-you'll need Flyway for database migration commands when deploying to downstream environments.
-
-To do so:
-
-first, install wget
-
-$ sudo yum install -y wget
-
-Then, get Flyway installed:
-
-$ wget https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/5.2.4/flyway-commandline-5.2.4-linux-x64.tar.gz
-$ tar zxf flyway-commandline-5.2.4-linux-x64.tar.gz
-$ sudo mv flyway-5.2.4 /opt/flyway
-$ sudo chmod 755 /opt/flyway/flyway
-
-
 CUSTOMIZE HOSTS FILE
 --------------------
 
