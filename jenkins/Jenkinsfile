@@ -29,7 +29,6 @@ pipeline {
 
     stage('Database Tests') {
       steps {
-        sh './gradlew flywayMigrate -i'
         sh './gradlew fastIntegrationTest'
       }
       post {
