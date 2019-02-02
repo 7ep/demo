@@ -64,7 +64,7 @@ pipeline {
         sh 'ssh cuser@uitestbox pipenv install'
 
         // need a little time to wait for Tomcat to initialize the application...
-        sh 'sleep 5'
+        sh 'sleep 10'
       }
     }
 
