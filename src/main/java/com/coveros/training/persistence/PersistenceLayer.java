@@ -385,16 +385,6 @@ public class PersistenceLayer {
         }
     }
 
-    public void dropAllSchemas() {
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement st = connection.prepareStatement("DROP SCHEMA IF EXISTS ADMINISTRATIVE CASCADE;DROP SCHEMA IF EXISTS AUTH CASCADE;DROP SCHEMA IF EXISTS LIBRARY CASCADE;")) {
-                st.execute();
-            }
-        } catch (SQLException ex) {
-            throw new SqlRuntimeException(ex);
-        }
-    }
-
     public void runRestore(String backupFileName) {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st = connection.prepareStatement("DROP SCHEMA IF EXISTS ADMINISTRATIVE CASCADE;DROP SCHEMA IF EXISTS AUTH CASCADE;DROP SCHEMA IF EXISTS LIBRARY CASCADE;")) {

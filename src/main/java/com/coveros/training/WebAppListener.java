@@ -16,6 +16,7 @@ public class WebAppListener implements ServletContextListener {
         .schemas("ADMINISTRATIVE", "LIBRARY", "AUTH")
         .dataSource("jdbc:h2:~/training", "sa", "sa")
         .load();
+    flyway.clean();
     flyway.migrate();
 
   }

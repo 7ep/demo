@@ -9,7 +9,7 @@ class TestStringMethods(unittest.TestCase):
 
     @staticmethod
     def __reset_database():
-        r = requests.get("%s/demo/dbutils?choice=restore" % URL)
+        r = requests.get("%s/demo/dbutils?choice=clean" % URL)
 
     def test_math_api(self):
         r = requests.post("%s/demo/math" % URL, data = {'item_a': '9', 'item_b': '7'})
