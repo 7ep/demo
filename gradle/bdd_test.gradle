@@ -42,6 +42,7 @@ task cucumber {
 
             args = ['--monochrome',
                     '--plugin', 'json:build/bdd/file.json',
+                    '--plugin', 'html:build/bdd/cucumber-html-report',
                     '--glue', 'com.coveros.training',
                     'src/bdd_test/resources']
         }
