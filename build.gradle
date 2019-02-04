@@ -132,6 +132,8 @@ cucumberReports {
     testTasksFinalizedByReport = false
 }
 
+generateCucumberReports.dependsOn(cucumber)
+
 flyway {
     url = 'jdbc:h2:mem:training;MODE=PostgreSQL;DB_CLOSE_DELAY=-1'
     driver = 'org.h2.Driver'

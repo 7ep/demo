@@ -46,7 +46,6 @@ pipeline {
 
     stage('Automated Acceptance Tests') {
       steps {
-        sh './gradlew cucumber'
         sh './gradlew generateCucumberReports'
       }
     }
