@@ -81,6 +81,11 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
 
+    // The following gives us the ability to use slf4j api calls.
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
+    compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.11.1'
+
+
     // we'll use this as our database
     // https://mvnrepository.com/artifact/com.h2database/h2
     localDeps group: 'com.h2database', name: 'h2', version: '1.4.197'

@@ -41,7 +41,6 @@ task cucumber {
                     sourceSets.fastIntegrationTest.output
 
             args = ['--monochrome',
-                    '--plugin', 'pretty',
                     '--plugin', 'json:build/bdd/file.json',
                     '--glue', 'com.coveros.training',
                     'src/bdd_test/resources']
