@@ -37,4 +37,4 @@ def __close_browser(context):
 
 
 def __reset_database():
-    requests.get("%s/demo/dbclean" % URL)
+    requests.get("%s/demo/flyway" % URL)

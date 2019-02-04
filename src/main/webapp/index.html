@@ -90,6 +90,14 @@
   <p><input type="submit" id="register_borrower_submit" value="register borrower" /></p>
 </form>
 
+<form action="flyway">
+  <input type="hidden" name="action" value="clean" />
+  <input type="submit" value="Clean the database" />
+</form>
+<form action="flyway">
+  <input type="hidden" name="action" value="migrate" />
+  <input type="submit" value="Migrate the database" />
+</form>
 
 </body>
 </html>

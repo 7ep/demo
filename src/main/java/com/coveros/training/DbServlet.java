@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import static com.coveros.training.persistence.PersistenceLayer.*;
 
-@WebServlet(name = "DbServlet", urlPatterns = {"/dbclean"}, loadOnStartup = 1)
+@WebServlet(name = "DbServlet", urlPatterns = {"/flyway"}, loadOnStartup = 1)
 public class DbServlet extends HttpServlet {
 
   static Logger logger = LogManager.getLogger();
