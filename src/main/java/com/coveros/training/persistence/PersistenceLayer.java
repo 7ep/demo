@@ -417,12 +417,33 @@ public class PersistenceLayer {
      * to the most current version.
      */
     public static void cleanAndMigrateDatabase() {
-        Flyway flyway = Flyway.configure()
+        cleanDatabase();
+        migrateDatabase();
+    }
+
+    /**
+     * Cleans the database and runs the scripts to update it
+     * to the most current version.
+     */
+    public static void cleanDatabase() {
+        Flyway flyway = configureFlyway();
+        flyway.clean();
+    }
+
+    /**
+     * Cleans the database and runs the scripts to update it
+     * to the most current version.
+     */
+    public static void migrateDatabase() {
+        Flyway flyway = configureFlyway();
+        flyway.migrate();
+    }
+
+    private static Flyway configureFlyway() {
+        return Flyway.configure()
             .schemas("ADMINISTRATIVE", "LIBRARY", "AUTH")
             .dataSource(obtainDataSource())
             .load();
-        flyway.clean();
-        flyway.migrate();
     }
 
 }
