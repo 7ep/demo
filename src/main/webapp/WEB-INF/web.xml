@@ -6,27 +6,6 @@
 
     <description>Demo App for Training</description>
 
-    <context-param>
-        <param-name>db.url</param-name>
-        <param-value>jdbc:h2:mem:training;MODE=PostgreSQL;DB_CLOSE_DELAY=-1</param-value>
-    </context-param>
-    <context-param>
-        <param-name>db.user</param-name>
-        <param-value>sa</param-value>
-    </context-param>
-    <context-param>
-        <param-name>db.password</param-name>
-        <param-value>sa</param-value>
-    </context-param>
-    <context-param>
-        <param-name>db.tcpServer</param-name>
-        <param-value>-tcpAllowOthers</param-value>
-    </context-param>
-
-    <listener>
-        <listener-class>org.h2.server.web.DbStarter</listener-class>
-    </listener>
-
     <resource-ref>
         <description>DB Connection</description>
         <res-ref-name>jdbc/demo_db</res-ref-name>
@@ -44,11 +23,11 @@
     <servlet>
         <servlet-name>H2Console</servlet-name>
         <servlet-class>org.h2.server.web.WebServlet</servlet-class>
-        <!--
         <init-param>
             <param-name>webAllowOthers</param-name>
-            <param-value></param-value>
+            <param-value>true</param-value>
         </init-param>
+        <!--
         <init-param>
             <param-name>trace</param-name>
             <param-value></param-value>
@@ -56,8 +35,10 @@
         -->
         <load-on-startup>1</load-on-startup>
     </servlet>
+
     <servlet-mapping>
         <servlet-name>H2Console</servlet-name>
         <url-pattern>/console/*</url-pattern>
     </servlet-mapping>
+
 </web-app>
