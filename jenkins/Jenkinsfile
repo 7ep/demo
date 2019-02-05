@@ -12,13 +12,7 @@ pipeline {
 
     stage ('Clean') {
       steps {
-        deleteDir()
-      }
-    }
-
-    stage ('Checkout') {
-      steps {
-        checkout scm
+        sh 'git clean -fxd'
       }
     }
 
