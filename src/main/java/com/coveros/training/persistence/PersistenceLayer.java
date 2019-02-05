@@ -9,10 +9,8 @@ import com.coveros.training.domainobjects.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.flywaydb.core.Flyway;
+import org.h2.jdbcx.JdbcConnectionPool;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -26,38 +24,29 @@ public class PersistenceLayer {
     private final DataSource dataSource;
 
     public PersistenceLayer() {
-        this(obtainDataSource());
+        this(obtainConnectionPool());
     }
 
     PersistenceLayer(DataSource ds) {
         dataSource = ds;
     }
 
-    private static DataSource obtainDataSource() {
-        try {
-            // First, in the most common case, we try to get a datasource from context,
-            // which is possibly mainly when running in a Servlet container.
-            Context ctx = new InitialContext();
-            return(DataSource) ctx.lookup("java:/comp/env/jdbc/demo");
-        } catch (NamingException e) {
-            // we'll likely get here if we couldn't find a name in the context - which is easily
-            // possible if we're running tests, since in that case we're often not
-            // running as a servlet with its accompanying context.
-            logger.info("NamingException occurred, switching to simple datasource creation.  Exception: " + e);
-            return getSimpleDataSource();
-        }
+    private static JdbcConnectionPool obtainConnectionPool() {
+        JdbcConnectionPool cp = JdbcConnectionPool.create(
+            "jdbc:h2:mem:training", "", "");
+        return cp;
     }
 
     /**
-     * Get a simple {@link DataSource}, necessary when running
-     * outside of a Servlet container.
+     * Get a file-based {@link JdbcConnectionPool}, which makes it easier
+     * to debug database tests when they are running.
+     *
+     * This method is solely meant to be used by database tests.
      */
-    private static DataSource getSimpleDataSource() {
-        final org.h2.jdbcx.JdbcDataSource ds = new org.h2.jdbcx.JdbcDataSource();
-        ds.setUser("sa");
-        ds.setPassword("sa");
-        ds.setUrl("jdbc:h2:./training;MODE=PostgreSQL;DB_CLOSE_DELAY=-1");
-        return ds;
+    public static JdbcConnectionPool getFileBasedDatabaseConnectionPool() {
+        JdbcConnectionPool cp = JdbcConnectionPool.create(
+            "jdbc:h2:./training", "", "");
+        return cp;
     }
 
     /**
@@ -442,7 +431,7 @@ public class PersistenceLayer {
     private static Flyway configureFlyway() {
         return Flyway.configure()
             .schemas("ADMINISTRATIVE", "LIBRARY", "AUTH")
-            .dataSource(obtainDataSource())
+            .dataSource(obtainConnectionPool())
             .load();
     }
 

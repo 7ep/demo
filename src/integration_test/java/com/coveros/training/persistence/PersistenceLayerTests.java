@@ -5,6 +5,7 @@ import com.coveros.training.domainobjects.Borrower;
 import com.coveros.training.domainobjects.Loan;
 import com.coveros.training.domainobjects.User;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -25,6 +26,12 @@ public class PersistenceLayerTests {
     private final static Date BORROW_DATE = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 1));
     private static final Book DEFAULT_BOOK = new Book(1, "The DevOps Handbook");
     private static final Borrower DEFAULT_BORROWER = new Borrower(1, "alice");
+    PersistenceLayer pl;
+
+    @Before
+    public void initDatabase() {
+        pl = new PersistenceLayer(PersistenceLayer.getFileBasedDatabaseConnectionPool());
+    }
 
     /**
      * assert that there is a way to store a borrower
@@ -35,7 +42,6 @@ public class PersistenceLayerTests {
     @Test
     public void testShouldSaveBorrowerToDatabase() {
         runRestoreEmpty();
-        PersistenceLayer pl = new PersistenceLayer();
 
         long id = pl.saveNewBorrower(DEFAULT_BORROWER.name);
 
@@ -50,7 +56,6 @@ public class PersistenceLayerTests {
     @Test
     public void testShouldUpdateBorrowerToDatabase() {
         runRestoreOneBookOneBorrower();
-        PersistenceLayer pl = new PersistenceLayer();
 
         pl.updateBorrower(1, "bob");
 
@@ -65,7 +70,6 @@ public class PersistenceLayerTests {
     @Test
     public void testShouldBeAbleToSearchBorrowerByName() {
         runRestoreOneBookOneBorrower();
-        PersistenceLayer pl = new PersistenceLayer();
 
         Borrower bd = pl.searchBorrowerDataByName("alice");
 
@@ -79,7 +83,6 @@ public class PersistenceLayerTests {
     @Test
     public void testShouldBeAbleToSearchForBooksByTitle() {
         runRestoreOneBookOneBorrower();
-        PersistenceLayer pl = new PersistenceLayer();
 
         Book book = pl.searchBooksByTitle(DEFAULT_BOOK.title);
 
@@ -90,7 +93,6 @@ public class PersistenceLayerTests {
     @Test
     public void testShouldBeAbleToSearchAUserByName() {
         runRestoreOneUser();
-        PersistenceLayer pl = new PersistenceLayer();
 
         User user = pl.searchForUserByName("alice");
 
@@ -101,7 +103,6 @@ public class PersistenceLayerTests {
     @Test
     public void testThatWeCanUpdateAUsersPassword() {
         runRestoreOneUser();
-        PersistenceLayer pl = new PersistenceLayer();
 
         pl.updateUserWithPassword(1, "abc123");
         final boolean result = pl.areCredentialsValid("alice", "abc123");
@@ -112,7 +113,6 @@ public class PersistenceLayerTests {
     @Test
     public void testWeCanCreateLoan() {
         runRestoreOneBookOneBorrower();
-        PersistenceLayer pl = new PersistenceLayer();
 
         final long loanId = pl.createLoan(DEFAULT_BOOK, DEFAULT_BORROWER, BORROW_DATE);
 
@@ -123,7 +123,6 @@ public class PersistenceLayerTests {
     @Test
     public void testWeCanSearchForALoanByABook() {
         runRestoreOneLoan();
-        PersistenceLayer pl = new PersistenceLayer();
 
         Loan loan = pl.searchForLoan(DEFAULT_BOOK);
 
@@ -134,7 +133,6 @@ public class PersistenceLayerTests {
     @Test
     public void testWeCanSaveANewUser() {
         runRestoreEmpty();
-        PersistenceLayer pl = new PersistenceLayer();
 
         long id = pl.saveNewUser("alice");
 
@@ -144,7 +142,6 @@ public class PersistenceLayerTests {
     @Test
     public void testWeCanSaveABook(){
         runRestoreEmpty();
-        PersistenceLayer pl = new PersistenceLayer();
 
         long id = pl.saveNewBook("The DevOps Handbook");
 
@@ -154,7 +151,7 @@ public class PersistenceLayerTests {
     @Test
     public void testWeCanCreateALoan() {
         runRestoreOneBookOneBorrower();
-        PersistenceLayer pl = new PersistenceLayer();
+
         long id = pl.createLoan(DEFAULT_BOOK, DEFAULT_BORROWER, BORROW_DATE);
 
         Assert.assertEquals(1, id);
@@ -220,7 +217,6 @@ public class PersistenceLayerTests {
      * This can be run here, simply put @Test on top.
      */
     public void runBackup() {
-        PersistenceLayer pl = new PersistenceLayer();
         pl.runBackup("db_sample_files/v2_one_loan.sql");
     }
 
@@ -231,24 +227,23 @@ public class PersistenceLayerTests {
         runRestoreOneBookOneBorrower();
     }
 
-    public static void runRestoreEmpty() {
+    public void runRestoreEmpty() {
         runRestore("db_sample_files/v2_empty_schema.sql");
     }
 
-    public static void runRestoreOneBookOneBorrower() {
+    public void runRestoreOneBookOneBorrower() {
         runRestore("db_sample_files/v2_one_book_one_borrower.sql");
     }
 
-    public static void runRestoreOneUser() {
+    public void runRestoreOneUser() {
         runRestore("db_sample_files/v2_one_user.sql");
     }
 
-    public static void runRestoreOneLoan() {
+    public void runRestoreOneLoan() {
         runRestore("db_sample_files/v2_one_loan.sql");
     }
 
-    public static void runRestore(String scriptName) {
-        PersistenceLayer pl = new PersistenceLayer();
+    public void runRestore(String scriptName) {
         pl.runRestore(scriptName);
     }
 
