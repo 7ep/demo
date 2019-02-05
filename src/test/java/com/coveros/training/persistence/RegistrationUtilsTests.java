@@ -42,7 +42,12 @@ public class RegistrationUtilsTests {
    */
   @Test
   public void testShouldHaveInsufficientEntropyInPassword() {
-    final List<String> badPasswords = Arrays.asList("abc123", "abc123horse", "abc123horsestaples", "typical_password_123");
+    final List<String> badPasswords =
+        Arrays.asList(
+            "abc123",
+            "abc123horse",
+            "abc123horsestaples",
+            "typical_password_123");
     for (String password : badPasswords) {
       final PasswordResult result = RegistrationUtils.isPasswordGood(password);
       Assert.assertEquals(INSUFFICIENT_ENTROPY, result.status);
@@ -74,7 +79,8 @@ public class RegistrationUtilsTests {
     // this needs to not find a user
     when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(User.createEmpty());
 
-    final RegistrationResult registrationResult = registrationUtils.processRegistration(ALICE, GOOD_PASSWORD);
+    final RegistrationResult registrationResult =
+        registrationUtils.processRegistration(ALICE, GOOD_PASSWORD);
 
     Assert.assertEquals(SUCCESSFULLY_REGISTERED, registrationResult.status);
     Assert.assertTrue(registrationResult.wasSuccessfullyRegistered);
@@ -82,7 +88,8 @@ public class RegistrationUtilsTests {
 
   @Test
   public void testShouldProcessRegistration_EmptyUsername() {
-    final RegistrationResult registrationResult = registrationUtils.processRegistration("", GOOD_PASSWORD);
+    final RegistrationResult registrationResult =
+        registrationUtils.processRegistration("", GOOD_PASSWORD);
 
     Assert.assertEquals(EMPTY_USERNAME, registrationResult.status);
     Assert.assertFalse(registrationResult.wasSuccessfullyRegistered);
@@ -93,7 +100,8 @@ public class RegistrationUtilsTests {
     // this needs to not find a user
     when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(User.createEmpty());
 
-    final RegistrationResult registrationResult = registrationUtils.processRegistration(ALICE, BAD_PASSWORD);
+    final RegistrationResult registrationResult =
+        registrationUtils.processRegistration(ALICE, BAD_PASSWORD);
 
     Assert.assertEquals(RegistrationStatusEnums.BAD_PASSWORD, registrationResult.status);
     Assert.assertFalse(registrationResult.wasSuccessfullyRegistered);
@@ -104,7 +112,8 @@ public class RegistrationUtilsTests {
     // this needs to not find a user
     when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(new User(ALICE, 1));
 
-    final RegistrationResult registrationResult = registrationUtils.processRegistration(ALICE, GOOD_PASSWORD);
+    final RegistrationResult registrationResult =
+        registrationUtils.processRegistration(ALICE, GOOD_PASSWORD);
 
     Assert.assertEquals(ALREADY_REGISTERED, registrationResult.status);
     Assert.assertFalse(registrationResult.wasSuccessfullyRegistered);
