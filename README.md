@@ -13,6 +13,19 @@ It consists of a simplistic web application.  Some of the techniques exemplified
 * Nulls not allowed by using [Checker Framework](https://checkerframework.org/)
 * Uses [Gretty](https://github.com/akhikhl/gretty) which allows us to hot swap Java code at runtime.
 
+Its essential goals:
+* Just works, any platform.
+* As simple as possible
+* Minimal system requirements
+* Fast and easy to install and to run
+* High test coverage
+* Multiple business domains
+* Easy to maintain and improve
+* Well documented
+* High performing
+* Illustrates maximum number of techniques
+* Easy to get up to speed
+
 #### Dependencies:
 
 * [Java 8](https://www.oracle.com/technetwork/java/javase/overview/java8-2100321.html)  
