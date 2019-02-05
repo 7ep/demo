@@ -174,3 +174,8 @@ sonarqube {
         property "sonar.jacoco.reportPaths", "build/jacoco/test.exec,build/jacoco/fastIntegrationTest.exec"
     }
 }
+
+// parallellize the tests, making them finish sooner.
+tasks.withType(Test) {
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+}
