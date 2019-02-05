@@ -229,6 +229,12 @@ Click Save and Continue.
 Click Save and Finish.
 Click Start using Jenkins
 
+Install the Sidebar-Link plugin.  Go to:
+
+http://jenkinsbox:8080/pluginManager/available
+
+and search for "sidebar".  Choose Sidebar Link and Install without restart.
+
 MAKE A GIT REPO
 ---------------
 
@@ -313,6 +319,16 @@ Now let's modify our pipeline so it does some actual work.
     Max # of builds to keep: 5
 - Check the box labeled "Do not allow concurrent builds".  (We don't want race conditions
     in our pipeline, and we don't want excessive memory usage on this demo machine)
+- Check the box for "Sidebar links". Add a link.  Enter this:
+
+  Link URL: http://jenkinsbox/cucumber/overview-features.html
+  Link Text: Cucumber report.
+
+  Click Add Link.
+
+  Link URL: http://jenkinsbox:9000/
+  Link Text: SonarQube
+
 - Under Pipeline, click on the dropdown and select Pipeline script from SCM.
 - on the dropdown next to SCM, select Git.
 - fill in these values:
@@ -323,6 +339,33 @@ Now let's modify our pipeline so it does some actual work.
      In Script Path: jenkins/Jenkinsfile
 
      Click save
+
+
+Let's create a new pipeline for our security analyses.
+
+- In Jenkins, click New Item and select a pipeline, name it "demo_security"
+- Check the box for "discard old builds",
+    Strategy: log rotation
+    Max # of builds to keep: 5
+- Check the box labeled "Do not allow concurrent builds".  (We don't want race conditions
+    in our pipeline, and we don't want excessive memory usage on this demo machine)
+- Check the box for "Sidebar links". Add a link.  Enter this:
+  Link URL: http://jenkinsbox/dependencycheck/dependency-check-report.html
+  Link Text: Dependency Check Report
+
+- Check the box next to "Build after other projects are built" and choose "demo" as
+  the project to watch.  Trigger only if build is stable.
+- Under Pipeline, click on the dropdown and select Pipeline script from SCM.
+- on the dropdown next to SCM, select Git.
+- fill in these values:
+     In Repositories:
+     Repository URL: /home/cuser/demo
+     In Branches to Build:
+     Branch specifier: refs/heads/master
+     In Script Path: jenkins/Jenkinsfile.security
+
+     Click save
+
 
 We're not quite done yet, we need to install some other parts of our system
 before this will all work.  Now that our Jenkins pipeline is running, and
@@ -454,37 +497,6 @@ To start h2o:
 
 $ sudo systemctl enable h2o.service
 $ sudo systemctl start h2o.service
-
-Eventually we want to be able to view a cucumber report,
-by going to http://jenkinsbox/cucumber/overview-features.html
-
-Let's put this link on our pipeline page in Jenkins.  To do so,
-first install the Sidebar-Link plugin.  Go to:
-
-http://jenkinsbox:8080/pluginManager/available
-
-and search for "sidebar".  Choose Sidebar Link and Install without restart.
-
-Now go back to your pipeline, here:
-
-http://jenkinsbox:8080/job/demo/configure
-
-and find the checkbox labeled "Sidebar links".  Check it on. Add a link.  Enter this:
-
-Link URL: http://jenkinsbox/cucumber/overview-features.html
-Link Text: Cucumber report.
-
-Click Add Link.
-
-Link URL: http://jenkinsbox:9000/
-Link Text: SonarQube
-
-Click Add Link.
-
-Link URL: http://jenkinsbox/dependencycheck/dependency-check-report.html
-Link Text: Dependency Check Report
-
-Save.
 
 CUSTOMIZE HOSTS FILE
 --------------------
