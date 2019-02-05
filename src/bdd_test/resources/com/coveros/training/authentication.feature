@@ -19,10 +19,10 @@ Feature: As a user of the system, I want to be able to authenticate myself, so I
     Then The system decides that they are not authenticated, because <note>
     Examples:
       | username      |    password     | note                                          |
-      | adam         | lpcvwwrkwsnvh   | the password is correct, but all lower-case   |
-      | adamee       | LpcVWwRkWSNVH   | we used an incorrect username                 |
-      | adam         |                 | we used an empty password                     |
-      | adam         | LpcVWwR         | we used a shortened version of the password   |
+      | adam          | lpcvwwrkwsnvh   | the password is correct, but all lower-case   |
+      | adamee        | LpcVWwRkWSNVH   | we used an incorrect username                 |
+      | adam          |                 | we used an empty password                     |
+      | adam          | LpcVWwR         | we used a shortened version of the password   |
       | ALICE         | LpcVWwRkWSNVH   | the username was made all upper-case          |
 
   @registration
