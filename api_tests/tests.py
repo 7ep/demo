@@ -24,7 +24,7 @@ class TestStringMethods(unittest.TestCase):
     # register, then login
     def test_login_api(self):
         self.__reset_database()
-        r = requests.post("%s/demo/register" % URL, data = {'username': 'alice', 'password': 'B65S3xNW8vXQHyjYnD72L3mejc'})
+        requests.post("%s/demo/register" % URL, data = {'username': 'alice', 'password': 'B65S3xNW8vXQHyjYnD72L3mejc'})
         r = requests.post("%s/demo/login" % URL, data = {'username': 'alice', 'password': 'B65S3xNW8vXQHyjYnD72L3mejc'})
         self.assertTrue("Result: access granted" in r.text)
 

@@ -17,7 +17,7 @@ public class DbServlet extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-    final String action = request.getParameter("action");
+    final String action = StringUtils.makeNotNullable(request.getParameter("action"));
     switch (action) {
       case "clean":
         cleanDatabase();
