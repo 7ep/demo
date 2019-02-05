@@ -69,6 +69,8 @@ public class AutoInsuranceProcessorTests {
         { 5, 26, 0, WarningLetterEnum.NONE, false },
         { 6, 26, 0, WarningLetterEnum.NONE, false },
         { 5, 80, 0, WarningLetterEnum.NONE, false },
+
+        { -1, 80, -1, WarningLetterEnum.NONE, false },
     });
   }
 
