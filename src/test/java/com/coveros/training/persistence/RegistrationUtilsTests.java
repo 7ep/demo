@@ -50,7 +50,7 @@ public class RegistrationUtilsTests {
             "typical_password_123");
     for (String password : badPasswords) {
       final PasswordResult result = RegistrationUtils.isPasswordGood(password);
-      Assert.assertEquals(INSUFFICIENT_ENTROPY, result.status);
+      Assert.assertEquals("password: " + password, INSUFFICIENT_ENTROPY, result.status);
     }
   }
 
