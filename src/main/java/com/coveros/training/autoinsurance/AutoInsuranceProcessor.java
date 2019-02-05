@@ -1,8 +1,12 @@
 package com.coveros.training.autoinsurance;
 
-public class AutoInsuranceProcessor {
+class AutoInsuranceProcessor {
 
-  public static AutoInsuranceAction process(int claims, int age) {
+  private AutoInsuranceProcessor() {
+    // private constructor to hide the public one.
+  }
+
+  static AutoInsuranceAction process(int claims, int age) {
 
     if (claims == 0 && age >= 16 && age <= 25) {
       return new AutoInsuranceAction(50, WarningLetterEnum.NONE, false);
