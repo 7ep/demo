@@ -10,6 +10,14 @@ pipeline {
 
   stages {
 
+    stage ('Clean') {
+        deleteDir()
+    }
+
+    stage ('Checkout') {
+        checkout scm
+    }
+
     stage('Build') {
       steps {
         sh './gradlew clean assemble'
