@@ -4,6 +4,8 @@ import com.coveros.training.domainobjects.PasswordResult;
 import com.coveros.training.domainobjects.RegistrationResult;
 import com.coveros.training.domainobjects.User;
 import me.gosimple.nbvcxz.Nbvcxz;
+import me.gosimple.nbvcxz.resources.Configuration;
+import me.gosimple.nbvcxz.resources.ConfigurationBuilder;
 import me.gosimple.nbvcxz.scoring.Result;
 import me.gosimple.nbvcxz.scoring.TimeEstimate;
 
@@ -68,6 +70,11 @@ public class RegistrationUtils {
 
         // Nbvcxz is a tool that tests entropy on passwords
         // See github.com/GoSimpleLLC/nbvcxz
+        // Create our configuration object and set the timeout
+        Configuration configuration = new ConfigurationBuilder()
+            .setCombinationAlgorithmTimeout(0l)
+            .createConfiguration();
+
         final Nbvcxz nbvcxz = new Nbvcxz();
         final Result result = nbvcxz.estimate(password);
         final String suggestions = String.join(";", result.getFeedback().getSuggestion());
