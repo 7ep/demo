@@ -56,7 +56,7 @@ public class PersistenceLayer {
         final org.h2.jdbcx.JdbcDataSource ds = new org.h2.jdbcx.JdbcDataSource();
         ds.setUser("sa");
         ds.setPassword("sa");
-        ds.setUrl("jdbc:h2:mem:training;MODE=PostgreSQL;DB_CLOSE_DELAY=-1");
+        ds.setUrl("jdbc:h2:./training;MODE=PostgreSQL;DB_CLOSE_DELAY=-1");
         return ds;
     }
 
