@@ -14,22 +14,20 @@ public class MathServlet extends HttpServlet {
   static Logger logger = LogManager.getLogger();
 
   private int putNumberInRequest(String itemName, HttpServletRequest request) {
-    int item;
-    try {
-      item = Integer.parseInt(request.getParameter(itemName));
-      request.setAttribute(itemName, item);
-    } catch (NumberFormatException ex) {
-      item = 0;
-    }
+    int item = Integer.parseInt(request.getParameter(itemName));
+    request.setAttribute(itemName, item);
     return item;
   }
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-    int itemA = putNumberInRequest("item_a", request);
-    int itemB = putNumberInRequest("item_b", request);
-
-    setResultToSum(request, itemA, itemB);
+    try {
+      int itemA = putNumberInRequest("item_a", request);
+      int itemB = putNumberInRequest("item_b", request);
+      setResultToSum(request, itemA, itemB);
+    } catch (NumberFormatException ex) {
+      request.setAttribute("result", "Error: only accepts integers");
+    }
     forwardToResult(request, response, logger);
   }
 
