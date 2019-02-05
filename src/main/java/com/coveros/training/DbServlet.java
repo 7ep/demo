@@ -13,6 +13,7 @@ import static com.coveros.training.persistence.PersistenceLayer.*;
 @WebServlet(name = "DbServlet", urlPatterns = {"/flyway"}, loadOnStartup = 1)
 public class DbServlet extends HttpServlet {
 
+  public static final String RESULT = "result";
   static Logger logger = LogManager.getLogger();
 
   @Override
@@ -21,15 +22,15 @@ public class DbServlet extends HttpServlet {
     switch (action) {
       case "clean":
         cleanDatabase();
-        request.setAttribute("result", "cleaned");
+        request.setAttribute(RESULT, "cleaned");
         break;
       case "migrate":
         migrateDatabase();
-        request.setAttribute("result", "migrated");
+        request.setAttribute(RESULT, "migrated");
         break;
       default:
         cleanAndMigrateDatabase();
-        request.setAttribute("result", "cleaned and migrated");
+        request.setAttribute(RESULT, "cleaned and migrated");
     }
 
     ServletUtils.forwardToResult(request, response, logger);
