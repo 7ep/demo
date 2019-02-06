@@ -61,6 +61,7 @@ pipeline {
         sh 'ssh cuser@uitestbox git clone cuser@jenkinsbox:~/demo demo_tests --branch master'
         sh 'ssh cuser@uitestbox "cd demo_tests;pipenv install"'
 
+        sh 'ssh cuser@uitestbox "sudo service tomcat9 stop && sudo service tomcat9 start"'
         // need a little time to wait for Tomcat to initialize the application...
         sh 'sleep 10'
       }
@@ -68,7 +69,7 @@ pipeline {
 
     stage('API Tests') {
       steps {
-        sh 'ssh cuser@uitestbox demo_tests/api_tests/run_api_tests.sh'
+        sh 'ssh cuser@uitestbox "cd demo_tests ; ./gradlew runApiTests"'
         sh 'mkdir build/test-results/api_tests'
         sh 'scp -r cuser@uitestbox:~/demo_tests/build/test-results/api_tests/* build/test-results/api_tests/'
       }
@@ -83,7 +84,7 @@ pipeline {
     // when it comes to experimentation with UI tests.  You can try things and see how they work out.
     stage('UI Tests') {
       steps {
-        sh 'ssh cuser@uitestbox demo_tests/ui_tests/run_behave.sh'
+        sh 'ssh cuser@uitestbox "cd demo_tests ; ./gradlew runBehaveTests"'
         sh 'mkdir build/test-results/bdd_ui'
         sh 'scp -r cuser@uitestbox:~/demo_tests/build/test-results/bdd_ui/* build/test-results/bdd_ui/'
       }
