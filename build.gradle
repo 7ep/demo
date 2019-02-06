@@ -1,14 +1,8 @@
 plugins {
-
-    id 'java'
-
     id 'war'
 
     // gretty is a gradle plugin to make it easy to run a server and hotswap code at runtime.
     id 'org.gretty' version '2.3.1'
-
-    // provides access to a database versioning tool.
-    id "org.flywaydb.flyway" version "5.2.4"
 
     // scans our code for static analysis
     id "org.sonarqube" version "2.6.2"
@@ -107,19 +101,6 @@ dependencies {
 task copyToLib(type: Copy) {
     from configurations.localDeps
     into "$buildDir/lib"
-}
-
-// starts the database - ctrl+c to stop it.  Will also try to cause a 
-// browser tab to open to the H2 console.
-task startDb(type: Exec) {
-    dependsOn 'copyToLib'
-    commandLine 'javaw','-cp','build/lib/h2-1.4.197.jar','org.h2.tools.Server','-tcpAllowOthers'
-}
-
-// starts the h2 console
-task startConsole(type: Exec) {
-    dependsOn 'copyToLib'
-    commandLine 'javaw','-cp','build/lib/h2-1.4.197.jar','org.h2.tools.Console'
 }
 
 pitest {
