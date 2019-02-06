@@ -4,6 +4,7 @@ import com.coveros.training.domainobjects.Book;
 import com.coveros.training.domainobjects.Borrower;
 import com.coveros.training.domainobjects.Loan;
 import com.coveros.training.domainobjects.User;
+import org.h2.jdbcx.JdbcConnectionPool;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +31,7 @@ public class PersistenceLayerTests {
 
     @Before
     public void initDatabase() {
-        pl = new PersistenceLayer(PersistenceLayer.getFileBasedDatabaseConnectionPool());
+        pl = new PersistenceLayer(getFileBasedDatabaseConnectionPool());
     }
 
     /**
@@ -227,24 +228,36 @@ public class PersistenceLayerTests {
         runRestoreOneBookOneBorrower();
     }
 
-    public void runRestoreEmpty() {
+    private void runRestoreEmpty() {
         runRestore("db_sample_files/v2_empty_schema.sql");
     }
 
-    public void runRestoreOneBookOneBorrower() {
+    private void runRestoreOneBookOneBorrower() {
         runRestore("db_sample_files/v2_one_book_one_borrower.sql");
     }
 
-    public void runRestoreOneUser() {
+    private void runRestoreOneUser() {
         runRestore("db_sample_files/v2_one_user.sql");
     }
 
-    public void runRestoreOneLoan() {
+    private void runRestoreOneLoan() {
         runRestore("db_sample_files/v2_one_loan.sql");
     }
 
-    public void runRestore(String scriptName) {
+    private void runRestore(String scriptName) {
         pl.runRestore(scriptName);
+    }
+
+    /**
+     * Get a file-based {@link JdbcConnectionPool}, which makes it easier
+     * to debug database tests when they are running.
+     *
+     * This method is solely meant to be used by database tests.
+     */
+    private static JdbcConnectionPool getFileBasedDatabaseConnectionPool() {
+        JdbcConnectionPool cp = JdbcConnectionPool.create(
+            "jdbc:h2:./build/db/training", "", "");
+        return cp;
     }
 
 

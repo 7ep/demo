@@ -10,21 +10,9 @@ pipeline {
 
   stages {
 
-    stage ('Clean') {
-      steps {
-        sh 'git clean -fxd'
-      }
-    }
-
-    stage('Build') {
-      steps {
-        sh './gradlew clean assemble'
-      }
-    }
-
     stage('Unit Tests') {
       steps {
-        sh './gradlew test'
+        sh './gradlew clean test'
       }
       post {
         always {

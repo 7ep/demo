@@ -38,18 +38,6 @@ public class PersistenceLayer {
     }
 
     /**
-     * Get a file-based {@link JdbcConnectionPool}, which makes it easier
-     * to debug database tests when they are running.
-     *
-     * This method is solely meant to be used by database tests.
-     */
-    public static JdbcConnectionPool getFileBasedDatabaseConnectionPool() {
-        JdbcConnectionPool cp = JdbcConnectionPool.create(
-            "jdbc:h2:./training", "", "");
-        return cp;
-    }
-
-    /**
      * This command provides a template to execute updates (including inserts) on the database
      * @param sqlData An object that contains the necessary components to run a SQL statement.
      *                Usually contains some SQL text and some values that will be injected
