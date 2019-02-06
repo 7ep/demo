@@ -76,7 +76,7 @@ public class RegisterServletTests {
 
 
     private void mockRegisterUserToReturnSomeResponse(RegistrationResult expectedResult) {
-        when(RegisterServlet.registrationUtils.processRegistration(Mockito.anyString(), Mockito.anyString())).thenReturn(new RegistrationResult(true, RegistrationStatusEnums.SUCCESSFULLY_REGISTERED));
+        when(RegisterServlet.registrationUtils.processRegistration(Mockito.anyString(), Mockito.anyString())).thenReturn(expectedResult);
     }
 
     private void mockRequestDispatcherForExpectedRedirection(String expectedPath) {

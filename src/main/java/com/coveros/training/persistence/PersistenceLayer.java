@@ -19,8 +19,6 @@ import java.sql.*;
 
 public class PersistenceLayer {
 
-    private static final Logger logger = LogManager.getLogger();
-
     private final DataSource dataSource;
 
     public PersistenceLayer() {
@@ -32,9 +30,8 @@ public class PersistenceLayer {
     }
 
     private static JdbcConnectionPool obtainConnectionPool() {
-        JdbcConnectionPool cp = JdbcConnectionPool.create(
+        return JdbcConnectionPool.create(
             "jdbc:h2:mem:training", "", "");
-        return cp;
     }
 
     /**

@@ -255,9 +255,8 @@ public class PersistenceLayerTests {
      * This method is solely meant to be used by database tests.
      */
     private static JdbcConnectionPool getFileBasedDatabaseConnectionPool() {
-        JdbcConnectionPool cp = JdbcConnectionPool.create(
+        return JdbcConnectionPool.create(
             "jdbc:h2:./build/db/training", "", "");
-        return cp;
     }
 
 

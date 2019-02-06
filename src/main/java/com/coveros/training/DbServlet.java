@@ -13,8 +13,8 @@ import static com.coveros.training.persistence.PersistenceLayer.*;
 @WebServlet(name = "DbServlet", urlPatterns = {"/flyway"}, loadOnStartup = 1)
 public class DbServlet extends HttpServlet {
 
-  public static final String RESULT = "result";
-  static Logger logger = LogManager.getLogger();
+  private static final String RESULT = "result";
+  private static Logger logger = LogManager.getLogger();
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) {
