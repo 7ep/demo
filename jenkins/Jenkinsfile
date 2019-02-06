@@ -48,11 +48,6 @@ pipeline {
       steps {
         sh './gradlew generateCucumberReports'
       }
-      post {
-        always {
-          junit 'build/test-results/bdd_non_ui/*.xml'
-        }
-      }
     }
 
     stage('Deploy to test') {
