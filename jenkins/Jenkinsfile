@@ -64,7 +64,7 @@ pipeline {
         // need demo_tests on the box, that's where we have the UI tests located.
         sh 'ssh cuser@uitestbox rm -fr demo_tests'
         sh 'ssh cuser@uitestbox git clone cuser@jenkinsbox:~/demo demo_tests --branch master'
-        sh 'ssh cuser@uitestbox pipenv install'
+        sh 'ssh cuser@uitestbox "cd demo_tests;pipenv install"'
 
         // need a little time to wait for Tomcat to initialize the application...
         sh 'sleep 10'
@@ -74,6 +74,8 @@ pipeline {
     stage('API Tests') {
       steps {
         sh 'ssh cuser@uitestbox demo_tests/api_tests/run_api_tests.sh'
+        sh 'mkdir build/test-results/api_tests'
+        sh 'scp -r cuser@uitestbox:~/demo_tests/build/test-results/api_tests/* build/test-results/api_tests/'
       }
       post {
         always {
@@ -87,6 +89,8 @@ pipeline {
     stage('UI Tests') {
       steps {
         sh 'ssh cuser@uitestbox demo_tests/ui_tests/run_behave.sh'
+        sh 'mkdir build/test-results/bdd_ui'
+        sh 'scp -r cuser@uitestbox:~/demo_tests/build/test-results/bdd_ui/* build/test-results/bdd_ui/'
       }
       post {
         always {
