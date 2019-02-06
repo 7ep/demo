@@ -75,6 +75,11 @@ pipeline {
       steps {
         sh 'ssh cuser@uitestbox demo_tests/api_tests/run_api_tests.sh'
       }
+      post {
+        always {
+          junit 'build/test-results/api_tests/*.xml'
+        }
+      }
     }
 
     // We use a different framework for UI tests, Behave, because Python rules
