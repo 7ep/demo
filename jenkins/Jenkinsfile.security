@@ -5,7 +5,6 @@ pipeline {
 
   environment {
     DEMO_PROJECT_HOME   =  "${env.WORKSPACE}"
-    POSTGRES_BIN_DIR    = '/usr/pgsql-10/bin'
   }
 
   stages {
@@ -13,13 +12,6 @@ pipeline {
     stage('Analyze security of dependencies') {
       steps {
          sh './gradlew dependencyCheckAnalyze'
-      }
-    }
-
-    stage('Run ZAP Security scan') {
-      steps {
-        // just a token operation while we pretend to deploy
-        sh 'ssh cuser@uitestbox "/usr/share/owasp-zap/zap.sh -quickurl http://localhost:8080/demo -cmd"'
       }
     }
 
