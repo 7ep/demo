@@ -18,4 +18,4 @@ And in the demo directory,
     pipenv install
 
 In order to run the Selenium tests with these instructions, you need Chrome and a driver for the browser.
-Download Chromedriver (check http://chromedriver.chromium.org/) and make sure it's in your path.
+Download Chromedriver (check http://chromedriver.chromium.org/) and make sure it's in your path or in the ui_tests directory.

@@ -181,7 +181,41 @@ task runApiTests(type:Exec) {
    commandLine 'pipenv','run','python','-m','unittest','tests'
 }
 
+static boolean SearchDirectoryForChromedriver(File dir) {
+    return dir.listFiles({ file -> file.name.contains("chromedriver") } as FileFilter).any();
+}
+
+static boolean ScanPathForChromeDriver() {
+    // Add all the directories from the system PATH variable
+    List pathDirectories = System.getenv('PATH').split(";").toList()
+
+    // Add the local ui_tests directory too - it will still work if it's there
+    pathDirectories.add("ui_tests")
+
+    return pathDirectories.any({dir -> SearchDirectoryForChromedriver(new File(dir))})
+}
+
 task runBehaveTests(type:Exec) {
+   doFirst {
+       def chromedriver_exists_in_ui_tests = ScanPathForChromeDriver();
+       if (! chromedriver_exists_in_ui_tests) {
+           ignoreExitValue true
+           throw new Exception(
+                   "\n\nFor your reference, here is the system path we checked:\n\n" +
+                    System.getenv('PATH') +
+                   "\n\n*****************************\n" +
+                   "*****************************\n" +
+                   "Does not look like you have Chromedriver in your \n" +
+                   "PATH or ui_tests directory.\n\n" +
+                   "Download it from http://chromedriver.chromium.org/ and store the binary\n" +
+                   "in your system path or in the ui_tests directory.\n" +
+                   "See the PATH variable expanded above.\n" +
+                   "*****************************\n" +
+                   "*****************************\n"
+
+           )
+       }
+   }
    workingDir 'ui_tests'
    commandLine 'pipenv','run','behave'
 }
