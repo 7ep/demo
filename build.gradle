@@ -168,3 +168,17 @@ sonarqube {
 tasks.withType(Test) {
     maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
 }
+
+task runApiTests(type:Exec) {
+   workingDir 'api_tests'
+   commandLine 'pipenv','run','python','-m','unittest','tests'
+}
+
+task runBehaveTests(type:Exec) {
+   workingDir 'ui_tests'
+   commandLine 'pipenv','run','behave'
+}
+
+task runAllTests(type: GradleBuild) {
+    tasks = ['check', 'runApiTests', 'runBehaveTests']
+}
