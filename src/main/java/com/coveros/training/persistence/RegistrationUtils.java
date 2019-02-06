@@ -75,7 +75,7 @@ public class RegistrationUtils {
             .setCombinationAlgorithmTimeout(0l)
             .createConfiguration();
 
-        final Nbvcxz nbvcxz = new Nbvcxz();
+        final Nbvcxz nbvcxz = new Nbvcxz(configuration);
         final Result result = nbvcxz.estimate(password);
         final String suggestions = String.join(";", result.getFeedback().getSuggestion());
         final Double entropy = result.getEntropy();
