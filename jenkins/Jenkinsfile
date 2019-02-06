@@ -33,7 +33,7 @@ pipeline {
       }
       post {
         always {
-          junit 'build/test-results/test/*.xml'
+          junit 'build/test-results/fastIntegrationTest/*.xml'
         }
       }
     }
@@ -47,6 +47,11 @@ pipeline {
     stage('Automated Acceptance Tests') {
       steps {
         sh './gradlew generateCucumberReports'
+      }
+      post {
+        always {
+          junit 'build/test-results/bdd_non_ui/*.xml'
+        }
       }
     }
 
@@ -77,6 +82,11 @@ pipeline {
     stage('UI Tests') {
       steps {
         sh 'ssh cuser@uitestbox demo_tests/ui_tests/run_behave.sh'
+      }
+      post {
+        always {
+          junit 'build/test-results/bdd_ui/*.xml'
+        }
       }
     }
 
