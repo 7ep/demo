@@ -22,7 +22,7 @@ Its essential goals:
 * Multiple business domains
 * Easy to maintain and improve
 * Well documented
-* High performing
+* High performance
 * Illustrates maximum number of techniques
 * Easy to get up to speed
 
@@ -54,17 +54,20 @@ And in the demo directory,
     
     pipenv install   
    
-Finally, to run (for example) our API tests or Behave tests,
-switch into one of those directories (ui_tests or api_tests) and
-run:
+Finally, to run (for example) our API tests or Behave tests (note
+that the app has to be running, so in another terminal run gradlew appRun)
 
 For ui_tests:
 
-    pipenv run behave
+    gradlew runBehaveTests
     
 or for api_tests:
 
-    pipenv run python -m unittest tests
+    gradlew runApiTests
+
+To run all tests combined:
+
+    gradlew runAllTests
 
 #### To build with tests:
 On Mac/Linux
