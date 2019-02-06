@@ -84,7 +84,7 @@ pipeline {
     // when it comes to experimentation with UI tests.  You can try things and see how they work out.
     stage('UI Tests') {
       steps {
-        sh 'ssh cuser@uitestbox "cd demo_tests ; export DISPLAY=:0; ./gradlew runBehaveTests"'
+        sh 'ssh cuser@uitestbox ". /etc/profile; cd demo_tests ; export DISPLAY=:0; ./gradlew runBehaveTests"'
         sh 'mkdir build/test-results/bdd_ui'
         sh 'scp -r cuser@uitestbox:~/demo_tests/build/test-results/bdd_ui/* build/test-results/bdd_ui/'
       }
