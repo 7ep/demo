@@ -178,7 +178,7 @@ tasks.withType(Test) {
 
 task runApiTests(type:Exec) {
    workingDir 'api_tests'
-   commandLine 'pipenv','run','python','-m','unittest','tests'
+   commandLine 'pipenv','run','pytest','--junitxml','../build/test-results/api_tests/TEST-api_test_results.xml'
 }
 
 static boolean SearchDirectoryForChromedriver(File dir) {
