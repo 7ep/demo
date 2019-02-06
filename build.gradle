@@ -1,4 +1,7 @@
 plugins {
+
+    id 'java'
+
     id 'war'
 
     // gretty is a gradle plugin to make it easy to run a server and hotswap code at runtime.
@@ -32,6 +35,10 @@ plugins {
     // changing the code and seeing if the test fails as a result.
     id 'info.solidsoft.pitest' version '1.4.0'
 }
+
+// sets the version of Java we want to use - 8
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 // the checker framework adds a bunch of type annotations that
 // can insure safer coding practices.  See https://checkerframework.org/manual/
