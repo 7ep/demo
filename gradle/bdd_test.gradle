@@ -41,7 +41,6 @@ task cucumber {
                     sourceSets.fastIntegrationTest.output
 
             args = ['--monochrome',
-                    '--tags', '"not @ignore"',
                     '--plugin', 'progress',
                     '--plugin', 'json:build/bdd/file.json',
                     '--plugin', 'html:build/reports/bdd/cucumber-html-report-basic',
