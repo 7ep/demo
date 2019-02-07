@@ -64,7 +64,7 @@ def step_impl(context):
 @then('it indicates that I used a poor password')
 def step_impl(context):
     result = context.driver.find_element_by_id('result')
-    assert_that(result.text, contains_string('INSUFFICIENT_ENTROPY'))
+    assert_that(result.text, contains_string('TOO_SHORT'))
 
 
 @given('I am registered as "{username}" with a password of "{password}"')
