@@ -223,7 +223,7 @@ task runBehaveTests(type:Exec) {
 task runAllTests(type: GradleBuild) {
     tasks = ['check', 'runApiTests', 'runBehaveTests']
 }
-
+// more info on test logging: https://discuss.gradle.org/t/whats-upcoming-in-gradle-1-1-test-logging/7741
 test {
     testLogging {
         exceptionFormat "full" // default is "short"
