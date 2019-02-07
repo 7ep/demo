@@ -223,3 +223,9 @@ task runBehaveTests(type:Exec) {
 task runAllTests(type: GradleBuild) {
     tasks = ['check', 'runApiTests', 'runBehaveTests']
 }
+
+test {
+    testLogging {
+        exceptionFormat "full" // default is "short"
+    }
+}
