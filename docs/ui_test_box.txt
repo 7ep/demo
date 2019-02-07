@@ -9,7 +9,7 @@ Create a new system "uitestbox"
 Make sure to choose Mac osX 64 bit for the operating system.  It's not a Mac, but for
 some reason this makes mouse integration work beautifully.
 
-Set it to use 3072 megabytes of ram and 12 gigs hard drive.
+Set it to use 6144 megabytes of ram and 12 gigs hard drive.
 
 Alter its settings:
   in the network tab, for adapter 1 choose Host-only adapter, and for
