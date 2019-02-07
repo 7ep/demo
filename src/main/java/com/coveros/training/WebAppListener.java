@@ -12,7 +12,7 @@ import static com.coveros.training.persistence.PersistenceLayer.cleanAndMigrateD
 @WebListener
 public class WebAppListener implements ServletContextListener {
 
-  public static ExecutorService executor;
+  public static final ExecutorService executor;
 
   static {
     executor = Executors.newFixedThreadPool(1);

@@ -96,7 +96,7 @@ public class RegistrationUtils {
                 return new PasswordResult(SUCCESS, entropy, timeToCrackOff, timeToCrackOn, result.getFeedback().getResult());
             }
         } catch (ExecutionException | TimeoutException | InterruptedException e) {
-            WebAppListener.executor.shutdownNow();
+            Thread.currentThread().interrupt();
             logger.warn("Had to cancel Nbvcxz estimation. error: " + e.toString());
             return new PasswordResult(ANALYSIS_TIMED_OUT, 0d, ANALYSIS_TIMED_OUT.toString(), ANALYSIS_TIMED_OUT.toString(), ANALYSIS_TIMED_OUT.toString());
         }
