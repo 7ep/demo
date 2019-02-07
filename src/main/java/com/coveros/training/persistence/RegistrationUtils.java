@@ -83,7 +83,11 @@ public class RegistrationUtils {
         });
 
         try {
-            final Result result = future.get(2, TimeUnit.SECONDS);
+            // It was found that the Nbvcxz password estimation can take a while,
+            // especially on slower machines.  Unit testing indicated that 4
+            // seconds was necessary for all unit tests to pass consistently
+            // on virtual machines with a single processor.
+            final Result result = future.get(4, TimeUnit.SECONDS);
             final String suggestions = String.join(";", result.getFeedback().getSuggestion());
             final Double entropy = result.getEntropy();
             String timeToCrackOff = TimeEstimate.getTimeToCrackFormatted(result, "OFFLINE_BCRYPT_12");
