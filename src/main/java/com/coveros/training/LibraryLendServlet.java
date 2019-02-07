@@ -3,7 +3,6 @@ package com.coveros.training;
 import com.coveros.training.domainobjects.LibraryActionResults;
 import com.coveros.training.persistence.LibraryUtils;
 import com.coveros.training.persistence.RegistrationUtils;
-import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

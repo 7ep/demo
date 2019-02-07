@@ -2,7 +2,6 @@ package com.coveros.training;
 
 import com.coveros.training.persistence.LoginUtils;
 import com.coveros.training.persistence.RegistrationUtils;
-import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

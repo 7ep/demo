@@ -1,18 +1,10 @@
 package com.coveros.training.persistence;
 
-import com.coveros.training.WebAppListener;
 import com.coveros.training.domainobjects.PasswordResult;
 import com.coveros.training.domainobjects.RegistrationResult;
 import com.coveros.training.domainobjects.User;
-import me.gosimple.nbvcxz.Nbvcxz;
-import me.gosimple.nbvcxz.resources.Configuration;
-import me.gosimple.nbvcxz.resources.ConfigurationBuilder;
-import me.gosimple.nbvcxz.scoring.Result;
-import me.gosimple.nbvcxz.scoring.TimeEstimate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.*;
 
 import static com.coveros.training.domainobjects.PasswordResultEnums.*;
 import static com.coveros.training.domainobjects.PasswordResultEnums.EMPTY_PASSWORD;

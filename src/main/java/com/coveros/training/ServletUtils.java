@@ -16,7 +16,7 @@ class ServletUtils {
     try {
       request.getRequestDispatcher("result.jsp").forward(request, response);
     } catch (Exception ex) {
-      logger.error("failed during forward: " + ex);
+      logger.error(String.format("failed during forward: %s", ex));
     }
   }
 }
