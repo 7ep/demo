@@ -83,7 +83,7 @@ public class RegistrationUtils {
         });
 
         try {
-            final Result result = future.get(1, TimeUnit.SECONDS);
+            final Result result = future.get(2, TimeUnit.SECONDS);
             final String suggestions = String.join(";", result.getFeedback().getSuggestion());
             final Double entropy = result.getEntropy();
             String timeToCrackOff = TimeEstimate.getTimeToCrackFormatted(result, "OFFLINE_BCRYPT_12");
