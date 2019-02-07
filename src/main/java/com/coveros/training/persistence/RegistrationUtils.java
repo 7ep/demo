@@ -73,32 +73,18 @@ public class RegistrationUtils {
         if (password.isEmpty()) return PasswordResult.createDefault(EMPTY_PASSWORD);
         if (password.length() < 6) return PasswordResult.createDefault(TOO_SHORT);
 
-        Future<Result> future = WebAppListener.executor.submit(() -> {
-            // Nbvcxz is a tool that tests entropy on passwords
-            // See github.com/GoSimpleLLC/nbvcxz
-            final Nbvcxz nbvcxz = new Nbvcxz();
-            return nbvcxz.estimate(password);
-        });
-
-        try {
-            // It was found that the Nbvcxz password estimation can take a while,
-            // especially on slower machines.  Unit testing indicated that 4
-            // seconds was necessary for all unit tests to pass consistently
-            // on virtual machines with a single processor.
-            final Result result = future.get(4, TimeUnit.SECONDS);
-            final String suggestions = String.join(";", result.getFeedback().getSuggestion());
-            final Double entropy = result.getEntropy();
-            String timeToCrackOff = TimeEstimate.getTimeToCrackFormatted(result, "OFFLINE_BCRYPT_12");
-            String timeToCrackOn = TimeEstimate.getTimeToCrackFormatted(result, "ONLINE_THROTTLED");
-            if (!result.isMinimumEntropyMet()) {
-                return new PasswordResult(INSUFFICIENT_ENTROPY, entropy, timeToCrackOff, timeToCrackOn, suggestions);
-            } else {
-                return new PasswordResult(SUCCESS, entropy, timeToCrackOff, timeToCrackOn, result.getFeedback().getResult());
-            }
-        } catch (ExecutionException | TimeoutException | InterruptedException e) {
-            Thread.currentThread().interrupt();
-            logger.warn("Had to cancel Nbvcxz estimation. error: " + e.toString());
-            return new PasswordResult(ANALYSIS_TIMED_OUT, 0d, ANALYSIS_TIMED_OUT.toString(), ANALYSIS_TIMED_OUT.toString(), ANALYSIS_TIMED_OUT.toString());
+        // Nbvcxz is a tool that tests entropy on passwords
+        // See github.com/GoSimpleLLC/nbvcxz
+        final Nbvcxz nbvcxz = new Nbvcxz();
+        final Result result = nbvcxz.estimate(password);
+        final String suggestions = String.join(";", result.getFeedback().getSuggestion());
+        final Double entropy = result.getEntropy();
+        String timeToCrackOff = TimeEstimate.getTimeToCrackFormatted(result, "OFFLINE_BCRYPT_12");
+        String timeToCrackOn = TimeEstimate.getTimeToCrackFormatted(result, "ONLINE_THROTTLED");
+        if (!result.isMinimumEntropyMet()) {
+            return new PasswordResult(INSUFFICIENT_ENTROPY, entropy, timeToCrackOff, timeToCrackOn, suggestions);
+        } else {
+            return new PasswordResult(SUCCESS, entropy, timeToCrackOff, timeToCrackOn, result.getFeedback().getResult());
         }
     }
 

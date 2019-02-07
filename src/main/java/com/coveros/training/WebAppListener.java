@@ -12,12 +12,6 @@ import static com.coveros.training.persistence.PersistenceLayer.cleanAndMigrateD
 @WebListener
 public class WebAppListener implements ServletContextListener {
 
-  public static final ExecutorService executor;
-
-  static {
-    executor = Executors.newFixedThreadPool(1);
-  }
-
   @Override
   public void contextInitialized ( ServletContextEvent sce ) {
     cleanAndMigrateDatabase();
@@ -25,7 +19,7 @@ public class WebAppListener implements ServletContextListener {
 
   @Override
   public void contextDestroyed(ServletContextEvent sce) {
-    executor.shutdown();
+    // do nothing.
   }
 
 }
