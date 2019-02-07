@@ -110,6 +110,12 @@ dependencies {
 
     // so we can programmatically run flyway at startup
     compile "org.flywaydb:flyway-core:5.2.4"
+
+    // provides monitoring of the application during runtime.
+    // go to http://url/demo/monitoring
+    // https://mvnrepository.com/artifact/net.bull.javamelody/javamelody-core
+    compile group: 'net.bull.javamelody', name: 'javamelody-core', version: '1.76.0'
+
 }
 
 task copyToLib(type: Copy) {
