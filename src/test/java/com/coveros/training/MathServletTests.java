@@ -1,8 +1,8 @@
 package com.coveros.training;
 
-import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

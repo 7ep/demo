@@ -1,7 +1,8 @@
 package com.coveros.training;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.coveros.training.persistence.RegistrationUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "MathServlet", urlPatterns = {"/math"}, loadOnStartup = 1)
 public class MathServlet extends HttpServlet {
 
-  static Logger logger = LogManager.getLogger();
+  static org.slf4j.Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
 
   private int putNumberInRequest(String itemName, HttpServletRequest request) {
     int item = Integer.parseInt(request.getParameter(itemName));

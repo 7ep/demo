@@ -1,8 +1,10 @@
 package com.coveros.training;
 
 import com.coveros.training.persistence.LoginUtils;
+import com.coveros.training.persistence.RegistrationUtils;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"}, loadOnStartup = 1)
 public class LoginServlet extends HttpServlet {
 
-  private static final Logger logger = LogManager.getLogger();
+  private static final Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
   static LoginUtils loginUtils = new LoginUtils();
 
   private String putUsernameInRequest(HttpServletRequest request) {

@@ -1,6 +1,7 @@
 package com.coveros.training;
 
-import org.apache.logging.log4j.Logger;
+
+import org.slf4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

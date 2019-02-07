@@ -2,8 +2,8 @@ package com.coveros.training;
 
 import com.coveros.training.domainobjects.RegistrationResult;
 import com.coveros.training.persistence.RegistrationUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 public class RegisterServlet extends HttpServlet {
 
   private static final String PASSWORD_PARAM = "password";
-  private static final Logger logger = LogManager.getLogger();
+  private static final org.slf4j.Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
   private static final String USERNAME_PARAM = "username";
   private static final String EMPTY_USERNAME = "EMPTY_USERNAME";
   private static final String EMPTY_PASSWORD = "EMPTY_PASSWORD";

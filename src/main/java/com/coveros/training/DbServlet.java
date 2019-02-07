@@ -1,7 +1,9 @@
 package com.coveros.training;
 
+import com.coveros.training.persistence.RegistrationUtils;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +16,7 @@ import static com.coveros.training.persistence.PersistenceLayer.*;
 public class DbServlet extends HttpServlet {
 
   private static final String RESULT = "result";
-  private static Logger logger = LogManager.getLogger();
+  private static final Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) {
