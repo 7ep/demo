@@ -1,5 +1,63 @@
 ## Demo - demonstrates an application and tests
 
+#### Dependencies:
+
+* [Java 8](https://www.oracle.com/technetwork/java/javase/overview/java8-2100321.html)  
+
+###### Optional Dependencies - needed for API testing and Selenium testing.
+* [Python 3.7](https://www.python.org/downloads/)
+
+---
+#### Java notes
+It *has* to be Java 8.  Don't use Java 10, it will error out because Mockito doesn't work with Java 10.
+    
+#### Python notes
+To run API tests and Selenium tests, an easy way to handle its 
+dependencies is to use *pipenv*.  To get this installed, first download
+[get-pip.py](https://bootstrap.pypa.io/get-pip.py), and run
+
+    python get-pip.py
+    
+Then,
+
+    pip install pipenv
+   
+And in the demo directory,
+    
+    pipenv install   
+   
+#### To build and run tests:
+On Mac/Linux
+
+    ./gradlew check
+
+On Windows
+
+    gradlew check
+
+#### To run the web application:
+On Mac/Linux
+
+    ./gradlew appRun
+
+On Windows
+
+    gradlew appRun
+    
+Then, head to http://localhost:8080/demo    
+    
+
+#### To run API and UI tests:
+Note: The app has to be already running for these tests to pass.
+
+On Mac/Linux
+
+    ./gradlew runAllTests
+
+On Windows
+
+    gradlew runAllTests    
+
 #### Summary:
 This is a tool for use in teaching software development best practices.  
 It consists of a simplistic web application.  Some of the techniques exemplified are:
@@ -25,67 +83,6 @@ Its essential goals:
 * High performance
 * Illustrates maximum number of techniques
 * Easy to get up to speed
-
-#### Dependencies:
-
-* [Java 8](https://www.oracle.com/technetwork/java/javase/overview/java8-2100321.html)  
-
-###### Optional Dependencies:
-The following is needed for some of the optional local testing,
-like API testing and Selenium testing.
-* [Python 3.7](https://www.python.org/downloads/)
-
----
-#### Java notes
-It *has* to be Java 8.  Don't use Java 10, it will error out because Mockito doesn't work with Java 10.
-    
-#### Python notes
-To run API tests and Selenium tests, an easy way to handle its 
-dependencies is to use *pipenv*.  To get this installed, first download
-[get-pip.py](https://bootstrap.pypa.io/get-pip.py), and run
-
-    python get-pip.py
-    
-Then,
-
-    pip install pipenv
-   
-And in the demo directory,
-    
-    pipenv install   
-   
-Finally, to run (for example) our API tests or Behave tests (note
-that the app has to be running, so in another terminal run gradlew appRun)
-
-For ui_tests:
-
-    gradlew runBehaveTests
-    
-or for api_tests:
-
-    gradlew runApiTests
-
-To run all tests combined:
-
-    gradlew runAllTests
-
-#### To build with tests:
-On Mac/Linux
-
-    ./gradlew clean build
-
-On Windows
-
-    gradlew clean build
-
-#### To run:
-On Mac/Linux
-
-    ./gradlew appRun
-
-On Windows
-
-    gradlew appRun
     
 #### The whole shebang - a CI/CD pipeline
 
