@@ -67,7 +67,7 @@ dependencies {
 
     // nbvcxz is a tool to determine how robust a password is.  See
     // https://github.com/GoSimpleLLC/nbvcxz
-    compile group: 'me.gosimple', name: 'nbvcxz', version: '1.4.2'
+    compile group: 'me.gosimple', name: 'nbvcxz', version: '1.4.3'
 
     // the glorious equalsverifier.  This is a tool that tests the contract
     // for equals and hashcode are met.  It's very strict.  Because it's very
