@@ -48,7 +48,8 @@ Then, head to http://localhost:8080/demo
     
 
 #### To run API and UI tests:
-Note: The app has to be already running for these tests to pass.
+Note: The app has to be already running for these tests to pass, and you _need_
+to have installed Python and Chromedriver.
 
 On Mac/Linux
 
