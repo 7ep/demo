@@ -1,3 +1,13 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.owasp:dependency-check-gradle:4.0.2'
+    }
+}
+
+
 plugins {
     id 'war'
 
@@ -15,10 +25,6 @@ plugins {
 
     // provides unit test coverage
     id 'jacoco'
-
-    // Dependency Check analyzes the dependencies for potential security issues.
-    // see https://plugins.gradle.org/plugin/org.owasp.dependencycheck
-    id "org.owasp.dependencycheck" version "4.0.1"
 
     // provides the ability to see a tree of dependent tasks
     // for any particular task.
@@ -46,6 +52,11 @@ apply from: "$rootDir/gradle/fast_integration_test.gradle"
 
 // including our script plugin for running BDD-type tests
 apply from: "$rootDir/gradle/bdd_test.gradle"
+
+// Dependency Check analyzes the dependencies for potential security issues.
+// see https://plugins.gradle.org/plugin/org.owasp.dependencycheck
+apply plugin: 'org.owasp.dependencycheck'
+check.dependsOn dependencyCheckAnalyze
 
 repositories {
     jcenter()
@@ -228,4 +239,11 @@ test {
     testLogging {
         exceptionFormat "full" // default is "short"
     }
+}
+
+dependencyCheck {
+    autoUpdate=true
+    cveValidForHours=168 // a week.
+    format='ALL'
+    failBuildOnCVSS=7 // see https://www.first.org/cvss/specification-document#5-Qualitative-Severity-Rating-Scale
 }

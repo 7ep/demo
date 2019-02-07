@@ -95,6 +95,12 @@ pipeline {
       }
     }
 
+    stage('Analyze security of dependencies') {
+      steps {
+         sh './gradlew dependencyCheckAnalyze'
+      }
+    }
+
 
     // This is the stage where we deploy to production.  If any test
     // fails, we won't get here.  Note that we aren't really doing anything - this
