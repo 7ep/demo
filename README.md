@@ -57,6 +57,11 @@ On Mac/Linux
 On Windows
 
     gradlew runAllTests    
+    
+#### Interesting links when the system is up:
+* http://localhost:8080/demo - the main application
+* http://localhost:8080/demo/console - the database viewer
+* http://localhost:8080/demo/monitoring - monitoring of the server    
 
 #### Summary:
 This is a tool for use in teaching software development best practices.  
