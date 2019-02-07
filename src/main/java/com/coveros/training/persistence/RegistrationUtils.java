@@ -1,5 +1,6 @@
 package com.coveros.training.persistence;
 
+import com.coveros.training.WebAppListener;
 import com.coveros.training.domainobjects.PasswordResult;
 import com.coveros.training.domainobjects.RegistrationResult;
 import com.coveros.training.domainobjects.User;
@@ -72,10 +73,7 @@ public class RegistrationUtils {
         if (password.isEmpty()) return PasswordResult.createDefault(EMPTY_PASSWORD);
         if (password.length() < 6) return PasswordResult.createDefault(TOO_SHORT);
 
-
-        ExecutorService executor = Executors.newFixedThreadPool(1);
-
-        Future<Result> future = executor.submit(() -> {
+        Future<Result> future = WebAppListener.executor.submit(() -> {
             // Nbvcxz is a tool that tests entropy on passwords
             // See github.com/GoSimpleLLC/nbvcxz
             final Nbvcxz nbvcxz = new Nbvcxz();
@@ -98,6 +96,7 @@ public class RegistrationUtils {
                 return new PasswordResult(SUCCESS, entropy, timeToCrackOff, timeToCrackOn, result.getFeedback().getResult());
             }
         } catch (ExecutionException | TimeoutException | InterruptedException e) {
+            WebAppListener.executor.shutdownNow();
             logger.warn("Had to cancel Nbvcxz estimation. error: " + e.toString());
             return new PasswordResult(ANALYSIS_TIMED_OUT, 0d, ANALYSIS_TIMED_OUT.toString(), ANALYSIS_TIMED_OUT.toString(), ANALYSIS_TIMED_OUT.toString());
         }
