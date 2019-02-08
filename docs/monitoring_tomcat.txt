@@ -1,0 +1,14 @@
+To monitor Tomcat with JConsole:
+
+First, in the /opt/tomcat/bin directory, add a file "setenv.sh"
+
+Here are the contents:
+
+export CATALINA_OPTS="$CATALINA_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9999 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Djava.rmi.server.hostname=uitestbox";
+
+make sure it has the proper ownership and permissions:
+
+$ sudo chown jenkins:jenkins setenv.sh
+$ sudo chmod 750 setenv.sh
+
+restart Tomcat, and you will be able to access it from JConsole on port 9999
