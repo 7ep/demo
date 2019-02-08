@@ -59,7 +59,7 @@ pipeline {
         // need demo_tests on the box, that's where we have the UI tests located.
         sh 'ssh cuser@uitestbox rm -fr demo_tests'
         sh 'ssh cuser@uitestbox git clone cuser@jenkinsbox:~/demo demo_tests --branch master'
-        sh 'ssh cuser@uitestbox "cd demo_tests;pipenv install"'
+        sh 'ssh cuser@uitestbox "cd demo_tests;pipenv install 2>/dev/null"'
 
         sh 'ssh cuser@uitestbox "sudo service tomcat9 stop && sudo service tomcat9 start"'
         // need a little time to wait for Tomcat to initialize the application...
