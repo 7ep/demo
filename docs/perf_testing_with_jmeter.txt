@@ -1,0 +1,21 @@
+Demonstrating Performance testing with JMeter
+
+Open Jmeter.
+Open demo.jmx
+Open Oracle Java Mission Control (JMC)
+Open the log file for Tomcat
+in JMC, open the MBean browser and under org.apache.logging.log4j2, open up the objects and in Loggers, there is a subelement which has a Level of ERROR.  Set that to INFO.
+Do some stuff in the web app like trying to register a new user - make sure logging is set to INFO.
+In JMC, switch back to the views that show memory and cpu.  Make that big screen.
+Make the logging clearly visible - move the window around to suit.
+Back in Jmeter, click the Run button (the arrow to the right, like from a cassette player)
+You will see that in the logs and in the CPU/Memory, something is happening.
+
+Now, in Thread Group, adjust the number of threads to 1 and run without pauses.  
+After, show the graph and the summary report.
+
+Change the number of threads to 5 and run without pauses.
+
+Change the Loop count to forever.
+
+Show the graph of thoroughput.
