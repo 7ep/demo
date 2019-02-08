@@ -61,7 +61,6 @@ pipeline {
         sh 'ssh cuser@uitestbox git clone cuser@jenkinsbox:~/demo demo_tests --branch master'
         sh 'ssh cuser@uitestbox "cd demo_tests;pipenv install 2>/dev/null"'
 
-        sh 'ssh cuser@uitestbox "sudo service tomcat9 stop && sudo service tomcat9 start"'
         // need a little time to wait for Tomcat to initialize the application...
         sh 'sleep 10'
       }
