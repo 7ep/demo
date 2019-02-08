@@ -20,6 +20,11 @@ Feature: Authenticating to the system
         When I register with a username of "Byron" and a password of "short"
         Then it indicates that I used a poor password
 
+    Scenario: Registering with a poor password (negative case)
+        Given I am not registered
+        When I register with a username of "Byron" and a password of "simplybad"
+        Then it indicates that I used a poor password
+
     Scenario: Login with valid user
         Given I am registered as "Byron" with a password of "OAh8Wq8CajGZwURSXI8uSS"
         When I login with those credentials

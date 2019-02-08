@@ -31,6 +31,25 @@ Feature: As a user of the system, I want to be able to authenticate myself, so I
     When they register with that username and use the password "lpcvwwrkwsnvh"
     Then they become registered
 
+   # The following is a scenario that is extra documentation for the team.
+   # It helps  make concrete the reasons why the system requires more difficult passwords.
+
+   # we are ignoring this feature for now because it turns out that the library
+   # we are using, Nbvcxz, is turtle slow.  Once I figure out a way to
+   # handle that problem, this feature can be re-vitalized.
+  @registration
+   Scenario Outline: A user might try different passwords, but we are making sure they are excellent before we allow it.
+     Given a user is in the midst of registering for an account
+     When they try registering with the password <password>
+     Then the system returns that the password has insufficient entropy, taking this long to crack: <time_to_crack>
+     Examples:
+     | password                | time_to_crack               |
+     | typical_password_123    | 1 hours                     |
+     | aaaaaa                  | instant                     |
+     | password123             | instant                     |
+     | really_totally_long_wut | 564 centuries               |
+
+
   @registration
   Scenario Outline: A user is unable to register due to blatantly bad password
     Given a user "adam" is not currently registered in the system
