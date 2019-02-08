@@ -30,9 +30,11 @@ public class RegistrationUtils {
     public RegistrationResult processRegistration(String username, String password) {
         // first we check if the username is empty
         boolean isUsernameEmpty = username == null || username.isEmpty();
+        logger.info("username is empty");
         if (isUsernameEmpty) return new RegistrationResult(false, EMPTY_USERNAME);
 
         if (isUserInDatabase(username)) {
+            logger.info("cannot register this user - they are already registered");
             return new RegistrationResult(false, ALREADY_REGISTERED);
         }
 
@@ -48,16 +50,14 @@ public class RegistrationUtils {
 
         // then we check if the password is good.
         final PasswordResult passwordResult = isPasswordGood(password);
-        if (passwordResult.status != SUCCESS) return new RegistrationResult(false, BAD_PASSWORD, passwordResult.toString());
-
-        // then we check if the username already exists
-        final User user = persistenceLayer.searchForUserByName(username);
-        if (!user.isEmpty()) {
-            return new RegistrationResult(false, ALREADY_REGISTERED);
+        if (passwordResult.status != SUCCESS) {
+          logger.info("user provided a bad password during registration");
+          return new RegistrationResult(false, BAD_PASSWORD, passwordResult.toString());
         }
 
         // at this point, we feel assured it's ok to save to the database.
         saveToDatabase(username, password);
+        logger.info(String.format("saving new user, %s, to database", username));
         return new RegistrationResult(true, SUCCESSFULLY_REGISTERED);
     }
 
@@ -80,8 +80,10 @@ public class RegistrationUtils {
         String timeToCrackOff = TimeEstimate.getTimeToCrackFormatted(result, "OFFLINE_BCRYPT_12");
         String timeToCrackOn = TimeEstimate.getTimeToCrackFormatted(result, "ONLINE_THROTTLED");
         if (!result.isMinimumEntropyMet()) {
+            logger.info("minimum entropy for password was not met");
             return new PasswordResult(INSUFFICIENT_ENTROPY, entropy, timeToCrackOff, timeToCrackOn, suggestions);
         } else {
+            logger.info("password met required entropy");
             return new PasswordResult(SUCCESS, entropy, timeToCrackOff, timeToCrackOn, result.getFeedback().getResult());
         }
     }
