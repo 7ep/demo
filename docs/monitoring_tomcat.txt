@@ -15,31 +15,3 @@ $ sudo chmod 750 setenv.sh
 restart Tomcat, and you will be able to access it from JConsole on port 9999
 
 
-To enable the manager and host-manager applications on Tomcat:
--------------------------------------------------------------
-
-in /opt/Tomcat/conf/tomcat-users.xml, add this text at the bottom:
-
-It will make the username and password be "admin" for the /manager and /host-manager application
-<role rolename="manager-gui"/>
-<role rolename="manager-script"/>
-<role rolename="manager-jmx"/>
-<role rolename="manager-status"/>
-<role rolename="admin-gui"/>
-<role rolename="admin-script"/>
-<role rolename="tomcat"/>
-<user username="admin" password="admin" roles="manager-gui,manager-script,manager-jmx,manager-status,admin-gui,admin-script"/>
-
-
-In /opt/Tomcat/webapps/manager/META-INF/context.xml and /opt/Tomcat/webapps/host-manager/META-INF/context.xml
-
-Replace the xml with this:
-
-<Context antiResourceLocking="false" privileged="true" >
-  <Valve className="org.apache.catalina.valves.RemoteAddrValve"
-         allow="^.*$" />
-  <Manager sessionAttributeValueClassNameFilter="java\.lang\.(?:Boolean|Integer|Long|Number|String)|org\.apache\.catalina\.filters\.CsrfPreventionFilter\$LruCache(?:\$1)?|java\.util\.(?:Linked)?HashMap"/>
-</Context>
-
-
-
