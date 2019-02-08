@@ -66,9 +66,18 @@ public class RegistrationUtils {
      * See implementation for criteria.
      */
     public static PasswordResult isPasswordGood(String password) {
-        if (password.isEmpty()) return PasswordResult.createDefault(EMPTY_PASSWORD);
-        if (password.length() < 6) return PasswordResult.createDefault(TOO_SHORT);
-        if (password.length() > 100) return PasswordResult.createDefault(TOO_LONG);
+        if (password.isEmpty()) {
+            logger.info("password was empty");
+            return PasswordResult.createDefault(EMPTY_PASSWORD);
+        }
+        if (password.length() < 6) {
+            logger.info("password was too short");
+            return PasswordResult.createDefault(TOO_SHORT);
+        }
+        if (password.length() > 100) {
+            logger.info("password was too long");
+            return PasswordResult.createDefault(TOO_LONG);
+        }
 
         // Nbvcxz is a tool that tests entropy on passwords
         // See github.com/GoSimpleLLC/nbvcxz
