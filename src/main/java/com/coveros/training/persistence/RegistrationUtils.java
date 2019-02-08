@@ -2,7 +2,6 @@ package com.coveros.training.persistence;
 
 import com.coveros.training.domainobjects.PasswordResult;
 import com.coveros.training.domainobjects.RegistrationResult;
-import com.coveros.training.domainobjects.User;
 import me.gosimple.nbvcxz.Nbvcxz;
 import me.gosimple.nbvcxz.scoring.Result;
 import me.gosimple.nbvcxz.scoring.TimeEstimate;
@@ -57,7 +56,7 @@ public class RegistrationUtils {
 
         // at this point, we feel assured it's ok to save to the database.
         saveToDatabase(username, password);
-        logger.info(String.format("saving new user, %s, to database", username));
+        logger.info("saving new user, {}, to database", username);
         return new RegistrationResult(true, SUCCESSFULLY_REGISTERED);
     }
 
