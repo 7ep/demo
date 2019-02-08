@@ -54,7 +54,7 @@ public class LibraryUtils {
      * that calls to the persistence layer, making it easier to test.
      */
     void createLoan(Book book, Borrower borrower, Date borrowDate) {
-        logger.info("creating loan for book: {} by borrower: {} on date: {}", book.title, borrower.name, borrowDate.toString());
+        logger.info("creating loan for book: {} by borrower: {} on date: {}", book.title, borrower.name, borrowDate);
         persistence.createLoan(book, borrower, borrowDate);
     }
 
