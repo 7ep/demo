@@ -244,10 +244,13 @@ task runAllTests(type: GradleBuild) {
 test {
     testLogging {
         exceptionFormat "full" // default is "short"
+        // uncomment the following to see the unit test progress in the output
+        //events "started", "passed", "skipped", "failed", "standardOut", "standardError"
     }
 }
 
 dependencyCheck {
+    showSummary=false
     autoUpdate=true
     cveValidForHours=168 // a week.
     format='HTML' // options are  (HTML, XML, CSV, JSON, VULN, ALL).
