@@ -40,3 +40,6 @@ api_tests/__pycache__
 
 # the h2 database files
 *.db
+
+# the log file created by log4j2
+log/
