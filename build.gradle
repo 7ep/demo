@@ -141,7 +141,7 @@ cucumberReports {
 }
 
 flyway {
-    url = 'jdbc:h2:./training;MODE=PostgreSQL'
+    url = 'jdbc:h2:./build/db/training;AUTO_SERVER=TRUE;MODE=POSTGRESQL'
     driver = 'org.h2.Driver'
     user = ""
     password = ""
@@ -150,7 +150,7 @@ flyway {
 
 
 // starts the h2 console
-task startConsole(type: Exec) {
+task startH2Console(type: Exec) {
     dependsOn 'copyToLib'
     commandLine 'javaw','-cp','build/lib/h2-1.4.197.jar','org.h2.tools.Console'
 }
