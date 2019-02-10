@@ -42,7 +42,7 @@ public class PersistenceLayerTests {
      */
     @Test
     public void testShouldSaveBorrowerToDatabase() {
-        runRestoreEmpty();
+        pl.cleanAndMigrateDatabase();
 
         long id = pl.saveNewBorrower(DEFAULT_BORROWER.name);
 
@@ -133,7 +133,7 @@ public class PersistenceLayerTests {
 
     @Test
     public void testWeCanSaveANewUser() {
-        runRestoreEmpty();
+        pl.cleanAndMigrateDatabase();
 
         long id = pl.saveNewUser("alice");
 
@@ -142,7 +142,7 @@ public class PersistenceLayerTests {
 
     @Test
     public void testWeCanSaveABook(){
-        runRestoreEmpty();
+        pl.cleanAndMigrateDatabase();
 
         long id = pl.saveNewBook("The DevOps Handbook");
 
@@ -228,10 +228,6 @@ public class PersistenceLayerTests {
         runRestoreOneBookOneBorrower();
     }
 
-    private void runRestoreEmpty() {
-        runRestore("db_sample_files/v2_empty_schema.sql");
-    }
-
     private void runRestoreOneBookOneBorrower() {
         runRestore("db_sample_files/v2_one_book_one_borrower.sql");
     }
@@ -252,11 +248,14 @@ public class PersistenceLayerTests {
      * Get a file-based {@link JdbcConnectionPool}, which makes it easier
      * to debug database tests when they are running.
      *
+     * Because we set AUTO_SERVER to true, we can access this database
+     * from multiple places when it starts.
+     *
      * This method is solely meant to be used by database tests.
      */
     private static JdbcConnectionPool getFileBasedDatabaseConnectionPool() {
         return JdbcConnectionPool.create(
-            "jdbc:h2:./build/db/training", "", "");
+            "jdbc:h2:./build/db/training;AUTO_SERVER=TRUE;MODE=PostgreSQL", "", "");
     }
 
 

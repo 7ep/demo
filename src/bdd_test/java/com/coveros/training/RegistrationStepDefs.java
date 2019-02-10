@@ -3,13 +3,13 @@ package com.coveros.training;
 import com.coveros.training.domainobjects.PasswordResult;
 import com.coveros.training.domainobjects.RegistrationResult;
 import com.coveros.training.domainobjects.RegistrationStatusEnums;
+import com.coveros.training.persistence.PersistenceLayer;
 import com.coveros.training.persistence.RegistrationUtils;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
-
-import static com.coveros.training.persistence.PersistenceLayer.cleanAndMigrateDatabase;
+import org.junit.Before;
 
 public class RegistrationStepDefs {
 
@@ -18,12 +18,18 @@ public class RegistrationStepDefs {
     private RegistrationResult myRegistrationResult = RegistrationResult.createEmpty();
     private RegistrationUtils registrationUtils = RegistrationUtils.createEmpty();
     private PasswordResult passwordResult = PasswordResult.createEmpty();
+    private PersistenceLayer pl = PersistenceLayer.createEmpty();
+
+    @Before
+    public void init() {
+        pl = new PersistenceLayer();
+    }
 
     /**
      * create objects for registration and login, and clear the database.
      */
     private void initializeDatabaseAccess() {
-        cleanAndMigrateDatabase();
+        pl.cleanAndMigrateDatabase();
         registrationUtils = new RegistrationUtils();
     }
 

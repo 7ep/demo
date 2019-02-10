@@ -5,17 +5,17 @@ import com.coveros.training.domainobjects.Borrower;
 import com.coveros.training.domainobjects.LibraryActionResults;
 import com.coveros.training.domainobjects.Loan;
 import com.coveros.training.persistence.LibraryUtils;
+import com.coveros.training.persistence.PersistenceLayer;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
+import org.junit.Before;
 
 import java.sql.Date;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-
-import static com.coveros.training.persistence.PersistenceLayer.cleanAndMigrateDatabase;
 
 public class BookCheckOutStepDefs {
 
@@ -25,12 +25,18 @@ public class BookCheckOutStepDefs {
     private LibraryUtils libraryUtils = LibraryUtils.createEmpty();
     private final Date Jan_2nd = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 2));
     private LibraryActionResults libraryActionResults = LibraryActionResults.NULL;
+    private PersistenceLayer pl = PersistenceLayer.createEmpty();
+
+    @Before
+    public void init() {
+        pl = new PersistenceLayer();
+    }
 
     /**
      * Set up the databases, clear them, initialize the Library Utility with them.
      */
     private void initializeEmptyDatabaseAndUtility() {
-        cleanAndMigrateDatabase();
+        pl.cleanAndMigrateDatabase();
         libraryUtils = new LibraryUtils();
     }
 

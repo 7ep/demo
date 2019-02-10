@@ -1,17 +1,18 @@
 package com.coveros.training;
 
+import com.coveros.training.persistence.PersistenceLayer;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-
-import static com.coveros.training.persistence.PersistenceLayer.cleanAndMigrateDatabase;
 
 @WebListener
 public class WebAppListener implements ServletContextListener {
 
   @Override
   public void contextInitialized ( ServletContextEvent sce ) {
-    cleanAndMigrateDatabase();
+    final PersistenceLayer persistenceLayer = new PersistenceLayer();
+    persistenceLayer.cleanAndMigrateDatabase();
   }
 
   @Override

@@ -29,7 +29,7 @@ public class PersistenceLayer {
 
     private static JdbcConnectionPool obtainConnectionPool() {
         return JdbcConnectionPool.create(
-            "jdbc:h2:mem:training", "", "");
+            "jdbc:h2:mem:training;MODE=PostgreSQL", "", "");
     }
 
     /**
@@ -388,7 +388,7 @@ public class PersistenceLayer {
      * Cleans the database and runs the scripts to update it
      * to the most current version.
      */
-    public static void cleanAndMigrateDatabase() {
+    public void cleanAndMigrateDatabase() {
         cleanDatabase();
         migrateDatabase();
     }
@@ -397,7 +397,7 @@ public class PersistenceLayer {
      * Cleans the database and runs the scripts to update it
      * to the most current version.
      */
-    public static void cleanDatabase() {
+    public void cleanDatabase() {
         Flyway flyway = configureFlyway();
         flyway.clean();
     }
@@ -406,15 +406,15 @@ public class PersistenceLayer {
      * Cleans the database and runs the scripts to update it
      * to the most current version.
      */
-    public static void migrateDatabase() {
+    public void migrateDatabase() {
         Flyway flyway = configureFlyway();
         flyway.migrate();
     }
 
-    private static Flyway configureFlyway() {
+    private Flyway configureFlyway() {
         return Flyway.configure()
             .schemas("ADMINISTRATIVE", "LIBRARY", "AUTH")
-            .dataSource(obtainConnectionPool())
+            .dataSource(this.dataSource)
             .load();
     }
 
