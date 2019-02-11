@@ -109,9 +109,10 @@ in docs.  *or*, see the appliance notes below.
 ---
 
 ##Screenshots:
-![alt Cucumber report](https://raw.githubusercontent.com/7ep/demo/master/screenshots/cucumber_report.png)
+![Cucumber report](https://raw.githubusercontent.com/7ep/demo/master/screenshots/cucumber_report.png)
 ![Feature file](https://raw.githubusercontent.com/7ep/demo/master/screenshots/feature_file.png)
 ![Jenkins pipeline](https://raw.githubusercontent.com/7ep/demo/master/screenshots/jenkins_pipeline.png)
 ![Webapp](https://raw.githubusercontent.com/7ep/demo/master/screenshots/webapp.png)
 ![Zap attach proxy](https://raw.githubusercontent.com/7ep/demo/master/screenshots/zap.png)
 ![SonarQube analysis](https://raw.githubusercontent.com/7ep/demo/master/screenshots/sonar.png)
+![Running performance tests](https://raw.githubusercontent.com/7ep/demo/master/screenshots/running_jmeter_perf_test.png)
