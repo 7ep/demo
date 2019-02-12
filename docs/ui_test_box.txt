@@ -306,6 +306,7 @@ ExecStart=/usr/share/owasp-zap/zap.sh -daemon -config api.disablekey=true
 WantedBy=multi-user.target
 -------------- FILE END ------------------------
 
+By the way, details on creating your own systemd script can be found here: https://medium.com/@benmorel/creating-a-linux-service-with-systemd-611b5c8b91d6
 
 In order to test out Zap, in the Quick Start tab, enter the following URL
 
