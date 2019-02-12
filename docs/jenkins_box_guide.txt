@@ -458,10 +458,9 @@ hosts:
       port: 80
       host: 0.0.0.0
     paths:
-      "/cucumber":
+   paths:
+      "/reports":
         file.dir: /var/lib/jenkins/workspace/demo/build/reports/bdd/cucumber-html-reports/
-      "/dependencycheck":
-        file.dir: /var/lib/jenkins/workspace/demo/build/reports/
 access-log: /var/log/h2o/access.log
 error-log: /var/log/h2o/error.log
 pid-file: /var/run/h2o/h2o.pid
