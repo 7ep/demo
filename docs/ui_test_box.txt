@@ -285,6 +285,28 @@ Change the port number so it doesn't interfere with our demo application:
 Open ZAP, Tools--> Options --> local proxies
 Change the default 8080 port to 8888 and click Ok.
 
+Configure Zap to run as a proxy at boot:
+
+edit /etc/systemd/system/zap.service:
+
+-------------- FILE START ------------------------
+[Unit]
+Description=Zap security proxy
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=cuser
+ExecStart=/usr/share/owasp-zap/zap.sh -daemon -config api.disablekey=true
+
+[Install]
+WantedBy=multi-user.target
+-------------- FILE END ------------------------
+
+
 In order to test out Zap, in the Quick Start tab, enter the following URL
 
 URL to attack: http://localhost:8080/demo
@@ -294,6 +316,7 @@ Then, click Attack.
 To do the same thing from the command line, run this:
 
 /usr/share/owasp-zap/zap.sh -cmd -quickurl http://localhost:8080/demo
+
 
 CUSTOMIZE HOSTS FILE
 --------------------
