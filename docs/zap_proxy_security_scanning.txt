@@ -1,0 +1,23 @@
+In environment.py, add this import:
+
+from selenium.webdriver.common.proxy import Proxy, ProxyType
+
+and replace __open_browser with this:
+
+def __open_browser(context):
+    PROXY = "localhost:8888"
+
+    proxy = Proxy()
+    proxy.proxy_type = ProxyType.MANUAL
+    proxy.http_proxy = PROXY
+    proxy.socks_proxy = PROXY
+    proxy.ssl_proxy = PROXY
+
+    capabilities = webdriver.DesiredCapabilities.CHROME
+    proxy.add_to_capabilities(capabilities)
+
+    context.driver = webdriver.Chrome(desired_capabilities=capabilities)
+
+Now, run Zap.
+
+Finally, run the ui tests.  It will run them through that proxy and you will get a report of what it sees.
