@@ -32,8 +32,6 @@ def __open_browser(context):
         proxy = Proxy()
         proxy.proxy_type = ProxyType.MANUAL
         proxy.http_proxy = PROXY
-        proxy.socks_proxy = PROXY
-        proxy.ssl_proxy = PROXY
 
         capabilities = webdriver.DesiredCapabilities.CHROME
         proxy.add_to_capabilities(capabilities)
