@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.proxy import Proxy, ProxyType
 import requests
 
 SERVER = "localhost"
@@ -21,7 +22,25 @@ def before_all(context):
 
 
 def __open_browser(context):
-    context.driver = webdriver.Chrome()
+    try:
+        # if there is a proxy, we'll use it.  Otherwise, we won't.
+        requests.get("http://localhost:8888", timeout=0.01)
+
+        # if there was no exception, we continue here.
+        PROXY = "localhost:8888"
+
+        proxy = Proxy()
+        proxy.proxy_type = ProxyType.MANUAL
+        proxy.http_proxy = PROXY
+        proxy.socks_proxy = PROXY
+        proxy.ssl_proxy = PROXY
+
+        capabilities = webdriver.DesiredCapabilities.CHROME
+        proxy.add_to_capabilities(capabilities)
+
+        context.driver = webdriver.Chrome(desired_capabilities=capabilities)
+    except:
+        context.driver = webdriver.Chrome()
 
 
 def before_scenario(context, scenario):

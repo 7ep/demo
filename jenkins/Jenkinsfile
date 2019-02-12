@@ -83,9 +83,21 @@ pipeline {
     // when it comes to experimentation with UI tests.  You can try things and see how they work out.
     stage('UI Tests') {
       steps {
+        // following line will clear Zap's memory:
+        sh 'ssh cuser@uitestbox "curl http://zap/JSON/core/action/newSession -s --proxy localhost:8888"'
+
+        // run the UI tests
         sh 'ssh cuser@uitestbox ". /etc/profile; cd demo_tests ; export DISPLAY=:0; ./gradlew runBehaveTests"'
+
+        // copy over the test results
         sh 'mkdir build/test-results/bdd_ui'
         sh 'scp -r cuser@uitestbox:~/demo_tests/build/test-results/bdd_ui/* build/test-results/bdd_ui/'
+
+        // following line will generate a new report and store it at ~/zap_report.html
+        sh 'ssh cuser@uitestbox "curl http://zap/OTHER/core/other/htmlreport --proxy localhost:8888 > ~/zap_report.html"'
+
+        // copy that report to our server
+        sh 'scp cuser@uitestbox:~/zap_report.html build/reports/'
       }
       post {
         always {
