@@ -1,3 +1,10 @@
+Zap proxy for UI tests
+----------------------
+
+It's an excellent idea to have a security scanning proxy to run your UI tests through.  What will
+happen is that the scanner will inspect everything about each request and response, and will then
+be able to notify you of any issues it sees during the run.
+
 In environment.py, add this import:
 
 from selenium.webdriver.common.proxy import Proxy, ProxyType
