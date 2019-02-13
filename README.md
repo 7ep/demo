@@ -109,10 +109,10 @@ in docs.  *or*, see the appliance notes below.
 ---
 
 ##Screenshots:
-![Cucumber report](https://raw.githubusercontent.com/7ep/demo/master/screenshots/cucumber_report.png)
-![Feature file](https://raw.githubusercontent.com/7ep/demo/master/screenshots/feature_file.png)
-![Jenkins pipeline](https://raw.githubusercontent.com/7ep/demo/master/screenshots/jenkins_pipeline.png)
-![Webapp](https://raw.githubusercontent.com/7ep/demo/master/screenshots/webapp.png)
-![Zap attach proxy](https://raw.githubusercontent.com/7ep/demo/master/screenshots/zap.png)
-![SonarQube analysis](https://raw.githubusercontent.com/7ep/demo/master/screenshots/sonar.png)
-![Running performance tests](https://raw.githubusercontent.com/7ep/demo/master/screenshots/running_jmeter_perf_test.png)
+![Cucumber report](https://c2.staticflickr.com/8/7881/33202009728_00134731ac_o.png)
+![Feature file](https://c2.staticflickr.com/8/7811/47077017811_ef51957ea5_b.jpg)
+![Jenkins pipeline](https://c2.staticflickr.com/8/7889/33202009658_11422b7f20_b.jpg)
+![Webapp](https://c2.staticflickr.com/8/7916/47077017561_f190c6f88e_o.png)
+![Zap attach proxy](https://c2.staticflickr.com/8/7905/33202009438_8f367e20ec_o.png)
+![SonarQube analysis](https://c2.staticflickr.com/8/7823/33202009548_e678128200_b.jpg)
+![Running performance tests](https://c2.staticflickr.com/8/7854/47077017751_7e045f68dd_b.jpg)
