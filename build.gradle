@@ -246,7 +246,7 @@ test {
 
 dependencyCheck {
     showSummary=false
-    autoUpdate=true
+    autoUpdate=false
     cveValidForHours=168 // a week.
     format='HTML' // options are  (HTML, XML, CSV, JSON, VULN, ALL).
     failBuildOnCVSS=8 // see https://www.first.org/cvss/specification-document#5-Qualitative-Severity-Rating-Scale
