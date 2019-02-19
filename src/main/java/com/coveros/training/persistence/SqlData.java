@@ -7,17 +7,23 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * This class encapsulates some of the actions related to
  * injecting data into a prepared SQL statement, so that
  * we are able to summarize what we want done without
  * all the annoying boilerplate.  See examples like {@link PersistenceLayer#saveNewBorrower}
+ *
+ * Was necessary to suppress the nullness warnings on this class due to its
+ * use of generics.
  */
-final class SqlData {
+@SuppressWarnings("nullness")
+final class SqlData<R> {
 
   /**
    * A summary description of what this SQL is doing.
@@ -35,11 +41,29 @@ final class SqlData {
    */
   private final List<ParameterObject> params;
 
+  /**
+   * A generic function - takes a {@link ResultSet} straight from the database,
+   * and then carries out actions on it, per the user's intentions, to convert it
+   * into something of type {@link R}.
+   */
+  final public Function<ResultSet, R> extractor;
 
   SqlData(String description, String preparedStatement) {
+    this(description, preparedStatement, null);
+  }
+
+  /**
+   * Creates an object that is used to avoid some of the boilerplate
+   * in running database CRUD operations.
+   * @param description A string that describes in plain English what this SQL does.
+   * @param preparedStatement The SQL that is run on the database
+   * @param extractor see {@link #extractor} a function that is run to convert the returned {@link ResultSet} into whatever we want
+   */
+  SqlData(String description, String preparedStatement, Function<ResultSet, R> extractor) {
     this.description = description;
     this.preparedStatement = preparedStatement;
     this.params = new ArrayList<>();
+    this.extractor = extractor;
   }
 
 
@@ -100,6 +124,7 @@ final class SqlData {
         .append(description, rhs.description)
         .append(preparedStatement, rhs.preparedStatement)
         .append(params, rhs.params)
+        .append(extractor, rhs.extractor)
         .isEquals();
   }
 
@@ -110,6 +135,7 @@ final class SqlData {
         .append(description)
         .append(preparedStatement)
         .append(params)
+        .append(extractor)
         .toHashCode();
   }
 
@@ -124,4 +150,5 @@ final class SqlData {
   public boolean isEmpty() {
     return this.equals(SqlData.createEmpty());
   }
+
 }
