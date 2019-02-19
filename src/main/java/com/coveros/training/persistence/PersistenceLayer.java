@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.util.function.Function;
 
 public class PersistenceLayer {
 
@@ -172,25 +173,22 @@ public class PersistenceLayer {
      * @param id a borrower's id.
      * @return the borrower's name, or an empty string if not found
      */
-    String getBorrowerName(int id) {
-        CheckUtils.checkIntParamPositive(id);
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement st =
-                     connection.prepareStatement(
-                         "SELECT name FROM library.borrower WHERE id = ?;")) {
-                st.setLong(1, id);
-                try (ResultSet resultSet = st.executeQuery()) {
-                    if (resultSet.next()) {
-                        final String name = resultSet.getString(1);
-                        return StringUtils.makeNotNullable(name);
-                    } else {
-                        return "";
-                    }
-                }
+    String getBorrowerName(long id) {
+        Function<ResultSet, String> extractor = throwingFunctionWrapper((rs) -> {
+            if (rs.next()) {
+                return StringUtils.makeNotNullable(rs.getString(1));
+            } else {
+                return "";
             }
-        } catch (SQLException ex) {
-            throw new SqlRuntimeException(ex);
-        }
+        });
+
+        final SqlData sqlData =
+            new SqlData(
+                "get a borrower's name by their id",
+                "SELECT name FROM library.borrower WHERE id = ?;",
+                extractor);
+        sqlData.addParameter(id, Long.class);
+        return runQuery(sqlData);
     }
 
     /**
@@ -200,87 +198,124 @@ public class PersistenceLayer {
      * @return a valid borrower, or an empty borrower if not found
      */
     Borrower searchBorrowerDataByName(String borrowerName) {
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement st =
-                     connection.prepareStatement(
-                         "SELECT id, name FROM library.borrower WHERE name = ?;")) {
-                st.setString(1, borrowerName);
-                try (ResultSet resultSet = st.executeQuery()) {
-                    if (resultSet.next()) {
-                        long id = resultSet.getLong(1);
-                        String name = StringUtils.makeNotNullable(resultSet.getString(2));
-                        return new Borrower(id, name);
-                    } else {
-                        return Borrower.createEmpty();
-                    }
-                }
+        Function<ResultSet, Borrower> extractor = throwingFunctionWrapper((rs) -> {
+            if (rs.next()) {
+                long id = rs.getLong(1);
+                String name = StringUtils.makeNotNullable(rs.getString(2));
+                return new Borrower(id, name);
+            } else {
+                return Borrower.createEmpty();
             }
-        } catch (SQLException ex) {
-            throw new SqlRuntimeException(ex);
-        }
+        });
+
+        final SqlData sqlData =
+            new SqlData(
+                "search for details on a borrower by name",
+                "SELECT id, name FROM library.borrower WHERE name = ?;",
+                extractor);
+        sqlData.addParameter(borrowerName, String.class);
+        return runQuery(sqlData);
     }
 
     Book searchBooksByTitle(String bookTitle) {
+        Function<ResultSet, Book> extractor = throwingFunctionWrapper((rs) -> {
+            if (rs.next()) {
+                long id = rs.getLong(1);
+                return new Book(id, bookTitle);
+            } else {
+                return Book.createEmpty();
+            }
+        });
+
+        final SqlData sqlData =
+            new SqlData(
+                "search for a book by title",
+                "SELECT id FROM library.book WHERE title = ?;",
+                extractor);
+        sqlData.addParameter(bookTitle, String.class);
+        return runQuery(sqlData);
+    }
+
+    <R> R runQuery(SqlData sqlData) {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st =
-                     connection.prepareStatement(
-                         "SELECT id FROM library.book WHERE title = ?;")) {
-                st.setString(1, bookTitle);
+                     connection.prepareStatement(sqlData.preparedStatement)) {
+                sqlData.applyParametersToPreparedStatement(st);
                 try (ResultSet resultSet = st.executeQuery()) {
-                    if (resultSet.next()) {
-                        long id = resultSet.getLong(1);
-                        return new Book(id, bookTitle);
-                    } else {
-                        return Book.createEmpty();
-                    }
+                    return (R)sqlData.extractor.apply(resultSet);
                 }
             }
         } catch (SQLException ex) {
             throw new SqlRuntimeException(ex);
         }
+
+    }
+
+    /**
+     * This is an interface to a wrapper around {@link Function} so we can catch exceptions
+     * in the generic function.
+     * @param <T> The type of the thing acted upon
+     * @param <R> The return type
+     * @param <E> The type of the exception
+     */
+    @FunctionalInterface
+    public interface ThrowingFunction<T, R, E extends Exception> {
+        R apply(T t) throws E;
+    }
+
+    /**
+     * This is the implementation of {@link ThrowingFunction}
+     */
+    static <T, R> Function<T, R> throwingFunctionWrapper(
+        ThrowingFunction<T, R, Exception> throwingFunction) {
+
+        return t -> {
+            try {
+                return throwingFunction.apply(t);
+            } catch (Exception ex) {
+                throw new SqlRuntimeException(ex);
+            }
+        };
     }
 
     User searchForUserByName(String username) {
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement st =
-                     connection.prepareStatement(
-                         "SELECT id  FROM auth.user WHERE name = ?;")) {
-                st.setString(1, username);
-                try (ResultSet resultSet = st.executeQuery()) {
-                    if (resultSet.next()) {
-                        final long id = resultSet.getLong(1);
-                        return new User(username, id);
-                    } else {
-                        return User.createEmpty();
-                    }
+        Function<ResultSet, User> extractor = throwingFunctionWrapper((rs) -> {
+                if (rs.next()) {
+                    final long id = rs.getLong(1);
+                    return new User(username, id);
+                } else {
+                    return User.createEmpty();
                 }
-            }
-        } catch (SQLException ex) {
-            throw new SqlRuntimeException(ex);
-        }
+        });
+        final SqlData sqlData =
+            new SqlData(
+                "search for a user by id, return that user if found, otherwise return an empty user",
+                "SELECT id  FROM auth.user WHERE name = ?;",
+                extractor);
+        sqlData.addParameter(username, String.class);
+        return runQuery(sqlData);
     }
 
-    boolean areCredentialsValid(String username, String password) {
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement st =
-                     connection.prepareStatement(
-                         "SELECT id FROM auth.user WHERE name = ? AND password_hash = ?;")) {
-                final String hexHash = createHashedValueFromPassword(password);
-                st.setString(1, username);
-                st.setString(2, hexHash);
-                try (ResultSet resultSet = st.executeQuery()) {
-                    if (resultSet.next()) {
-                        final long id = resultSet.getLong(1);
-                        assert (id > 0);
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
+    Boolean areCredentialsValid (String username, String password) {
+        Function<ResultSet, Boolean> extractor = throwingFunctionWrapper((rs) -> {
+            if (rs.next()) {
+                final long id = rs.getLong(1);
+                assert (id > 0);
+                return true;
+            } else {
+                return false;
             }
-        } catch (SQLException ex) {
-            throw new SqlRuntimeException(ex);
-        }
+        });
+
+        final SqlData sqlData =
+            new SqlData(
+                "check to see if the credentials for a user are valid",
+                "SELECT id FROM auth.user WHERE name = ? AND password_hash = ?;",
+                extractor);
+        final String hexHash = createHashedValueFromPassword(password);
+        sqlData.addParameter(username, String.class);
+        sqlData.addParameter(hexHash, String.class);
+        return runQuery(sqlData);
     }
 
     void updateUserWithPassword(long id, String password) {
@@ -306,27 +341,26 @@ public class PersistenceLayer {
     }
 
     Loan searchForLoan(Book book) {
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement st =
-                     connection.prepareStatement(
-                         "select loan.id, loan.borrow_date, loan.borrower, bor.name FROM library.loan loan JOIN library.borrower bor ON bor.id = loan.id WHERE loan.book = ?;")) {
-                st.setLong(1, book.id);
-                try (ResultSet resultSet = st.executeQuery()) {
-                    if (resultSet.next()) {
-                        final long loanId = resultSet.getLong(1);
-                        final Date borrowDate = resultSet.getDate(2);
-                        final long borrowerId = resultSet.getLong(3);
-                        final String borrowerName = StringUtils.makeNotNullable(resultSet.getString(4));
-                        final Date borrowDateNotNullable = borrowDate == null ? Date.valueOf("0000-01-01") : borrowDate;
-                        return new Loan(book, new Borrower(borrowerId, borrowerName), loanId, borrowDateNotNullable);
-                    } else {
-                        return Loan.createEmpty();
-                    }
-                }
+        Function<ResultSet, Loan> extractor = throwingFunctionWrapper((rs) -> {
+            if (rs.next()) {
+                final long loanId = rs.getLong(1);
+                final Date borrowDate = rs.getDate(2);
+                final long borrowerId = rs.getLong(3);
+                final String borrowerName = StringUtils.makeNotNullable(rs.getString(4));
+                final Date borrowDateNotNullable = borrowDate == null ? Date.valueOf("0000-01-01") : borrowDate;
+                return new Loan(book, new Borrower(borrowerId, borrowerName), loanId, borrowDateNotNullable);
+            } else {
+                return Loan.createEmpty();
             }
-        } catch (SQLException ex) {
-            throw new SqlRuntimeException(ex);
-        }
+        });
+
+        final SqlData sqlData =
+            new SqlData(
+                "search for a loan by book",
+                "select loan.id, loan.borrow_date, loan.borrower, bor.name FROM library.loan loan JOIN library.borrower bor ON bor.id = loan.id WHERE loan.book = ?;",
+                extractor);
+        sqlData.addParameter(book.id, Long.class);
+        return runQuery(sqlData);
     }
 
     private static String bytesToHex(byte[] hash) {
