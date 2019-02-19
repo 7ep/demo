@@ -5,7 +5,7 @@
 * [Java 8](https://www.oracle.com/technetwork/java/javase/overview/java8-2100321.html)  
 
 ###### Optional Dependencies - needed for API testing and Selenium testing.
-* [Python 3](https://www.python.org/downloads/)
+* [Python](https://www.python.org/downloads/)
 
 ---
 #### Java notes
