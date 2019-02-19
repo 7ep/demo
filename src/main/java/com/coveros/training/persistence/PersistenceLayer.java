@@ -174,6 +174,7 @@ public class PersistenceLayer {
      * @return the borrower's name, or an empty string if not found
      */
     String getBorrowerName(long id) {
+        CheckUtils.checkIntParamPositive(id);
         Function<ResultSet, String> extractor = throwingFunctionWrapper((rs) -> {
             if (rs.next()) {
                 return StringUtils.makeNotNullable(rs.getString(1));
