@@ -14,7 +14,7 @@ public class BorrowerTests {
     @Test
     public void testShouldOutputGoodString() {
         final Borrower borrower = createTestBorrower();
-        Assert.assertTrue( borrower.toString().contains("id=1,name=alice"));
+        Assert.assertTrue(borrower.toString().contains("id=1,name=alice"));
     }
 
     public static Borrower createTestBorrower() {

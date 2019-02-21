@@ -7,9 +7,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * An immutable data value representing the data for a borrower.
- *
+ * <p>
  * A borrower is a person who borrows a book from a library.
- *
+ * <p>
  * Note that we make our fields public because they are final,
  * so there's no need to have methods wrapping them.
  */
@@ -31,8 +31,12 @@ public final class Borrower {
     }
 
     public final boolean equals(@Nullable Object obj) {
-        if (obj == null) { return false; }
-        if (obj == this) { return true; }
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
         if (obj.getClass() != getClass()) {
             return false;
         }

@@ -1,7 +1,6 @@
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-import time
 import os
+import time
+from selenium import webdriver
 
 try:
     os.remove("../database.txt")
@@ -25,7 +24,6 @@ password.send_keys("somepass")
 register_button = driver.find_element_by_id("login_submit")
 time.sleep(1)
 register_button.click()
-
 
 title = driver.title
 try:

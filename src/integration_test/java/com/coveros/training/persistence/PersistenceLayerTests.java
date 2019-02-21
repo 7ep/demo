@@ -141,7 +141,7 @@ public class PersistenceLayerTests {
     }
 
     @Test
-    public void testWeCanSaveABook(){
+    public void testWeCanSaveABook() {
         pl.cleanAndMigrateDatabase();
 
         long id = pl.saveNewBook("The DevOps Handbook");
@@ -247,15 +247,15 @@ public class PersistenceLayerTests {
     /**
      * Get a file-based {@link JdbcConnectionPool}, which makes it easier
      * to debug database tests when they are running.
-     *
+     * <p>
      * Because we set AUTO_SERVER to true, we can access this database
      * from multiple places when it starts.
-     *
+     * <p>
      * This method is solely meant to be used by database tests.
      */
     private static JdbcConnectionPool getFileBasedDatabaseConnectionPool() {
         return JdbcConnectionPool.create(
-            "jdbc:h2:./build/db/training;AUTO_SERVER=TRUE;MODE=PostgreSQL", "", "");
+                "jdbc:h2:./build/db/training;AUTO_SERVER=TRUE;MODE=PostgreSQL", "", "");
     }
 
 

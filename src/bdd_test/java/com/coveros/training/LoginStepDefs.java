@@ -3,7 +3,6 @@ package com.coveros.training;
 import com.coveros.training.persistence.LoginUtils;
 import com.coveros.training.persistence.PersistenceLayer;
 import com.coveros.training.persistence.RegistrationUtils;
-import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -44,7 +43,7 @@ public class LoginStepDefs {
 
 
     @When("^when a user authenticates with \"([^\"]*)\" and \"([^\"]*)\"$")
-    public void whenAUserAuthenticatesWithAnd(String username, String password){
+    public void whenAUserAuthenticatesWithAnd(String username, String password) {
         isRegisteredUser = loginUtils.isUserRegistered(username, password);
     }
 

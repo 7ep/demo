@@ -5,8 +5,8 @@ package com.coveros.training.autoinsurance;
  * different numbers of claims and age of the driver.
  */
 public enum WarningLetterEnum {
-  NONE,
-  LTR1,
-  LTR2,
-  LTR3
+    NONE,
+    LTR1,
+    LTR2,
+    LTR3
 }

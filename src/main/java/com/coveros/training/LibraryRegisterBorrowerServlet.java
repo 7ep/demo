@@ -14,18 +14,18 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "LibraryRegisterBorrowerServlet", urlPatterns = {"/registerborrower"}, loadOnStartup = 1)
 public class LibraryRegisterBorrowerServlet extends HttpServlet {
 
-  private static final Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
-  static LibraryUtils libraryUtils = new LibraryUtils();
+    private static final Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
+    static LibraryUtils libraryUtils = new LibraryUtils();
 
-  @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-    final String borrower = request.getParameter("borrower");
-    request.setAttribute("borrower", borrower);
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        final String borrower = request.getParameter("borrower");
+        request.setAttribute("borrower", borrower);
 
-    final LibraryActionResults libraryActionResults = libraryUtils.registerBorrower(borrower);
+        final LibraryActionResults libraryActionResults = libraryUtils.registerBorrower(borrower);
 
-    request.setAttribute("result", libraryActionResults);
-    ServletUtils.forwardToResult(request, response, logger);
-  }
+        request.setAttribute("result", libraryActionResults);
+        ServletUtils.forwardToResult(request, response, logger);
+    }
 
 }

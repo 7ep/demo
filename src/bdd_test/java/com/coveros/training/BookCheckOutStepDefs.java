@@ -6,7 +6,6 @@ import com.coveros.training.domainobjects.LibraryActionResults;
 import com.coveros.training.domainobjects.Loan;
 import com.coveros.training.persistence.LibraryUtils;
 import com.coveros.training.persistence.PersistenceLayer;
-import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -14,7 +13,8 @@ import cucumber.api.java.en.When;
 import org.junit.Assert;
 
 import java.sql.Date;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 
 public class BookCheckOutStepDefs {
@@ -69,7 +69,7 @@ public class BookCheckOutStepDefs {
     @Then("^the system indicates the book is loaned to them on some date$")
     public void theSystemIndicatesTheBookIsLoanedToThemOnSomeDate() {
         final Loan loan = libraryUtils.searchForLoan(myBook);
-        Assert.assertEquals( Date.valueOf("2018-01-31"), loan.checkoutDate);
+        Assert.assertEquals(Date.valueOf("2018-01-31"), loan.checkoutDate);
     }
 
     @Given("^an individual, \"([^\"]*)\", is not registered$")
@@ -108,7 +108,6 @@ public class BookCheckOutStepDefs {
     public void theSystemIndicatesThatTheBookIsNotAvailable() {
         Assert.assertEquals(LibraryActionResults.BOOK_CHECKED_OUT, libraryActionResults);
     }
-
 
 
 }

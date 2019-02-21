@@ -1,8 +1,8 @@
 package com.coveros.training.persistence;
 
-import com.coveros.training.domainobjects.LibraryActionResults;
 import com.coveros.training.domainobjects.Book;
 import com.coveros.training.domainobjects.Borrower;
+import com.coveros.training.domainobjects.LibraryActionResults;
 import com.coveros.training.domainobjects.Loan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +60,7 @@ public class LibraryUtils {
 
     public LibraryActionResults registerBorrower(String borrower) {
         final Borrower borrowerDetails = searchForBorrowerByName(borrower);
-        final boolean borrowerWasFound = ! borrowerDetails.equals(Borrower.createEmpty());
+        final boolean borrowerWasFound = !borrowerDetails.equals(Borrower.createEmpty());
         if (borrowerWasFound) {
             logger.info("borrower: {} was already registered", borrower);
             return LibraryActionResults.ALREADY_REGISTERED_BORROWER;
@@ -81,7 +81,7 @@ public class LibraryUtils {
 
     public LibraryActionResults registerBook(String bookTitle) {
         final Book book = searchForBookByTitle(bookTitle);
-        if (! book.isEmpty()) {
+        if (!book.isEmpty()) {
             logger.info("book was already registered");
             return LibraryActionResults.ALREADY_REGISTERED_BOOK;
         }

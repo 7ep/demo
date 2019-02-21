@@ -1,9 +1,10 @@
+import requests
 from selenium import webdriver
 from selenium.webdriver.common.proxy import Proxy, ProxyType
-import requests
 
 SERVER = "localhost"
 URL = "http://%s:8080" % SERVER
+
 
 # used as a simple object during console runs,
 # to experiment.  typical incantation is:

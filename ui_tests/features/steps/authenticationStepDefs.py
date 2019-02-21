@@ -1,7 +1,6 @@
 from behave import given, when, then
 from hamcrest import *
 
-
 empty_database = ''
 one_user_registered = 'alice password123'
 
@@ -103,5 +102,3 @@ def step_impl(context):
 def step_impl(context):
     result = context.driver.find_element_by_id('result')
     assert_that(result.text, contains_string('access denied'))
-
-

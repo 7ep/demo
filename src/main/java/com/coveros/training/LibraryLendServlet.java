@@ -16,32 +16,32 @@ import java.time.LocalDate;
 @WebServlet(name = "LibraryLendServlet", urlPatterns = {"/lend"}, loadOnStartup = 1)
 public class LibraryLendServlet extends HttpServlet {
 
-  private static final Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
-  static LibraryUtils libraryUtils = new LibraryUtils();
+    private static final Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
+    static LibraryUtils libraryUtils = new LibraryUtils();
 
-  @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-    final String book = request.getParameter("book");
-    request.setAttribute("book", book);
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        final String book = request.getParameter("book");
+        request.setAttribute("book", book);
 
-    final String borrower = request.getParameter("borrower");
-    request.setAttribute("borrower", borrower);
+        final String borrower = request.getParameter("borrower");
+        request.setAttribute("borrower", borrower);
 
-    final Date now = getDateNow();
-    request.setAttribute("date", now.toString());
+        final Date now = getDateNow();
+        request.setAttribute("date", now.toString());
 
-    final LibraryActionResults libraryActionResults = libraryUtils.lendBook(book, borrower, now);
+        final LibraryActionResults libraryActionResults = libraryUtils.lendBook(book, borrower, now);
 
-    request.setAttribute("result", libraryActionResults.toString());
-    ServletUtils.forwardToResult(request, response, logger);
-  }
+        request.setAttribute("result", libraryActionResults.toString());
+        ServletUtils.forwardToResult(request, response, logger);
+    }
 
-  /**
-   * Wrapping the call to get a date for now,
-   * so it's easier to stub for testing.
-   */
-  Date getDateNow() {
-    return Date.valueOf(LocalDate.now());
-  }
+    /**
+     * Wrapping the call to get a date for now,
+     * so it's easier to stub for testing.
+     */
+    Date getDateNow() {
+        return Date.valueOf(LocalDate.now());
+    }
 
 }

@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.PrintWriter;
-import java.sql.SQLException;
 
 /**
  * See {@link EmptyDataSource} for more detail.
@@ -14,56 +13,56 @@ import java.sql.SQLException;
  */
 public class EmptyDataSourceTests {
 
-  private EmptyDataSource emptyDataSource;
+    private EmptyDataSource emptyDataSource;
 
-  @Before
-  public void init() {
-    emptyDataSource = new EmptyDataSource();
-  }
+    @Before
+    public void init() {
+        emptyDataSource = new EmptyDataSource();
+    }
 
-  @Test(expected = NotImplementedException.class)
-  public void testGetConnection() {
-    emptyDataSource.getConnection();
-  }
+    @Test(expected = NotImplementedException.class)
+    public void testGetConnection() {
+        emptyDataSource.getConnection();
+    }
 
-  @Test(expected = NotImplementedException.class)
-  public void testGetConnectionWithParams() {
-    emptyDataSource.getConnection("", "");
-  }
+    @Test(expected = NotImplementedException.class)
+    public void testGetConnectionWithParams() {
+        emptyDataSource.getConnection("", "");
+    }
 
-  @Test(expected = NotImplementedException.class)
-  public void testUnwrap() {
-    emptyDataSource.unwrap(emptyDataSource.getClass());
-  }
+    @Test(expected = NotImplementedException.class)
+    public void testUnwrap() {
+        emptyDataSource.unwrap(emptyDataSource.getClass());
+    }
 
-  @Test(expected = NotImplementedException.class)
-  public void testIsWrapperFor() {
-    emptyDataSource.isWrapperFor(emptyDataSource.getClass());
-  }
+    @Test(expected = NotImplementedException.class)
+    public void testIsWrapperFor() {
+        emptyDataSource.isWrapperFor(emptyDataSource.getClass());
+    }
 
-  @Test(expected = NotImplementedException.class)
-  public void testGetLogWriter() {
-    emptyDataSource.getLogWriter();
-  }
+    @Test(expected = NotImplementedException.class)
+    public void testGetLogWriter() {
+        emptyDataSource.getLogWriter();
+    }
 
-  @Test(expected = NotImplementedException.class)
-  public void testSetLogWriter() {
-    emptyDataSource.setLogWriter(Mockito.mock(PrintWriter.class));
-  }
+    @Test(expected = NotImplementedException.class)
+    public void testSetLogWriter() {
+        emptyDataSource.setLogWriter(Mockito.mock(PrintWriter.class));
+    }
 
-  @Test(expected = NotImplementedException.class)
-  public void testSetLoginTimeout() {
-    emptyDataSource.setLoginTimeout(0);
-  }
+    @Test(expected = NotImplementedException.class)
+    public void testSetLoginTimeout() {
+        emptyDataSource.setLoginTimeout(0);
+    }
 
-  @Test(expected = NotImplementedException.class)
-  public void testGetLoginTimeout() {
-    emptyDataSource.getLoginTimeout();
-  }
+    @Test(expected = NotImplementedException.class)
+    public void testGetLoginTimeout() {
+        emptyDataSource.getLoginTimeout();
+    }
 
-  @Test(expected = NotImplementedException.class)
-  public void testGetParentLogger() {
-    emptyDataSource.getParentLogger();
-  }
+    @Test(expected = NotImplementedException.class)
+    public void testGetParentLogger() {
+        emptyDataSource.getParentLogger();
+    }
 
 }

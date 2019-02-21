@@ -1,7 +1,7 @@
 <html>
 <head>
-  <title>Web Demo</title>
-  <style>
+    <title>Web Demo</title>
+    <style>
   form {
     border: 1px black solid;
     width: 300px;
@@ -16,87 +16,88 @@
    input[type="password"] {
     background: white;
    }
-  </style>
+
+    </style>
 
 </head>
 <body>
 
 <form method="post" action="login">
 
-  <h2>Login</h2>
-  <label for="login_username">Name:</label>
-  <p><input type="text" id="login_username" name="username" placeholder="name"/></p>
+    <h2>Login</h2>
+    <label for="login_username">Name:</label>
+    <p><input type="text" id="login_username" name="username" placeholder="name"/></p>
 
-  <label for="login_password">Password:</label>
-  <p><input type="password" id="login_password" name="password" /></p>
+    <label for="login_password">Password:</label>
+    <p><input type="password" id="login_password" name="password"/></p>
 
-  <p><input type="submit" id="login_submit" value="login" /></p>
+    <p><input type="submit" id="login_submit" value="login"/></p>
 </form>
 
-<form method="post" action="register">  
+<form method="post" action="register">
 
-  <h2>Register a user</h2>
-  <label for="register_username">Name:</label>
-  <p><input type="text" id="register_username" name="username" placeholder="name"/></p>
+    <h2>Register a user</h2>
+    <label for="register_username">Name:</label>
+    <p><input type="text" id="register_username" name="username" placeholder="name"/></p>
 
-  <label for="register_password">Password:</label>
-  <p><input type="password" id="register_password" name="password" /></p>
-  <p><input type="submit" id="register_submit" value="register" /></p>
+    <label for="register_password">Password:</label>
+    <p><input type="password" id="register_password" name="password"/></p>
+    <p><input type="submit" id="register_submit" value="register"/></p>
 </form>
 
 
-<form method="post" action="math">  
-  <h2>Addends for summation:</h2>
+<form method="post" action="math">
+    <h2>Addends for summation:</h2>
 
-  <p><input type="number" id="addend_a" name="item_a" placeholder="addend a" /></p>
-  <p><input type="number" id="addend_b" name="item_b" placeholder="addend b" /></p>
+    <p><input type="number" id="addend_a" name="item_a" placeholder="addend a"/></p>
+    <p><input type="number" id="addend_b" name="item_b" placeholder="addend b"/></p>
 
-  <p><input type="submit" id="math_submit" value="process math" /></p>
+    <p><input type="submit" id="math_submit" value="process math"/></p>
 </form>
 
 
 <form method="post" action="lend">
 
-  <h2>Borrow a book</h2>
+    <h2>Borrow a book</h2>
 
-  <label for="lend_book">Book:</label>
-  <p><input type="text" id="lend_book" name="book" placeholder="book"/></p>
+    <label for="lend_book">Book:</label>
+    <p><input type="text" id="lend_book" name="book" placeholder="book"/></p>
 
-  <label for="lend_borrower">Borrower:</label>
-  <p><input type="text" id="lend_borrower" name="borrower" placeholder="borrower"/></p>
+    <label for="lend_borrower">Borrower:</label>
+    <p><input type="text" id="lend_borrower" name="borrower" placeholder="borrower"/></p>
 
-  <p><input type="submit" id="lend_book_submit" value="lend book" /></p>
+    <p><input type="submit" id="lend_book_submit" value="lend book"/></p>
 </form>
 
 
 <form method="post" action="registerbook">
 
-  <h2>Register a book</h2>
+    <h2>Register a book</h2>
 
-  <label for="register_book">Book:</label>
-  <p><input type="text" id="register_book" name="book" placeholder="book"/></p>
+    <label for="register_book">Book:</label>
+    <p><input type="text" id="register_book" name="book" placeholder="book"/></p>
 
-  <p><input type="submit" id="register_book_submit" value="register book" /></p>
+    <p><input type="submit" id="register_book_submit" value="register book"/></p>
 </form>
 
 
 <form method="post" action="registerborrower">
 
-  <h2>Register a borrower</h2>
+    <h2>Register a borrower</h2>
 
-  <label for="book">Borrower:</label>
-  <p><input type="text" id="register_borrower" name="borrower" placeholder="borrower"/></p>
+    <label for="book">Borrower:</label>
+    <p><input type="text" id="register_borrower" name="borrower" placeholder="borrower"/></p>
 
-  <p><input type="submit" id="register_borrower_submit" value="register borrower" /></p>
+    <p><input type="submit" id="register_borrower_submit" value="register borrower"/></p>
 </form>
 
 <form action="flyway">
-  <input type="hidden" name="action" value="clean" />
-  <input type="submit" value="Clean the database" />
+    <input type="hidden" name="action" value="clean"/>
+    <input type="submit" value="Clean the database"/>
 </form>
 <form action="flyway">
-  <input type="hidden" name="action" value="migrate" />
-  <input type="submit" value="Migrate the database" />
+    <input type="hidden" name="action" value="migrate"/>
+    <input type="submit" value="Migrate the database"/>
 </form>
 
 </body>

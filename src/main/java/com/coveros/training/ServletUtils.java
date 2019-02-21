@@ -8,15 +8,15 @@ import javax.servlet.http.HttpServletResponse;
 
 class ServletUtils {
 
-  private ServletUtils() {
-    // using a private constructor to hide the implicit public one.
-  }
-
-  static void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
-    try {
-      request.getRequestDispatcher("result.jsp").forward(request, response);
-    } catch (Exception ex) {
-      logger.error(String.format("failed during forward: %s", ex));
+    private ServletUtils() {
+        // using a private constructor to hide the implicit public one.
     }
-  }
+
+    static void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
+        try {
+            request.getRequestDispatcher("result.jsp").forward(request, response);
+        } catch (Exception ex) {
+            logger.error(String.format("failed during forward: %s", ex));
+        }
+    }
 }

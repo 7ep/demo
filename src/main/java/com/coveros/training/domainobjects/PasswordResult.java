@@ -16,10 +16,10 @@ public final class PasswordResult {
     private static final String BASIC_PASSWORD_CHECKS_FAILED = "BASIC_PASSWORD_CHECKS_FAILED";
 
     public PasswordResult(PasswordResultEnums status,
-                                 Double entropy,
-                                 String timeToCrackOffline,
-                                 String timeToCrackOnline,
-                                 String message) {
+                          Double entropy,
+                          String timeToCrackOffline,
+                          String timeToCrackOnline,
+                          String message) {
 
         this.status = status;
         this.entropy = entropy;
@@ -33,13 +33,17 @@ public final class PasswordResult {
      * the password field fail.  Like passing an empty string, for example.
      */
     public static PasswordResult createDefault(PasswordResultEnums resultStatus) {
-        return new PasswordResult(resultStatus, 0d, "", "",  BASIC_PASSWORD_CHECKS_FAILED);
+        return new PasswordResult(resultStatus, 0d, "", "", BASIC_PASSWORD_CHECKS_FAILED);
     }
 
     @Override
     public final boolean equals(@Nullable Object obj) {
-        if (obj == null) { return false; }
-        if (obj == this) { return true; }
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
         if (obj.getClass() != getClass()) {
             return false;
         }
@@ -75,7 +79,7 @@ public final class PasswordResult {
      * when we are initializing a variable and don't want to use null.
      */
     public static PasswordResult createEmpty() {
-        return new PasswordResult(PasswordResultEnums.NULL, 0d, "", "",  "");
+        return new PasswordResult(PasswordResultEnums.NULL, 0d, "", "", "");
     }
 
     public boolean isEmpty() {

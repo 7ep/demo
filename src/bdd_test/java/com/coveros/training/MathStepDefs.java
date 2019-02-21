@@ -22,7 +22,7 @@ public class MathStepDefs {
 
     @Then("the result should be (.*)")
     public void the_result_should_be(String total) {
-        Assert.assertEquals((int)Integer.valueOf(total), calculated_total);
+        Assert.assertEquals((int) Integer.valueOf(total), calculated_total);
     }
 
 }

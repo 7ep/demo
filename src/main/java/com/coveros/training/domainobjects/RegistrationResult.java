@@ -22,8 +22,12 @@ public final class RegistrationResult {
     }
 
     public final boolean equals(@Nullable Object obj) {
-        if (obj == null) { return false; }
-        if (obj == this) { return true; }
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
         if (obj.getClass() != getClass()) {
             return false;
         }
