@@ -14,12 +14,7 @@ public class LoginStepDefs {
     private boolean isRegisteredUser;
     private RegistrationUtils registrationUtils = RegistrationUtils.createEmpty();
     private LoginUtils loginUtils = LoginUtils.createEmpty();
-    private PersistenceLayer pl = PersistenceLayer.createEmpty();
-
-    @Before
-    public void init() {
-        pl = new PersistenceLayer();
-    }
+    private PersistenceLayer pl = new PersistenceLayer();
 
     /**
      * create objects for registration and login, and clear the database.
