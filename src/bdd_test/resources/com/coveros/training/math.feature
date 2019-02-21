@@ -1,4 +1,8 @@
-Feature: As a user who has trouble with doing math in their head, I want to add some numbers so I know the sums
+Feature: A user may add numbers
+
+  As a user who has trouble with doing math in their head,
+  I want to add some numbers
+  so I know the sums
 
   Scenario Outline: Add two numbers <num1> and <num2>
     Given my website is running and can do math

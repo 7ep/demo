@@ -1,4 +1,6 @@
-Feature: As a patron of the library system,
+Feature: A patron may borrow a book from the library
+
+  As a patron of the library system,
   I would like to check out a book
   so that I may take it outside the library.
 

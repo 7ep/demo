@@ -1,4 +1,8 @@
-Feature: As a user of the system, I want to be able to authenticate myself, so I can access its capabilities.
+Feature: A user may authenticate to system.
+
+  As a user of the system,
+  I want to be able to authenticate myself,
+  so I can access its capabilities.
 
   Narrative: A user wants to access the system, but they can only do it if they have
   an account on it.  To register an account, they simply provide
