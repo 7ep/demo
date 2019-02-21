@@ -183,7 +183,7 @@ public class PersistenceLayer {
      */
     String getBorrowerName(long id) {
         CheckUtils.checkIntParamPositive(id);
-        Function<ResultSet, String> extractor = throwingFunctionWrapper((rs) -> {
+        Function<ResultSet, String> extractor = throwingFunctionWrapper(rs -> {
             if (rs.next()) {
                 return StringUtils.makeNotNullable(rs.getString(1));
             } else {
@@ -208,7 +208,7 @@ public class PersistenceLayer {
      * @return a valid borrower, or an empty borrower if not found
      */
     Borrower searchBorrowerDataByName(String borrowerName) {
-        Function<ResultSet, Borrower> extractor = throwingFunctionWrapper((rs) -> {
+        Function<ResultSet, Borrower> extractor = throwingFunctionWrapper(rs -> {
             if (rs.next()) {
                 long id = rs.getLong(1);
                 String name = StringUtils.makeNotNullable(rs.getString(2));
@@ -228,7 +228,7 @@ public class PersistenceLayer {
     }
 
     Book searchBooksByTitle(String bookTitle) {
-        Function<ResultSet, Book> extractor = throwingFunctionWrapper((rs) -> {
+        Function<ResultSet, Book> extractor = throwingFunctionWrapper(rs -> {
             if (rs.next()) {
                 long id = rs.getLong(1);
                 return new Book(id, bookTitle);
@@ -290,7 +290,7 @@ public class PersistenceLayer {
     }
 
     User searchForUserByName(String username) {
-        Function<ResultSet, User> extractor = throwingFunctionWrapper((rs) -> {
+        Function<ResultSet, User> extractor = throwingFunctionWrapper(rs -> {
             if (rs.next()) {
                 final long id = rs.getLong(1);
                 return new User(username, id);
@@ -308,7 +308,7 @@ public class PersistenceLayer {
     }
 
     Boolean areCredentialsValid(String username, String password) {
-        Function<ResultSet, Boolean> extractor = throwingFunctionWrapper((rs) -> {
+        Function<ResultSet, Boolean> extractor = throwingFunctionWrapper(rs -> {
             if (rs.next()) {
                 final long id = rs.getLong(1);
                 assert (id > 0);
