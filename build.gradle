@@ -175,6 +175,8 @@ check.dependsOn(jacocoTestReport)
 
 sonarqube {
     properties {
+        property "sonar.projectName", "demo"
+        property "sonar.projectDescription", "A demonstration of a web application with good test coverage and best practices"
         property "sonar.sources", "src/main/java"
         property "sonar.tests", "src/test/java,src/integration_test/java,src/bdd_test/java"
         property "sonar.java.binaries", "build/classes/java/main"
