@@ -6,4 +6,7 @@
     <body>
         <h2 id="result">Result: ${result}</h2>
     </body>
+    <p>
+    <a href="/demo">Return</a>
+    </p>
 </html>
