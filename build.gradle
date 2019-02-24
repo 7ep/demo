@@ -18,7 +18,7 @@ plugins {
     id 'org.gretty' version '2.3.1'
 
     // scans our code for static analysis
-    id "org.sonarqube" version "2.6.2"
+    id "org.sonarqube" version "2.7"
 
     // provides Cucumber reporting
     id "com.github.spacialcircumstances.gradle-cucumber-reporting" version "0.0.15"
@@ -68,7 +68,7 @@ configurations {
 }
 
 dependencies {
-    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+    providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
 
     // junit, for running unit tests
     testCompile 'junit:junit:4.12'
@@ -175,6 +175,7 @@ check.dependsOn(jacocoTestReport)
 
 sonarqube {
     properties {
+        property "sonar.projectKey", "demo"
         property "sonar.projectName", "demo"
         property "sonar.projectDescription", "A demonstration of a web application with good test coverage and best practices"
         property "sonar.sources", "src/main/java"
