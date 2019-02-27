@@ -18,7 +18,7 @@ plugins {
     id 'org.gretty' version '2.3.1'
 
     // scans our code for static analysis
-    id "org.sonarqube" version "2.6.2"
+    id "org.sonarqube" version "2.7"
 
     // provides Cucumber reporting
     id "com.github.spacialcircumstances.gradle-cucumber-reporting" version "0.0.15"
@@ -180,6 +180,10 @@ sonarqube {
         property "sonar.java.binaries", "build/classes/java/main"
         property "sonar.junit.reportPaths", "build/test-results/test/,build/test-results/fastIntegrationTest"
         property "sonar.jacoco.reportPaths", "build/jacoco/test.exec,build/jacoco/fastIntegrationTest.exec"
+	property "sonar.host.url", "https://localhost/sonar"
+	property "sonar.projectKey", "demo"
+	property "sonar.projectName", "Demo Application"
+	property "sonar.dependencyCheck.reportPath", "$project.buildDir/reports/dependency-check-report.xml"
     }
 }
 
@@ -248,8 +252,7 @@ dependencyCheck {
     showSummary=false
     autoUpdate=true
     cveValidForHours=168 // a week.
-    format='HTML' // options are  (HTML, XML, CSV, JSON, VULN, ALL).
-    failBuildOnCVSS=8 // see https://www.first.org/cvss/specification-document#5-Qualitative-Severity-Rating-Scale
+    format='XML' // options are  (HTML, XML, CSV, JSON, VULN, ALL).
 }
 
 task('printReportPathsCheck'){
