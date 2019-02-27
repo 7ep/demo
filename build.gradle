@@ -183,6 +183,7 @@ sonarqube {
 	property "sonar.host.url", "https://localhost/sonar"
 	property "sonar.projectKey", "demo"
 	property "sonar.projectName", "Demo Application"
+	property "sonar.dependencyCheck.reportPath", "${WORKSPACE}/build/reports/dependency-check-report.xml"
     }
 }
 
