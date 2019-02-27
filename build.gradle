@@ -168,6 +168,10 @@ task combineCoverage(type: JacocoMerge) {
     mustRunAfter fastIntegrationTest
 }
 
+task testReport(type: GradleBuild) {
+    tasks = ['test', 'fastIntegrationTest', 'combineCoverage', 'jacocoTestReport']
+}
+
 // Add the combined report when we run check
 check.dependsOn(combineCoverage)
 check.dependsOn(jacocoTestReport)
