@@ -19,8 +19,6 @@ Feature: A patron may borrow a book from the library
         When they try to check out a book, "BDD in Action" that is available
         Then the system indicates that they are not registered
 
-  # The following is a poor scenario.
-  # How would this have made it past discussion in a collaboration?
     Scenario: A registered borrower cannot borrow a non-available book
         Given a borrower, "alice", is registered
         And and a book, "Specification By Example" is already checked out to "bob"
