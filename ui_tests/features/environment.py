@@ -1,6 +1,8 @@
 import requests
 from selenium import webdriver
 from selenium.webdriver.common.proxy import Proxy, ProxyType
+from hamcrest import *
+
 
 SERVER = "localhost"
 URL = "http://%s:8080" % SERVER
