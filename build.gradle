@@ -217,26 +217,54 @@ static boolean ScanPathForChromeDriver() {
 task runBehaveTests(type: Exec) {
     doFirst {
         def chromedriver_exists_in_ui_tests = ScanPathForChromeDriver();
-        if (!chromedriver_exists_in_ui_tests) {
+		def chrm = project.properties['chromedriver.path']
+
+		// make sure that the path to chromedriver isn't null or empty:
+		def chromedriver_full_path_empty = chrm == null || chrm.isEmpty()
+        if (chromedriver_full_path_empty) {
+            chrm = "(NOT SET)"
+        }
+
+        if (!chromedriver_exists_in_ui_tests && chromedriver_full_path_empty) {
             ignoreExitValue true
             throw new Exception(
-                    "\n\nFor your reference, here is the system path we checked:\n\n" +
-                            System.getenv('PATH') +
-                            "\n\n*****************************\n" +
-                            "*****************************\n" +
-                            "Does not look like you have Chromedriver in your \n" +
-                            "PATH or ui_tests directory.\n\n" +
-                            "Download it from http://chromedriver.chromium.org/ and store the binary\n" +
-                            "in your system path or in the ui_tests directory.\n" +
-                            "See the PATH variable expanded above.\n" +
-                            "*****************************\n" +
-                            "*****************************\n"
+
+
+					"\n\n*****************************************************\n" +
+					"*****************************************************\n" +
+					"Does not look like you have Chromedriver on your \n" +
+					"PATH or have set the full directory in gradle.properties.\n\n" +
+
+					"Download it from http://chromedriver.chromium.org/\n" +
+					"*****************************************************\n" +
+					"*****************************************************\n" +
+
+
+					"\n\nMore detail:\n  We couldn't find Chromedriver, which is needed to run the \n" +
+					"  Behave tests (The UI-focused Behavior Driven Development test)\n" +
+
+					"\nThe easiest way to fix this, once you have downloaded Chromedriver, \n" +
+					"is to move the Chromedriver executable into a directory that is in \n" +
+					"your path.\n" +
+
+                    "\nFor your reference, here are all the directories we checked:\n\n" +
+					System.getenv('PATH') +
+					
+					"\n\nAn alternate way is to set the path to the Chromedriver executable\n" +
+					"in the gradle.properties file, at chromedriver.path\n" +
+					
+					"\nFor example: \n" +
+					"\nchromedriver.path=C:/foo/bar/chromedriver_win32/chromedriver.exe\n" +
+                    "\n\nHere is the value of your \"chromedriver.path\" \n(found in gradle.properties): \n\n" +
+					chrm +
+
+                    "\n\nIMPORTANT MESSAGES ABOVE! SCROLL UP."
 
             )
         }
     }
     workingDir 'ui_tests'
-    commandLine 'pipenv', 'run', 'behave'
+    commandLine 'pipenv', 'run', 'behave', '-D', 'chromedriver_path='+project.properties['chromedriver.path']
 }
 
 task runAllTests(type: GradleBuild) {
