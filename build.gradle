@@ -57,6 +57,9 @@ apply from: "$rootDir/gradle/bdd_test.gradle"
 // see https://plugins.gradle.org/plugin/org.owasp.dependencycheck
 apply plugin: 'org.owasp.dependencycheck'
 
+// makes sure the git pre-push commit is installed
+apply from: rootProject.file('gradle/install-git-hooks.gradle')
+
 
 repositories {
     jcenter()
