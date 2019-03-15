@@ -125,13 +125,61 @@ class Result:
 
 
 
+def register_user(driver, username, password):
+    driver.get(HOMEPAGE)
+
+    reg = Registration(driver)
+    reg.enter_username(username)
+    reg.enter_password(password)
+    reg.enter()
+
+def login_user(driver, username, password):
+    driver.get(HOMEPAGE)
+
+    login = Login(driver)
+    login.enter_username(username)
+    login.enter_password(password)
+    login.enter()
+
+def add_numbers(driver, a, b):
+    driver.get(HOMEPAGE)
+
+    sums = Summation(driver)
+    sums.enter_addend_a(a)
+    sums.enter_addend_b(b)
+    sums.enter()
+
+def register_borrower(driver, name):
+    driver.get(HOMEPAGE)
+
+    bor = BorrowerRegister(driver)
+    bor.register_borrower(name)
+    bor.enter()
+
+def register_book(driver, title):
+    driver.get(HOMEPAGE)
+
+    br = BookRegister(driver)
+    br.register_book(title)
+    br.enter()
+
+def lend_book(driver, title, borrower):
+    driver.get(HOMEPAGE)
+
+    bl = BookLend(driver)
+    bl.enter_book(title)
+    bl.enter_borrower(borrower)
+    bl.enter()
+
+
+
 # opens a browser, returns a handle for it
 def start_testing():
     return open_browser()
 
 
 # an example of page-object-model testing
-def go():
+def register_and_login():
     driver = start_testing()
     username = "bob"
     password = "fWd8SNtALsKScD9xYUm5Jb"
@@ -156,6 +204,20 @@ def go():
     assert_that(result_text, contains_string('Result: access granted'))
 
     driver.close()
+
+# an example of a more abstracted page-object-model
+def full_lend_book():
+    driver = start_testing()
+    driver.get(RESET_DATABASE)
+    book = "alice in wonderland"
+    borrower = "bob"
+    register_book(driver, book)
+    register_borrower(driver, borrower)
+    lend_book(driver, book, borrower)
+    result = Result(driver)
+    assert_that(result.get_result_text(), equal_to("Result: SUCCESS"))
+    driver.close()
+
 
 
 def open_browser():
