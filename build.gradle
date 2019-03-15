@@ -218,10 +218,9 @@ static boolean ScanPathForChromeDriver() {
 }
 
 task runBehaveTests(type: Exec) {
-    def chrm
     doFirst {
         def chromedriver_exists_in_ui_tests = ScanPathForChromeDriver();
-		chrm = project.properties['chromedriver.path']
+		def chrm = project.properties['chromedriver.path']
 
 		// make sure that the path to chromedriver isn't null or empty:
 		def chromedriver_full_path_empty = chrm == null || chrm.isEmpty()
@@ -268,7 +267,7 @@ task runBehaveTests(type: Exec) {
         }
     }
     workingDir 'ui_tests'
-    commandLine 'pipenv', 'run', 'behave', '-D', 'chromedriver_path='+(chrm ?: "")
+    commandLine 'pipenv', 'run', 'behave', '-D', 'chromedriver_path='+(project.properties['chromedriver.path'] ?: "")
 }
 
 task runAllTests(type: GradleBuild) {
