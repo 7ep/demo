@@ -133,6 +133,7 @@ gretty {
     httpPort = 8080
     servletContainer = 'tomcat8'
     contextPath = "demo"
+    jvmArgs = ['-Dcom.sun.management.jmxremote', '-Dcom.sun.management.jmxremote.port=9999', '-Dcom.sun.management.jmxremote.ssl=false', '-Dcom.sun.management.jmxremote.authenticate=false']
 }
 
 // configuration for the cucumber reports.
