@@ -210,6 +210,10 @@ $ sudo yum install -y jenkins
 $ sudo systemctl start jenkins
 $ sudo systemctl enable jenkins
 
+(To update the system, simply replace the jenkins.war with the newest version,
+and restart the server: sudo systemctl restart jenkins. Find the war at
+ /usr/lib/jenkins/jenkins.war)
+
 In your browser, go to Jenkins at this URL: http://jenkinsbox:8080/
 
 Once Jenkins boots up, you will need the password for the new Jenkins, here:
