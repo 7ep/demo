@@ -26,7 +26,7 @@ public class RegistrationUtilsTests {
 
     @Test
     public void testShouldFailOnShortPassword() {
-        final PasswordResult result = RegistrationUtils.isPasswordGood("");
+        final PasswordResult result = RegistrationUtils.isPasswordGood("abc");
         Assert.assertEquals(TOO_SHORT, result.status);
     }
 
