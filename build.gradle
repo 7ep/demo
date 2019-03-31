@@ -200,6 +200,9 @@ tasks.withType(Test) {
 }
 
 task runApiTests(type: Exec) {
+    doFirst {
+        checkIfAlive();
+    }
     workingDir 'api_tests'
     commandLine 'pipenv', 'run', 'pytest', '--junitxml', '../build/test-results/api_tests/TEST-api_test_results.xml'
 }
@@ -218,8 +221,31 @@ static boolean ScanPathForChromeDriver() {
     return pathDirectories.any({ dir -> SearchDirectoryForChromedriver(new File(dir)) })
 }
 
+// returns true if the application is running.
+static void checkIfAlive() {
+    int code;
+    try {
+        URL url = new URL("http://localhost:8080/demo");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.connect();
+
+        code = connection.getResponseCode();
+    } catch (Exception ex) {
+        String errorMsg = "\n\n\n" +
+                "****************************************\n" +
+                "*       SERVER IS NOT RUNNING          *\n" +
+                "****************************************\n";
+        throw new Exception(errorMsg);
+    }
+    if (code != 200) {
+        throw new Exception("\n\nServer is not returning a 200.  Instead, it is: " +code + "\n\n");
+    }
+}
+
 task runBehaveTests(type: Exec) {
     doFirst {
+        checkIfAlive();
         def chromedriver_exists_in_ui_tests = ScanPathForChromeDriver();
 		def chrm = project.properties['chromedriver.path']
 
@@ -272,6 +298,9 @@ task runBehaveTests(type: Exec) {
 }
 
 task runAllTests(type: GradleBuild) {
+    doFirst {
+        checkIfAlive()
+    }
     tasks = ['check', 'runApiTests', 'runBehaveTests']
 }
 // more info on test logging: https://discuss.gradle.org/t/whats-upcoming-in-gradle-1-1-test-logging/7741
