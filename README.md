@@ -9,7 +9,9 @@
 
 ---
 #### Java notes
-It *has* to be Java 8.  Don't use Java 10, it will error out because Mockito doesn't work with Java 10.
+It *has* to be Java 8.  Specifically, Mockito and Checker Framework are
+reliant on the system using Java 8. [Mockito issue](https://github.com/MovingBlocks/Terasology/issues/3538)
+and [Checker Framework issue](https://github.com/typetools/checker-framework/issues/1224)
     
 #### Python notes
 To run API tests and Selenium tests, an easy way to handle its 
