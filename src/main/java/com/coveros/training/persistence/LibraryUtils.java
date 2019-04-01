@@ -24,24 +24,26 @@ public class LibraryUtils {
 
     public LibraryActionResults lendBook(String bookTitle, String borrowerName, Date borrowDate) {
         final Book book = searchForBookByTitle(bookTitle);
+        final Book foundBook = new Book(book.id, bookTitle);
         final Borrower borrower = searchForBorrowerByName(borrowerName);
-        return lendBook(book, borrower, borrowDate);
+        final Borrower foundBorrower = new Borrower(borrower.id, borrowerName);
+        return lendBook(foundBook, foundBorrower, borrowDate);
     }
 
     public LibraryActionResults lendBook(Book book, Borrower borrower, Date borrowDate) {
-        if (book.isEmpty()) {
-            logger.info("book was not registered");
+        if (book.id == 0) {
+            logger.info("book {} was not registered", book.title);
             return LibraryActionResults.BOOK_NOT_REGISTERED;
         }
 
-        if (borrower.isEmpty()) {
-            logger.info("borrower was not registered");
+        if (borrower.id == 0) {
+            logger.info("borrower {} was not registered", borrower.name);
             return LibraryActionResults.BORROWER_NOT_REGISTERED;
         }
 
         final Loan loan = searchForLoan(book);
         if (!loan.isEmpty()) {
-            logger.info("book was already checked out");
+            logger.info("book {} was already checked out on {}", book.title, loan.checkoutDate);
             return LibraryActionResults.BOOK_CHECKED_OUT;
         }
 
