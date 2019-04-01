@@ -31,19 +31,20 @@ public class LibraryUtils {
     }
 
     public LibraryActionResults lendBook(Book book, Borrower borrower, Date borrowDate) {
+        logger.info("starting process to lend a book, {}", book.title);
         if (book.id == 0) {
-            logger.info("book {} was not registered", book.title);
+            logger.info("book {} was not registered.  Lending failed", book.title);
             return LibraryActionResults.BOOK_NOT_REGISTERED;
         }
 
         if (borrower.id == 0) {
-            logger.info("borrower {} was not registered", borrower.name);
+            logger.info("borrower {} was not registered.  Lending failed", borrower.name);
             return LibraryActionResults.BORROWER_NOT_REGISTERED;
         }
 
         final Loan loan = searchForLoan(book);
         if (!loan.isEmpty()) {
-            logger.info("book {} was already checked out on {}", book.title, loan.checkoutDate);
+            logger.info("book {} was already checked out on {}.  Lending failed", book.title, loan.checkoutDate);
             return LibraryActionResults.BOOK_CHECKED_OUT;
         }
 

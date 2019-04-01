@@ -27,6 +27,7 @@ public class RegistrationUtils {
     }
 
     public RegistrationResult processRegistration(String username, String password) {
+        logger.info("Starting registration");
         // first we check if the username is empty
         boolean isUsernameEmpty = username == null || username.isEmpty();
 
