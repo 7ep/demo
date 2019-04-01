@@ -29,8 +29,11 @@ public class RegistrationUtils {
     public RegistrationResult processRegistration(String username, String password) {
         // first we check if the username is empty
         boolean isUsernameEmpty = username == null || username.isEmpty();
-        logger.info("username is empty");
-        if (isUsernameEmpty) return new RegistrationResult(false, EMPTY_USERNAME);
+
+        if (isUsernameEmpty) {
+            logger.info("username is empty during registration");
+            return new RegistrationResult(false, EMPTY_USERNAME);
+        }
 
         if (isUserInDatabase(username)) {
             logger.info("cannot register this user - they are already registered");
