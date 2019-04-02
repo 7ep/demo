@@ -23,6 +23,7 @@ public class LibraryUtils {
     }
 
     public LibraryActionResults lendBook(String bookTitle, String borrowerName, Date borrowDate) {
+        logger.info("starting process to lend a book: {} to borrower: {}", bookTitle, borrowerName);
         final Book book = searchForBookByTitle(bookTitle);
         final Book foundBook = new Book(book.id, bookTitle);
         final Borrower borrower = searchForBorrowerByName(borrowerName);
@@ -31,7 +32,6 @@ public class LibraryUtils {
     }
 
     public LibraryActionResults lendBook(Book book, Borrower borrower, Date borrowDate) {
-        logger.info("starting process to lend a book: {} to borrower: {} on date: {}", book.title, borrower.name, borrowDate);
         if (book.id == 0) {
             logger.info("book: {} was not registered.  Lending failed", book.title);
             return LibraryActionResults.BOOK_NOT_REGISTERED;
@@ -58,7 +58,7 @@ public class LibraryUtils {
      * that calls to the persistence layer, making it easier to test.
      */
     void createLoan(Book book, Borrower borrower, Date borrowDate) {
-        logger.info("creating loan for book: {} by borrower: {} on date: {}", book.title, borrower.name, borrowDate);
+        logger.info("creating loan for book: {} by borrower: {}", book.title, borrower.name);
         persistence.createLoan(book, borrower, borrowDate);
     }
 
