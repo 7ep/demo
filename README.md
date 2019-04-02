@@ -1,22 +1,39 @@
 ## Demo - demonstrates an application and tests
 
+This is an application used by Coveros to demonstrate a multitude of good
+software practices.  
+
 #### Dependencies:
 
 * [Java 8](https://www.oracle.com/technetwork/java/javase/overview/java8-2100321.html)  
 
 ###### Optional Dependencies - needed for API testing and Selenium testing.
 * [Python](https://www.python.org/downloads/)
+* [Chromedriver](http://chromedriver.chromium.org/downloads)
+* [Chrome internet browser](https://www.google.com/chrome/)
 
 ---
 #### Java notes
 It *has* to be Java 8.  Specifically, Mockito and Checker Framework are
 reliant on the system using Java 8. [Mockito issue](https://github.com/MovingBlocks/Terasology/issues/3538)
 and [Checker Framework issue](https://github.com/typetools/checker-framework/issues/1224)
+
+#### Chromedriver notes
+make sure that the Chromedriver executable is installed in one of the directories that is 
+on your path.  To see your path, type the following in a command line: 
+
+on Windows:
+
+    echo %PATH%  
+    
+On Mac/Linux:
+
+    echo $PATH
     
 #### Python notes
 To run API tests and Selenium tests, an easy way to handle its 
 dependencies is to use *pipenv*.  To get this installed, first download
-[get-pip.py](https://bootstrap.pypa.io/get-pip.py), and run
+[get-pip.py](https://bootstrap.pypa.io/get-pip.py), and run the following on the command line:
 
     python get-pip.py
     
@@ -29,6 +46,8 @@ And in the demo directory,
     pipenv install   
    
 #### To build and run tests:
+On the command line, run the following:
+
 On Mac/Linux
 
     ./gradlew check
@@ -38,6 +57,8 @@ On Windows
     gradlew check
 
 #### To run the web application:
+On the command line, run the following:
+
 On Mac/Linux
 
     ./gradlew appRun
@@ -53,6 +74,8 @@ Then, head to http://localhost:8080/demo
 Note: The app has to be already running for these tests to pass, and you _need_
 to have installed Python and Chromedriver.
 
+On the command line, run the following:
+
 On Mac/Linux
 
     ./gradlew runAllTests
@@ -66,8 +89,10 @@ On Windows
 * http://localhost:8080/demo/console - the database viewer
 
 #### Summary:
-This is a tool for use in teaching software development best practices.  
-It consists of a simplistic web application.  Some of the techniques exemplified are:
+ 
+Demo consists of a simple web application and tests.  Its goal is to provide 
+an environment suitable for demonstration and practice in valuable development
+techniques.  Some of the techniques exemplified are:
 * Unit tests using [Junit](https://junit.org/junit5/) and [Mockito](https://site.mockito.org/), with coverage reports.
 * BDD-style tests using gherkin
   * [Cucumber](https://docs.cucumber.io/) tests, with reports
