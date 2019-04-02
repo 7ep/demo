@@ -10,8 +10,8 @@ software practices.
 #### Quick Start:
 
 * Download this repo: https://github.com/7ep/demo/archive/master.zip
-* unzip the file - creates a directory called demo_master
-* On the command line in demo_master, run _gradlew check_ , then _gradlew appRun_
+* unzip the file to a directory.
+* On the command line in that directory, run _gradlew check_ , then _gradlew appRun_
 * visit the application at http://localhost:8080/demo
 
 
