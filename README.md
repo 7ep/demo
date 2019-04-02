@@ -5,7 +5,15 @@ software practices.
 
 #### Dependencies:
 
-* [Java 8](https://www.oracle.com/technetwork/java/javase/overview/java8-2100321.html)  
+* [Java 8](https://www.oracle.com/technetwork/java/javase/overview/java8-2100321.html)
+
+#### Quick Start:
+
+* Download this repo: https://github.com/7ep/demo/archive/master.zip
+* unzip the file - creates a directory called demo_master
+* On the command line in demo_master, run _gradlew check_ , then _gradlew appRun_
+* visit the application at http://localhost:8080/demo
+
 
 ###### Optional Dependencies - needed for API testing and Selenium testing.
 * [Python](https://www.python.org/downloads/)
