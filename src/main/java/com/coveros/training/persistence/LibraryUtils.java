@@ -31,7 +31,7 @@ public class LibraryUtils {
     }
 
     public LibraryActionResults lendBook(Book book, Borrower borrower, Date borrowDate) {
-        logger.info("starting process to lend a book, {}", book.title);
+        logger.info("starting process to lend a book: {} to borrower: {} on date: {}", book.title, borrower.name, borrowDate);
         if (book.id == 0) {
             logger.info("book: {} was not registered.  Lending failed", book.title);
             return LibraryActionResults.BOOK_NOT_REGISTERED;
@@ -63,6 +63,7 @@ public class LibraryUtils {
     }
 
     public LibraryActionResults registerBorrower(String borrower) {
+        logger.info("trying to register a borrower with name: {}", borrower);
         final Borrower borrowerDetails = searchForBorrowerByName(borrower);
         final boolean borrowerWasFound = !borrowerDetails.equals(Borrower.createEmpty());
         if (borrowerWasFound) {
@@ -84,6 +85,7 @@ public class LibraryUtils {
     }
 
     public LibraryActionResults registerBook(String bookTitle) {
+        logger.info("trying to register a book with title: {}", bookTitle);
         final Book book = searchForBookByTitle(bookTitle);
         if (!book.isEmpty()) {
             logger.info("book: {} was already registered", bookTitle);

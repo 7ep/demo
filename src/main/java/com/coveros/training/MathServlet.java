@@ -44,13 +44,14 @@ public class MathServlet extends HttpServlet {
      */
     void setResultToSum(HttpServletRequest request, int itemA, int itemB) {
         final int result = doAdd(itemA, itemB);
-        logger.info("setting result to {}", result);
         request.setAttribute("result", result);
     }
 
 
     private int doAdd(int a, int b) {
-        logger.info("adding a:{} to b:{}", a, b);
-        return a + b;
+        logger.info("adding a: {} to b: {}", a, b);
+        int result = a + b;
+        logger.info("result is {}", result);
+        return result;
     }
 }
