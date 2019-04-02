@@ -33,21 +33,22 @@ public class LibraryUtils {
     public LibraryActionResults lendBook(Book book, Borrower borrower, Date borrowDate) {
         logger.info("starting process to lend a book, {}", book.title);
         if (book.id == 0) {
-            logger.info("book {} was not registered.  Lending failed", book.title);
+            logger.info("book: {} was not registered.  Lending failed", book.title);
             return LibraryActionResults.BOOK_NOT_REGISTERED;
         }
 
         if (borrower.id == 0) {
-            logger.info("borrower {} was not registered.  Lending failed", borrower.name);
+            logger.info("borrower: {} was not registered.  Lending failed", borrower.name);
             return LibraryActionResults.BORROWER_NOT_REGISTERED;
         }
 
         final Loan loan = searchForLoan(book);
         if (!loan.isEmpty()) {
-            logger.info("book {} was already checked out on {}.  Lending failed", book.title, loan.checkoutDate);
+            logger.info("book: {} was already checked out on {}.  Lending failed", book.title, loan.checkoutDate);
             return LibraryActionResults.BOOK_CHECKED_OUT;
         }
 
+        logger.info("book: {} is available for borrowing by valid borrower: {}", book.title, borrower.name);
         createLoan(book, borrower, borrowDate);
         return LibraryActionResults.SUCCESS;
     }
@@ -68,7 +69,7 @@ public class LibraryUtils {
             logger.info("borrower: {} was already registered", borrower);
             return LibraryActionResults.ALREADY_REGISTERED_BORROWER;
         }
-
+        logger.info("borrower: {} was not found.  Registering new borrower...", borrower);
         saveNewBorrower(borrower);
         return LibraryActionResults.SUCCESS;
     }
@@ -85,10 +86,10 @@ public class LibraryUtils {
     public LibraryActionResults registerBook(String bookTitle) {
         final Book book = searchForBookByTitle(bookTitle);
         if (!book.isEmpty()) {
-            logger.info("book was already registered");
+            logger.info("book: {} was already registered", bookTitle);
             return LibraryActionResults.ALREADY_REGISTERED_BOOK;
         }
-
+        logger.info("book: {} was not found.  Registering new book...", bookTitle);
         saveNewBook(bookTitle);
         return LibraryActionResults.SUCCESS;
     }
