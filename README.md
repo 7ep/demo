@@ -1,6 +1,6 @@
 ## Demo - demonstrates an application and tests
 
-This is an application used by Coveros to demonstrate a multitude of good
+This is an application used by [Coveros](www.coveros.com) to demonstrate a multitude of good
 software practices.  
 
 #### Dependencies:
