@@ -11,6 +11,8 @@ import org.mockito.Mockito;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
@@ -109,10 +111,43 @@ public class LibraryUtilsTests {
 
     @Test
     public void testCanSearchForBooksByTitle() {
+        Mockito.when(mockPersistenceLayer.searchBooksByTitle(DEFAULT_BOOK.title)).thenReturn(DEFAULT_BOOK);
         libraryUtils.searchForBookByTitle(DEFAULT_BOOK.title);
         Mockito.verify(mockPersistenceLayer, times(1)).searchBooksByTitle(DEFAULT_BOOK.title);
     }
 
+    /**
+     * We don't allow to search by empty string.
+     */
+    @Test
+    public void testShouldThrowExceptionWhenSearchingWithEmptyStringAsBookTitle() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("when searching for a book, must include a non-empty string for title");
+
+        libraryUtils.searchForBookByTitle("");
+    }
+
+    @Test
+    public void testCanSearchForBooksById() {
+        Mockito.when(mockPersistenceLayer.searchBooksById(DEFAULT_BOOK.id)).thenReturn(DEFAULT_BOOK);
+        libraryUtils.searchForBookById(DEFAULT_BOOK.id);
+        Mockito.verify(mockPersistenceLayer, times(1)).searchBooksById(DEFAULT_BOOK.id);
+    }
+
+    /**
+     * The id of the book must be 1 or greater.  0 isn't allowed, nor anything else below 1.
+     */
+    @Test
+    public void testShouldThrowExceptionWhenSearchingWithLessThanOneAsBookId() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("when searching for a book, must include an id of one or greater");
+
+        libraryUtils.searchForBookById(0);
+    }
+
+    /**
+     * Basic happy path - delete a book that is registered.
+     */
     @Test
     public void testCanDeleteBook() {
         Mockito.when(mockPersistenceLayer.searchBooksByTitle(DEFAULT_BOOK.title)).thenReturn(DEFAULT_BOOK);
@@ -123,6 +158,9 @@ public class LibraryUtilsTests {
         Assert.assertEquals(LibraryActionResults.SUCCESS, result);
     }
 
+    /**
+     * If a book isn't registered, then obviously we cannot delete it.
+     */
     @Test
     public void testCannotDeleteNonRegisteredBook() {
         Mockito.when(mockPersistenceLayer.searchBooksByTitle(DEFAULT_BOOK.title)).thenReturn(Book.createEmpty());
@@ -133,6 +171,9 @@ public class LibraryUtilsTests {
         Assert.assertEquals(LibraryActionResults.NON_REGISTERED_BOOK_CANNOT_BE_DELETED, result);
     }
 
+    /**
+     * Basic happy path - delete a borrower who is registered.
+     */
     @Test
     public void testCanDeleteBorrower() {
         Mockito.when(mockPersistenceLayer.searchBorrowerDataByName(DEFAULT_BORROWER.name)).thenReturn(DEFAULT_BORROWER);
@@ -143,6 +184,9 @@ public class LibraryUtilsTests {
         Assert.assertEquals(LibraryActionResults.SUCCESS, result);
     }
 
+    /**
+     * If a borrower isn't registered, then obviously we cannot delete them.
+     */
     @Test
     public void testCannotDeleteNonRegisteredBorrower() {
         Mockito.when(mockPersistenceLayer.searchBorrowerDataByName(DEFAULT_BORROWER.name)).thenReturn(Borrower.createEmpty());
@@ -151,6 +195,32 @@ public class LibraryUtilsTests {
 
         Mockito.verify(mockPersistenceLayer, times(0)).deleteBorrower(DEFAULT_BORROWER.id);
         Assert.assertEquals(LibraryActionResults.NON_REGISTERED_BORROWER_CANNOT_BE_DELETED, result);
+    }
+
+    /**
+     * A test to cover the action of listing all the books in the database.
+     * Perhaps unusual, given how large libraries get, but we're going MVP style - minimum
+     * viable product.  At early stages we may develop features that later on become obsolete.
+     */
+    @Test
+    public void testShouldBeAbleToListAllBooks() {
+        final List<Book> books = generateListOfBooks(new String[]{"foo", "bar"});
+        Mockito.when(mockPersistenceLayer.listAllBooks()).thenReturn(books);
+        List<Book> bookList = libraryUtils.listAllBooks();
+        Assert.assertEquals(books, bookList);
+    }
+
+    /**
+     * A helper function to generate a list of books, given a list of titles.
+     */
+    public static List<Book> generateListOfBooks(String[] bookTitles) {
+        ArrayList bookList = new ArrayList<Book>();
+        int id = 1;
+        for(String s : bookTitles) {
+            bookList.add(new Book(id, s));
+            id++;
+        }
+        return bookList;
     }
 
 

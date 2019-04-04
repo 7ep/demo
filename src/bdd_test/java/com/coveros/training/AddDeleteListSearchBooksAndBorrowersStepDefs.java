@@ -16,6 +16,11 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static com.coveros.training.persistence.LibraryUtilsTests.generateListOfBooks;
 
 public class AddDeleteListSearchBooksAndBorrowersStepDefs {
 
@@ -28,6 +33,7 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
     private final Date Jan_2nd = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 2));
     private LibraryActionResults libraryActionResults = LibraryActionResults.NULL;
     private PersistenceLayer pl = new PersistenceLayer();
+    private List<Book> allBooks = new ArrayList<>();
 
     /**
      * Set up the databases, clear them, initialize the Library Utility with them.
@@ -124,88 +130,64 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
         Assert.assertTrue(borrower.isEmpty());
     }
 
-    @Given("a library with the following books registered: {string}, {string}, {string}")
-    public void a_library_with_the_following_books_registered(String string, String string2, String string3) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+    @Given("a library with the following books registered: a, b, c")
+    public void a_library_with_the_following_books_registered() {
+        initializeEmptyDatabaseAndUtility();
+        libraryUtils.registerBook("a");
+        libraryUtils.registerBook("b");
+        libraryUtils.registerBook("c");
     }
 
     @When("a librarian lists all the registered books")
     public void a_librarian_lists_all_the_registered_books() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        allBooks = libraryUtils.listAllBooks();
     }
 
     @Then("that list is returned")
     public void that_list_is_returned() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        final List<Book> expectedBooks = generateListOfBooks(new String[]{"a", "b", "c"});
+        Assert.assertEquals(expectedBooks, allBooks);
     }
 
     @When("a librarian searches by that title")
     public void a_librarian_searches_by_that_title() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        myBook = libraryUtils.searchForBookByTitle(myBookTitle);
     }
 
     @Then("the system returns its full data")
     public void the_system_returns_its_full_data() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        Assert.assertEquals(myBookTitle, myBook.title);
+        Assert.assertTrue(myBook.id > 0);
     }
 
-    @Given("a book, {string}, with id of {int}, is currently registered in the system")
-    public void a_book_with_id_of_is_currently_registered_in_the_system(String string, Integer int1) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
-    }
-
-    @When("a librarian searches by that id")
-    public void a_librarian_searches_by_that_id() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+    @When("a librarian searches by its id")
+    public void a_librarian_searches_by_its_id() {
+        myBook = libraryUtils.searchForBookById(myBook.id);
     }
 
     @Given("no books are registered in the system")
     public void no_books_are_registered_in_the_system() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        initializeEmptyDatabaseAndUtility();
     }
 
     @When("a librarian searches for a book by id {int}")
-    public void a_librarian_searches_for_a_book_by_id(Integer int1) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+    public void a_librarian_searches_for_a_book_by_id(Integer bookId) {
+        myBook = libraryUtils.searchForBookById(bookId);
     }
 
-    @Then("the system reports that there are no books with that id")
-    public void the_system_reports_that_there_are_no_books_with_that_id() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+    @Then("the system returns an empty result")
+    public void the_system_returns_an_empty_result() {
+        Assert.assertTrue(myBook.isEmpty());
     }
 
     @When("a librarian searches for a book by title of {string}")
-    public void a_librarian_searches_for_a_book_by_title_of(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
-    }
-
-    @Then("the system reports that there are no books found with that title")
-    public void the_system_reports_that_there_are_no_books_found_with_that_title() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
-    }
-
-    @When("a librarian lists all the books")
-    public void a_librarian_lists_all_the_books() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+    public void a_librarian_searches_for_a_book_by_title_of(String bookTitle) {
+        myBook = libraryUtils.searchForBookByTitle(bookTitle);
     }
 
     @Then("the system reports that there are no books in the system")
     public void the_system_reports_that_there_are_no_books_in_the_system() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        Assert.assertTrue(allBooks.isEmpty());
     }
 
     @Given("a library with the following borrowers registered: {string}, {string}, {string}")
@@ -282,6 +264,12 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
     @Then("the system reports an error indicating that the borrower cannot be deleted because he or she was never registered")
     public void the_system_reports_an_error_indicating_that_the_borrower_cannot_be_deleted_because_he_or_she_was_never_registered() {
         Assert.assertEquals(LibraryActionResults.NON_REGISTERED_BORROWER_CANNOT_BE_DELETED, libraryActionResults);
+    }
+
+    @When("a librarian searches by that id")
+    public void a_librarian_searches_by_that_id() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new cucumber.api.PendingException();
     }
 
 }

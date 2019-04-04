@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 
 import static org.mockito.Mockito.when;
 
@@ -86,6 +87,19 @@ public class PersistenceLayerTests {
         runRestoreOneBookOneBorrower();
 
         Book book = pl.searchBooksByTitle(DEFAULT_BOOK.title);
+
+        Assert.assertEquals(DEFAULT_BOOK.title, book.title);
+        Assert.assertEquals(1, book.id);
+    }
+
+    /**
+     * If a book is in the database, we should be able to find it by id.
+     */
+    @Test
+    public void testShouldBeAbleToSearchForBooksById() {
+        runRestoreOneBookOneBorrower();
+
+        Book book = pl.searchBooksById(DEFAULT_BOOK.id);
 
         Assert.assertEquals(DEFAULT_BOOK.title, book.title);
         Assert.assertEquals(1, book.id);
@@ -176,6 +190,16 @@ public class PersistenceLayerTests {
         final Borrower borrower = pl.searchBorrowerDataByName(DEFAULT_BORROWER.name);
 
         Assert.assertTrue(borrower.isEmpty());
+    }
+
+    @Test
+    public void testShouldListAllBooks() {
+        runRestoreOneBookOneBorrower();
+
+        final List<Book> books = pl.listAllBooks();
+
+        Assert.assertTrue(books.size() > 0);
+        Assert.assertTrue(books.contains(DEFAULT_BOOK));
     }
 
     @Test(expected = SqlRuntimeException.class)

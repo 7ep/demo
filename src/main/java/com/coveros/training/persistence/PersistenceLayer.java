@@ -14,6 +14,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 public class PersistenceLayer {
@@ -274,6 +276,51 @@ public class PersistenceLayer {
         return runQuery(sqlData);
     }
 
+
+    public Book searchBooksById(long id) {
+        Function<ResultSet, Book> extractor = throwingFunctionWrapper(rs -> {
+            if (rs.next()) {
+                long bookId = rs.getLong(1);
+                String title = StringUtils.makeNotNullable(rs.getString(2));
+                return new Book(bookId, title);
+            } else {
+                return Book.createEmpty();
+            }
+        });
+
+        final SqlData sqlData =
+                new SqlData(
+                        "search for a book by title",
+                        "SELECT id, title FROM library.book WHERE id = ?;",
+                        extractor);
+        sqlData.addParameter(id, Long.class);
+        return runQuery(sqlData);
+    }
+
+    public List<Book> listAllBooks() {
+        Function<ResultSet, List<Book>> extractor = throwingFunctionWrapper(rs -> {
+            if (rs.next()) {
+                List<Book> bookList = new ArrayList<>();
+                do {
+                    long id = rs.getLong(1);
+                    String title = StringUtils.makeNotNullable(rs.getString(2));
+                    bookList.add(new Book(id, title));
+                } while (rs.next());
+                return bookList;
+            } else {
+                return new ArrayList<>();
+            }
+        });
+
+        final SqlData sqlData =
+                new SqlData(
+                        "get all books",
+                        "SELECT id, title FROM library.book;",
+                        extractor);
+        return runQuery(sqlData);
+    }
+
+
     <R> R runQuery(SqlData sqlData) {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st =
@@ -288,6 +335,7 @@ public class PersistenceLayer {
         }
 
     }
+
 
     /**
      * This is an interface to a wrapper around {@link Function} so we can catch exceptions

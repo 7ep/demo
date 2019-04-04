@@ -5,7 +5,7 @@ Feature: Librarians may list and search books
     So that I can review the inventory of my library
 
     Scenario: Can list all the books
-        Given a library with the following books registered: "a", "b", "c"
+        Given a library with the following books registered: a, b, c
         When a librarian lists all the registered books
         Then that list is returned
 
@@ -15,23 +15,23 @@ Feature: Librarians may list and search books
         Then the system returns its full data
 
     Scenario: Can search a book by id
-        Given a book, "The DevOps Handbook", with id of 1, is currently registered in the system
-        When a librarian searches by that id
+        Given a book, "The DevOps Handbook", is currently registered in the system
+        When a librarian searches by its id
         Then the system returns its full data
 
-    Scenario: Receive an appropriate message if search by id finds nothing
+    Scenario: Should return an empty result if search by id finds nothing
         Given no books are registered in the system
         When a librarian searches for a book by id 1
-        Then the system reports that there are no books with that id
+        Then the system returns an empty result
 
-    Scenario: Receive an appropriate message if search by title finds nothing
+    Scenario: Should return an empty result if search by title finds nothing
         Given no books are registered in the system
         When a librarian searches for a book by title of "The DevOps Handbook"
-        Then the system reports that there are no books found with that title
+        Then the system returns an empty result
 
     Scenario: Receive an appropriate message if listing all books, but no books in library
         Given no books are registered in the system
-        When a librarian lists all the books
+        When a librarian lists all the registered books
         Then the system reports that there are no books in the system
 
 

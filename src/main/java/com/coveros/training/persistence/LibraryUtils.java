@@ -1,5 +1,6 @@
 package com.coveros.training.persistence;
 
+import com.coveros.training.CheckUtils;
 import com.coveros.training.domainobjects.Book;
 import com.coveros.training.domainobjects.Borrower;
 import com.coveros.training.domainobjects.LibraryActionResults;
@@ -8,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Date;
+import java.util.List;
 
 public class LibraryUtils {
 
@@ -119,8 +121,34 @@ public class LibraryUtils {
     }
 
     public Book searchForBookByTitle(String title) {
+        if (title.isEmpty()) {
+            throw new IllegalArgumentException("when searching for a book, must include a non-empty string for title");
+        }
         logger.info("search for book with title: {}", title);
-        return persistence.searchBooksByTitle(title);
+        final Book book = persistence.searchBooksByTitle(title);
+        if (book.isEmpty()) {
+            logger.info("No book found with title of {}", title);
+        } else {
+            logger.info("book found with title of {}", title);
+        }
+        return book;
+    }
+
+    /**
+     * The id has to be positive.  Exception will be thrown otherwise.
+     */
+    public Book searchForBookById(long id) {
+        if (id < 1) {
+            throw new IllegalArgumentException("when searching for a book, must include an id of one or greater");
+        }
+        logger.info("search for book with id: {}", id);
+        final Book book = persistence.searchBooksById(id);
+        if (book.isEmpty()) {
+            logger.info("No book found with id of {}", id);
+        } else {
+            logger.info("Book found with id of {}", id);
+        }
+        return book;
     }
 
     public static LibraryUtils createEmpty() {
@@ -154,4 +182,11 @@ public class LibraryUtils {
         logger.info("borrower with name: {} and id: {} was deleted", borrowerInDatabase.name, borrowerInDatabase.id);
         return LibraryActionResults.SUCCESS;
     }
+
+    public List<Book> listAllBooks() {
+        logger.info("received request to list all books");
+        return persistence.listAllBooks();
+    }
+
+
 }
