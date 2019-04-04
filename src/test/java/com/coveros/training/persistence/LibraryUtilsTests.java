@@ -133,5 +133,25 @@ public class LibraryUtilsTests {
         Assert.assertEquals(LibraryActionResults.NON_REGISTERED_BOOK_CANNOT_BE_DELETED, result);
     }
 
+    @Test
+    public void testCanDeleteBorrower() {
+        Mockito.when(mockPersistenceLayer.searchBorrowerDataByName(DEFAULT_BORROWER.name)).thenReturn(DEFAULT_BORROWER);
+
+        final LibraryActionResults result = libraryUtils.deleteBorrower(DEFAULT_BORROWER);
+
+        Mockito.verify(mockPersistenceLayer, times(1)).deleteBorrower(DEFAULT_BORROWER.id);
+        Assert.assertEquals(LibraryActionResults.SUCCESS, result);
+    }
+
+    @Test
+    public void testCannotDeleteNonRegisteredBorrower() {
+        Mockito.when(mockPersistenceLayer.searchBorrowerDataByName(DEFAULT_BORROWER.name)).thenReturn(Borrower.createEmpty());
+
+        final LibraryActionResults result = libraryUtils.deleteBorrower(DEFAULT_BORROWER);
+
+        Mockito.verify(mockPersistenceLayer, times(0)).deleteBorrower(DEFAULT_BORROWER.id);
+        Assert.assertEquals(LibraryActionResults.NON_REGISTERED_BORROWER_CANNOT_BE_DELETED, result);
+    }
+
 
 }

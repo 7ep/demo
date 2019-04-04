@@ -142,4 +142,16 @@ public class LibraryUtils {
         logger.info("book with title: {} and id: {} was deleted", bookInDatabase.title, bookInDatabase.id);
         return LibraryActionResults.SUCCESS;
     }
+
+    public LibraryActionResults deleteBorrower(Borrower borrower) {
+        logger.info("deleting a borrower.  id: {}, name: {}", borrower.id, borrower.name);
+        final Borrower borrowerInDatabase = searchForBorrowerByName(borrower.name);
+        if (borrowerInDatabase.isEmpty()) {
+            logger.info("borrower not found in database.  Therefore, obviously, cannot be deleted");
+            return LibraryActionResults.NON_REGISTERED_BORROWER_CANNOT_BE_DELETED;
+        }
+        persistence.deleteBorrower(borrower.id);
+        logger.info("borrower with name: {} and id: {} was deleted", borrowerInDatabase.name, borrowerInDatabase.id);
+        return LibraryActionResults.SUCCESS;
+    }
 }

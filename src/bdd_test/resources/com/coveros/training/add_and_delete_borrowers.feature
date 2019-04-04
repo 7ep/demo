@@ -17,12 +17,12 @@ Feature: Librarians may add and delete borrowers
     Scenario: Cannot add a borrower that already exists
         Given a borrower, "alice", is currently registered in the system
         When a librarian registers that borrower
-        Then the system reports an error indicating that "the borrower is already registered"
+        Then the system reports an error indicating that the borrower is already registered
 
     Scenario: Cannot remove a borrower that doesn't exist
-        Given a borrower, "alice", is currently registered in the system
+        Given a borrower, "alice", is not currently registered in the system
         When a librarian deletes that borrower
-        Then the system reports an error indicating that "the borrower cannot be deleted because he or she was never registered"
+        Then the system reports an error indicating that the borrower cannot be deleted because he or she was never registered
 
 
 

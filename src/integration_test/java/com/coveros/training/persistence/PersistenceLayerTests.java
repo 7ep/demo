@@ -166,7 +166,16 @@ public class PersistenceLayerTests {
         final Book book = pl.searchBooksByTitle(DEFAULT_BOOK.title);
 
         Assert.assertTrue(book.isEmpty());
+    }
 
+    @Test
+    public void testShouldBeAbleToDeleteBorrower() {
+        runRestoreOneBookOneBorrower();
+
+        pl.deleteBorrower(DEFAULT_BORROWER.id);
+        final Borrower borrower = pl.searchBorrowerDataByName(DEFAULT_BORROWER.name);
+
+        Assert.assertTrue(borrower.isEmpty());
     }
 
     @Test(expected = SqlRuntimeException.class)

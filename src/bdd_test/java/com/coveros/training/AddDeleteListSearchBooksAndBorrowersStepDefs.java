@@ -22,6 +22,7 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
     private Book myBook = Book.createEmpty();
     private String myBookTitle = "";
     private Borrower myBorrower = Borrower.createEmpty();
+    private String myBorrowerName = "";
     private final Date jan_1st = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 1));
     private LibraryUtils libraryUtils = LibraryUtils.createEmpty();
     private final Date Jan_2nd = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 2));
@@ -64,7 +65,8 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
 
     @When("a librarian deletes that book")
     public void a_librarian_deletes_that_book() {
-        libraryActionResults = libraryUtils.deleteBook(myBook);
+        final Book book = new Book(1, myBookTitle);
+        libraryActionResults = libraryUtils.deleteBook(book);
     }
 
     @Then("the system does not have the book registered")
@@ -74,7 +76,7 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
     }
 
     @Then("the system reports an error indicating that the book is already registered")
-    public void the_system_reports_an_error_indicating_that() {
+    public void the_system_reports_an_error_indicating_that_TheBookIsAlreadyRegistered() {
         Assert.assertEquals(LibraryActionResults.ALREADY_REGISTERED_BOOK, libraryActionResults);
     }
 
@@ -85,40 +87,41 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
     }
 
     @Given("a borrower, {string}, is not currently registered in the system")
-    public void a_borrower_is_not_currently_registered_in_the_system(String string) {
+    public void a_borrower_is_not_currently_registered_in_the_system(String borrower) {
+        myBorrowerName = borrower;
         initializeEmptyDatabaseAndUtility();
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
     }
 
     @When("a librarian registers that borrower")
     public void a_librarian_registers_that_borrower() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        libraryActionResults = libraryUtils.registerBorrower(myBorrowerName);
     }
 
     @Then("the system has the borrower registered")
     public void the_system_has_the_borrower_registered() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        final Borrower borrower = libraryUtils.searchForBorrowerByName(myBorrowerName);
+        Assert.assertEquals(borrower.name, myBorrowerName);
+        Assert.assertTrue(borrower.id > 0);
+        Assert.assertEquals(LibraryActionResults.SUCCESS, libraryActionResults);
     }
 
     @Given("a borrower, {string}, is currently registered in the system")
-    public void a_borrower_is_currently_registered_in_the_system(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+    public void a_borrower_is_currently_registered_in_the_system(String borrowerName) {
+        initializeEmptyDatabaseAndUtility();
+        myBorrowerName = borrowerName;
+        libraryActionResults = libraryUtils.registerBorrower(borrowerName);
     }
 
     @When("a librarian deletes that borrower")
     public void a_librarian_deletes_that_borrower() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        final Borrower borrower = new Borrower(1, myBorrowerName);
+        libraryActionResults = libraryUtils.deleteBorrower(borrower);
     }
 
     @Then("the system does not have the borrower registered")
     public void the_system_does_not_have_the_borrower_registered() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        final Borrower borrower = libraryUtils.searchForBorrowerByName(myBorrowerName);
+        Assert.assertTrue(borrower.isEmpty());
     }
 
     @Given("a library with the following books registered: {string}, {string}, {string}")
@@ -269,6 +272,16 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
     public void the_system_reports_that_there_are_no_borrowers_in_the_system() {
         // Write code here that turns the phrase above into concrete actions
         throw new cucumber.api.PendingException();
+    }
+
+    @Then("the system reports an error indicating that the borrower is already registered")
+    public void the_system_reports_an_error_indicating_that_the_borrower_is_already_registered() {
+        Assert.assertEquals(LibraryActionResults.ALREADY_REGISTERED_BORROWER, libraryActionResults);
+    }
+
+    @Then("the system reports an error indicating that the borrower cannot be deleted because he or she was never registered")
+    public void the_system_reports_an_error_indicating_that_the_borrower_cannot_be_deleted_because_he_or_she_was_never_registered() {
+        Assert.assertEquals(LibraryActionResults.NON_REGISTERED_BORROWER_CANNOT_BE_DELETED, libraryActionResults);
     }
 
 }
