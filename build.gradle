@@ -37,11 +37,6 @@ plugins {
     // simply being run during the test.  It does this by
     // changing the code and seeing if the test fails as a result.
     id 'info.solidsoft.pitest' version '1.4.0'
-
-    // provides code generation from a swagger definition file.
-    // See https://github.com/int128/gradle-swagger-generator-plugin
-    // This allows us to create sophisticated Swagger endpoints easily.
-    id 'org.hidetake.swagger.generator' version '2.18.1'
 }
 
 // sets the version of Java we want to use - 8
@@ -121,26 +116,7 @@ dependencies {
 
     // so we can programmatically run flyway at startup
     compile "org.flywaydb:flyway-core:5.2.4"
-
-    // Swagger Codegen V2
-    swaggerCodegen 'io.swagger:swagger-codegen-cli:2.4.4'
 }
-
-swaggerSources {
-    demo {
-        inputFile = file('swagger/api_design/demo_swagger_design.yaml')
-        code {
-            language = 'jaxrs'
-            // Validate YAML before code generation. for Swagger Codegen V2 / V3
-            dependsOn validation
-        }
-    }
-}
-
-// Configure compile task dependency and source for Swagger code generation
-compileJava.dependsOn swaggerSources.demo.code
-sourceSets.main.java.srcDir "${swaggerSources.demo.code.outputDir}/src/main/java"
-sourceSets.main.resources.srcDir "${swaggerSources.demo.code.outputDir}/src/main/resources"
 
 task copyToLib(type: Copy) {
     from configurations.localDeps
