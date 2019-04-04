@@ -1,6 +1,5 @@
 package com.coveros.training.persistence;
 
-import com.coveros.training.CheckUtils;
 import com.coveros.training.domainobjects.Book;
 import com.coveros.training.domainobjects.Borrower;
 import com.coveros.training.domainobjects.LibraryActionResults;
