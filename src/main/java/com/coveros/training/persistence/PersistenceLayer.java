@@ -175,6 +175,20 @@ public class PersistenceLayer {
         executeUpdateTemplate(sqlData);
     }
 
+
+    /**
+     * Delete a book from the database
+     * @param id the identifier for a book
+     */
+    public void deleteBook(long id) {
+        CheckUtils.checkIntParamPositive(id);
+        final SqlData sqlData = new SqlData(
+                "Deletes a book from the database",
+                "DELETE FROM library.book WHERE id = ?;");
+        sqlData.addParameter(id, Long.class);
+        executeUpdateTemplate(sqlData);
+    }
+
     /**
      * Given the id for a borrower, this command returns their name.
      *

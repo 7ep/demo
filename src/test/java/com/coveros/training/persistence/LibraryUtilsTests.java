@@ -3,7 +3,9 @@ package com.coveros.training.persistence;
 import com.coveros.training.domainobjects.*;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 
 import java.sql.Date;
@@ -77,6 +79,22 @@ public class LibraryUtilsTests {
         Assert.assertEquals(LibraryActionResults.SUCCESS, libraryActionResults);
     }
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    /**
+     * Makes no sense to allow registering a book with an empty string.
+     * Throw an exception, since it's probably a dev error in that case - it
+     * should never have been allowed to occur, by the developer.
+     */
+    @Test
+    public void testCannotRegisterBookWithEmptyString() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("bookTitle was an empty string - disallowed when registering books");
+
+        libraryUtils.registerBook("");
+    }
+
     @Test
     public void testCanSearchForLoan() {
         libraryUtils.searchForLoan(DEFAULT_BOOK);
@@ -93,6 +111,26 @@ public class LibraryUtilsTests {
     public void testCanSearchForBooksByTitle() {
         libraryUtils.searchForBookByTitle(DEFAULT_BOOK.title);
         Mockito.verify(mockPersistenceLayer, times(1)).searchBooksByTitle(DEFAULT_BOOK.title);
+    }
+
+    @Test
+    public void testCanDeleteBook() {
+        Mockito.when(mockPersistenceLayer.searchBooksByTitle(DEFAULT_BOOK.title)).thenReturn(DEFAULT_BOOK);
+
+        final LibraryActionResults result = libraryUtils.deleteBook(DEFAULT_BOOK);
+
+        Mockito.verify(mockPersistenceLayer, times(1)).deleteBook(DEFAULT_BOOK.id);
+        Assert.assertEquals(LibraryActionResults.SUCCESS, result);
+    }
+
+    @Test
+    public void testCannotDeleteNonRegisteredBook() {
+        Mockito.when(mockPersistenceLayer.searchBooksByTitle(DEFAULT_BOOK.title)).thenReturn(Book.createEmpty());
+
+        final LibraryActionResults result = libraryUtils.deleteBook(DEFAULT_BOOK);
+
+        Mockito.verify(mockPersistenceLayer, times(0)).deleteBook(DEFAULT_BOOK.id);
+        Assert.assertEquals(LibraryActionResults.NON_REGISTERED_BOOK_CANNOT_BE_DELETED, result);
     }
 
 

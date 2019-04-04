@@ -2,6 +2,7 @@ package com.coveros.training.domainobjects;
 
 public enum LibraryActionResults {
     ALREADY_REGISTERED_BOOK,
+    NON_REGISTERED_BOOK_CANNOT_BE_DELETED, // if a book isn't registered, then of course we cannot delete it.
     ALREADY_REGISTERED_BORROWER,
     BOOK_NOT_REGISTERED,
     BORROWER_NOT_REGISTERED,

@@ -85,6 +85,9 @@ public class LibraryUtils {
     }
 
     public LibraryActionResults registerBook(String bookTitle) {
+        if (bookTitle.isEmpty()) {
+            throw new IllegalArgumentException("bookTitle was an empty string - disallowed when registering books");
+        }
         logger.info("trying to register a book with title: {}", bookTitle);
         final Book book = searchForBookByTitle(bookTitle);
         if (!book.isEmpty()) {
@@ -126,5 +129,17 @@ public class LibraryUtils {
 
     public boolean isEmpty() {
         return persistence.isEmpty();
+    }
+
+    public LibraryActionResults deleteBook(Book book) {
+        logger.info("deleting a book.  id: {}, title: {}", book.id, book.title);
+        final Book bookInDatabase = searchForBookByTitle(book.title);
+        if (bookInDatabase.isEmpty()) {
+            logger.info("book not found in database.  Therefore, obviously, cannot be deleted");
+            return LibraryActionResults.NON_REGISTERED_BOOK_CANNOT_BE_DELETED;
+        }
+        persistence.deleteBook(book.id);
+        logger.info("book with title: {} and id: {} was deleted", bookInDatabase.title, bookInDatabase.id);
+        return LibraryActionResults.SUCCESS;
     }
 }

@@ -17,12 +17,12 @@ Feature: Librarians may add and delete books
     Scenario: Cannot add a book that already exists
         Given a book, "The DevOps Handbook", is currently registered in the system
         When a librarian registers that book
-        Then the system reports an error indicating that "the book is already registered"
+        Then the system reports an error indicating that the book is already registered
 
     Scenario: Cannot remove a book that doesn't exist
-        Given a book, "The DevOps Handbook", is currently registered in the system
+        Given a book, "The DevOps Handbook", is not currently registered in the system
         When a librarian deletes that book
-        Then the system reports an error indicating that "the book cannot be deleted because it was never registered"
+        Then the system reports an error indicating that the book cannot be deleted because it was never registered
 
 
 

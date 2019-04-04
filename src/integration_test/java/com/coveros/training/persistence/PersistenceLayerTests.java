@@ -158,6 +158,17 @@ public class PersistenceLayerTests {
         Assert.assertEquals(1, id);
     }
 
+    @Test
+    public void testShouldBeAbleToDeleteBook() {
+        runRestoreOneBookOneBorrower();
+
+        pl.deleteBook(DEFAULT_BOOK.id);
+        final Book book = pl.searchBooksByTitle(DEFAULT_BOOK.title);
+
+        Assert.assertTrue(book.isEmpty());
+
+    }
+
     @Test(expected = SqlRuntimeException.class)
     public void testThatExecuteInsertOnPreparedStatementHandlesExceptions() throws SQLException {
         final PersistenceLayer persistenceLayer = new PersistenceLayer();

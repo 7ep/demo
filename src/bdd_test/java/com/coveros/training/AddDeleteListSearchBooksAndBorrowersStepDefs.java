@@ -20,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 public class AddDeleteListSearchBooksAndBorrowersStepDefs {
 
     private Book myBook = Book.createEmpty();
+    private String myBookTitle = "";
     private Borrower myBorrower = Borrower.createEmpty();
     private final Date jan_1st = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 1));
     private LibraryUtils libraryUtils = LibraryUtils.createEmpty();
@@ -36,49 +37,56 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
     }
 
     @Given("a book, {string}, is not currently registered in the system")
-    public void a_book_is_not_currently_registered_in_the_system(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+    public void a_book_is_not_currently_registered_in_the_system(String bookTitle) {
+        myBookTitle = bookTitle;
+        initializeEmptyDatabaseAndUtility();
     }
 
     @When("a librarian registers that book")
     public void a_librarian_registers_that_book() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        libraryActionResults = libraryUtils.registerBook(myBookTitle);
+        myBook = libraryUtils.searchForBookByTitle(myBookTitle);
     }
 
     @Then("the system has the book registered")
     public void the_system_has_the_book_registered() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        Assert.assertEquals(LibraryActionResults.SUCCESS, libraryActionResults);
+        Assert.assertTrue(myBook.id > 0);
     }
 
     @Given("a book, {string}, is currently registered in the system")
-    public void a_book_is_currently_registered_in_the_system(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+    public void a_book_is_currently_registered_in_the_system(String bookTitle) {
+        initializeEmptyDatabaseAndUtility();
+        myBookTitle = bookTitle;
+        libraryUtils.registerBook(bookTitle);
+        myBook = libraryUtils.searchForBookByTitle(bookTitle);
     }
 
     @When("a librarian deletes that book")
     public void a_librarian_deletes_that_book() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        libraryActionResults = libraryUtils.deleteBook(myBook);
     }
 
     @Then("the system does not have the book registered")
     public void the_system_does_not_have_the_book_registered() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        myBook = libraryUtils.searchForBookByTitle(myBook.title);
+        Assert.assertTrue(myBook.isEmpty());
     }
 
-    @Then("the system reports an error indicating that {string}")
-    public void the_system_reports_an_error_indicating_that(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+    @Then("the system reports an error indicating that the book is already registered")
+    public void the_system_reports_an_error_indicating_that() {
+        Assert.assertEquals(LibraryActionResults.ALREADY_REGISTERED_BOOK, libraryActionResults);
+    }
+
+
+    @Then("the system reports an error indicating that the book cannot be deleted because it was never registered")
+    public void theSystemReportsAnErrorIndicatingThatTheBookCannotBeDeletedBecauseItWasNeverRegistered() {
+        Assert.assertEquals(LibraryActionResults.NON_REGISTERED_BOOK_CANNOT_BE_DELETED, libraryActionResults);
     }
 
     @Given("a borrower, {string}, is not currently registered in the system")
     public void a_borrower_is_not_currently_registered_in_the_system(String string) {
+        initializeEmptyDatabaseAndUtility();
         // Write code here that turns the phrase above into concrete actions
         throw new cucumber.api.PendingException();
     }
@@ -262,6 +270,5 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
         // Write code here that turns the phrase above into concrete actions
         throw new cucumber.api.PendingException();
     }
-
 
 }
