@@ -1,1 +1,0 @@
-demo_swagger_design.yaml was created using the Swagger editor at https://editor.swagger.io/
