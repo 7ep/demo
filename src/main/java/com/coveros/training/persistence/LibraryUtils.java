@@ -151,6 +151,23 @@ public class LibraryUtils {
         return book;
     }
 
+    /**
+     * The id has to be positive.  Exception will be thrown otherwise.
+     */
+    public Borrower searchForBorrowerById(long id) {
+        if (id < 1) {
+            throw new IllegalArgumentException("when searching for a borrower, must include an id of one or greater");
+        }
+        logger.info("search for borrower with id: {}", id);
+        final Borrower borrower = persistence.searchBorrowersById(id);
+        if (borrower.isEmpty()) {
+            logger.info("No borrower found with id of {}", id);
+        } else {
+            logger.info("borrower found with id of {}", id);
+        }
+        return borrower;
+    }
+
     public static LibraryUtils createEmpty() {
         return new LibraryUtils(PersistenceLayer.createEmpty());
     }
@@ -186,6 +203,12 @@ public class LibraryUtils {
     public List<Book> listAllBooks() {
         logger.info("received request to list all books");
         return persistence.listAllBooks();
+    }
+
+
+    public List<Borrower> listAllBorrowers() {
+        logger.info("received request to list all borrowers");
+        return persistence.listAllBorrowers();
     }
 
 

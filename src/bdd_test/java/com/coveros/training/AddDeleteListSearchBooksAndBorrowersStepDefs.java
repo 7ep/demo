@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.coveros.training.persistence.LibraryUtilsTests.generateListOfBooks;
+import static com.coveros.training.persistence.LibraryUtilsTests.generateListOfBorrowers;
 
 public class AddDeleteListSearchBooksAndBorrowersStepDefs {
 
@@ -34,6 +35,7 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
     private LibraryActionResults libraryActionResults = LibraryActionResults.NULL;
     private PersistenceLayer pl = new PersistenceLayer();
     private List<Book> allBooks = new ArrayList<>();
+    private List<Borrower> allBorrowers = new ArrayList<>();
 
     /**
      * Set up the databases, clear them, initialize the Library Utility with them.
@@ -143,10 +145,16 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
         allBooks = libraryUtils.listAllBooks();
     }
 
-    @Then("that list is returned")
-    public void that_list_is_returned() {
+    @Then("the whole list of books is returned")
+    public void the_whole_list_of_books_is_returned() {
         final List<Book> expectedBooks = generateListOfBooks(new String[]{"a", "b", "c"});
         Assert.assertEquals(expectedBooks, allBooks);
+    }
+
+    @Then("the whole list of borrowers is returned")
+    public void the_whole_list_of_borrowers_is_returned() {
+        final List<Borrower> expectedBorrowers = generateListOfBorrowers(new String[]{"a", "b", "c"});
+        Assert.assertEquals(expectedBorrowers, allBorrowers);
     }
 
     @When("a librarian searches by that title")
@@ -154,10 +162,16 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
         myBook = libraryUtils.searchForBookByTitle(myBookTitle);
     }
 
-    @Then("the system returns its full data")
-    public void the_system_returns_its_full_data() {
+    @Then("the system returns the book's full data")
+    public void the_system_returns_the_books_full_data() {
         Assert.assertEquals(myBookTitle, myBook.title);
         Assert.assertTrue(myBook.id > 0);
+    }
+
+    @Then("the system returns the borrower's full data")
+    public void the_system_returns_the_borrowers_full_data() {
+        Assert.assertEquals(myBorrowerName, myBorrower.name);
+        Assert.assertTrue(myBorrower.id > 0);
     }
 
     @When("a librarian searches by its id")
@@ -175,9 +189,14 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
         myBook = libraryUtils.searchForBookById(bookId);
     }
 
-    @Then("the system returns an empty result")
-    public void the_system_returns_an_empty_result() {
+    @Then("the system returns an empty result for the book")
+    public void the_system_returns_an_empty_result_for_the_book() {
         Assert.assertTrue(myBook.isEmpty());
+    }
+
+    @Then("the system returns an empty result for the borrower")
+    public void the_system_returns_an_empty_result_for_the_borrower() {
+        Assert.assertTrue(myBorrower.isEmpty());
     }
 
     @When("a librarian searches for a book by title of {string}")
@@ -190,70 +209,57 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
         Assert.assertTrue(allBooks.isEmpty());
     }
 
-    @Given("a library with the following borrowers registered: {string}, {string}, {string}")
-    public void a_library_with_the_following_borrowers_registered(String string, String string2, String string3) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+    @Given("a library with the following borrowers registered: a, b, c")
+    public void a_library_with_the_following_borrowers_registered() {
+        initializeEmptyDatabaseAndUtility();
+        libraryUtils.registerBorrower("a");
+        libraryUtils.registerBorrower("b");
+        libraryUtils.registerBorrower("c");
     }
 
     @When("a librarian lists all the registered borrowers")
     public void a_librarian_lists_all_the_registered_borrowers() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        allBorrowers = libraryUtils.listAllBorrowers();
     }
 
     @When("a librarian searches by that name")
     public void a_librarian_searches_by_that_name() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
-    }
-
-    @Given("a borrower, {string}, with id of {int}, is currently registered in the system")
-    public void a_borrower_with_id_of_is_currently_registered_in_the_system(String string, Integer int1) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        myBorrower = libraryUtils.searchForBorrowerByName(myBorrowerName);
     }
 
     @Given("no borrowers are registered in the system")
     public void no_borrowers_are_registered_in_the_system() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        initializeEmptyDatabaseAndUtility();
     }
 
     @When("a librarian searches for a borrower by id {int}")
-    public void a_librarian_searches_for_a_borrower_by_id(Integer int1) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+    public void a_librarian_searches_for_a_borrower_by_id(Integer id) {
+        myBorrower = libraryUtils.searchForBorrowerById(id);
     }
 
     @Then("the system reports that there are no borrowers with that id")
     public void the_system_reports_that_there_are_no_borrowers_with_that_id() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        Assert.assertTrue(myBorrower.isEmpty());
     }
 
     @When("a librarian searches for a borrower by name of {string}")
-    public void a_librarian_searches_for_a_borrower_by_name_of(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+    public void a_librarian_searches_for_a_borrower_by_name_of(String name) {
+        myBorrower = libraryUtils.searchForBorrowerByName(name);
     }
 
     @Then("the system reports that there are no borrowers found with that name")
     public void the_system_reports_that_there_are_no_borrowers_found_with_that_name() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        Assert.assertTrue(myBorrower.isEmpty());
     }
 
     @When("a librarian lists all the borrowers")
     public void a_librarian_lists_all_the_borrowers() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        allBorrowers = libraryUtils.listAllBorrowers();
     }
 
-    @Then("the system reports that there are no borrowers in the system")
-    public void the_system_reports_that_there_are_no_borrowers_in_the_system() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+    @Then("the system returns an empty list of borrowers")
+    public void the_system_returns_an_empty_list_of_borrowers() {
+        Assert.assertTrue(allBorrowers.isEmpty());
     }
 
     @Then("the system reports an error indicating that the borrower is already registered")
@@ -268,8 +274,8 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
 
     @When("a librarian searches by that id")
     public void a_librarian_searches_by_that_id() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        final Borrower tempBorrower = libraryUtils.searchForBorrowerByName(myBorrowerName);
+        myBorrower = libraryUtils.searchForBorrowerById(tempBorrower.id);
     }
 
 }

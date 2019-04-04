@@ -105,6 +105,19 @@ public class PersistenceLayerTests {
         Assert.assertEquals(1, book.id);
     }
 
+    /**
+     * If a borrower is in the database, we should be able to find it by id.
+     */
+    @Test
+    public void testShouldBeAbleToSearchForBorrowersById() {
+        runRestoreOneBookOneBorrower();
+
+        Borrower borrower = pl.searchBorrowersById(DEFAULT_BORROWER.id);
+
+        Assert.assertEquals(DEFAULT_BORROWER.name, borrower.name);
+        Assert.assertEquals(1, borrower.id);
+    }
+
     @Test
     public void testShouldBeAbleToSearchAUserByName() {
         runRestoreOneUser();
@@ -200,6 +213,16 @@ public class PersistenceLayerTests {
 
         Assert.assertTrue(books.size() > 0);
         Assert.assertTrue(books.contains(DEFAULT_BOOK));
+    }
+
+    @Test
+    public void testShouldListAllBorrowers() {
+        runRestoreOneBookOneBorrower();
+
+        final List<Borrower> borrowers = pl.listAllBorrowers();
+
+        Assert.assertTrue(borrowers.size() > 0);
+        Assert.assertTrue(borrowers.contains(DEFAULT_BORROWER));
     }
 
     @Test(expected = SqlRuntimeException.class)

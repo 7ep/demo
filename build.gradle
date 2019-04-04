@@ -60,6 +60,9 @@ apply plugin: 'org.owasp.dependencycheck'
 // makes sure the git pre-push commit is installed
 apply from: rootProject.file('gradle/install-git-hooks.gradle')
 
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:unchecked"
+}
 
 repositories {
     jcenter()

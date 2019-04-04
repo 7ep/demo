@@ -297,6 +297,27 @@ public class PersistenceLayer {
         return runQuery(sqlData);
     }
 
+
+    public Borrower searchBorrowersById(long id) {
+        Function<ResultSet, Borrower> extractor = throwingFunctionWrapper(rs -> {
+            if (rs.next()) {
+                long borrowerId = rs.getLong(1);
+                String name = StringUtils.makeNotNullable(rs.getString(2));
+                return new Borrower(borrowerId, name);
+            } else {
+                return Borrower.createEmpty();
+            }
+        });
+
+        final SqlData sqlData =
+                new SqlData(
+                        "search for a borrower by name",
+                        "SELECT id, name FROM library.borrower WHERE id = ?;",
+                        extractor);
+        sqlData.addParameter(id, Long.class);
+        return runQuery(sqlData);
+    }
+
     public List<Book> listAllBooks() {
         Function<ResultSet, List<Book>> extractor = throwingFunctionWrapper(rs -> {
             if (rs.next()) {
@@ -316,6 +337,29 @@ public class PersistenceLayer {
                 new SqlData(
                         "get all books",
                         "SELECT id, title FROM library.book;",
+                        extractor);
+        return runQuery(sqlData);
+    }
+
+    public List<Borrower> listAllBorrowers() {
+        Function<ResultSet, List<Borrower>> extractor = throwingFunctionWrapper(rs -> {
+            if (rs.next()) {
+                List<Borrower> borrowerList = new ArrayList<>();
+                do {
+                    long id = rs.getLong(1);
+                    String name = StringUtils.makeNotNullable(rs.getString(2));
+                    borrowerList.add(new Borrower(id, name));
+                } while (rs.next());
+                return borrowerList;
+            } else {
+                return new ArrayList<>();
+            }
+        });
+
+        final SqlData sqlData =
+                new SqlData(
+                        "get all borrowers",
+                        "SELECT id, name FROM library.borrower;",
                         extractor);
         return runQuery(sqlData);
     }

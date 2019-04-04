@@ -211,16 +211,43 @@ public class LibraryUtilsTests {
     }
 
     /**
+     * A test to cover the action of listing all the borrowers in the database.
+     * Perhaps unusual, given how large libraries get, but we're going MVP style - minimum
+     * viable product.  At early stages we may develop features that later on become obsolete.
+     */
+    @Test
+    public void testShouldBeAbleToListAllBorrowers() {
+        final List<Borrower> borrowers = generateListOfBorrowers(new String[]{"foo", "bar"});
+        Mockito.when(mockPersistenceLayer.listAllBorrowers()).thenReturn(borrowers);
+        List<Borrower> borrowerList = libraryUtils.listAllBorrowers();
+        Assert.assertEquals(borrowers, borrowerList);
+    }
+
+    /**
      * A helper function to generate a list of books, given a list of titles.
      */
     public static List<Book> generateListOfBooks(String[] bookTitles) {
-        ArrayList bookList = new ArrayList<Book>();
+        ArrayList<Book> bookList = new ArrayList<>();
         int id = 1;
         for(String s : bookTitles) {
             bookList.add(new Book(id, s));
             id++;
         }
         return bookList;
+    }
+
+
+    /**
+     * A helper function to generate a list of borrowers, given a list of names.
+     */
+    public static List<Borrower> generateListOfBorrowers(String[] names) {
+        ArrayList<Borrower> borrowerList = new ArrayList<>();
+        int id = 1;
+        for(String s : names) {
+            borrowerList.add(new Borrower(id, s));
+            id++;
+        }
+        return borrowerList;
     }
 
 
