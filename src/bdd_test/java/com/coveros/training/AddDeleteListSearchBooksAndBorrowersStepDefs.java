@@ -25,6 +25,8 @@ import static com.coveros.training.persistence.LibraryUtilsTests.generateListOfB
 
 public class AddDeleteListSearchBooksAndBorrowersStepDefs {
 
+    public static final String ALICE = "alice";
+    public static final String DEVOPS_HANDBOOK = "devops handbook";
     private Book myBook = Book.createEmpty();
     private String myBookTitle = "";
     private Borrower myBorrower = Borrower.createEmpty();
@@ -73,8 +75,8 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
 
     @When("a librarian deletes that book")
     public void a_librarian_deletes_that_book() {
-        final Book book = new Book(1, myBookTitle);
-        libraryActionResults = libraryUtils.deleteBook(book);
+        myBook = new Book(1, myBookTitle);
+        libraryActionResults = libraryUtils.deleteBook(myBook);
     }
 
     @Then("the system does not have the book registered")
@@ -278,4 +280,21 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
         myBorrower = libraryUtils.searchForBorrowerById(tempBorrower.id);
     }
 
+    @Given("a book, {string}, is currently loaned out")
+    public void aBookIsCurrentlyLoanedOut(String bookTitle) {
+        initializeEmptyDatabaseAndUtility();
+        libraryUtils.registerBorrower(ALICE);
+        libraryUtils.registerBook(bookTitle);
+        myBookTitle = bookTitle;
+        libraryUtils.lendBook(bookTitle, ALICE, jan_1st);
+    }
+
+    @Given("a book is currently loaned out to {string}")
+    public void aBookIsCurrentlyLoanedOutTo(String borrowerName) {
+        initializeEmptyDatabaseAndUtility();
+        libraryUtils.registerBorrower(borrowerName);
+        myBorrowerName = borrowerName;
+        libraryUtils.registerBook(DEVOPS_HANDBOOK);
+        libraryUtils.lendBook(DEVOPS_HANDBOOK, borrowerName, jan_1st);
+    }
 }

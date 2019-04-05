@@ -24,5 +24,10 @@ Feature: Librarians may add and delete books
         When a librarian deletes that book
         Then the system reports an error indicating that the book cannot be deleted because it was never registered
 
+    Scenario: Can delete a book that is loaned out
+        Given a book, "The DevOps Handbook", is currently loaned out
+        When a librarian deletes that book
+        Then the system does not have the book registered
+
 
 

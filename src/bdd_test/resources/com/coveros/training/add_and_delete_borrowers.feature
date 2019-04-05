@@ -24,5 +24,10 @@ Feature: Librarians may add and delete borrowers
         When a librarian deletes that borrower
         Then the system reports an error indicating that the borrower cannot be deleted because he or she was never registered
 
+    Scenario: Can delete a borrower that has a loan
+        Given a book is currently loaned out to "alice"
+        When a librarian deletes that borrower
+        Then the system does not have the borrower registered
+
 
 
