@@ -30,6 +30,8 @@ public class LibraryLendServlet extends HttpServlet {
         final Date now = getDateNow();
         request.setAttribute("date", now.toString());
 
+        logger.info("received request to lend a book, {}, to {}", book, borrower);
+
         final LibraryActionResults libraryActionResults = libraryUtils.lendBook(book, borrower, now);
 
         request.setAttribute("result", libraryActionResults.toString());

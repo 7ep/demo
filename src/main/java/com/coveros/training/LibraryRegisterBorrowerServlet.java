@@ -22,6 +22,8 @@ public class LibraryRegisterBorrowerServlet extends HttpServlet {
         final String borrower = request.getParameter("borrower");
         request.setAttribute("borrower", borrower);
 
+        logger.info("received request to register a borrower, {}", borrower);
+
         final LibraryActionResults libraryActionResults = libraryUtils.registerBorrower(borrower);
 
         request.setAttribute("result", libraryActionResults);

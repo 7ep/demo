@@ -22,6 +22,8 @@ public class LibraryRegisterBookServlet extends HttpServlet {
         final String book = request.getParameter("book");
         request.setAttribute("book", book);
 
+        logger.info("received request to register a book, {}", book);
+
         final LibraryActionResults libraryActionResults = libraryUtils.registerBook(book);
 
         request.setAttribute("result", libraryActionResults.toString());

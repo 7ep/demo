@@ -43,6 +43,8 @@ public class RegisterServlet extends HttpServlet {
         username = StringUtils.makeNotNullable(username);
         password = StringUtils.makeNotNullable(password);
 
+        logger.info("received request to register a user, {}", username);
+
         RegistrationResult registrationResult = registrationUtils.processRegistration(username, password);
 
         request.setAttribute("result", registrationResult.toString());

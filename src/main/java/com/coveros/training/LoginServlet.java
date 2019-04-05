@@ -35,6 +35,8 @@ public class LoginServlet extends HttpServlet {
         String username = putUsernameInRequest(request);
         String password = putPasswordInRequest(request);
 
+        logger.info("received request to authenticate a user, {}", username);
+
         final Boolean userRegistered = loginUtils.isUserRegistered(username, password);
         String responseText = userRegistered ? "access granted" : "access denied";
         request.setAttribute("result", responseText);

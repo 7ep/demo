@@ -25,6 +25,9 @@ public class MathServlet extends HttpServlet {
         try {
             int itemA = putNumberInRequest("item_a", request);
             int itemB = putNumberInRequest("item_b", request);
+
+            logger.info("received request to add two numbers, {} and {}", itemA, itemB);
+
             setResultToSum(request, itemA, itemB);
         } catch (NumberFormatException ex) {
             request.setAttribute("result", "Error: only accepts integers");
