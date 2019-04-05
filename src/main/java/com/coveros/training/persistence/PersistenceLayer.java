@@ -471,7 +471,44 @@ public class PersistenceLayer {
         }
     }
 
-    Loan searchForLoan(Book book) {
+    /**
+     * A borrower may have more than one loan.  But a book
+     * can only be loaned to one borrower.  That is why when we
+     * search for loans by borrower, we may get multiple loans
+     * back, but when we search by book, we only get one back.
+     * A book cannot be loaned to two people at the same time!
+     */
+    public List<Loan> searchForLoanByBorrower(Borrower borrower) {
+        Function<ResultSet, List<Loan>> extractor = throwingFunctionWrapper((rs) -> {
+            List<Loan> loans = new ArrayList<>();
+            if (rs.next()) {
+                do {
+                    final long loanId = rs.getLong(1);
+                    final Date borrowDate = rs.getDate(2);
+                    final long bookId = rs.getLong(3);
+                    final String bookTitle = StringUtils.makeNotNullable(rs.getString(4));
+                    final Date borrowDateNotNullable = borrowDate == null ? Date.valueOf("0000-01-01") : borrowDate;
+                    loans.add(new Loan(new Book(bookId, bookTitle), borrower, loanId, borrowDateNotNullable));
+                } while (rs.next());
+                return loans;
+            } else {
+                return new ArrayList<>();
+            }
+        });
+
+        final SqlData sqlData =
+                new SqlData(
+                        "search for all loans by borrower",
+                        "SELECT loan.id, loan.borrow_date, loan.book, book.title " +
+                        "FROM library.loan loan " +
+                        "JOIN library.book book ON book.id = loan.book " +
+                        "WHERE loan.borrower = ?;",
+                        extractor);
+        sqlData.addParameter(borrower.id, Long.class);
+        return runQuery(sqlData);
+    }
+
+    Loan searchForLoanByBook(Book book) {
         Function<ResultSet, Loan> extractor = throwingFunctionWrapper((rs) -> {
             if (rs.next()) {
                 final long loanId = rs.getLong(1);
@@ -488,7 +525,10 @@ public class PersistenceLayer {
         final SqlData sqlData =
                 new SqlData(
                         "search for a loan by book",
-                        "select loan.id, loan.borrow_date, loan.borrower, bor.name FROM library.loan loan JOIN library.borrower bor ON bor.id = loan.id WHERE loan.book = ?;",
+                        "SELECT loan.id, loan.borrow_date, loan.borrower, bor.name " +
+                        "FROM library.loan loan " +
+                        "JOIN library.borrower bor ON bor.id = loan.borrower " +
+                        "WHERE loan.book = ?;",
                         extractor);
         sqlData.addParameter(book.id, Long.class);
         return runQuery(sqlData);

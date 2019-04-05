@@ -29,5 +29,10 @@ Feature: Librarians may add and delete books
         When a librarian deletes that book
         Then the system does not have the book registered
 
+    Scenario: If a book is deleted, then related loans are as well
+        Given a book, "The DevOps Handbook", is loaned out
+        When a librarian deletes that book
+        Then the loan is deleted as well
+
 
 

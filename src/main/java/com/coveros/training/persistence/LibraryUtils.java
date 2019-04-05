@@ -43,7 +43,7 @@ public class LibraryUtils {
             return LibraryActionResults.BORROWER_NOT_REGISTERED;
         }
 
-        final Loan loan = searchForLoan(book);
+        final Loan loan = searchForLoanByBook(book);
         if (!loan.isEmpty()) {
             logger.info("book: {} was already checked out on {}.  Lending failed", book.title, loan.checkoutDate);
             return LibraryActionResults.BOOK_CHECKED_OUT;
@@ -109,9 +109,15 @@ public class LibraryUtils {
         persistence.saveNewBook(bookTitle);
     }
 
-    public Loan searchForLoan(Book book) {
+    public Loan searchForLoanByBook(Book book) {
         logger.info("searching for loan by book with title: {}", book.title);
-        return persistence.searchForLoan(book);
+        return persistence.searchForLoanByBook(book);
+    }
+
+
+    public List<Loan> searchForLoanByBorrower(Borrower borrower) {
+        logger.info("searching for loan by borrower with name: {}", borrower.name);
+        return persistence.searchForLoanByBorrower(borrower);
     }
 
     public Borrower searchForBorrowerByName(String borrowerName) {

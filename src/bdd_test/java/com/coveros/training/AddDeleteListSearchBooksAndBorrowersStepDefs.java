@@ -6,7 +6,6 @@ import com.coveros.training.domainobjects.LibraryActionResults;
 import com.coveros.training.domainobjects.Loan;
 import com.coveros.training.persistence.LibraryUtils;
 import com.coveros.training.persistence.PersistenceLayer;
-import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -15,9 +14,7 @@ import org.junit.Assert;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.coveros.training.persistence.LibraryUtilsTests.generateListOfBooks;
@@ -30,10 +27,11 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
     private Book myBook = Book.createEmpty();
     private String myBookTitle = "";
     private Borrower myBorrower = Borrower.createEmpty();
+    private Loan myLoan = Loan.createEmpty();
     private String myBorrowerName = "";
-    private final Date jan_1st = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 1));
+    private final Date JAN_1ST = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 1));
     private LibraryUtils libraryUtils = LibraryUtils.createEmpty();
-    private final Date Jan_2nd = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 2));
+    private final Date JAN_2ND = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 2));
     private LibraryActionResults libraryActionResults = LibraryActionResults.NULL;
     private PersistenceLayer pl = new PersistenceLayer();
     private List<Book> allBooks = new ArrayList<>();
@@ -286,7 +284,7 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
         libraryUtils.registerBorrower(ALICE);
         libraryUtils.registerBook(bookTitle);
         myBookTitle = bookTitle;
-        libraryUtils.lendBook(bookTitle, ALICE, jan_1st);
+        libraryUtils.lendBook(bookTitle, ALICE, JAN_1ST);
     }
 
     @Given("a book is currently loaned out to {string}")
@@ -295,6 +293,31 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
         libraryUtils.registerBorrower(borrowerName);
         myBorrowerName = borrowerName;
         libraryUtils.registerBook(DEVOPS_HANDBOOK);
-        libraryUtils.lendBook(DEVOPS_HANDBOOK, borrowerName, jan_1st);
+        libraryUtils.lendBook(DEVOPS_HANDBOOK, borrowerName, JAN_1ST);
+    }
+
+    @Given("a book is loaned to {string}")
+    public void aBookIsLoanedTo(String borrowerName) {
+        myBorrowerName = borrowerName;
+        initializeEmptyDatabaseAndUtility();
+        libraryUtils.registerBook(DEVOPS_HANDBOOK);
+        libraryUtils.registerBorrower(borrowerName);
+        libraryUtils.lendBook(DEVOPS_HANDBOOK, borrowerName, JAN_2ND);
+        myBook = libraryUtils.searchForBookByTitle(DEVOPS_HANDBOOK);
+    }
+
+    @Then("the loan is deleted as well")
+    public void theLoanIsDeletedAsWell() {
+        final Loan loan = libraryUtils.searchForLoanByBook(myBook);
+        Assert.assertTrue(loan.isEmpty());
+    }
+
+    @Given("a book, {string}, is loaned out")
+    public void aBookIsLoanedOut(String bookTitle) {
+        initializeEmptyDatabaseAndUtility();
+        myBookTitle = bookTitle;
+        libraryUtils.registerBook(myBookTitle);
+        libraryUtils.registerBorrower(ALICE);
+        libraryUtils.lendBook(bookTitle, ALICE, JAN_1ST);
     }
 }

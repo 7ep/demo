@@ -39,7 +39,7 @@ public class LibraryUtilsTests {
 
     @Test
     public void testCanLendBook() {
-        Mockito.doReturn(Loan.createEmpty()).when(libraryUtils).searchForLoan(DEFAULT_BOOK);
+        Mockito.doReturn(Loan.createEmpty()).when(libraryUtils).searchForLoanByBook(DEFAULT_BOOK);
 
         final LibraryActionResults libraryActionResults =
                 libraryUtils.lendBook(DEFAULT_BOOK, DEFAULT_BORROWER, BORROW_DATE);
@@ -52,7 +52,7 @@ public class LibraryUtilsTests {
      */
     @Test
     public void testCanLendBook_wrapperMethod() {
-        Mockito.doReturn(Loan.createEmpty()).when(libraryUtils).searchForLoan(DEFAULT_BOOK);
+        Mockito.doReturn(Loan.createEmpty()).when(libraryUtils).searchForLoanByBook(DEFAULT_BOOK);
         Mockito.doReturn(DEFAULT_BOOK).when(libraryUtils).searchForBookByTitle(DEFAULT_BOOK.title);
         Mockito.doReturn(DEFAULT_BORROWER).when(libraryUtils).searchForBorrowerByName(DEFAULT_BORROWER.name);
 
@@ -98,9 +98,15 @@ public class LibraryUtilsTests {
     }
 
     @Test
-    public void testCanSearchForLoan() {
-        libraryUtils.searchForLoan(DEFAULT_BOOK);
-        Mockito.verify(mockPersistenceLayer, times(1)).searchForLoan(DEFAULT_BOOK);
+    public void testCanSearchForLoanByBook() {
+        libraryUtils.searchForLoanByBook(DEFAULT_BOOK);
+        Mockito.verify(mockPersistenceLayer, times(1)).searchForLoanByBook(DEFAULT_BOOK);
+    }
+
+    @Test
+    public void testCanSearchForLoanByBorrower() {
+        libraryUtils.searchForLoanByBorrower(DEFAULT_BORROWER);
+        Mockito.verify(mockPersistenceLayer, times(1)).searchForLoanByBorrower(DEFAULT_BORROWER);
     }
 
     @Test

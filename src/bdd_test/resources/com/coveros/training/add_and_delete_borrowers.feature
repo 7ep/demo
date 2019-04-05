@@ -29,5 +29,9 @@ Feature: Librarians may add and delete borrowers
         When a librarian deletes that borrower
         Then the system does not have the borrower registered
 
+     Scenario: If a borrower is deleted, then their loan is too
+         Given a book is loaned to "alice"
+         When a librarian deletes that borrower
+         Then the loan is deleted as well
 
 

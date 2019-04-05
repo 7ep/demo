@@ -152,8 +152,19 @@ public class PersistenceLayerTests {
     public void testWeCanSearchForALoanByABook() {
         runRestoreOneLoan();
 
-        Loan loan = pl.searchForLoan(DEFAULT_BOOK);
+        Loan loan = pl.searchForLoanByBook(DEFAULT_BOOK);
 
+        Assert.assertEquals(DEFAULT_BOOK, loan.book);
+        Assert.assertEquals(DEFAULT_BORROWER, loan.borrower);
+    }
+
+    @Test
+    public void testWeCanSearchForALoanByABorrower() {
+        runRestoreOneLoan();
+
+        List<Loan> loans = pl.searchForLoanByBorrower(DEFAULT_BORROWER);
+
+        final Loan loan = loans.get(0);
         Assert.assertEquals(DEFAULT_BOOK, loan.book);
         Assert.assertEquals(DEFAULT_BORROWER, loan.borrower);
     }

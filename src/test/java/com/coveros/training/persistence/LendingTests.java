@@ -43,7 +43,7 @@ public class LendingTests {
     }
 
     private void mockSearchForLoan() {
-        Mockito.doReturn(Loan.createEmpty()).when(libraryUtils).searchForLoan(SAMPLE_BOOK);
+        Mockito.doReturn(Loan.createEmpty()).when(libraryUtils).searchForLoanByBook(SAMPLE_BOOK);
     }
 
     /**
@@ -110,7 +110,7 @@ public class LendingTests {
     @Test
     public void shouldNotLendIfCurrentlyBorrowed() {
         mockSearchForLoan();
-        Mockito.when(libraryUtils.searchForLoan(SAMPLE_BOOK)).thenReturn(new Loan(SAMPLE_BOOK, SAMPLE_BORROWER_B, 1, BORROW_DATE));
+        Mockito.when(libraryUtils.searchForLoanByBook(SAMPLE_BOOK)).thenReturn(new Loan(SAMPLE_BOOK, SAMPLE_BORROWER_B, 1, BORROW_DATE));
         final LibraryActionResults libraryActionResults_bob = libraryUtils.lendBook(SAMPLE_BOOK, SAMPLE_BORROWER_B, BORROW_DATE);
         Assert.assertEquals(LibraryActionResults.BOOK_CHECKED_OUT, libraryActionResults_bob);
     }
