@@ -56,6 +56,10 @@ public final class Borrower {
                 toHashCode();
     }
 
+    public final String toOutputString() {
+        return String.format("{Name: %s, Id: %s}", name, id);
+    }
+
     public final String toString() {
         return ToStringBuilder.reflectionToString(this);
     }

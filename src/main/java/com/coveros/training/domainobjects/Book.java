@@ -48,6 +48,10 @@ public final class Book {
                 toHashCode();
     }
 
+    public final String toOutputString() {
+        return String.format("{Title: %s, Id: %s}", title, id);
+    }
+
     public final String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
