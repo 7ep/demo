@@ -22,14 +22,17 @@ public class DbServlet extends HttpServlet {
         final PersistenceLayer pl = new PersistenceLayer();
         switch (action) {
             case "clean":
+                logger.info("received request to clean the database - i.e. remove all data and schema");
                 pl.cleanDatabase();
                 request.setAttribute(RESULT, "cleaned");
                 break;
             case "migrate":
+                logger.info("received request to migrate the database - i.e. add schema, but no data");
                 pl.migrateDatabase();
                 request.setAttribute(RESULT, "migrated");
                 break;
             default:
+                logger.info("received request to clean, then migrate the database - i.e. putting it a fresh state with no data");
                 pl.cleanAndMigrateDatabase();
                 request.setAttribute(RESULT, "cleaned and migrated");
         }
