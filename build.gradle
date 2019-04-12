@@ -37,10 +37,6 @@ plugins {
     // simply being run during the test.  It does this by
     // changing the code and seeing if the test fails as a result.
     id 'info.solidsoft.pitest' version '1.4.0'
-
-    // A Gradle plugin for printing beautiful logs on the console while running tests
-    // see https://github.com/radarsh/gradle-test-logger-plugin
-    id 'com.adarshr.test-logger' version '1.6.0'
 }
 
 // sets the version of Java we want to use - 8
@@ -319,33 +315,24 @@ task runAllTests(type: GradleBuild) {
     }
     tasks = ['check', 'runApiTests', 'runBehaveTests']
 }
-//// more info on test logging: https://discuss.gradle.org/t/whats-upcoming-in-gradle-1-1-test-logging/7741
-//test {
-//    testLogging {
-//        exceptionFormat "full" // default is "short"
-//        // uncomment the following to see the unit test progress in the output
-//        //events "started", "passed", "skipped", "failed", "standardOut", "standardError"
-//
-//        // set to false to disable detailed failure logs
-//        showExceptions true
-//
-//        // enable to see standard out and error streams inline with the test results
-//        showStandardStreams true
-//    }
-//
-//    // Fail the 'test' task on the first test failure
-//    failFast = true
-//
-//
-//}
+// more info on test logging: https://discuss.gradle.org/t/whats-upcoming-in-gradle-1-1-test-logging/7741
+test {
+    testLogging {
+        exceptionFormat "full" // default is "short"
+        // uncomment the following to see the unit test progress in the output
+        //events "started", "passed", "skipped", "failed", "standardOut", "standardError"
 
-testlogger {
-    theme 'standard-parallel'
-    slowThreshold 100
-    showStandardStreams true
-    showPassedStandardStreams true
-    showSkippedStandardStreams false
-    showFailedStandardStreams true
+        // set to false to disable detailed failure logs
+        showExceptions true
+
+        // enable to see standard out and error streams inline with the test results
+        showStandardStreams true
+    }
+
+    // Fail the 'test' task on the first test failure
+    failFast = true
+
+
 }
 
 dependencyCheck {
