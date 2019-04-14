@@ -238,5 +238,8 @@ def open_browser():
         driver = webdriver.Chrome(desired_capabilities=capabilities)
         return driver
     except:
+        # if we got an exception while trying to hit a proxy URL,
+        # it probably means the proxy isn't available, so we run
+        # without a proxy, as follows.
         driver = webdriver.Chrome()
         return driver
