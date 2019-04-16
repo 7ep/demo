@@ -237,6 +237,12 @@ static void checkIfAlive() {
         String errorMsg = "\n\n\n" +
                 "****************************************\n" +
                 "*       SERVER IS NOT RUNNING          *\n" +
+                "****************************************\n" +
+                " The server has to be running to run    \n" +
+                " tests you requested                    \n" +
+                "                                        \n" +
+                " To start the app:                      \n" +
+                "    gradlew appRun                      \n" +
                 "****************************************\n";
         throw new Exception(errorMsg);
     }
