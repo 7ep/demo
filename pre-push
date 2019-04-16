@@ -1,17 +1,24 @@
 #!/bin/sh
 # From gist at https://gist.github.com/chadmaughan/5889802
 
-# stash any unstaged changes
+# this program is expected to be run just before pushing the application to
+# a remote repository.  Since that action is rare compared to commits, and because
+# we want to be doubly sure of our work before sending it out, we will run
+# the gradlew check command.  If that fails, we want to correct things first.
+
+# stash any unstaged changes.  This is so we can test solely those items that
+# will be sent, not simply whatever is our current working directory.
+
 git stash -q --keep-index
 
 # run the tests with the gradle wrapper
-./gradlew test
+./gradlew check
 
 # store the last exit code in a variable
 RESULT=$?
 
-# unstash the unstashed changes
+# unstash the stashed changes
 git stash pop -q
 
-# return the './gradlew test' exit code
+# return the './gradlew check' exit code
 exit $RESULT

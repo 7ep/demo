@@ -96,6 +96,28 @@ On Windows
 * http://localhost:8080/demo - the main application
 * http://localhost:8080/demo/console - the database viewer
 
+#### Summary of relevant Gradle commands
+* gradlew appRun - runs the application
+* gradlew check - runs all tests possible with only dependency being Java 8.  No need for app to be running.
+* gradlew runAllTests - runs the whole set of tests**  
+* gradlew clean - cleans build products and installs pre-push hook. (see the file in this directory, pre-push)
+* gradlew runBehaveTests - runs the UI tests**
+* gradlew runApiTests - runs the API tests**
+* gradlew generateCucumberReport - runs cucumber and creates a nice-looking HTML report
+* gradlew pitest - runs mutation testing (see http://pitest.org/)
+* gradlew dependencyCheckAnalyze - analyzes security reports for the dependencies of 
+  this project.  See https://www.owasp.org/index.php/OWASP_Dependency_Check
+* gradlew sonarqube - runs static analysis using SonarQube.  Sonarqube must be running - check http://localhost:9000
+* gradlew fastIntegrationTest - runs the database integration tests
+* gradlew startH2Console - Starts a console to examine the H2 database file.  (user and
+  password are empty, URL to use is jdbc:h2:./build/db/training)
+* gradlew <task 1>...<task N> taskTree - a utility that will show the task tree for a particular task
+
+
+
+  ** Requires the app to be running 
+     (usually in another terminal) and all optional dependencies installed.
+
 #### Summary:
  
 Demo consists of a simple web application and tests.  Its goal is to provide 
