@@ -94,7 +94,7 @@ On Windows
     
 #### Interesting links when the system is up:
 * http://localhost:8080/demo - the main application
-* http://localhost:8080/demo/console - the database viewer
+* http://localhost:8080/demo/console - the database viewer - use URL of jdbc:h2:mem:training and no user or password
 
 #### Summary of relevant Gradle commands
 * gradlew appRun - runs the application
