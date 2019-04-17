@@ -129,6 +129,7 @@ techniques.  Some of the techniques exemplified are:
   * [Behave](https://behave.readthedocs.io/en/latest/) tests
 * Integration tests that test the database
 * Database versioning, with [Flyway](https://flywaydb.org/)
+* Uses [H2 database](https://www.h2database.com/html/main.html) to simplify operation
 * Security analysis using [DependencyCheck](https://www.owasp.org/index.php/OWASP_Dependency_Check)
 * Nulls not allowed by using [Checker Framework](https://checkerframework.org/)
 * Uses [Gretty](https://github.com/akhikhl/gretty) which allows us to hot swap Java code at runtime.
