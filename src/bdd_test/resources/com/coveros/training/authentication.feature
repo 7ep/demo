@@ -37,10 +37,6 @@ Feature: A user may authenticate to system.
 
    # The following is a scenario that is extra documentation for the team.
    # It helps  make concrete the reasons why the system requires more difficult passwords.
-
-   # we are ignoring this feature for now because it turns out that the library
-   # we are using, Nbvcxz, is turtle slow.  Once I figure out a way to
-   # handle that problem, this feature can be re-vitalized.
     @registration
     Scenario Outline: A user might try different passwords, but we are making sure they are excellent before we allow it.
         Given a user is in the midst of registering for an account
