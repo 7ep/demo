@@ -250,7 +250,7 @@ test {
 
 dependencyCheck {
     showSummary=false
-    autoUpdate=true
+    autoUpdate=false
     cveValidForHours=168 // a week.
     format='XML' // options are  (HTML, XML, CSV, JSON, VULN, ALL).
 }
