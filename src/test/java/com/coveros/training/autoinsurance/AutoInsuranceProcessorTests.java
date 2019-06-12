@@ -17,7 +17,7 @@ public class AutoInsuranceProcessorTests {
 
         // three-point bounds testing
         return Arrays.asList(new Object[][]{
-
+        // claims,  age,  premiumIncrease,  warningLetter,  cancelPolicy
                 {0, 15, -1, WarningLetterEnum.NONE, false},
                 {0, 16, 50, WarningLetterEnum.NONE, false},
                 {0, 17, 50, WarningLetterEnum.NONE, false},
@@ -66,9 +66,9 @@ public class AutoInsuranceProcessorTests {
                 {4, 85, 200, WarningLetterEnum.LTR3, false},
                 {4, 86, -1, WarningLetterEnum.NONE, false},
 
-                {5, 26, 0, WarningLetterEnum.NONE, false},
-                {6, 26, 0, WarningLetterEnum.NONE, false},
-                {5, 80, 0, WarningLetterEnum.NONE, false},
+                {5, 26, 0, WarningLetterEnum.NONE, true},
+                {6, 26, 0, WarningLetterEnum.NONE, true},
+                {5, 80, 0, WarningLetterEnum.NONE, true},
 
                 {-1, 80, -1, WarningLetterEnum.NONE, false},
         });

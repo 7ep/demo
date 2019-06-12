@@ -33,7 +33,7 @@ class AutoInsuranceProcessor {
         }
 
         if (claims >= 5) {
-            return new AutoInsuranceAction(0, WarningLetterEnum.NONE, false);
+            return new AutoInsuranceAction(0, WarningLetterEnum.NONE, true);
         }
 
         // for any outside condition
