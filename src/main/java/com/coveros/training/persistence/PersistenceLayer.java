@@ -222,7 +222,7 @@ public class PersistenceLayer {
         });
 
         final SqlData sqlData =
-                new SqlData(
+                new SqlData<>(
                         "get a borrower's name by their id",
                         "SELECT name FROM library.borrower WHERE id = ?;",
                         extractor);
@@ -249,7 +249,7 @@ public class PersistenceLayer {
         });
 
         final SqlData sqlData =
-                new SqlData(
+                new SqlData<>(
                         "search for details on a borrower by name",
                         "SELECT id, name FROM library.borrower WHERE name = ?;",
                         extractor);
@@ -268,7 +268,7 @@ public class PersistenceLayer {
         });
 
         final SqlData sqlData =
-                new SqlData(
+                new SqlData<>(
                         "search for a book by title",
                         "SELECT id FROM library.book WHERE title = ?;",
                         extractor);
@@ -289,7 +289,7 @@ public class PersistenceLayer {
         });
 
         final SqlData sqlData =
-                new SqlData(
+                new SqlData<>(
                         "search for a book by title",
                         "SELECT id, title FROM library.book WHERE id = ?;",
                         extractor);
@@ -310,7 +310,7 @@ public class PersistenceLayer {
         });
 
         final SqlData sqlData =
-                new SqlData(
+                new SqlData<>(
                         "search for a borrower by name",
                         "SELECT id, name FROM library.borrower WHERE id = ?;",
                         extractor);
@@ -334,7 +334,7 @@ public class PersistenceLayer {
         });
 
         final SqlData sqlData =
-                new SqlData(
+                new SqlData<>(
                         "get all books",
                         "SELECT id, title FROM library.book;",
                         extractor);
@@ -357,7 +357,7 @@ public class PersistenceLayer {
         });
 
         final SqlData sqlData =
-                new SqlData(
+                new SqlData<>(
                         "get all borrowers",
                         "SELECT id, name FROM library.borrower;",
                         extractor);
@@ -419,7 +419,7 @@ public class PersistenceLayer {
             }
         });
         final SqlData sqlData =
-                new SqlData(
+                new SqlData<>(
                         "search for a user by id, return that user if found, otherwise return an empty user",
                         "SELECT id  FROM auth.user WHERE name = ?;",
                         extractor);
@@ -439,7 +439,7 @@ public class PersistenceLayer {
         });
 
         final SqlData sqlData =
-                new SqlData(
+                new SqlData<>(
                         "check to see if the credentials for a user are valid",
                         "SELECT id FROM auth.user WHERE name = ? AND password_hash = ?;",
                         extractor);
@@ -497,7 +497,7 @@ public class PersistenceLayer {
         });
 
         final SqlData sqlData =
-                new SqlData(
+                new SqlData<>(
                         "search for all loans by borrower",
                         "SELECT loan.id, loan.borrow_date, loan.book, book.title " +
                         "FROM library.loan loan " +
@@ -523,7 +523,7 @@ public class PersistenceLayer {
         });
 
         final SqlData sqlData =
-                new SqlData(
+                new SqlData<>(
                         "search for a loan by book",
                         "SELECT loan.id, loan.borrow_date, loan.borrower, bor.name " +
                         "FROM library.loan loan " +

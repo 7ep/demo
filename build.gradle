@@ -39,13 +39,6 @@ plugins {
     id 'info.solidsoft.pitest' version '1.4.0'
 }
 
-// sets the version of Java we want to use - 8
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-// the checker framework adds a bunch of type annotations that
-// can insure safer coding practices.  See https://checkerframework.org/manual/
-apply from: "$rootDir/gradle/checkerframework.gradle"
 
 // including our script plugin for running our integration tests
 apply from: "$rootDir/gradle/fast_integration_test.gradle"
@@ -80,7 +73,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     // mockito, for mocking objects in our unit tests
-    testCompile 'org.mockito:mockito-core:2.7.19'
+    testCompile 'org.mockito:mockito-core:2.28.2'
 
     // nbvcxz is a tool to determine how robust a password is.  See
     // https://github.com/GoSimpleLLC/nbvcxz

@@ -3,7 +3,7 @@ package com.coveros.training.autoinsurance;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.checkerframework.checker.nullness.qual.Nullable;
+
 
 public final class AutoInsuranceAction {
 
@@ -19,7 +19,7 @@ public final class AutoInsuranceAction {
     }
 
 
-    public final boolean equals(@Nullable Object obj) {
+    public final boolean equals(Object obj) {
         if (obj == null) {
             return false;
         }
