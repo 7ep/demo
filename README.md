@@ -5,7 +5,7 @@ software practices.
 
 #### Dependencies:
 
-* [Java 8](https://www.oracle.com/technetwork/java/javase/overview/java8-2100321.html)
+* [JDK 12](https://www.oracle.com/technetwork/java/javase/downloads/jdk12-downloads-5295953.html)
 
 #### Quick Start:
 
@@ -21,10 +21,6 @@ software practices.
 * [Chrome internet browser](https://www.google.com/chrome/)
 
 ---
-#### Java notes
-It *has* to be Java 8.  Specifically, Mockito and Checker Framework are
-reliant on the system using Java 8. [Mockito issue](https://github.com/MovingBlocks/Terasology/issues/3538)
-and [Checker Framework issue](https://github.com/typetools/checker-framework/issues/1224)
 
 #### Chromedriver notes
 make sure that the Chromedriver executable is installed in one of the directories that is 
@@ -131,7 +127,6 @@ techniques.  Some of the techniques exemplified are:
 * Database versioning, with [Flyway](https://flywaydb.org/)
 * Uses [H2 database](https://www.h2database.com/html/main.html) to simplify operation
 * Security analysis using [DependencyCheck](https://www.owasp.org/index.php/OWASP_Dependency_Check)
-* Nulls not allowed by using [Checker Framework](https://checkerframework.org/)
 * Uses [Gretty](https://github.com/akhikhl/gretty) which allows us to hot swap Java code at runtime.
 
 Its essential goals:
