@@ -371,7 +371,9 @@ public class PersistenceLayer {
                          connection.prepareStatement(sqlData.preparedStatement)) {
                 sqlData.applyParametersToPreparedStatement(st);
                 try (ResultSet resultSet = st.executeQuery()) {
-                    return (R) sqlData.extractor.apply(resultSet);
+                    @SuppressWarnings("unchecked")
+                    final R result = (R) sqlData.extractor.apply(resultSet);
+                    return result;
                 }
             }
         } catch (SQLException ex) {
