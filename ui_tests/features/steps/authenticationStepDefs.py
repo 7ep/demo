@@ -45,7 +45,7 @@ def __login_user(context, username_text, password_text):
 @then('it indicates I am successfully registered')
 def step_impl(context):
     result = context.driver.find_element_by_id('result')
-    assert_that(result.text, contains_string('wasSuccessfullyRegistered=true'))
+    assert_that(result.text, contains_string('successfully registered: true'))
 
 
 @when('I try to register again')
@@ -57,13 +57,13 @@ def step_impl(context):
 @then('it indicates I am already registered')
 def step_impl(context):
     result = context.driver.find_element_by_id('result')
-    assert_that(result.text, contains_string('wasSuccessfullyRegistered=false'))
+    assert_that(result.text, contains_string('successfully registered: false'))
 
 
 @then('it indicates that I used a poor password')
 def step_impl(context):
     result = context.driver.find_element_by_id('result')
-    assert_that(result.text, is_not(contains_string('wasSuccessfullyRegistered=true')))
+    assert_that(result.text, is_not(contains_string('successfully registered: true')))
 
 
 @given('I am registered as "{username}" with a password of "{password}"')

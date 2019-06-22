@@ -74,6 +74,16 @@ public final class PasswordResult {
         return ToStringBuilder.reflectionToString(this);
     }
 
+    public final String toPrettyString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("status: %s%n", status));
+        sb.append(String.format("entropy: %s%n", entropy));
+        sb.append(String.format("time to crack offline: %s%n", timeToCrackOffline));
+        sb.append(String.format("time to crack online: %s%n", timeToCrackOnline));
+        sb.append(String.format("Nbvcxz response: %s%n", message));
+        return sb.toString();
+    }
+
     /**
      * Return this to represent an empty result.  Used primarily
      * when we are initializing a variable and don't want to use null.

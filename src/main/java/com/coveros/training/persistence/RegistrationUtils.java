@@ -58,7 +58,7 @@ public class RegistrationUtils {
         final PasswordResult passwordResult = isPasswordGood(password);
         if (passwordResult.status != SUCCESS) {
             logger.info("user provided a bad password during registration");
-            return new RegistrationResult(false, BAD_PASSWORD, passwordResult.toString());
+            return new RegistrationResult(false, BAD_PASSWORD, passwordResult.toPrettyString());
         }
 
         // at this point, we feel assured it's ok to save to the database.

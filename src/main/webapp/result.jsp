@@ -4,7 +4,8 @@
         <title>Result Page</title>
     </head>
     <body>
-        <h2 id="result">Result: ${result}</h2>
+        <h2>Result</h2>
+        <p><pre id="result">${result}</pre></p>
     </body>
     <p>
     <a href="/demo">Return</a>

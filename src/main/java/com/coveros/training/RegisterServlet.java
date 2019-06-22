@@ -47,7 +47,9 @@ public class RegisterServlet extends HttpServlet {
 
         RegistrationResult registrationResult = registrationUtils.processRegistration(username, password);
 
-        request.setAttribute("result", registrationResult.toString());
+        final String prettyString = registrationResult.toPrettyString();
+
+        request.setAttribute("result", prettyString);
         forwardToResult(request, response, logger);
     }
 

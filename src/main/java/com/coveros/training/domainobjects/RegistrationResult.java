@@ -53,6 +53,14 @@ public final class RegistrationResult {
         return ToStringBuilder.reflectionToString(this);
     }
 
+    public final String toPrettyString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("successfully registered: %s%n", wasSuccessfullyRegistered));
+        sb.append(String.format("status: %s%n", status));
+        sb.append(String.format("message: %n%n%s%n", message));
+        return sb.toString();
+    }
+
     public static RegistrationResult createEmpty() {
         return new RegistrationResult(false, RegistrationStatusEnums.EMPTY);
     }
