@@ -5,7 +5,7 @@ software practices.
 
 #### Dependencies:
 
-* [Java Development Kit](https://www.oracle.com/technetwork/java/javase/downloads/jdk12-downloads-5295953.html)
+* [Open Java Development Kit](https://jdk.java.net/12/) _or_ [Oracle Java Development Kit](https://www.oracle.com/technetwork/java/javase/downloads/jdk12-downloads-5295953.html) (If you don't have an opinion, go with the first.)
 
 #### Quick Start:
 
