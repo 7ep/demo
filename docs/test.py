@@ -201,7 +201,7 @@ def register_and_login():
 
     result = Result(driver)
     result_text = result.get_result_text()
-    assert_that(result_text, contains_string('Result: access granted'))
+    assert_that(result_text, contains_string('access granted'))
 
     driver.close()
 
@@ -215,7 +215,7 @@ def full_lend_book():
     register_borrower(driver, borrower)
     lend_book(driver, book, borrower)
     result = Result(driver)
-    assert_that(result.get_result_text(), equal_to("Result: SUCCESS"))
+    assert_that(result.get_result_text(), equal_to("SUCCESS"))
     driver.close()
 
 
