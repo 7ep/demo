@@ -2,19 +2,57 @@
 <head>
     <title>Web Demo</title>
     <style>
+
   form {
-    border: 1px black solid;
-    width: 300px;
-    margin: 10px;
-    padding: 10px;
+    margin: 0;
+    padding: 0;
+  }
+
+  div.buttons {
+    border: 2px black solid;
+    width: 165px;
+    height: 150px;
+    margin: 2px;
+    padding: 5px;
+    float: left;
+    background: lightblue;
+  }
+
+  form.regular-form {
+    border: 2px black solid;
+    width: 165px;
+    height: 150px;
+    margin: 2px;
+    padding: 5px;
     float: left;
     background: lightblue;
    }
+
+  label {
+     font-size: 1.1em;
+  }
+
+  p {
+    margin: 0px;
+    padding: 0px;
+  }
+
+  h2 {
+    font-size: 1.3em;
+    margin: 0;
+    padding: 0;
+  }
 
    input[type="text"],
    input[type="number"],
    input[type="password"] {
     background: white;
+    width: 80%
+   }
+
+   input[type=submit] {
+     font-size: 1.0em;
+     margin: 2px;
    }
 
     </style>
@@ -22,7 +60,7 @@
 </head>
 <body>
 
-<form method="post" action="login">
+<form method="post" action="login" autocomplete="off" class="regular-form">
 
     <h2>Login</h2>
     <label for="login_username">Name:</label>
@@ -34,7 +72,7 @@
     <p><input type="submit" id="login_submit" value="login"/></p>
 </form>
 
-<form method="post" action="register">
+<form method="post" action="register" autocomplete="off" class="regular-form">
 
     <h2>Register a user</h2>
     <label for="register_username">Name:</label>
@@ -46,7 +84,7 @@
 </form>
 
 
-<form method="post" action="math">
+<form method="post" action="math" autocomplete="off" class="regular-form">
     <h2>Addends for summation:</h2>
 
     <p><input type="number" id="addend_a" name="item_a" placeholder="addend a"/></p>
@@ -56,7 +94,7 @@
 </form>
 
 
-<form method="post" action="lend">
+<form method="post" action="lend" autocomplete="off" class="regular-form">
 
     <h2>Borrow a book</h2>
 
@@ -70,7 +108,7 @@
 </form>
 
 
-<form method="post" action="registerbook">
+<form method="post" action="registerbook" autocomplete="off" class="regular-form">
 
     <h2>Register a book</h2>
 
@@ -81,7 +119,7 @@
 </form>
 
 
-<form method="post" action="registerborrower">
+<form method="post" action="registerborrower" autocomplete="off" class="regular-form">
 
     <h2>Register a borrower</h2>
 
@@ -91,17 +129,20 @@
     <p><input type="submit" id="register_borrower_submit" value="register borrower"/></p>
 </form>
 
-<form action="flyway">
-    <input type="hidden" name="action" value="clean"/>
-    <input type="submit" value="Clean the database"/>
-</form>
-<form action="flyway">
-    <input type="hidden" name="action" value="migrate"/>
-    <input type="submit" value="Migrate the database"/>
-</form>
-<form action="flyway">
-    <input type="submit" value="Clean and Migrate the database"/>
-</form>
+<div class="buttons">
+  <h2>Database versioning</h2>
+  <form action="flyway" class="button-form">
+      <input type="hidden" name="action" value="clean"/>
+      <input type="submit" value="Clean the database"/>
+  </form>
+  <form action="flyway" class="button-form">
+      <input type="hidden" name="action" value="migrate"/>
+      <input type="submit" value="Migrate the database"/>
+  </form>
+  <form action="flyway" class="button-form">
+      <input type="submit" value="Clean and Migrate"/>
+  </form>
+</div>
 
 </body>
 </html>
