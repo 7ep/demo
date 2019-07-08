@@ -357,6 +357,13 @@ task('printReportPathsCheck') {
     }
 }
 
+task('coveros') {
+    doLast {
+      String fileContents = new File('docs/coveros_text.txt').text
+      print fileContents
+    }
+}
+
 check.finalizedBy 'printReportPathsCheck'
 
 task('printReportPathsDependencyCheck') {
