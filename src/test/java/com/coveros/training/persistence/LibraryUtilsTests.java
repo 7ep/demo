@@ -212,7 +212,9 @@ public class LibraryUtilsTests {
     public void testShouldBeAbleToListAllBooks() {
         final List<Book> books = generateListOfBooks(new String[]{"foo", "bar"});
         Mockito.when(mockPersistenceLayer.listAllBooks()).thenReturn(books);
+
         List<Book> bookList = libraryUtils.listAllBooks();
+
         Assert.assertEquals(books, bookList);
     }
 
