@@ -41,13 +41,13 @@ Feature: A user may authenticate to system.
     Scenario Outline: A user might try different passwords, but we are making sure they are excellent before we allow it.
         Given a user is in the midst of registering for an account
         When they try registering with the password <password>
-        Then the system returns that the password has insufficient entropy, taking this long to crack: <time_to_crack>
+        Then the system returns that the password has insufficient entropy
         Examples:
-            | password                | time_to_crack |
-            | typical_password_123    | 1 hours       |
-            | aaaaaa                  | instant       |
-            | password123             | instant       |
-            | really_totally_long_wut | 564 centuries |
+            | password                |
+            | typical_password_123    |
+            | aaaaaa                  |
+            | password123             |
+            | really_totally_long     |
 
 
     @registration

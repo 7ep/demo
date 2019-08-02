@@ -10,6 +10,8 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 
+import static com.coveros.training.domainobjects.PasswordResultEnums.INSUFFICIENT_ENTROPY;
+
 public class RegistrationStepDefs {
 
     private static final RegistrationResult ALREADY_REGISTERED = new RegistrationResult(false, RegistrationStatusEnums.ALREADY_REGISTERED);
@@ -93,8 +95,8 @@ public class RegistrationStepDefs {
         passwordResult = RegistrationUtils.isPasswordGood(password);
     }
 
-    @Then("^the system returns that the password has insufficient entropy, taking this long to crack: (.*)$")
-    public void theSystemReturnsThatThePasswordHasInsufficientEntropyTakingThisLongToCrackTime_to_crack(String timeToCrack) {
-        Assert.assertEquals(timeToCrack, passwordResult.timeToCrackOffline);
+    @Then("the system returns that the password has insufficient entropy")
+    public void theSystemReturnsThatThePasswordHasInsufficientEntropyTakingThisLongToCrackTime_to_crack() {
+        Assert.assertEquals(INSUFFICIENT_ENTROPY, passwordResult.status);
     }
 }
