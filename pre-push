@@ -1,15 +1,16 @@
 #!/bin/sh
-# From gist at https://gist.github.com/chadmaughan/5889802
 
 # this program is expected to be run just before pushing the application to
 # a remote repository.  Since that action is rare compared to commits, and because
 # we want to be doubly sure of our work before sending it out, we will run
 # the gradlew check command.  If that fails, we want to correct things first.
 
-# stash any unstaged changes.  This is so we can test solely those items that
-# will be sent, not simply whatever is our current working directory.
+# stash all changes, including what is in the index (the staging area between
+# the working directory and the repository).  This is so that when we run our
+# tests, we are only testing the stuff that's fully committed to the repo
+# and that is going to be sent to the central repo, since this is pre-push
 
-git stash -q --keep-index
+git stash push -q --all
 
 # run the tests with the gradle wrapper
 ./gradlew check
