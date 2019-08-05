@@ -1,13 +1,3 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'org.owasp:dependency-check-gradle:4.0.2'
-    }
-}
-
-
 plugins {
     id 'war'
 
@@ -37,6 +27,11 @@ plugins {
     // simply being run during the test.  It does this by
     // changing the code and seeing if the test fails as a result.
     id 'info.solidsoft.pitest' version '1.4.0'
+
+    // Dependency Check analyzes the dependencies for 
+    // potential security issues.
+    // see https://plugins.gradle.org/plugin/org.owasp.dependencycheck
+    id "org.owasp.dependencycheck" version "5.2.0"
 }
 
 
@@ -45,10 +40,6 @@ apply from: "$rootDir/gradle/fast_integration_test.gradle"
 
 // including our script plugin for running BDD-type tests
 apply from: "$rootDir/gradle/bdd_test.gradle"
-
-// Dependency Check analyzes the dependencies for potential security issues.
-// see https://plugins.gradle.org/plugin/org.owasp.dependencycheck
-apply plugin: 'org.owasp.dependencycheck'
 
 // makes sure the git pre-push commit is installed
 apply from: rootProject.file('gradle/install-git-hooks.gradle')
@@ -337,7 +328,7 @@ test {
 
 dependencyCheck {
     showSummary = false
-    autoUpdate = false
+    autoUpdate = true
     cveValidForHours = 168 // a week.
     format = 'HTML' // options are  (HTML, XML, CSV, JSON, VULN, ALL).
     failBuildOnCVSS = 8 // see https://www.first.org/cvss/specification-document#5-Qualitative-Severity-Rating-Scale
