@@ -10,7 +10,7 @@
 # tests, we are only testing the stuff that's fully committed to the repo
 # and that is going to be sent to the central repo, since this is pre-push
 
-git stash push -q --all
+git stash push -q
 
 # run the tests with the gradle wrapper
 ./gradlew check
