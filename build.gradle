@@ -1,3 +1,14 @@
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "com.github.spacialcircumstances:gradle-cucumber-reporting:0.1.8"
+  }
+}
+
 plugins {
     id 'war'
 
@@ -9,9 +20,6 @@ plugins {
 
     // scans our code for static analysis
     id "org.sonarqube" version "2.7"
-
-    // provides Cucumber reporting
-    id "com.github.spacialcircumstances.gradle-cucumber-reporting" version "0.0.15"
 
     // provides unit test coverage
     id 'jacoco'
@@ -31,9 +39,11 @@ plugins {
     // Dependency Check analyzes the dependencies for 
     // potential security issues.
     // see https://plugins.gradle.org/plugin/org.owasp.dependencycheck
-    id "org.owasp.dependencycheck" version "5.2.0"
+    id "org.owasp.dependencycheck" version "5.2.1"
 }
 
+// apply our fancy cucumber reporting program, see https://plugins.gradle.org/plugin/com.github.spacialcircumstances.gradle-cucumber-reporting
+apply plugin: "com.github.spacialcircumstances.gradle-cucumber-reporting"
 
 // including our script plugin for running our integration tests
 apply from: "$rootDir/gradle/fast_integration_test.gradle"
@@ -125,7 +135,7 @@ gretty {
 // configuration for the cucumber reports.
 cucumberReports {
     outputDir = file('build/reports/bdd')
-    buildName = '0'
+    buildId = '0'
     reports = files('build/bdd/file.json', 'build/bdd/behave_cucumber_style.json')
     testTasksFinalizedByReport = false
 }
