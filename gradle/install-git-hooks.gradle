@@ -9,5 +9,5 @@ task installGitHooks(type: Copy) {
     into { new File(rootProject.rootDir, '.git/hooks') }
 }
 
-gitExecutableHooks.dependsOn installGitHooks
-clean.dependsOn gitExecutableHooks
+// gitExecutableHooks.dependsOn installGitHooks
+// clean.dependsOn gitExecutableHooks
