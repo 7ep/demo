@@ -1,5 +1,11 @@
 #!/bin/sh
 
+# This is a file meant to be run just before we push our work to
+# a remote repository.  It runs the basic set of tests, just to make
+# sure that things are generally valid before sending.
+
+# To install this, put it into the git directory under hooks
+
 # this program is expected to be run just before pushing the application to
 # a remote repository.  Since that action is rare compared to commits, and because
 # we want to be doubly sure of our work before sending it out, we will run

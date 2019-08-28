@@ -51,9 +51,6 @@ apply from: "$rootDir/gradle/fast_integration_test.gradle"
 // including our script plugin for running BDD-type tests
 apply from: "$rootDir/gradle/bdd_test.gradle"
 
-// makes sure the git pre-push commit is installed
-apply from: rootProject.file('gradle/install-git-hooks.gradle')
-
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked"
 }
