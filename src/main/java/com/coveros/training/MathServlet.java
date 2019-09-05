@@ -12,45 +12,49 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "MathServlet", urlPatterns = {"/math"}, loadOnStartup = 1)
 public class MathServlet extends HttpServlet {
 
-  static org.slf4j.Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
+    static org.slf4j.Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
 
-  private int putNumberInRequest(String itemName, HttpServletRequest request) {
-    int item = Integer.parseInt(request.getParameter(itemName));
-    request.setAttribute(itemName, item);
-    return item;
-  }
-
-  @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-    try {
-      int itemA = putNumberInRequest("item_a", request);
-      int itemB = putNumberInRequest("item_b", request);
-      setResultToSum(request, itemA, itemB);
-    } catch (NumberFormatException ex) {
-      request.setAttribute("result", "Error: only accepts integers");
+    private int putNumberInRequest(String itemName, HttpServletRequest request) {
+        int item = Integer.parseInt(request.getParameter(itemName));
+        request.setAttribute(itemName, item);
+        return item;
     }
-    forwardToResult(request, response, logger);
-  }
 
-  /**
-   * Wrapping a static method call for testing.
-   */
-  void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
-    ServletUtils.forwardToResult(request, response, logger);
-  }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int itemA = putNumberInRequest("item_a", request);
+            int itemB = putNumberInRequest("item_b", request);
 
-  /**
-   * Wrapping a request set for easier testing and clarity.
-   */
-  void setResultToSum(HttpServletRequest request, int itemA, int itemB) {
-    final int result = doAdd(itemA, itemB);
-    logger.info("setting result to {}", result);
-    request.setAttribute("result", result);
-  }
+            logger.info("received request to add two numbers, {} and {}", itemA, itemB);
+
+            setResultToSum(request, itemA, itemB);
+        } catch (NumberFormatException ex) {
+            request.setAttribute("result", "Error: only accepts integers");
+        }
+        forwardToResult(request, response, logger);
+    }
+
+    /**
+     * Wrapping a static method call for testing.
+     */
+    void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
+        ServletUtils.forwardToResult(request, response, logger);
+    }
+
+    /**
+     * Wrapping a request set for easier testing and clarity.
+     */
+    void setResultToSum(HttpServletRequest request, int itemA, int itemB) {
+        final int result = doAdd(itemA, itemB);
+        request.setAttribute("result", result);
+    }
 
 
-  private int doAdd(int a, int b) {
-    logger.info("adding a:{} to b:{}", a, b);
-    return a + b;
-  }
+    private int doAdd(int a, int b) {
+        logger.info("adding a: {} to b: {}", a, b);
+        int result = a + b;
+        logger.info("result is {}", result);
+        return result;
+    }
 }

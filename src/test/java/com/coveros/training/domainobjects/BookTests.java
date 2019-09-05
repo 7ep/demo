@@ -6,25 +6,25 @@ import org.junit.Test;
 
 public class BookTests {
 
-  @Test
-  public void testShouldHaveEqualsAndHashcodeImplementedCorrectly() {
-    EqualsVerifier.forClass(Book.class).verify();
-  }
+    @Test
+    public void testShouldHaveEqualsAndHashcodeImplementedCorrectly() {
+        EqualsVerifier.forClass(Book.class).verify();
+    }
 
-  @Test
-  public void testShouldOutputGoodString() {
-    final Book book = createTestBook();
-    Assert.assertTrue("toString was: " + book.toString(), book.toString().contains("title=The DevOps Handbook,id=1"));
-  }
+    @Test
+    public void testShouldOutputGoodString() {
+        final Book book = createTestBook();
+        Assert.assertTrue("toString was: " + book.toString(), book.toString().contains("title=The DevOps Handbook,id=1"));
+    }
 
-  public static Book createTestBook() {
-    return new Book(1, "The DevOps Handbook");
-  }
+    public static Book createTestBook() {
+        return new Book(1, "The DevOps Handbook");
+    }
 
-  @Test
-  public void testCanCreateEmpty() {
-    final Book book = Book.createEmpty();
-    Assert.assertTrue(book.isEmpty());
-  }
+    @Test
+    public void testCanCreateEmpty() {
+        final Book book = Book.createEmpty();
+        Assert.assertTrue(book.isEmpty());
+    }
 
 }

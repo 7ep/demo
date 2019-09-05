@@ -8,8 +8,8 @@ import me.gosimple.nbvcxz.scoring.TimeEstimate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.coveros.training.domainobjects.PasswordResultEnums.*;
 import static com.coveros.training.domainobjects.PasswordResultEnums.EMPTY_PASSWORD;
+import static com.coveros.training.domainobjects.PasswordResultEnums.*;
 import static com.coveros.training.domainobjects.RegistrationStatusEnums.*;
 
 public class RegistrationUtils {
@@ -27,10 +27,14 @@ public class RegistrationUtils {
     }
 
     public RegistrationResult processRegistration(String username, String password) {
+        logger.info("Starting registration");
         // first we check if the username is empty
         boolean isUsernameEmpty = username == null || username.isEmpty();
-        logger.info("username is empty");
-        if (isUsernameEmpty) return new RegistrationResult(false, EMPTY_USERNAME);
+
+        if (isUsernameEmpty) {
+            logger.info("username is empty during registration");
+            return new RegistrationResult(false, EMPTY_USERNAME);
+        }
 
         if (isUserInDatabase(username)) {
             logger.info("cannot register this user - they are already registered");
@@ -43,15 +47,18 @@ public class RegistrationUtils {
     public static RegistrationUtils createEmpty() {
         return new RegistrationUtils(PersistenceLayer.createEmpty());
     }
-    public boolean isEmpty() { return persistenceLayer.isEmpty(); }
+
+    public boolean isEmpty() {
+        return persistenceLayer.isEmpty();
+    }
 
     private RegistrationResult registerUser(String username, String password) {
 
         // then we check if the password is good.
         final PasswordResult passwordResult = isPasswordGood(password);
         if (passwordResult.status != SUCCESS) {
-          logger.info("user provided a bad password during registration");
-          return new RegistrationResult(false, BAD_PASSWORD, passwordResult.toString());
+            logger.info("user provided a bad password during registration");
+            return new RegistrationResult(false, BAD_PASSWORD, passwordResult.toPrettyString());
         }
 
         // at this point, we feel assured it's ok to save to the database.
@@ -62,7 +69,7 @@ public class RegistrationUtils {
 
     /**
      * Whether we qualify a password as good.
-     *
+     * <p>
      * See implementation for criteria.
      */
     public static PasswordResult isPasswordGood(String password) {
@@ -97,7 +104,7 @@ public class RegistrationUtils {
     }
 
     public boolean isUserInDatabase(String username) {
-        return ! persistenceLayer.searchForUserByName(username).isEmpty();
+        return !persistenceLayer.searchForUserByName(username).isEmpty();
     }
 
     private void saveToDatabase(String username, String password) {

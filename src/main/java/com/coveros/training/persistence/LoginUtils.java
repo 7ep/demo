@@ -17,8 +17,14 @@ public class LoginUtils {
     }
 
     public boolean isUserRegistered(String username, String password) {
-        logger.info("checking if credentials for {} are valid", username);
-        return persistenceLayer.areCredentialsValid(username, password);
+        logger.info("checking if credentials for {} are valid for login", username);
+        boolean isValid = persistenceLayer.areCredentialsValid(username, password);
+        if (isValid) {
+            logger.info("credentials for {} are valid - granting access", username);
+        } else {
+            logger.info("credentials for {} were invalid - denying access", username);
+        }
+        return isValid;
     }
 
     public static LoginUtils createEmpty() {

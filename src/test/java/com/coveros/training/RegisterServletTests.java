@@ -25,16 +25,16 @@ public class RegisterServletTests {
 
     @Before
     public void before() {
-      request = mock(HttpServletRequest.class);
-      response = mock(HttpServletResponse.class);
-      requestDispatcher = mock(RequestDispatcher.class);
-      registerServlet = spy(new RegisterServlet());
-      RegisterServlet.registrationUtils = Mockito.mock(RegistrationUtils.class);
-    } 
+        request = mock(HttpServletRequest.class);
+        response = mock(HttpServletResponse.class);
+        requestDispatcher = mock(RequestDispatcher.class);
+        registerServlet = spy(new RegisterServlet());
+        RegisterServlet.registrationUtils = Mockito.mock(RegistrationUtils.class);
+    }
 
     /**
      * Makes sure that the request dispatcher sends the user to the right place.
-     *
+     * <p>
      * If the user enters no name when registering, they should be
      * sent to the error page "empty_username.html"
      */
@@ -55,12 +55,12 @@ public class RegisterServletTests {
 
     /**
      * Makes sure that the request dispatcher sends the user to the right place.
-     *
+     * <p>
      * If the user enters their name when registering, they should be
      * sent to the successful registration page.
      */
     @Test
-    public void doPostWithName()  {
+    public void doPostWithName() {
         // given a user entered their username
         mockRequestParam("username", "Alice");
         mockRequestParam("password", "password123");

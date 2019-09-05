@@ -3,7 +3,6 @@ package com.coveros.training;
 import com.coveros.training.persistence.LoginUtils;
 import com.coveros.training.persistence.PersistenceLayer;
 import com.coveros.training.persistence.RegistrationUtils;
-import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -14,12 +13,7 @@ public class LoginStepDefs {
     private boolean isRegisteredUser;
     private RegistrationUtils registrationUtils = RegistrationUtils.createEmpty();
     private LoginUtils loginUtils = LoginUtils.createEmpty();
-    private PersistenceLayer pl = PersistenceLayer.createEmpty();
-
-    @Before
-    public void init() {
-        pl = new PersistenceLayer();
-    }
+    private PersistenceLayer pl = new PersistenceLayer();
 
     /**
      * create objects for registration and login, and clear the database.
@@ -49,7 +43,7 @@ public class LoginStepDefs {
 
 
     @When("^when a user authenticates with \"([^\"]*)\" and \"([^\"]*)\"$")
-    public void whenAUserAuthenticatesWithAnd(String username, String password){
+    public void whenAUserAuthenticatesWithAnd(String username, String password) {
         isRegisteredUser = loginUtils.isUserRegistered(username, password);
     }
 

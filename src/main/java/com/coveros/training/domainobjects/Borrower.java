@@ -3,13 +3,13 @@ package com.coveros.training.domainobjects;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.checkerframework.checker.nullness.qual.Nullable;
+
 
 /**
  * An immutable data value representing the data for a borrower.
- *
+ * <p>
  * A borrower is a person who borrows a book from a library.
- *
+ * <p>
  * Note that we make our fields public because they are final,
  * so there's no need to have methods wrapping them.
  */
@@ -30,9 +30,13 @@ public final class Borrower {
         this.name = name;
     }
 
-    public final boolean equals(@Nullable Object obj) {
-        if (obj == null) { return false; }
-        if (obj == this) { return true; }
+    public final boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
         if (obj.getClass() != getClass()) {
             return false;
         }
@@ -50,6 +54,10 @@ public final class Borrower {
                 append(id).
                 append(name).
                 toHashCode();
+    }
+
+    public final String toOutputString() {
+        return String.format("{Name: %s, Id: %s}", name, id);
     }
 
     public final String toString() {

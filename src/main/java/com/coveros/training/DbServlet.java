@@ -10,34 +10,35 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.coveros.training.persistence.PersistenceLayer.*;
-
 @WebServlet(name = "DbServlet", urlPatterns = {"/flyway"}, loadOnStartup = 1)
 public class DbServlet extends HttpServlet {
 
-  private static final String RESULT = "result";
-  private static final Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
+    private static final String RESULT = "result";
+    private static final Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
 
-  @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-    final String action = StringUtils.makeNotNullable(request.getParameter("action"));
-    final PersistenceLayer pl = new PersistenceLayer();
-    switch (action) {
-      case "clean":
-        pl.cleanDatabase();
-        request.setAttribute(RESULT, "cleaned");
-        break;
-      case "migrate":
-        pl.migrateDatabase();
-        request.setAttribute(RESULT, "migrated");
-        break;
-      default:
-        pl.cleanAndMigrateDatabase();
-        request.setAttribute(RESULT, "cleaned and migrated");
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        final String action = StringUtils.makeNotNullable(request.getParameter("action"));
+        final PersistenceLayer pl = new PersistenceLayer();
+        switch (action) {
+            case "clean":
+                logger.info("received request to clean the database - i.e. remove all data and schema");
+                pl.cleanDatabase();
+                request.setAttribute(RESULT, "cleaned");
+                break;
+            case "migrate":
+                logger.info("received request to migrate the database - i.e. add schema, but no data");
+                pl.migrateDatabase();
+                request.setAttribute(RESULT, "migrated");
+                break;
+            default:
+                logger.info("received request to clean, then migrate the database - i.e. putting it a fresh state with no data");
+                pl.cleanAndMigrateDatabase();
+                request.setAttribute(RESULT, "cleaned and migrated");
+        }
+
+        ServletUtils.forwardToResult(request, response, logger);
     }
-
-    ServletUtils.forwardToResult(request, response, logger);
-  }
 
 
 }

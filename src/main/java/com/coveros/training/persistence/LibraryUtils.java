@@ -1,13 +1,14 @@
 package com.coveros.training.persistence;
 
-import com.coveros.training.domainobjects.LibraryActionResults;
 import com.coveros.training.domainobjects.Book;
 import com.coveros.training.domainobjects.Borrower;
+import com.coveros.training.domainobjects.LibraryActionResults;
 import com.coveros.training.domainobjects.Loan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Date;
+import java.util.List;
 
 public class LibraryUtils {
 
@@ -23,28 +24,32 @@ public class LibraryUtils {
     }
 
     public LibraryActionResults lendBook(String bookTitle, String borrowerName, Date borrowDate) {
+        logger.info("starting process to lend a book: {} to borrower: {}", bookTitle, borrowerName);
         final Book book = searchForBookByTitle(bookTitle);
+        final Book foundBook = new Book(book.id, bookTitle);
         final Borrower borrower = searchForBorrowerByName(borrowerName);
-        return lendBook(book, borrower, borrowDate);
+        final Borrower foundBorrower = new Borrower(borrower.id, borrowerName);
+        return lendBook(foundBook, foundBorrower, borrowDate);
     }
 
     public LibraryActionResults lendBook(Book book, Borrower borrower, Date borrowDate) {
-        if (book.isEmpty()) {
-            logger.info("book was not registered");
+        if (book.id == 0) {
+            logger.info("book: {} was not registered.  Lending failed", book.title);
             return LibraryActionResults.BOOK_NOT_REGISTERED;
         }
 
-        if (borrower.isEmpty()) {
-            logger.info("borrower was not registered");
+        if (borrower.id == 0) {
+            logger.info("borrower: {} was not registered.  Lending failed", borrower.name);
             return LibraryActionResults.BORROWER_NOT_REGISTERED;
         }
 
-        final Loan loan = searchForLoan(book);
+        final Loan loan = searchForLoanByBook(book);
         if (!loan.isEmpty()) {
-            logger.info("book was already checked out");
+            logger.info("book: {} was already checked out on {}.  Lending failed", book.title, loan.checkoutDate);
             return LibraryActionResults.BOOK_CHECKED_OUT;
         }
 
+        logger.info("book: {} is available for borrowing by valid borrower: {}", book.title, borrower.name);
         createLoan(book, borrower, borrowDate);
         return LibraryActionResults.SUCCESS;
     }
@@ -54,18 +59,19 @@ public class LibraryUtils {
      * that calls to the persistence layer, making it easier to test.
      */
     void createLoan(Book book, Borrower borrower, Date borrowDate) {
-        logger.info("creating loan for book: {} by borrower: {} on date: {}", book.title, borrower.name, borrowDate);
+        logger.info("creating loan for book: {} by borrower: {}", book.title, borrower.name);
         persistence.createLoan(book, borrower, borrowDate);
     }
 
     public LibraryActionResults registerBorrower(String borrower) {
+        logger.info("trying to register a borrower with name: {}", borrower);
         final Borrower borrowerDetails = searchForBorrowerByName(borrower);
-        final boolean borrowerWasFound = ! borrowerDetails.equals(Borrower.createEmpty());
+        final boolean borrowerWasFound = !borrowerDetails.equals(Borrower.createEmpty());
         if (borrowerWasFound) {
             logger.info("borrower: {} was already registered", borrower);
             return LibraryActionResults.ALREADY_REGISTERED_BORROWER;
         }
-
+        logger.info("borrower: {} was not found.  Registering new borrower...", borrower);
         saveNewBorrower(borrower);
         return LibraryActionResults.SUCCESS;
     }
@@ -80,12 +86,16 @@ public class LibraryUtils {
     }
 
     public LibraryActionResults registerBook(String bookTitle) {
+        if (bookTitle.isEmpty()) {
+            throw new IllegalArgumentException("bookTitle was an empty string - disallowed when registering books");
+        }
+        logger.info("trying to register a book with title: {}", bookTitle);
         final Book book = searchForBookByTitle(bookTitle);
-        if (! book.isEmpty()) {
-            logger.info("book was already registered");
+        if (!book.isEmpty()) {
+            logger.info("book: {} was already registered", bookTitle);
             return LibraryActionResults.ALREADY_REGISTERED_BOOK;
         }
-
+        logger.info("book: {} was not found.  Registering new book...", bookTitle);
         saveNewBook(bookTitle);
         return LibraryActionResults.SUCCESS;
     }
@@ -99,9 +109,15 @@ public class LibraryUtils {
         persistence.saveNewBook(bookTitle);
     }
 
-    public Loan searchForLoan(Book book) {
+    public Loan searchForLoanByBook(Book book) {
         logger.info("searching for loan by book with title: {}", book.title);
-        return persistence.searchForLoan(book);
+        return persistence.searchForLoanByBook(book);
+    }
+
+
+    public List<Loan> searchForLoanByBorrower(Borrower borrower) {
+        logger.info("searching for loan by borrower with name: {}", borrower.name);
+        return persistence.searchForLoanByBorrower(borrower);
     }
 
     public Borrower searchForBorrowerByName(String borrowerName) {
@@ -110,8 +126,51 @@ public class LibraryUtils {
     }
 
     public Book searchForBookByTitle(String title) {
+        if (title.isEmpty()) {
+            throw new IllegalArgumentException("when searching for a book, must include a non-empty string for title");
+        }
         logger.info("search for book with title: {}", title);
-        return persistence.searchBooksByTitle(title);
+        final Book book = persistence.searchBooksByTitle(title);
+        if (book.isEmpty()) {
+            logger.info("No book found with title of {}", title);
+        } else {
+            logger.info("book found with title of {}", title);
+        }
+        return book;
+    }
+
+    /**
+     * The id has to be positive.  Exception will be thrown otherwise.
+     */
+    public Book searchForBookById(long id) {
+        if (id < 1) {
+            throw new IllegalArgumentException("when searching for a book, must include an id of one or greater");
+        }
+        logger.info("search for book with id: {}", id);
+        final Book book = persistence.searchBooksById(id);
+        if (book.isEmpty()) {
+            logger.info("No book found with id of {}", id);
+        } else {
+            logger.info("Book found with id of {}", id);
+        }
+        return book;
+    }
+
+    /**
+     * The id has to be positive.  Exception will be thrown otherwise.
+     */
+    public Borrower searchForBorrowerById(long id) {
+        if (id < 1) {
+            throw new IllegalArgumentException("when searching for a borrower, must include an id of one or greater");
+        }
+        logger.info("search for borrower with id: {}", id);
+        final Borrower borrower = persistence.searchBorrowersById(id);
+        if (borrower.isEmpty()) {
+            logger.info("No borrower found with id of {}", id);
+        } else {
+            logger.info("borrower found with id of {}", id);
+        }
+        return borrower;
     }
 
     public static LibraryUtils createEmpty() {
@@ -121,4 +180,41 @@ public class LibraryUtils {
     public boolean isEmpty() {
         return persistence.isEmpty();
     }
+
+    public LibraryActionResults deleteBook(Book book) {
+        logger.info("deleting a book.  id: {}, title: {}", book.id, book.title);
+        final Book bookInDatabase = searchForBookByTitle(book.title);
+        if (bookInDatabase.isEmpty()) {
+            logger.info("book not found in database.  Therefore, obviously, cannot be deleted");
+            return LibraryActionResults.NON_REGISTERED_BOOK_CANNOT_BE_DELETED;
+        }
+        persistence.deleteBook(book.id);
+        logger.info("book with title: {} and id: {} was deleted", bookInDatabase.title, bookInDatabase.id);
+        return LibraryActionResults.SUCCESS;
+    }
+
+    public LibraryActionResults deleteBorrower(Borrower borrower) {
+        logger.info("deleting a borrower.  id: {}, name: {}", borrower.id, borrower.name);
+        final Borrower borrowerInDatabase = searchForBorrowerByName(borrower.name);
+        if (borrowerInDatabase.isEmpty()) {
+            logger.info("borrower not found in database.  Therefore, obviously, cannot be deleted");
+            return LibraryActionResults.NON_REGISTERED_BORROWER_CANNOT_BE_DELETED;
+        }
+        persistence.deleteBorrower(borrower.id);
+        logger.info("borrower with name: {} and id: {} was deleted", borrowerInDatabase.name, borrowerInDatabase.id);
+        return LibraryActionResults.SUCCESS;
+    }
+
+    public List<Book> listAllBooks() {
+        logger.info("received request to list all books");
+        return persistence.listAllBooks();
+    }
+
+
+    public List<Borrower> listAllBorrowers() {
+        logger.info("received request to list all borrowers");
+        return persistence.listAllBorrowers();
+    }
+
+
 }

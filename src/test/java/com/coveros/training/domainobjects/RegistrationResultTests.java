@@ -4,8 +4,6 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.coveros.training.domainobjects.RegistrationStatusEnums.EMPTY_PASSWORD;
-
 
 public class RegistrationResultTests {
 

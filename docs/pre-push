@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# This is a file meant to be run just before we push our work to
+# a remote repository.  It runs the basic set of tests, just to make
+# sure that things are generally valid before sending.
+
+# To install this, put it into the git directory under hooks
+
+# this program is expected to be run just before pushing the application to
+# a remote repository.  Since that action is rare compared to commits, and because
+# we want to be doubly sure of our work before sending it out, we will run
+# the gradlew check command.  If that fails, we want to correct things first.
+
+# stash all changes, including what is in the index (the staging area between
+# the working directory and the repository).  This is so that when we run our
+# tests, we are only testing the stuff that's fully committed to the repo
+# and that is going to be sent to the central repo, since this is pre-push
+
+git stash push -q
+
+# run the tests with the gradle wrapper
+./gradlew check
+
+# store the last exit code in a variable
+RESULT=$?
+
+# unstash the stashed changes
+git stash pop -q
+
+# return the './gradlew check' exit code
+exit $RESULT

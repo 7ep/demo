@@ -1,29 +1,25 @@
 Demonstrating Performance testing with JMeter
 ---------------------------------------------
 
-Install plugins.  First, install plugin manager: https://jmeter-plugins.org/wiki/PluginsManager/
-Then, using plugin manager, install two plugins:
-1) jpgc-casutg - see https://jmeter-plugins.org/?search=jpgc-casutg
-2) jpgc-graphs-basic - see https://jmeter-plugins.org/?search=jpgc-graphs-basic
+First and foremost, have Jmeter installed: https://jmeter.apache.org/download_jmeter.cgi
+Then, install plugin manager: https://jmeter-plugins.org/wiki/PluginsManager/
+  Installing plugin manager is described on the plugin's page:
+  Download the Plugins Manager JAR file and put it into JMeter's lib/ext directory.
+  Then start JMeter and go to "Options" menu to access the Plugins Manager.
 
-Open up JMeter.  We'll do this in the GUI.
+Open up JMeter.
 
 Open docs/demo.jmx
 
 Open Java Mission Control (jmc) and connect to uitestbox:9999
-Set the Tomcat logs to INFO:
-in JMC, open the MBean browser and under org.apache.logging.log4j2,
-open up the objects and in Loggers, there is a subelement which has a
-Level of ERROR.  Set that to INFO.
 
 Open putty to uitestbox and tail -f the logs/catalina.out in Tomcat
-
-Clear the listeners for the ultimate Thread Group and make sure the other thread group is toggled off.
 
 Run the test.
 You should see quite a lot of action in the Tomcat logs.  While the test is running, take a look at the graphs.
 
-One interesting thing to note is that at a certain point, close to about 80 users, the CPU starts to max out.  At that point the response time starts going through the roof.  We've just realized our max load.
+One interesting thing to note is that at a certain point, close to about 80 users, the CPU starts to
+max out.  At that point the response time starts going through the roof.
 
 
 
@@ -49,4 +45,4 @@ the screen.
 
 Make the logging clearly visible - move the window around to suit.
 
-Show the Jmeter listener graph of thoroughput. (How?)
+Show the Jmeter listener graph of thoroughput.

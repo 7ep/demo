@@ -9,15 +9,15 @@ import javax.servlet.annotation.WebListener;
 @WebListener
 public class WebAppListener implements ServletContextListener {
 
-  @Override
-  public void contextInitialized ( ServletContextEvent sce ) {
-    final PersistenceLayer persistenceLayer = new PersistenceLayer();
-    persistenceLayer.cleanAndMigrateDatabase();
-  }
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
+        final PersistenceLayer persistenceLayer = new PersistenceLayer();
+        persistenceLayer.cleanAndMigrateDatabase();
+    }
 
-  @Override
-  public void contextDestroyed(ServletContextEvent sce) {
-    // do nothing.
-  }
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        // do nothing.
+    }
 
 }

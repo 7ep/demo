@@ -1,12 +1,13 @@
 buildscript {
-    repositories {
-        mavenCentral()
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
     }
-    dependencies {
-        classpath 'org.owasp:dependency-check-gradle:4.0.2'
-    }
+  }
+  dependencies {
+    classpath "com.github.spacialcircumstances:gradle-cucumber-reporting:0.1.8"
+  }
 }
-
 
 plugins {
     id 'war'
@@ -19,9 +20,6 @@ plugins {
 
     // scans our code for static analysis
     id "org.sonarqube" version "2.7"
-
-    // provides Cucumber reporting
-    id "com.github.spacialcircumstances.gradle-cucumber-reporting" version "0.0.15"
 
     // provides unit test coverage
     id 'jacoco'
@@ -37,15 +35,15 @@ plugins {
     // simply being run during the test.  It does this by
     // changing the code and seeing if the test fails as a result.
     id 'info.solidsoft.pitest' version '1.4.0'
+
+    // Dependency Check analyzes the dependencies for 
+    // potential security issues.
+    // see https://plugins.gradle.org/plugin/org.owasp.dependencycheck
+    id "org.owasp.dependencycheck" version "5.2.1"
 }
 
-// sets the version of Java we want to use - 8
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-// the checker framework adds a bunch of type annotations that
-// can insure safer coding practices.  See https://checkerframework.org/manual/
-apply from: "$rootDir/gradle/checkerframework.gradle"
+// apply our fancy cucumber reporting program, see https://plugins.gradle.org/plugin/com.github.spacialcircumstances.gradle-cucumber-reporting
+apply plugin: "com.github.spacialcircumstances.gradle-cucumber-reporting"
 
 // including our script plugin for running our integration tests
 apply from: "$rootDir/gradle/fast_integration_test.gradle"
@@ -53,10 +51,9 @@ apply from: "$rootDir/gradle/fast_integration_test.gradle"
 // including our script plugin for running BDD-type tests
 apply from: "$rootDir/gradle/bdd_test.gradle"
 
-// Dependency Check analyzes the dependencies for potential security issues.
-// see https://plugins.gradle.org/plugin/org.owasp.dependencycheck
-apply plugin: 'org.owasp.dependencycheck'
-
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:unchecked"
+}
 
 repositories {
     jcenter()
@@ -68,13 +65,13 @@ configurations {
 }
 
 dependencies {
-    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+    providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
 
     // junit, for running unit tests
     testCompile 'junit:junit:4.12'
 
     // mockito, for mocking objects in our unit tests
-    testCompile 'org.mockito:mockito-core:2.7.19'
+    testCompile 'org.mockito:mockito-core:2.28.2'
 
     // nbvcxz is a tool to determine how robust a password is.  See
     // https://github.com/GoSimpleLLC/nbvcxz
@@ -110,7 +107,6 @@ dependencies {
 
     // so we can programmatically run flyway at startup
     compile "org.flywaydb:flyway-core:5.2.4"
-
 }
 
 task copyToLib(type: Copy) {
@@ -130,13 +126,14 @@ gretty {
     httpPort = 8080
     servletContainer = 'tomcat8'
     contextPath = "demo"
+    jvmArgs = ['-Dcom.sun.management.jmxremote', '-Dcom.sun.management.jmxremote.port=9999', '-Dcom.sun.management.jmxremote.ssl=false', '-Dcom.sun.management.jmxremote.authenticate=false']
 }
 
 // configuration for the cucumber reports.
 cucumberReports {
     outputDir = file('build/reports/bdd')
-    buildName = '0'
-    reports = files('build/bdd/file.json')
+    buildId = '0'
+    reports = files('build/bdd/file.json', 'build/bdd/behave_cucumber_style.json')
     testTasksFinalizedByReport = false
 }
 
@@ -152,7 +149,7 @@ flyway {
 // starts the h2 console
 task startH2Console(type: Exec) {
     dependsOn 'copyToLib'
-    commandLine 'javaw','-cp','build/lib/h2-1.4.197.jar','org.h2.tools.Console'
+    commandLine 'javaw', '-cp', 'build/lib/h2-1.4.197.jar', 'org.h2.tools.Console'
 }
 
 generateCucumberReports.dependsOn(cucumber)
@@ -163,9 +160,13 @@ jacocoTestReport {
 
 // a way to combine the coverage reports for the purpose of seeing the
 // whole picture when we run jacocoTestReport
-task combineCoverage (type: JacocoMerge) {
+task combineCoverage(type: JacocoMerge) {
     executionData = files("$buildDir/jacoco/test.exec", "$buildDir/jacoco/fastIntegrationTest.exec")
     mustRunAfter fastIntegrationTest
+}
+
+task testReport(type: GradleBuild) {
+    tasks = ['test', 'fastIntegrationTest', 'combineCoverage', 'jacocoTestReport']
 }
 
 // Add the combined report when we run check
@@ -175,6 +176,9 @@ check.dependsOn(jacocoTestReport)
 
 sonarqube {
     properties {
+        property "sonar.projectKey", "demo"
+        property "sonar.projectName", "demo"
+        property "sonar.projectDescription", "A demonstration of a web application with good test coverage and best practices"
         property "sonar.sources", "src/main/java"
         property "sonar.tests", "src/test/java,src/integration_test/java,src/bdd_test/java"
         property "sonar.java.binaries", "build/classes/java/main"
@@ -192,9 +196,12 @@ tasks.withType(Test) {
     maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
 }
 
-task runApiTests(type:Exec) {
-   workingDir 'api_tests'
-   commandLine 'pipenv','run','pytest','--junitxml','../build/test-results/api_tests/TEST-api_test_results.xml'
+task runApiTests(type: Exec) {
+    doFirst {
+        checkIfAlive();
+    }
+    workingDir 'api_tests'
+    commandLine 'pipenv', 'run', 'pytest', '--junitxml', '../build/test-results/api_tests/TEST-api_test_results.xml'
 }
 
 static boolean SearchDirectoryForChromedriver(File dir) {
@@ -208,35 +215,105 @@ static boolean ScanPathForChromeDriver() {
     // Add the local ui_tests directory too - it will still work if it's there
     pathDirectories.add("ui_tests")
 
-    return pathDirectories.any({dir -> SearchDirectoryForChromedriver(new File(dir))})
+    return pathDirectories.any({ dir -> SearchDirectoryForChromedriver(new File(dir)) })
 }
 
-task runBehaveTests(type:Exec) {
-   doFirst {
-       def chromedriver_exists_in_ui_tests = ScanPathForChromeDriver();
-       if (! chromedriver_exists_in_ui_tests) {
-           ignoreExitValue true
-           throw new Exception(
-                   "\n\nFor your reference, here is the system path we checked:\n\n" +
-                    System.getenv('PATH') +
-                   "\n\n*****************************\n" +
-                   "*****************************\n" +
-                   "Does not look like you have Chromedriver in your \n" +
-                   "PATH or ui_tests directory.\n\n" +
-                   "Download it from http://chromedriver.chromium.org/ and store the binary\n" +
-                   "in your system path or in the ui_tests directory.\n" +
-                   "See the PATH variable expanded above.\n" +
-                   "*****************************\n" +
-                   "*****************************\n"
+// returns true if the application is running.
+static void checkIfAlive() {
+    int code;
+    try {
+        URL url = new URL("http://localhost:8080/demo");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.connect();
 
-           )
-       }
-   }
-   workingDir 'ui_tests'
-   commandLine 'pipenv','run','behave'
+        code = connection.getResponseCode();
+    } catch (Exception ex) {
+        String errorMsg = "\n\n\n" +
+                "****************************************\n" +
+                "*       SERVER IS NOT RUNNING          *\n" +
+                "****************************************\n" +
+                " The server has to be running to run    \n" +
+                " tests you requested                    \n" +
+                "                                        \n" +
+                " To start the app:                      \n" +
+                "    gradlew appRun                      \n" +
+                "****************************************\n";
+        throw new Exception(errorMsg);
+    }
+    if (code != 200) {
+        throw new Exception("\n\nServer is not returning a 200.  Instead, it is: " +code + "\n\n");
+    }
 }
+
+task runBehaveTests(type: Exec) {
+    doFirst {
+        checkIfAlive();
+        def chromedriver_exists_in_ui_tests = ScanPathForChromeDriver();
+		def chrm = project.properties['chromedriver.path']
+
+		// make sure that the path to chromedriver isn't null or empty:
+		def chromedriver_full_path_empty = chrm == null || chrm.isEmpty()
+        if (chromedriver_full_path_empty) {
+            chrm = "(NOT SET)"
+        }
+
+        if (!chromedriver_exists_in_ui_tests && chromedriver_full_path_empty) {
+            ignoreExitValue true
+            throw new Exception(
+
+
+					"\n\n*****************************************************\n" +
+					"*****************************************************\n" +
+					"Does not look like you have Chromedriver on your \n" +
+					"PATH or have set the full directory in gradle.properties.\n\n" +
+
+					"Download it from http://chromedriver.chromium.org/\n" +
+					"*****************************************************\n" +
+					"*****************************************************\n" +
+
+
+					"\n\nMore detail:\n  We couldn't find Chromedriver, which is needed to run the \n" +
+					"  Behave tests (The UI-focused Behavior Driven Development test)\n" +
+
+					"\nThe easiest way to fix this, once you have downloaded Chromedriver, \n" +
+					"is to move the Chromedriver executable into a directory that is in \n" +
+					"your path.\n" +
+
+                    "\nFor your reference, here are all the directories we checked:\n\n" +
+					System.getenv('PATH') +
+					
+					"\n\nAn alternate way is to set the path to the Chromedriver executable\n" +
+					"in the gradle.properties file, at chromedriver.path\n" +
+					
+					"\nFor example: \n" +
+					"\nchromedriver.path=C:/foo/bar/chromedriver_win32/chromedriver.exe\n" +
+                    "\n\nHere is the value of your \"chromedriver.path\" \n(found in gradle.properties): \n\n" +
+					chrm +
+
+                    "\n\nIMPORTANT MESSAGES ABOVE! SCROLL UP."
+
+            )
+        }
+    }
+    workingDir 'ui_tests'
+    // run behave and output a json file (we'll convert that to Cucumber format later for reporting)
+    commandLine 'pipenv', 'run', 'behave', '--format','json','-o','../build/bdd/behave.json', '-D', 'chromedriver_path='+(project.properties['chromedriver.path'] ?: "")
+
+}
+
+// Run a command to convert the Behave json to Cucumber format.
+// Once this is done, we can run generateCucumberReport again and it will have the Behave results included.
+task convertBehaveOutputToCucumber(type: Exec) {
+    commandLine 'pipenv', 'run', 'python', '-m', 'behave2cucumber', '-i', 'build/bdd/behave.json', '-o', 'build/bdd/behave_cucumber_style.json'
+}
+runBehaveTests.finalizedBy convertBehaveOutputToCucumber
+
 
 task runAllTests(type: GradleBuild) {
+    doFirst {
+        checkIfAlive()
+    }
     tasks = ['check', 'runApiTests', 'runBehaveTests']
 }
 // more info on test logging: https://discuss.gradle.org/t/whats-upcoming-in-gradle-1-1-test-logging/7741
@@ -245,42 +322,62 @@ test {
         exceptionFormat "full" // default is "short"
         // uncomment the following to see the unit test progress in the output
         //events "started", "passed", "skipped", "failed", "standardOut", "standardError"
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+
+        // set to false to disable detailed failure logs
+        showExceptions true
+
+        // enable to see standard out and error streams inline with the test results
+        showStandardStreams true
     }
+
+    // Fail the 'test' task on the first test failure
+    failFast = true
+
+
 }
 
 dependencyCheck {
-    showSummary=false
-    autoUpdate=false
-    cveValidForHours=168 // a week.
-    format='XML' // options are  (HTML, XML, CSV, JSON, VULN, ALL).
+    showSummary = false
+    autoUpdate = true
+    cveValidForHours = 168 // a week.
+    format = 'HTML' // options are  (HTML, XML, CSV, JSON, VULN, ALL).
+    failBuildOnCVSS = 8 // see https://www.first.org/cvss/specification-document#5-Qualitative-Severity-Rating-Scale
 }
 
-task('printReportPathsCheck'){
-    doLast{
+task('printReportPathsCheck') {
+    doLast {
         print "\n\n\n"
-        println "-------------------------------------------------------------------------------"
+        println "------------------------------------------------------------"
         println "Reports were generated by the tests."
-        println "-------------------------------------------------------------------------------"
+        println "------------------------------------------------------------"
         println ""
-        println "Coverage Report:         build/reports/jacoco/test/html/index.html"
-        println "Cucumber BDD Report:     build/reports/bdd/cucumber-html-report-basic/index.html"
-        println "Unit Test Reports:       build/reports/tests/"
-        println "-------------------------------------------------------------------------------"
+        println "Coverage:   build/reports/jacoco/test/html/index.html"
+        println "BDD Report: build/reports/bdd/cucumber-html-report-basic/index.html"
+        println "Unit Tests: build/reports/tests/"
+        println "------------------------------------------------------------"
         print "\n"
+    }
+}
+
+task('coveros') {
+    doLast {
+      String fileContents = new File('docs/coveros_text.txt').text
+      print fileContents
     }
 }
 
 check.finalizedBy 'printReportPathsCheck'
 
-task('printReportPathsDependencyCheck'){
-    doLast{
+task('printReportPathsDependencyCheck') {
+    doLast {
         print "\n\n\n"
-        println "-------------------------------------------------------------------------------"
+        println "---------------------------------------------------------------"
         println "Reports were generated by the tests."
-        println "-------------------------------------------------------------------------------"
+        println "---------------------------------------------------------------"
         println ""
-        println "Dependency Check:        build/reports/dependency-check-report.html"
-        println "-------------------------------------------------------------------------------"
+        println "Dependency Check: build/reports/dependency-check-report.html"
+        println "---------------------------------------------------------------"
         print "\n"
     }
 }

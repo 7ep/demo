@@ -1,7 +1,8 @@
-Feature: Authenticating to the system
+Feature: A user may authenticate to the system through the UI
+
     As a user of the system
     I want to be able to authenticate myself
-    So that I can use its features securely.
+    So that I can use its features securely
 
   # This user story relates to behavior from a UI-centric point of view.
 

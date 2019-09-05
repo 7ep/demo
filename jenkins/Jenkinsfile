@@ -92,6 +92,8 @@ pipeline {
         // copy over the test results
         sh 'mkdir build/test-results/bdd_ui'
         sh 'scp -r cuser@uitestbox:~/demo_tests/build/test-results/bdd_ui/* build/test-results/bdd_ui/'
+        sh 'scp cuser@uitestbox:~/demo_tests/build/bdd/behave_cucumber_style.json build/bdd/'
+        sh './gradlew generateCucumberReport'
 
         // following line will generate a new report and store it at ~/zap_report.html
         sh 'ssh cuser@uitestbox "curl http://zap/OTHER/core/other/htmlreport --proxy localhost:8888 > ~/zap_report.html"'

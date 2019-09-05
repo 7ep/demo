@@ -3,7 +3,7 @@ package com.coveros.training.domainobjects;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.checkerframework.checker.nullness.qual.Nullable;
+
 
 public final class RegistrationResult {
 
@@ -21,9 +21,13 @@ public final class RegistrationResult {
         this(wasSuccessfullyRegistered, status, "");
     }
 
-    public final boolean equals(@Nullable Object obj) {
-        if (obj == null) { return false; }
-        if (obj == this) { return true; }
+    public final boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
         if (obj.getClass() != getClass()) {
             return false;
         }
@@ -47,6 +51,14 @@ public final class RegistrationResult {
 
     public final String toString() {
         return ToStringBuilder.reflectionToString(this);
+    }
+
+    public final String toPrettyString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("successfully registered: %s%n", wasSuccessfullyRegistered));
+        sb.append(String.format("status: %s%n", status));
+        sb.append(String.format("message: %n%n%s%n", message));
+        return sb.toString();
     }
 
     public static RegistrationResult createEmpty() {

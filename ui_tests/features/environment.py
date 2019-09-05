@@ -1,20 +1,9 @@
+import requests
 from selenium import webdriver
 from selenium.webdriver.common.proxy import Proxy, ProxyType
-import requests
 
 SERVER = "localhost"
 URL = "http://%s:8080" % SERVER
-
-# used as a simple object during console runs,
-# to experiment.  typical incantation is:
-#   context = Object()
-class Object(object):
-    pass
-
-
-def __create_context():
-    context = Object()
-    return context
 
 
 def before_all(context):
@@ -22,6 +11,8 @@ def before_all(context):
 
 
 def __open_browser(context):
+    chrm = context.config.userdata['chromedriver_path']
+    
     try:
         # if there is a proxy, we'll use it.  Otherwise, we won't.
         requests.get("http://localhost:8888", timeout=0.01)
@@ -35,10 +26,18 @@ def __open_browser(context):
 
         capabilities = webdriver.DesiredCapabilities.CHROME
         proxy.add_to_capabilities(capabilities)
-
-        context.driver = webdriver.Chrome(desired_capabilities=capabilities)
+        
+        if (chrm):
+            context.driver = webdriver.Chrome(desired_capabilities=capabilities, executable_path=chrm)
+        else:
+            context.driver = webdriver.Chrome(desired_capabilities=capabilities)
+        return context.driver
     except:
-        context.driver = webdriver.Chrome()
+        if (chrm):
+            context.driver = webdriver.Chrome(executable_path=chrm)
+        else:
+            context.driver = webdriver.Chrome()
+        return context.driver
 
 
 def before_scenario(context, scenario):

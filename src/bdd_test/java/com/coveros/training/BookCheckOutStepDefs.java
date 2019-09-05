@@ -6,7 +6,6 @@ import com.coveros.training.domainobjects.LibraryActionResults;
 import com.coveros.training.domainobjects.Loan;
 import com.coveros.training.persistence.LibraryUtils;
 import com.coveros.training.persistence.PersistenceLayer;
-import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -14,23 +13,23 @@ import cucumber.api.java.en.When;
 import org.junit.Assert;
 
 import java.sql.Date;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class BookCheckOutStepDefs {
 
+    public static final String ANOTHER_BOOK = "another book";
     private Book myBook = Book.createEmpty();
+    private String myBookTitle = "";
+    private String myBorrowerName = "";
     private Borrower myBorrower = Borrower.createEmpty();
-    private final Date jan_1st = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 1));
+    private final Date JAN_1ST = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 1));
     private LibraryUtils libraryUtils = LibraryUtils.createEmpty();
-    private final Date Jan_2nd = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 2));
+    private final Date JAN_2ND = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 2));
     private LibraryActionResults libraryActionResults = LibraryActionResults.NULL;
-    private PersistenceLayer pl = PersistenceLayer.createEmpty();
-
-    @Before
-    public void init() {
-        pl = new PersistenceLayer();
-    }
+    private PersistenceLayer pl = new PersistenceLayer();
 
     /**
      * Set up the databases, clear them, initialize the Library Utility with them.
@@ -62,19 +61,19 @@ public class BookCheckOutStepDefs {
 
     @Then("^the system indicates the book is loaned to them on that date$")
     public void theSystemIndicatesTheBookIsLoanedToThemOnThatDate() {
-        final Loan loan = libraryUtils.searchForLoan(myBook);
+        final Loan loan = libraryUtils.searchForLoanByBook(myBook);
         Assert.assertEquals(Date.valueOf("2018-01-31"), loan.checkoutDate);
     }
 
     @When("^they try to check out the book$")
     public void theyCheckOutTheBook() {
-        libraryUtils.lendBook(myBook, myBorrower, Jan_2nd);
+        libraryUtils.lendBook(myBook, myBorrower, JAN_2ND);
     }
 
     @Then("^the system indicates the book is loaned to them on some date$")
     public void theSystemIndicatesTheBookIsLoanedToThemOnSomeDate() {
-        final Loan loan = libraryUtils.searchForLoan(myBook);
-        Assert.assertEquals( Date.valueOf("2018-01-31"), loan.checkoutDate);
+        final Loan loan = libraryUtils.searchForLoanByBook(myBook);
+        Assert.assertEquals(Date.valueOf("2018-01-31"), loan.checkoutDate);
     }
 
     @Given("^an individual, \"([^\"]*)\", is not registered$")
@@ -87,7 +86,7 @@ public class BookCheckOutStepDefs {
         libraryUtils.registerBook(title);
         myBook = libraryUtils.searchForBookByTitle(title);
 
-        libraryActionResults = libraryUtils.lendBook(myBook, myBorrower, Jan_2nd);
+        libraryActionResults = libraryUtils.lendBook(myBook, myBorrower, JAN_2ND);
     }
 
     @Then("^the system indicates that they are not registered$")
@@ -103,10 +102,10 @@ public class BookCheckOutStepDefs {
         final Borrower borrower = libraryUtils.searchForBorrowerByName(borrower_b);
 
         // a previous person already checked it out.
-        libraryUtils.lendBook(book, borrower, jan_1st);
+        libraryUtils.lendBook(book, borrower, JAN_1ST);
 
         // now we try to check it out.  It should indicate BOOK_CHECKED_OUT.
-        libraryActionResults = libraryUtils.lendBook(book, myBorrower, Jan_2nd);
+        libraryActionResults = libraryUtils.lendBook(book, myBorrower, JAN_2ND);
     }
 
     @Then("^the system indicates that the book is not available$")
@@ -114,6 +113,39 @@ public class BookCheckOutStepDefs {
         Assert.assertEquals(LibraryActionResults.BOOK_CHECKED_OUT, libraryActionResults);
     }
 
+    @Given("a borrower, {string}, has one book, {string}, already borrowed")
+    public void a_borrower_has_one_book_already_borrowed(String borrowerName, String bookTitle) {
+        initializeEmptyDatabaseAndUtility();
+        myBookTitle = bookTitle;
+        myBorrowerName = borrowerName;
+        libraryUtils.registerBook(myBookTitle);
+        libraryUtils.registerBorrower(borrowerName);
+        libraryUtils.lendBook(bookTitle, borrowerName, JAN_1ST);
+    }
+
+    @When("they borrow another book")
+    public void they_borrow_another_book() {
+        libraryUtils.registerBook(ANOTHER_BOOK);
+        libraryUtils.lendBook(ANOTHER_BOOK, myBorrowerName, JAN_1ST);
+    }
+
+    @Then("they have two books currently borrowed")
+    public void they_have_two_books_currently_borrowed() {
+        final Borrower borrower = libraryUtils.searchForBorrowerByName(myBorrowerName);
+        final List<Loan> loans = libraryUtils.searchForLoanByBorrower(borrower);
+        Assert.assertEquals(2, loans.size());
+    }
+
+    @When("another borrower, {string} tries to borrow that book")
+    public void another_borrower_tries_to_borrow_that_book(String string) {
+        libraryUtils.registerBorrower("someone else");
+        libraryActionResults = libraryUtils.lendBook(myBookTitle, "someone else", JAN_1ST);
+    }
+
+    @Then("they fail to do so")
+    public void they_fail_to_do_so() {
+        Assert.assertEquals(LibraryActionResults.BOOK_CHECKED_OUT, libraryActionResults);
+    }
 
 
 }

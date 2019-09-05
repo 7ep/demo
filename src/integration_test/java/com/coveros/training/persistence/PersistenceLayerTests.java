@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 
 import static org.mockito.Mockito.when;
 
@@ -91,6 +92,32 @@ public class PersistenceLayerTests {
         Assert.assertEquals(1, book.id);
     }
 
+    /**
+     * If a book is in the database, we should be able to find it by id.
+     */
+    @Test
+    public void testShouldBeAbleToSearchForBooksById() {
+        runRestoreOneBookOneBorrower();
+
+        Book book = pl.searchBooksById(DEFAULT_BOOK.id);
+
+        Assert.assertEquals(DEFAULT_BOOK.title, book.title);
+        Assert.assertEquals(1, book.id);
+    }
+
+    /**
+     * If a borrower is in the database, we should be able to find it by id.
+     */
+    @Test
+    public void testShouldBeAbleToSearchForBorrowersById() {
+        runRestoreOneBookOneBorrower();
+
+        Borrower borrower = pl.searchBorrowersById(DEFAULT_BORROWER.id);
+
+        Assert.assertEquals(DEFAULT_BORROWER.name, borrower.name);
+        Assert.assertEquals(1, borrower.id);
+    }
+
     @Test
     public void testShouldBeAbleToSearchAUserByName() {
         runRestoreOneUser();
@@ -125,8 +152,19 @@ public class PersistenceLayerTests {
     public void testWeCanSearchForALoanByABook() {
         runRestoreOneLoan();
 
-        Loan loan = pl.searchForLoan(DEFAULT_BOOK);
+        Loan loan = pl.searchForLoanByBook(DEFAULT_BOOK);
 
+        Assert.assertEquals(DEFAULT_BOOK, loan.book);
+        Assert.assertEquals(DEFAULT_BORROWER, loan.borrower);
+    }
+
+    @Test
+    public void testWeCanSearchForALoanByABorrower() {
+        runRestoreOneLoan();
+
+        List<Loan> loans = pl.searchForLoanByBorrower(DEFAULT_BORROWER);
+
+        final Loan loan = loans.get(0);
         Assert.assertEquals(DEFAULT_BOOK, loan.book);
         Assert.assertEquals(DEFAULT_BORROWER, loan.borrower);
     }
@@ -141,7 +179,7 @@ public class PersistenceLayerTests {
     }
 
     @Test
-    public void testWeCanSaveABook(){
+    public void testWeCanSaveABook() {
         pl.cleanAndMigrateDatabase();
 
         long id = pl.saveNewBook("The DevOps Handbook");
@@ -156,6 +194,46 @@ public class PersistenceLayerTests {
         long id = pl.createLoan(DEFAULT_BOOK, DEFAULT_BORROWER, BORROW_DATE);
 
         Assert.assertEquals(1, id);
+    }
+
+    @Test
+    public void testShouldBeAbleToDeleteBook() {
+        runRestoreOneBookOneBorrower();
+
+        pl.deleteBook(DEFAULT_BOOK.id);
+        final Book book = pl.searchBooksByTitle(DEFAULT_BOOK.title);
+
+        Assert.assertTrue(book.isEmpty());
+    }
+
+    @Test
+    public void testShouldBeAbleToDeleteBorrower() {
+        runRestoreOneBookOneBorrower();
+
+        pl.deleteBorrower(DEFAULT_BORROWER.id);
+        final Borrower borrower = pl.searchBorrowerDataByName(DEFAULT_BORROWER.name);
+
+        Assert.assertTrue(borrower.isEmpty());
+    }
+
+    @Test
+    public void testShouldListAllBooks() {
+        runRestoreOneBookOneBorrower();
+
+        final List<Book> books = pl.listAllBooks();
+
+        Assert.assertTrue(books.size() > 0);
+        Assert.assertTrue(books.contains(DEFAULT_BOOK));
+    }
+
+    @Test
+    public void testShouldListAllBorrowers() {
+        runRestoreOneBookOneBorrower();
+
+        final List<Borrower> borrowers = pl.listAllBorrowers();
+
+        Assert.assertTrue(borrowers.size() > 0);
+        Assert.assertTrue(borrowers.contains(DEFAULT_BORROWER));
     }
 
     @Test(expected = SqlRuntimeException.class)
@@ -247,15 +325,15 @@ public class PersistenceLayerTests {
     /**
      * Get a file-based {@link JdbcConnectionPool}, which makes it easier
      * to debug database tests when they are running.
-     *
+     * <p>
      * Because we set AUTO_SERVER to true, we can access this database
      * from multiple places when it starts.
-     *
+     * <p>
      * This method is solely meant to be used by database tests.
      */
     private static JdbcConnectionPool getFileBasedDatabaseConnectionPool() {
         return JdbcConnectionPool.create(
-            "jdbc:h2:./build/db/training;AUTO_SERVER=TRUE;MODE=PostgreSQL", "", "");
+                "jdbc:h2:./build/db/training;AUTO_SERVER=TRUE;MODE=PostgreSQL", "", "");
     }
 
 

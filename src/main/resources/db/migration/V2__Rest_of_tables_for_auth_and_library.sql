@@ -12,8 +12,8 @@ create table library.BOOK (
 
 create table library.LOAN (
     id serial PRIMARY KEY,
-    book int NOT NULL REFERENCES library.BOOK (id),
-    borrower int NOT NULL REFERENCES library.BORROWER (id),
+    book int NOT NULL REFERENCES library.BOOK (id) ON DELETE CASCADE,
+    borrower int NOT NULL REFERENCES library.BORROWER (id) ON DELETE CASCADE,
     borrow_date date NOT NULL
 );
 

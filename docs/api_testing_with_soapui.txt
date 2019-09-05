@@ -1,0 +1,9 @@
+Start the demo project by running gradlew appRun
+
+Open SoapUI
+
+Import a project, select "soapui_demo_tests.xml" in the demo/docs directory
+
+Double-click on Math_TestSuite
+
+click the green arrow to run the Test Suite.
