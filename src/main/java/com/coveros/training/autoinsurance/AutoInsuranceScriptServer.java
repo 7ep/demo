@@ -32,8 +32,47 @@ public class AutoInsuranceScriptServer implements Runnable {
         ) {
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
-                out.println(inputLine);
-                autoInsuranceUI.setLabel(inputLine);
+                String result = "OK";
+
+                final String[] inputTokens = inputLine.split(" ");
+
+                if (inputTokens[0].equals("set")) {
+                    if (inputTokens[1].equals("label")) {
+                        autoInsuranceUI.setLabel(inputTokens[2]);
+                    }
+                    if (inputTokens[1].equals("age")) {
+                        autoInsuranceUI.setClaimsAge(inputTokens[2]);
+                    }
+                    if (inputTokens[1].equals("claims")) {
+                        final int i = Integer.parseInt(inputTokens[2]);
+                        autoInsuranceUI.setPreviousClaims(i);
+                    }
+                    if (inputTokens[1].equals("tab")) {
+                        final int i = Integer.parseInt(inputTokens[2]);
+                        autoInsuranceUI.setTab(i);
+                    }
+                }
+
+                if (inputTokens[0].equals("get")) {
+                    if (inputTokens[1].equals("label")) {
+                        result = autoInsuranceUI.label.getText();
+                    }
+                    if (inputTokens[1].equals("age")) {
+                        result = autoInsuranceUI.ageField.getText();
+                    }
+                    if (inputTokens[1].equals("claims")) {
+                        result = autoInsuranceUI.claimsDropDown.getSelectedItem().toString();
+                    }
+                }
+
+                if (inputTokens[0].equals("click")) {
+                    if (inputTokens[1].equals("calculate")) {
+                        autoInsuranceUI.claimsCalcButton.doClick();
+                    }
+                }
+
+                out.println(result);
+
             }
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "
