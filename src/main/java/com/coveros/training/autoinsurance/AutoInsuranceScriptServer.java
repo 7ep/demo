@@ -9,6 +9,16 @@ import java.net.Socket;
 
 public class AutoInsuranceScriptServer implements Runnable {
 
+    private AutoInsuranceUI autoInsuranceUI;
+
+    /**
+     * Construct this with access to the UI we can control
+     * @param autoInsuranceUI the UI we are controlling
+     */
+    public AutoInsuranceScriptServer(AutoInsuranceUI autoInsuranceUI) {
+        this.autoInsuranceUI = autoInsuranceUI;
+    }
+
     public void serverStart() {
 
         int portNumber = 8000;
@@ -23,7 +33,7 @@ public class AutoInsuranceScriptServer implements Runnable {
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 out.println(inputLine);
-
+                autoInsuranceUI.setLabel(inputLine);
             }
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "

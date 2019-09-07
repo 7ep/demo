@@ -17,6 +17,9 @@ import java.beans.PropertyChangeListener;
  */
 public class AutoInsuranceUI extends JPanel {
 
+    // server used for automating the UI
+    AutoInsuranceScriptServer autoInsuranceScriptServer;
+
     JLabel label;
     JFrame frame;
     String simpleDialogDesc = "Some simple message dialogs";
@@ -59,6 +62,11 @@ public class AutoInsuranceUI extends JPanel {
         add(tabbedPane, BorderLayout.CENTER);
         add(label, BorderLayout.PAGE_END);
         label.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+
+        autoInsuranceScriptServer = new AutoInsuranceScriptServer(this);
+
+        Thread newThread = new Thread(autoInsuranceScriptServer);
+        newThread.start();
     }
 
     /** Sets the text displayed at the bottom of the frame. */
@@ -561,8 +569,5 @@ public class AutoInsuranceUI extends JPanel {
                 createAndShowGUI();
             }
         });
-        final AutoInsuranceScriptServer autoInsuranceScriptServer = new AutoInsuranceScriptServer();
-        Thread newThread = new Thread(autoInsuranceScriptServer);
-        newThread.start();
     }
 }
