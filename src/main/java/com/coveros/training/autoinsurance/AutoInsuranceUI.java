@@ -561,5 +561,8 @@ public class AutoInsuranceUI extends JPanel {
                 createAndShowGUI();
             }
         });
+        final AutoInsuranceScriptServer autoInsuranceScriptServer = new AutoInsuranceScriptServer();
+        Thread newThread = new Thread(autoInsuranceScriptServer);
+        newThread.start();
     }
 }

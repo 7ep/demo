@@ -7,23 +7,16 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class AutoInsuranceScriptServer {
+public class AutoInsuranceScriptServer implements Runnable {
 
-    public static void main(String[] args) throws IOException {
+    public void serverStart() {
 
-        if (args.length != 1) {
-            System.err.println("Usage: java EchoServer <port number>");
-            System.exit(1);
-        }
-
-        int portNumber = Integer.parseInt(args[0]);
+        int portNumber = 8000;
 
         try (
-                ServerSocket serverSocket =
-                        new ServerSocket(Integer.parseInt(args[0]));
+                ServerSocket serverSocket = new ServerSocket(portNumber);
                 Socket clientSocket = serverSocket.accept();
-                PrintWriter out =
-                        new PrintWriter(clientSocket.getOutputStream(), true);
+                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(clientSocket.getInputStream()));
         ) {
@@ -37,5 +30,10 @@ public class AutoInsuranceScriptServer {
                     + portNumber + " or listening for a connection");
             System.out.println(e.getMessage());
         }
+    }
+
+    @Override
+    public void run() {
+        serverStart();
     }
 }
