@@ -49,3 +49,6 @@ behave2cucumber.log
 
 # some new directory, "testing_cache", appeared when I installed Intellij 2019.1
 testing_cache/
+
+# selenified outputs to test-output
+test-output/
