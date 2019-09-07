@@ -26,8 +26,12 @@ public class AutoInsuranceScriptClient {
         ) {
             String userInput;
             while ((userInput = stdIn.readLine()) != null) {
+                if (userInput.equals("quit") || userInput.equals("exit")) {
+                    System.out.println("bye!");
+                    System.exit(0);
+                }
                 out.println(userInput);
-                System.out.println("echo: " + in.readLine());
+                System.out.println("response: " + in.readLine());
             }
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
