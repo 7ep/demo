@@ -8,21 +8,15 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class AutoInsuranceScriptClient {
-    public static void main(String[] args) throws IOException {
 
-        if (args.length != 2) {
-            System.err.println(
-                    "Usage: java EchoClient <host name> <port number>");
-            System.exit(1);
-        }
+    public static void main(String[] args) {
 
-        String hostName = args[0];
-        int portNumber = Integer.parseInt(args[1]);
+        String hostName = "localhost";
+        int portNumber = 8000;
 
         try (
                 Socket echoSocket = new Socket(hostName, portNumber);
-                PrintWriter out =
-                        new PrintWriter(echoSocket.getOutputStream(), true);
+                PrintWriter out = new PrintWriter(echoSocket.getOutputStream(), true);
                 BufferedReader in =
                         new BufferedReader(
                                 new InputStreamReader(echoSocket.getInputStream()));

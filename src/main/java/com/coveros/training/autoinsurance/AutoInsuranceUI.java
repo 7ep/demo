@@ -38,6 +38,7 @@ public class AutoInsuranceUI extends JPanel {
         JPanel frequentPanel = createSimpleDialogBox();
         JPanel featurePanel = createFeatureDialogBox();
         JPanel iconPanel = createIconDialogBox();
+        JPanel autoInsurancePanel = createAutoInsurancePanel();
         label = new JLabel("Click the \"Show it!\" button"
                 + " to bring up the selected dialog.",
                 JLabel.CENTER);
@@ -47,6 +48,7 @@ public class AutoInsuranceUI extends JPanel {
         frequentPanel.setBorder(padding);
         featurePanel.setBorder(padding);
         iconPanel.setBorder(padding);
+        autoInsurancePanel.setBorder(padding);
 
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Simple Modal Dialogs", null,
@@ -58,11 +60,29 @@ public class AutoInsuranceUI extends JPanel {
         tabbedPane.addTab("Dialog Icons", null,
                 iconPanel,
                 iconDesc); //tooltip text
+        tabbedPane.addTab("Auto Insurance", null,
+                autoInsurancePanel,
+                "Calculates consequences for new insurance claims");
 
         add(tabbedPane, BorderLayout.CENTER);
         add(label, BorderLayout.PAGE_END);
         label.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
+        startSocketServer();
+    }
+
+    private JPanel createAutoInsurancePanel() {
+        JPanel box = new JPanel();
+
+        box.setLayout(new BoxLayout(box, BoxLayout.PAGE_AXIS));
+        return box;
+    }
+
+    /**
+     * start a socket server that can run commands on this UI.
+     * This is to enable automation scripts.
+     */
+    private void startSocketServer() {
         autoInsuranceScriptServer = new AutoInsuranceScriptServer(this);
 
         Thread newThread = new Thread(autoInsuranceScriptServer);
