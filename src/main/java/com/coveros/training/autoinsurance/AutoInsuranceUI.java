@@ -21,6 +21,10 @@ public class AutoInsuranceUI extends JPanel {
     AutoInsuranceScriptServer autoInsuranceScriptServer;
 
     JLabel label;
+    JComboBox<String> claimsDropDown;
+    JTextField ageField;
+    JButton claimsCalcButton;
+    JTabbedPane tabbedPane;
     JFrame frame;
     String simpleDialogDesc = "Some simple message dialogs";
     String iconDesc = "A JOptionPane has its choice of icons";
@@ -43,6 +47,7 @@ public class AutoInsuranceUI extends JPanel {
                 + " to bring up the selected dialog.",
                 JLabel.CENTER);
 
+
         //Lay them out.
         Border padding = BorderFactory.createEmptyBorder(20,20,5,20);
         frequentPanel.setBorder(padding);
@@ -50,7 +55,7 @@ public class AutoInsuranceUI extends JPanel {
         iconPanel.setBorder(padding);
         autoInsurancePanel.setBorder(padding);
 
-        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Simple Modal Dialogs", null,
                 frequentPanel,
                 simpleDialogDesc); //tooltip text
@@ -62,7 +67,7 @@ public class AutoInsuranceUI extends JPanel {
                 iconDesc); //tooltip text
         tabbedPane.addTab("Auto Insurance", null,
                 autoInsurancePanel,
-                "Calculates consequences for new insurance claims");
+                "Calculates results for new insurance claims");
 
         add(tabbedPane, BorderLayout.CENTER);
         add(label, BorderLayout.PAGE_END);
@@ -75,7 +80,72 @@ public class AutoInsuranceUI extends JPanel {
         JPanel box = new JPanel();
 
         box.setLayout(new BoxLayout(box, BoxLayout.PAGE_AXIS));
+
+        addLabel(box, "Previous claims:");
+        claimsDropDown = addClaimsDropDown(box);
+
+        addLabel(box, "Driver's age:");
+        ageField = addClaimsAgeTextField(box);
+
+        claimsCalcButton = addClaimsCalcButton(box);
+        claimsCalcButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                final int intPreviousClaims = getIntPreviousClaims();
+                final String customerAge = ageField.getText();
+                final int intCustomerAge = Integer.parseInt(customerAge);
+
+                final AutoInsuranceAction result = AutoInsuranceProcessor.process(intPreviousClaims, intCustomerAge);
+
+                setLabel("Premium increase: $" + result.premiumIncreaseDollars + " Warning Ltr: " + result.warningLetterEnum);
+            }
+        });
+
         return box;
+    }
+
+    /**
+     * This method returns an integer representing the number of previous claims for a customer.
+     */
+    private int getIntPreviousClaims() {
+        final String numberPreviousClaims = (String)claimsDropDown.getSelectedItem();
+
+        switch (numberPreviousClaims) {
+            case "0" : return 0;
+            case "1" : return 1;
+            case "2-4" : return 2;
+            case ">=5" : return 5;
+            default:
+                throw new RuntimeException("invalid value entered");
+        }
+    }
+
+    private JTextField addClaimsAgeTextField(JPanel box) {
+        JTextField textField = new JTextField();
+        textField.setVisible(true);
+        box.add(textField);
+        return textField;
+    }
+
+    private JButton addClaimsCalcButton(JPanel box) {
+        JButton crunch = new JButton("Crunch");
+        crunch.setVisible(true);
+        box.add(crunch);
+        return crunch;
+    }
+
+    private void addLabel(JPanel box, String msg) {
+        JLabel lbl = new JLabel(msg);
+        lbl.setVisible(true);
+        box.add(lbl);
+    }
+
+    private JComboBox<String> addClaimsDropDown(JPanel box) {
+        String[] previousClaims = {"0", "1", "2-4", ">=5"};
+        final JComboBox<String> cb = new JComboBox<String>(previousClaims);
+        cb.setVisible(true);
+        box.add(cb);
+        return cb;
     }
 
     /**
@@ -89,9 +159,50 @@ public class AutoInsuranceUI extends JPanel {
         newThread.start();
     }
 
-    /** Sets the text displayed at the bottom of the frame. */
+    /**
+     * Sets the text at the bottom of the panel
+     * @param newText whatever you want the new text to be
+     */
     void setLabel(String newText) {
         label.setText(newText);
+    }
+
+    /**
+     * Switches tabs programmatically
+     * @param index index of the tab
+     */
+    void setTab(int index) {
+        tabbedPane.setSelectedIndex(index);
+    }
+
+    /**
+     * Selects one of the drop-down items for previous claims
+     * @param claims number of previous claims
+     */
+    void setPreviousClaims(int claims) {
+        if (claims <= 0) {
+            claimsDropDown.setSelectedIndex(0);
+        }
+
+        if (claims == 1) {
+            claimsDropDown.setSelectedIndex(1);
+        }
+
+        if (claims >= 2 && claims <= 4) {
+            claimsDropDown.setSelectedIndex(2);
+        }
+
+        if (claims >= 5) {
+            claimsDropDown.setSelectedIndex(3);
+        }
+    }
+
+    /**
+     * Sets the age field per what you enter
+     * @param age the text that goes into the age field.
+     */
+    void setClaimsAge(String age) {
+        ageField.setText(age);
     }
 
     /** Creates the panel shown by the first tab. */
