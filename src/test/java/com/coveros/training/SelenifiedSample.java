@@ -4,68 +4,57 @@ import com.coveros.selenified.Locator;
 import com.coveros.selenified.Selenified;
 import com.coveros.selenified.application.App;
 import com.coveros.selenified.element.Element;
-import com.coveros.selenified.services.Call;
-import com.coveros.selenified.services.Request;
-import com.coveros.selenified.services.Response;
-import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.util.HashMap;
-
 public class SelenifiedSample extends Selenified {
+
+    static final String BASE_URL =  "http://localhost:8080/demo/";
+    static final String RESET_DATABASE_URL = BASE_URL + "flyway";
 
     @BeforeClass(alwaysRun = true)
     public void beforeClass(ITestContext test) {
         // set the base URL for the tests here
-        setAppURL(this, test, "https://www.coveros.com/");
+        setAppURL(this, test, BASE_URL);
     }
 
-    @DataProvider(name = "coveros search terms", parallel = true)
-    public Object[][] DataSetOptions() {
-        return new Object[][]{new Object[]{"python"},
-                new Object[]{"perl"}, new Object[]{"bash"},};
-    }
-
-    @Test(groups = {"sample"}, description = "A sample selenium test to check a title")
+    @Test(groups = {"sample"}, description = "Check that the title on the page is as expected")
     public void sampleTest() {
         // use this object to manipulate the app
         App app = this.apps.get();
         // verify the correct page title
-        app.azzert().titleEquals("Coveros | Bringing together agile and security to deliver superior software");
+        app.azzert().titleEquals("Web Demo");
         // verify no issues
         finish();
     }
 
-    @Test(dataProvider = "coveros search terms", groups = {"sample"},
-            description = "A sample selenium test using a data provider to perform a search")
-    public void sampleTestWDataProvider(String searchTerm) {
+    @Test(groups = {"sample"}, description = "Make sure we can successfully register a user")
+    public void sampleTest2() {
+        String username = "fakeuser";
+        String password = "asdfpoiasefaslfaje";
+
         // use this object to manipulate the app
         App app = this.apps.get();
-        // find the search box element and create the object
-        Element searchBox = app.newElement(Locator.NAME, "s");
-        //perform the search and submit
-        searchBox.type(searchTerm);
-        searchBox.submit();
-        //wait for the page to return the results
-        app.newElement(Locator.ID, "recent-posts-4").waitForState().present();
-        // verify the correct page title
-        app.azzert().titleEquals("You searched for " + searchTerm + " - Coveros");
-        // verify no issues
-        finish();
-    }
 
-    @Test(groups = {"sample", "services"}, description = "A sample web services test to verify the response code")
-    public void sampleServicesSearchTest() {
-        HashMap<String, Object> params = new HashMap<>();
-        params.put("s", "Max+Saperstone");
-        // use this object to verify the app looks as expected
-        Call call = this.calls.get();
-        // retrieve the zip code and verify the return code
-        final Response response = call.get("", new Request().setUrlParams(params));
-        Assert.assertEquals(403, response.getCode());
+        app.goToURL(RESET_DATABASE_URL);
+        app.goToURL(BASE_URL);
+
+        // find the register user field and enter a username to register
+        Element register_username = app.newElement(Locator.ID, "register_username");
+        register_username.type(username);
+
+        // find the register password field and enter a password
+        Element register_password = app.newElement(Locator.ID, "register_password");
+        register_password.type(password);
+
+        // click to register the user
+        Element register_submit = app.newElement(Locator.ID, "register_submit");
+        register_submit.click();
+
+        // assert we find the proper response in the result
+        app.azzert().textPresent("successfully registered: true");
+
         // verify no issues
         finish();
     }
