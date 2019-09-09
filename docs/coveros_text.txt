@@ -14,19 +14,21 @@
    \CCCCCCCCCCCCCC\                         |  _ \| ____|  \/  |/ _ \          Summary of relevant Gradle commands
     \CCCCCCCCCCCCCCc\                       | | | |  _| | |\/| | | | |         ------------------------------------
        \CCCCCCCCCCCCCCc                     | |_| | |___| |  | | |_| |
-          .CCCCCCCCCCCCCCCc                 |____/|_____|_|  |_|\___/          gradlew appRun         - runs the application
-             *\CCCCCCCCCCCCCCCC\c                                              gradlew check          - runs all tests solely using Java
-                  ^\CCCCCCCCCCCCCCCCccc                                        gradlew runAllTests    - runs the whole set of tests**
-                        ^^^*CCCCCCCCCCCCCCCCCCCCCCCCCCcc..                     gradlew clean          - cleans build products and installs pre-push hook.
-                                   ^^^^^^^^^^^^^^^^^                           gradlew runBehaveTests - runs the UI tests**
-                                                                               gradlew runApiTests    - runs the API tests**
-                                                                               gradlew pitest         - runs mutation testing (see http://pitest.org/)
-                                                                               gradlew sonarqube      - runs static analysis using SonarQube.
+          .CCCCCCCCCCCCCCCc                 |____/|_____|_|  |_|\___/          gradlew appRun         - Runs the application
+             *\CCCCCCCCCCCCCCCC\c                                              gradlew check          - Runs all tests solely using Java
+                  ^\CCCCCCCCCCCCCCCCccc                                        gradlew runAllTests    - Runs the whole set of tests**
+                        ^^^*CCCCCCCCCCCCCCCCCCCCCCCCCCcc..                     gradlew clean          - Cleans build products and installs pre-push hook.
+                                   ^^^^^^^^^^^^^^^^^                           gradlew runBehaveTests - Runs the UI tests**
+                                                                               gradlew runApiTests    - Runs the API tests**
+                                                                               gradlew selenified     - Runs some Selenified tests**
+                                                                               gradlew pitest         - Runs mutation testing (see http://pitest.org/)
+                                                                               gradlew sonarqube      - Runs static analysis using SonarQube.
+                                                                                                        (SonarQube must be running on localhost:9000)
 
-gradlew generateCucumberReport   - runs cucumber and creates a nice-looking HTML report
-gradlew dependencyCheckAnalyze   - analyzes security reports for the dependencies of this project.
-gradlew fastIntegrationTest      - runs the database integration tests
+gradlew generateCucumberReport   - Runs cucumber and creates a nice-looking HTML report.
+gradlew dependencyCheckAnalyze   - Analyzes security reports for the dependencies of this project.
+gradlew fastIntegrationTest      - Runs the database integration tests.
 gradlew startH2Console           - Starts a console to examine the H2 database file.
-gradlew <task 1>... taskTree     - a utility that will show the task tree for a particular task
+gradlew <task 1>... taskTree     - A utility that will show the task tree for a particular task.
 
 ** Requires the app to be running (usually in another terminal) and all optional dependencies installed.

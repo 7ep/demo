@@ -51,6 +51,9 @@ apply from: "$rootDir/gradle/fast_integration_test.gradle"
 // including our script plugin for running BDD-type tests
 apply from: "$rootDir/gradle/bdd_test.gradle"
 
+// including our script plugin for running Selenified
+apply from: "$rootDir/gradle/selenified_tests.gradle"
+
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked"
 }
@@ -383,3 +386,24 @@ task('printReportPathsDependencyCheck') {
 }
 
 dependencyCheckAnalyze.finalizedBy 'printReportPathsDependencyCheck'
+
+/**
+ * this starts the desktop UI for the auto insurance processor
+ *  and its accompanying automation script server
+ */
+task startui(type:JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.coveros.training.autoinsurance.AutoInsuranceUI'
+}
+
+/**
+ * This starts the client that controls the automation script
+ * server that can control the UI for the auto insurance processor
+ */
+task startscriptclient(type:JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    main = 'com.coveros.training.autoinsurance.AutoInsuranceScriptClient'
+}
+
+

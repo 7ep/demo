@@ -29,8 +29,10 @@ configurations {
     }
 }
 // some of the configuration for running Cucumber BDD
-task cucumber {
+task cucumber (type: Test) {
     dependsOn assemble, compileTestJava, compileBddTestJava
+    testClassesDirs = sourceSets.bddTest.output.classesDirs
+    classpath = sourceSets.bddTest.runtimeClasspath
     doLast {
         javaexec {
             main = "cucumber.api.cli.Main"
