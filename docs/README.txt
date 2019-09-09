@@ -4,6 +4,7 @@ Contents of the docs directory
 api_testing_with_curl.txt         : How to call API endpoints with Curl https://curl.haxx.se/
 api_testing_with_soapui.txt       : How to test API with SoapUI https://www.soapui.org/
 coveros_text.txt                  : help text with a fancy Coveros ascii graphic (also shown with gradlew coveros).
+chromedriver_log.zip              : A compressed log file from Chromedriver when running our Behave UI tests
 demo.jmx                          : A JMeter file to demonstrate performance testing.
 desktop_automation.txt            : A guide on automating non-web-applications
 install_docker_centos.txt         : Instructions for setting up Docker on CentOS.
