@@ -5,6 +5,7 @@ api_testing_with_curl.txt         : How to call API endpoints with Curl https://
 api_testing_with_soapui.txt       : How to test API with SoapUI https://www.soapui.org/
 coveros_text.txt                  : help text with a fancy Coveros ascii graphic (also shown with gradlew coveros).
 demo.jmx                          : A JMeter file to demonstrate performance testing.
+desktop_automation.txt            : A guide on automating non-web-applications
 install_docker_centos.txt         : Instructions for setting up Docker on CentOS.
 jenkins_box_guide.txt             : How to set up a CI/CD server on CentOS.
 ui_test_box.txt                   : Instructions for setting up a server to run UI testing.
