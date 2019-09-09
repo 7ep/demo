@@ -1,4 +1,4 @@
-package com.coveros.training.com.coveros.training.selenified;
+package com.coveros.training.selenified;
 
 import com.coveros.selenified.Locator;
 import com.coveros.selenified.Selenified;

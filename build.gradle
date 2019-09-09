@@ -51,6 +51,9 @@ apply from: "$rootDir/gradle/fast_integration_test.gradle"
 // including our script plugin for running BDD-type tests
 apply from: "$rootDir/gradle/bdd_test.gradle"
 
+// including our script plugin for running Selenified
+apply from: "$rootDir/gradle/selenified_tests.gradle"
+
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked"
 }
@@ -107,10 +110,6 @@ dependencies {
 
     // so we can programmatically run flyway at startup
     compile "org.flywaydb:flyway-core:5.2.4"
-
-    // Selenfied, a Coveros application to aid with test needs using Selenium
-    // This has a properties file in src/test/resource/selenified.properties
-    testCompile group: 'com.coveros', name: 'selenified', version: '3.2.0'
 }
 
 task copyToLib(type: Copy) {
@@ -403,6 +402,4 @@ task startscriptclient(type:JavaExec) {
     main = 'com.coveros.training.autoinsurance.AutoInsuranceScriptClient'
 }
 
-task selenified(type:Test) {
-    useTestNG() {}
-}
+
