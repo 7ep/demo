@@ -1,0 +1,53 @@
+How to create robust application automation
+-------------------------------------------
+
+In web applications, it is possible to test using locators of our elements - locating
+a particular text field or a button, then interacting with it.
+
+Sometimes our software isn't a web application.  How do you test that?
+
+Some of the automation frameworks for applications attempt to mimic the behavior of a
+human - moving the mouse to a known position on the screen and clicking, sending
+characters like a human would have done on a keyboard, and so on.
+
+The problem with that: it results in incredibly fragile tests that require tremendous
+maintenance.
+
+Just imagine that the screen size changed.  Suddenly all the tests would be invalid,
+with mouse clicks going who-knows-where.  What if the styling of the user interface
+changed at all?  What a pain it would be to figure out why things weren't working
+perfectly.
+
+A much better way is to plan for automation from the start.  Yes, the developers would
+have to spend extra time to develop some kind of system to enable automated testing,
+but if they are on-board with the idea that testable systems lead to more tests
+which leads to higher quality, then they have to understand it is an investment
+worth making.
+
+A current project with Demo is to provide this kind of robust automation for a
+desktop UI application.
+
+To start the application:
+   gradlew startui
+
+To start the scripting client:
+   gradlew startscriptclient
+
+Once they have both started, you can run commands in the script client as follows:
+
+commands possible:
+    set label <TEXT>
+    set age <AGE>
+    set claims <CLAIMS>
+    set tab <TAB-INDEX>
+
+    get label
+    get age
+    get claims
+
+    click calculate
+
+    quit
+
+
+Note: this is all still at a very rudimentary stage.
