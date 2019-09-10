@@ -14,7 +14,14 @@ dependencies {
 
     // Selenfied, a Coveros application to aid with test needs using Selenium
     // This has a properties file in src/test/resource/selenified_tests.properties
-    testCompile group: 'com.coveros', name: 'selenified', version: '3.2.0'
+    testCompile (group: 'com.coveros', name: 'selenified', version: '3.2.0') {
+        // it is necessary to exclude these two groups - slf4j and logback - because
+        // demo already has an implementation of log4j selected.  These two that
+        // come with Selenified are conflicting.  By excluding them everything
+        // works as expected.
+        exclude group: 'org.slf4j'
+        exclude group: 'ch.qos.logback'
+    }
 }
 
 task selenified(type: Test) {
