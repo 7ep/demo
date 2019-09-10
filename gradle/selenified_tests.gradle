@@ -12,9 +12,6 @@ dependencies {
     selenifiedtestsCompile configurations.compile
     selenifiedtestsCompile configurations.testCompile
 
-    selenifiedtestsRuntime configurations.runtime
-    selenifiedtestsRuntime configurations.testRuntime
-
     // Selenfied, a Coveros application to aid with test needs using Selenium
     // This has a properties file in src/test/resource/selenified_tests.properties
     testCompile group: 'com.coveros', name: 'selenified', version: '3.2.0'
