@@ -32,6 +32,7 @@ public class AckermannParameterizedTests {
                 {    3,                3,                    61    },
 
                 {    4,                0,                    13    }
+               // {    4,                1,                    65533 },   //This one takes 35 seconds!
         });
     }
 
@@ -47,7 +48,7 @@ public class AckermannParameterizedTests {
 
     @Test
     public void testShouldProperlyCalculate() {
-        final long result = Ackermann.calculate(m, n);
+        final long result = Ackermann.calculate((int)m, (int)n);
         Assert.assertEquals(String.format("for m of %d and n of %d we should have gotten %d", m, n, expected), expected, result);
     }
 
