@@ -8,15 +8,13 @@ public class AckermannStepDefs {
 
     private long result;
 
-    @When("I calculate Ackermann's formula using {long} and {long}")
-    public void i_calculate_ackermann_s_formula_using_and(long int1, long int2) {
-        long m = int1;
-        long n = int2;
+    @When("I calculate Ackermann's formula using {int} and {int}")
+    public void i_calculate_ackermann_s_formula_using_and(int m, int n) {
         result = Ackermann.calculate(m, n);
     }
 
-    @Then("the Ackermann result is {long}")
-    public void i_get(long expected) {
+    @Then("the Ackermann result is {int}")
+    public void i_get(int expected) {
         Assert.assertEquals(expected, result);
     }
 
