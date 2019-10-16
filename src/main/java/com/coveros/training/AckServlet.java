@@ -27,7 +27,7 @@ public class AckServlet extends HttpServlet {
             int ackParamN = putNumberInRequest("ack_param_n", request);
             String algorithm = request.getParameter("ack_algorithm_choice");
 
-            logger.info("received request to defaultRecursiveCalculation Ackermann's with {} and {} and the {} algorithm", ackParamM, ackParamN, algorithm);
+            logger.info("received request to calculate Ackermann's with {} and {} and the {} algorithm", ackParamM, ackParamN, algorithm);
 
             if (algorithm.equals("tail_recursive")) {
                 tailRecursive(request, ackParamM, ackParamN);

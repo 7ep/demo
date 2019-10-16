@@ -25,7 +25,7 @@ public class FibServlet extends HttpServlet {
             int fibParamN = putNumberInRequest("fib_param_n", request);
             String algorithm = request.getParameter("fib_algorithm_choice");
 
-            logger.info("received request to defaultRecursiveCalculation the {}th fibonacci number by {}", fibParamN, algorithm);
+            logger.info("received request to calculate the {}th fibonacci number by {}", fibParamN, algorithm);
 
             if (algorithm.equals("tail_recursive_1")) {
                 tailRecursiveAlgo1Calc(request, fibParamN);
