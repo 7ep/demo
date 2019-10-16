@@ -1,4 +1,4 @@
-Feature: To calculate using the Ackermann formula
+Feature: Calculation of Ackermann's formula
 
     As a mathematically-oriented control-system designer
     I want to create controllers to alter poles using Ackermann's formula
