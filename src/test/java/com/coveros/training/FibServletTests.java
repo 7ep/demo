@@ -25,11 +25,12 @@ public class FibServletTests {
     @Test
     public void testPostService_HappyPath() {
         when(request.getParameter("fib_param_n")).thenReturn("2");
+        when(request.getParameter("fib_algorithm_choice")).thenReturn("regular_recursive");
         doNothing().when(fibServlet).forwardToResult(Mockito.any(), Mockito.any(), Mockito.any());
 
         fibServlet.doPost(request, response);
 
-        verify(fibServlet).calculate(request, 2);
+        verify(fibServlet).defaultRecursiveCalculation(request, 2);
     }
 
     /**

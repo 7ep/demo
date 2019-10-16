@@ -8,7 +8,7 @@ public class FibonacciStepDefs {
 
     long result;
 
-    @When("I calculate the {int}")
+    @When("I calculate the {int} Fibonacci number")
     public void i_calculate_the(Integer nth_fibonacci_number) {
         result = Fibonacci.calculate(nth_fibonacci_number);
     }

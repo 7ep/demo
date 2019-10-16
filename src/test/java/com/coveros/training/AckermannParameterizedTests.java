@@ -17,23 +17,22 @@ public class AckermannParameterizedTests {
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
              //      m                 n                  expected
-                {    0,                0,                    1     },
+                {    0,                0,                    "1"     },
 
-                {    1,                1,                    3     },
-                {    1,                2,                    4     },
-                {    1,                3,                    5     },
+                {    1,                1,                    "3"     },
+                {    1,                2,                    "4"     },
+                {    1,                3,                    "5"     },
 
-                {    2,                1,                    5     },
-                {    2,                2,                    7     },
-                {    2,                3,                    9     },
-                {    2,                4,                    11    },
+                {    2,                1,                    "5"     },
+                {    2,                2,                    "7"     },
+                {    2,                3,                    "9"     },
+                {    2,                4,                    "11"    },
 
-                {    3,                1,                    13    },
-                {    3,                2,                    29    },
-                {    3,                3,                    61    },
+                {    3,                1,                    "13"    },
+                {    3,                2,                    "29"    },
+                {    3,                3,                    "61"    },
 
-                {    4,                0,                    13    },
-               // {    4,                1,                    65533 },   //This one overflows!
+                {    4,                0,                    "13"    },
         });
     }
 
@@ -41,10 +40,10 @@ public class AckermannParameterizedTests {
     private long n;
     private BigInteger expected;
 
-    public AckermannParameterizedTests(long m, long n, long expected) {
+    public AckermannParameterizedTests(long m, long n, String expected) {
         this.m = m;
         this.n = n;
-        this.expected = BigInteger.valueOf(expected);
+        this.expected = new BigInteger(expected);
     }
 
     @Test
@@ -52,7 +51,5 @@ public class AckermannParameterizedTests {
         final BigInteger result = Ackermann.calculate((int)m, (int)n);
         Assert.assertEquals(String.format("for m of %d and n of %d we should have gotten %d", m, n, expected), expected, result);
     }
-
-
 
 }

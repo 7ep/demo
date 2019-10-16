@@ -23,14 +23,33 @@ public class FibServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         try {
             int fibParamN = putNumberInRequest("fib_param_n", request);
+            String algorithm = request.getParameter("fib_algorithm_choice");
 
-            logger.info("received request to calculate the {}th fibonacci number", fibParamN);
+            logger.info("received request to defaultRecursiveCalculation the {}th fibonacci number by {}", fibParamN, algorithm);
 
-            calculate(request, fibParamN);
+            if (algorithm.equals("tail_recursive_1")) {
+                tailRecursiveAlgo1Calc(request, fibParamN);
+            } else if (algorithm.equals("tail_recursive_2")) {
+                tailRecursiveAlgo2Calc(request, fibParamN);
+            } else {
+                defaultRecursiveCalculation(request, fibParamN);
+            }
         } catch (NumberFormatException ex) {
             request.setAttribute("result", "Error: only accepts integers");
         }
         forwardToResult(request, response, logger);
+    }
+
+    private void tailRecursiveAlgo2Calc(HttpServletRequest request, int fibParamN) {
+        final long result = FibonacciIterative.fib(fibParamN);
+        logger.info("Fibonacci value is {}", result);
+        request.setAttribute("result", result);
+    }
+
+    private void tailRecursiveAlgo1Calc(HttpServletRequest request, int fibParamN) {
+        final long result = FibonacciIterative.itFibN(fibParamN);
+        logger.info("Fibonacci value is {}", result);
+        request.setAttribute("result", result);
     }
 
     /**
@@ -43,7 +62,7 @@ public class FibServlet extends HttpServlet {
     /**
      * Wrapping a request set for easier testing and clarity.
      */
-    void calculate(HttpServletRequest request, int itemA) {
+    void defaultRecursiveCalculation(HttpServletRequest request, int itemA) {
         final long result = Fibonacci.calculate(itemA);
         logger.info("Fibonacci value is {}", result);
         request.setAttribute("result", result);

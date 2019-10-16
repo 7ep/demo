@@ -26,11 +26,12 @@ public class AckServletTests {
     public void testPostService_HappyPath() {
         when(request.getParameter("ack_param_m")).thenReturn("2");
         when(request.getParameter("ack_param_n")).thenReturn("3");
+        when(request.getParameter("ack_algorithm_choice")).thenReturn("regular_recursive");
         doNothing().when(ackServlet).forwardToResult(Mockito.any(), Mockito.any(), Mockito.any());
 
         ackServlet.doPost(request, response);
 
-        verify(ackServlet).calculate(request, 2, 3);
+        verify(ackServlet).regularRecursive(request, 2, 3);
     }
 
     /**
