@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "MathServlet", urlPatterns = {"/math"}, loadOnStartup = 1)
-public class MathServlet extends HttpServlet {
+@WebServlet(name = "FibServlet", urlPatterns = {"/fibonacci"}, loadOnStartup = 1)
+public class FibServlet extends HttpServlet {
 
-    static org.slf4j.Logger logger = LoggerFactory.getLogger(MathServlet.class);
+    static Logger logger = LoggerFactory.getLogger(FibServlet.class);
 
     private int putNumberInRequest(String itemName, HttpServletRequest request) {
         int item = Integer.parseInt(request.getParameter(itemName));
@@ -22,12 +22,11 @@ public class MathServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         try {
-            int itemA = putNumberInRequest("item_a", request);
-            int itemB = putNumberInRequest("item_b", request);
+            int fibParamN = putNumberInRequest("fib_param_n", request);
 
-            logger.info("received request to add two numbers, {} and {}", itemA, itemB);
+            logger.info("received request to calculate the {}th fibonacci number", fibParamN);
 
-            setResultToSum(request, itemA, itemB);
+            calculate(request, fibParamN);
         } catch (NumberFormatException ex) {
             request.setAttribute("result", "Error: only accepts integers");
         }
@@ -44,16 +43,10 @@ public class MathServlet extends HttpServlet {
     /**
      * Wrapping a request set for easier testing and clarity.
      */
-    void setResultToSum(HttpServletRequest request, int itemA, int itemB) {
-        final int result = doAdd(itemA, itemB);
+    void calculate(HttpServletRequest request, int itemA) {
+        final long result = Fibonacci.calculate(itemA);
+        logger.info("Fibonacci value is {}", result);
         request.setAttribute("result", result);
     }
 
-
-    private int doAdd(int a, int b) {
-        logger.info("adding a: {} to b: {}", a, b);
-        int result = a + b;
-        logger.info("result is {}", result);
-        return result;
-    }
 }

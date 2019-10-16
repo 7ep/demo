@@ -4,6 +4,10 @@ import com.coveros.selenified.Locator;
 import com.coveros.selenified.Selenified;
 import com.coveros.selenified.application.App;
 import com.coveros.selenified.element.Element;
+import org.junit.Assert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -58,5 +62,78 @@ public class SelenifiedSample extends Selenified {
         // verify no issues
         finish();
     }
+
+    /**
+     *  This is a test to do whatever blah blah blah
+     *
+     */
+    @Test
+    public void sampleTest3() {
+        // arrange
+        App app = this.apps.get();
+        final WebDriver driver = app.getDriver();
+        String username = "someuser";
+        String password = "passworsdosjfasldf";
+
+        final WebElement login_username = driver.findElement(By.id("login_username"));
+        login_username.sendKeys(username);
+
+        final WebElement login_password = driver.findElement(By.id("login_password"));
+        login_password.sendKeys(password);
+
+        // act
+        final WebElement login_submit = driver.findElement(By.id("login_submit"));
+        login_submit.click();
+
+        // assert
+        final WebElement result = driver.findElement(By.id("result"));
+        Assert.assertEquals("access denied", result.getText());
+    }
+
+    /**
+     * Testing out logging in with invalid credentials
+     *
+     * This uses basic Selenium, not Selenified.
+     */
+    @Test
+    public void sampleTest4() {
+        App app = this.apps.get();
+        final WebDriver driver = app.getDriver();
+        String username = "someuser";
+        String password = "passworsdosjfasldf";
+
+        final WebElement register_username = driver.findElement(By.id("register_username"));
+        register_username.sendKeys(username);
+
+        final WebElement register_password = driver.findElement(By.id("register_password"));
+        register_password.sendKeys(password);
+
+        final WebElement register_submit = driver.findElement(By.id("register_submit"));
+        register_submit.click();
+
+        driver.get(BASE_URL);
+
+        final WebElement login_username = driver.findElement(By.id("login_username"));
+        login_username.sendKeys(username);
+
+        final WebElement login_password = driver.findElement(By.id("login_password"));
+        login_password.sendKeys(password);
+
+        final WebElement login_submit = driver.findElement(By.id("login_submit"));
+        login_submit.click();
+
+        final WebElement result = driver.findElement(By.id("result"));
+        Assert.assertEquals("access granted", result.getText());
+
+        finish();
+    }
+
 }
 
+
+
+
+
+
+
+  

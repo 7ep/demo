@@ -14,7 +14,7 @@ dependencies {
 
     // Selenfied, a Coveros application to aid with test needs using Selenium
     // This has a properties file in src/test/resource/selenified_tests.properties
-    testCompile (group: 'com.coveros', name: 'selenified', version: '3.2.0') {
+    testCompile (group: 'com.coveros', name: 'selenified', version: '3.2.1') {
         // it is necessary to exclude these two groups - slf4j and logback - because
         // demo already has an implementation of log4j selected.  These two that
         // come with Selenified are conflicting.  By excluding them everything
@@ -27,7 +27,28 @@ dependencies {
 task selenified(type: Test) {
     testClassesDirs = sourceSets.selenifiedtests.output.classesDirs
     classpath = sourceSets.selenifiedtests.runtimeClasspath
-    useTestNG() {}
+    def threads = System.getProperty("threads") ? System.getProperty("threads") : 5
+    systemProperties System.getProperties()
+
+    useTestNG() {
+        useDefaultListeners = true
+        if (System.getProperty("groups.include") != null) {
+            includeGroups System.getProperty("groups.include")
+        }
+        if (System.hasProperty("groups.exclude") != null) {
+            excludeGroups System.getProperty("groups.exclude")
+        }
+    }
+    testLogging {
+        showStandardStreams = true
+        exceptionFormat = 'full'
+    }
+    options {
+        listeners.add("com.coveros.selenified.utilities.Transformer")
+        parallel = 'methods'
+        threadCount = threads
+    }
+
 }
 
 selenified.finalizedBy 'printSelenifiedReportPath'
