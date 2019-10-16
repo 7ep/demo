@@ -1,4 +1,4 @@
-Feature: A user may add numbers
+Feature: Adding of numbers
 
     As a user who has trouble with doing math in their head,
     I want to add some numbers
