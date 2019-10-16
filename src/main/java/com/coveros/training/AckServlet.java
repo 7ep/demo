@@ -25,10 +25,16 @@ public class AckServlet extends HttpServlet {
         try {
             int ackParamM = putNumberInRequest("ack_param_m", request);
             int ackParamN = putNumberInRequest("ack_param_n", request);
+            String algorithm = request.getParameter("ack_algorithm_choice");
 
-            logger.info("received request to calculate Ackermann's with {} and {}", ackParamM, ackParamN);
+            logger.info("received request to defaultRecursiveCalculation Ackermann's with {} and {} and the {} algorithm", ackParamM, ackParamN, algorithm);
 
-            calculate(request, ackParamM, ackParamN);
+            if (algorithm.equals("tail_recursive")) {
+                tailRecursive(request, ackParamM, ackParamN);
+            } else {
+                regularRecursive(request, ackParamM, ackParamN);
+            }
+
         } catch (NumberFormatException ex) {
             request.setAttribute("result", "Error: only accepts integers");
         }
@@ -45,8 +51,17 @@ public class AckServlet extends HttpServlet {
     /**
      * Wrapping a request set for easier testing and clarity.
      */
-    void calculate(HttpServletRequest request, int itemA, int itemB) {
+    void regularRecursive(HttpServletRequest request, int itemA, int itemB) {
         final BigInteger result = Ackermann.calculate(itemA, itemB);
+        logger.info("Ackermann's result is {}", result);
+        request.setAttribute("result", result);
+    }
+
+    /**
+     * Wrapping a request set for easier testing and clarity.
+     */
+    void tailRecursive(HttpServletRequest request, int itemA, int itemB) {
+        final BigInteger result = AckermannIterative.calculate(itemA, itemB);
         logger.info("Ackermann's result is {}", result);
         request.setAttribute("result", result);
     }

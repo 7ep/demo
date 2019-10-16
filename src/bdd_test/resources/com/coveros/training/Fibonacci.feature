@@ -25,10 +25,10 @@ Feature: Calculation of Fibonacci numbers
         of a pine cone's bracts.
 
     Scenario Outline: Calculating some Fibonacci numbers
-        When I calculate the <nth Fibonacci number>
+        When I calculate the <nth> Fibonacci number
         Then the Fibonacci result is <result>
         Examples:
-        |   nth Fibonacci number   |    result       |
+        |   nth                    |    result       |
         |           0              |      0          |
         |           1              |      1          |
         |           2              |      1          |
