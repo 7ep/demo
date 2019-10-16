@@ -1,4 +1,4 @@
-Feature: To calculate Fibonacci numbers
+Feature: Calculation of Fibonacci numbers
 
     As an aspiring mathematically-oriented beekeeper
     I want to be able to calculate Fibonacci numbers
