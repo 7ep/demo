@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -31,24 +32,24 @@ public class AckermannParameterizedTests {
                 {    3,                2,                    29    },
                 {    3,                3,                    61    },
 
-                {    4,                0,                    13    }
-               // {    4,                1,                    65533 },   //This one takes 35 seconds!
+                {    4,                0,                    13    },
+               // {    4,                1,                    65533 },   //This one overflows!
         });
     }
 
     private long m;
     private long n;
-    private long expected;
+    private BigInteger expected;
 
     public AckermannParameterizedTests(long m, long n, long expected) {
         this.m = m;
         this.n = n;
-        this.expected = expected;
+        this.expected = BigInteger.valueOf(expected);
     }
 
     @Test
     public void testShouldProperlyCalculate() {
-        final long result = Ackermann.calculate((int)m, (int)n);
+        final BigInteger result = Ackermann.calculate((int)m, (int)n);
         Assert.assertEquals(String.format("for m of %d and n of %d we should have gotten %d", m, n, expected), expected, result);
     }
 

@@ -1,18 +1,23 @@
-Feature: Calculation of Ackermann's formula
+Feature: Calculation of Ackermann's function
 
-    As a mathematically-oriented control-system designer
-    I want to create controllers to alter poles using Ackermann's formula
-    So that the pole placement is efficient
+    As a cool computer kid
+    I want to calculate the result of Ackermann's function for various values
+    So that I can see an early example of a total computable function
 
     Narrative:
-        From Wikipedia (https://en.wikipedia.org/wiki/Ackermann%27s_formula):
-        Ackermann's formula is a control system design method for solving the pole allocation problem.
-        One of the primary problems in control system design is the creation of controllers that will alter
-        the dynamics of a system and alter the poles to a more suitable, and sometimes more stable, state.
-        Such a problem can be tackled by many different methods; one such solution is the addition of a
-        feedback loop in such a way that a gain is added to the input with which one can change the poles
-        of the original system. If the system is controllable, an efficient method for pole placement is
-        Ackermann's formula, which allows one to choose arbitrary poles within the system.
+        from Wikipedia (https://en.wikipedia.org/wiki/Ackermann_function)
+        In computability theory, the Ackermann function, named after Wilhelm Ackermann, is one of the simplest
+        and earliest-discovered examples of a total computable function that is not primitive recursive. All primitive
+        recursive functions are total and computable, but the Ackermann function illustrates that not all total
+        computable functions are primitive recursive.
+
+        After Ackermann's publication[2] of his function (which had three nonnegative integer arguments), many
+        authors modified it to suit various purposes, so that today "the Ackermann function" may refer to any
+        of numerous variants of the original function.
+
+        from Rosetta Code (https://rosettacode.org/wiki/Ackermann_function)
+        The Ackermann function is a classic example of a recursive function, notable especially because it
+        is not a primitive recursive function. It grows very quickly in value, as does the size of its call tree.
 
     Scenario Outline: I should be able to calculate a few results per Ackermann's formula
         When I calculate Ackermann's formula using <m> and <n>

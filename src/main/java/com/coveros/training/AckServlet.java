@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigInteger;
 
 @WebServlet(name = "AckServlet", urlPatterns = {"/ackermann"}, loadOnStartup = 1)
 public class AckServlet extends HttpServlet {
@@ -45,7 +46,7 @@ public class AckServlet extends HttpServlet {
      * Wrapping a request set for easier testing and clarity.
      */
     void calculate(HttpServletRequest request, int itemA, int itemB) {
-        final long result = Ackermann.calculate(itemA, itemB);
+        final BigInteger result = Ackermann.calculate(itemA, itemB);
         logger.info("Ackermann's result is {}", result);
         request.setAttribute("result", result);
     }
