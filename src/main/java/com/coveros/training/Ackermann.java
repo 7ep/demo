@@ -1,31 +1,29 @@
 package com.coveros.training;
 
-import java.util.Stack;
+import java.math.BigInteger;
+
 
 public class Ackermann {
 
     /**
-     * Ackerman function.  See https://en.wikipedia.org/wiki/Ackermann%27s_formula
+     * Ackerman function.
      *
-     * This less recursive version found at https://stackoverflow.com/a/45412879/713809
+     * This version found at https://rosettacode.org/wiki/Ackermann_function#Java
      */
-    public static int calculate(int m, int n){
-        Stack<Integer> s = new Stack<>();
-        s.add(m);
-        while(!s.isEmpty()){
-            m=s.pop();
-            if(m==0) { n+=m+1; }
-            else if(n==0)
-            {
-                n += 1;
-                s.add(--m);
-            }
-            else{
-                s.add(--m);
-                s.add(++m);
-                n--;
-            }
-        }
-        return n;
+    public static BigInteger ack(BigInteger m, BigInteger n) {
+        return m.equals(BigInteger.ZERO)
+                ? n.add(BigInteger.ONE)
+                : ack(m.subtract(BigInteger.ONE),
+                n.equals(BigInteger.ZERO) ? BigInteger.ONE : ack(m, n.subtract(BigInteger.ONE)));
+    }
+
+    /**
+     * A helper method to make it easy to call this with only integers
+     * Calls to {@link #ack}
+     */
+    public static BigInteger calculate(int m, int n) {
+        BigInteger bigM = BigInteger.valueOf(m);
+        BigInteger bigN = BigInteger.valueOf(n);
+        return ack(bigM, bigN);
     }
 }
