@@ -23,7 +23,7 @@ public class FibonacciIterative {
         BigInteger tmp2;
 
         while (i.compareTo(BigInteger.ZERO) > 0) {
-            if (!i.mod(BigInteger.TWO).equals(BigInteger.ZERO)) {
+            if (!i.mod(BigInteger.valueOf(2)).equals(BigInteger.ZERO)) {
                 tmp1 = d.multiply(b).add(c.multiply(a));
                 tmp2 = d.multiply (b.add(a)).add(c.multiply(b));
                 a = tmp1;
@@ -36,7 +36,7 @@ public class FibonacciIterative {
             c = tmp1;
             d = tmp2;
 
-            i = i.divide(BigInteger.TWO);
+            i = i.divide(BigInteger.valueOf(2));
         }
         return a.add(b);
     }
