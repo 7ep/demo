@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigInteger;
 
 @WebServlet(name = "FibServlet", urlPatterns = {"/fibonacci"}, loadOnStartup = 1)
 public class FibServlet extends HttpServlet {
@@ -41,13 +42,13 @@ public class FibServlet extends HttpServlet {
     }
 
     private void tailRecursiveAlgo2Calc(HttpServletRequest request, int fibParamN) {
-        final long result = FibonacciIterative.fib(fibParamN);
+        final BigInteger result = FibonacciIterative.fib_algo2(fibParamN);
         logger.info("Fibonacci value is {}", result);
         request.setAttribute("result", result);
     }
 
     private void tailRecursiveAlgo1Calc(HttpServletRequest request, int fibParamN) {
-        final long result = FibonacciIterative.itFibN(fibParamN);
+        final BigInteger result = FibonacciIterative.fib_algo1(fibParamN);
         logger.info("Fibonacci value is {}", result);
         request.setAttribute("result", result);
     }
