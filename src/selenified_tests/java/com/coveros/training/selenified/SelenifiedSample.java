@@ -15,12 +15,13 @@ import org.testng.annotations.Test;
 public class SelenifiedSample extends Selenified {
 
     static final String BASE_URL =  "http://localhost:8080/demo/";
+    static final String LIBRARY_URL = BASE_URL + "library";
     static final String RESET_DATABASE_URL = BASE_URL + "flyway";
 
     @BeforeClass(alwaysRun = true)
     public void beforeClass(ITestContext test) {
         // set the base URL for the tests here
-        setAppURL(this, test, BASE_URL);
+        setAppURL(this, test, LIBRARY_URL);
     }
 
     @Test(groups = {"sample"}, description = "Check that the title on the page is as expected")
@@ -42,7 +43,7 @@ public class SelenifiedSample extends Selenified {
         App app = this.apps.get();
 
         app.goToURL(RESET_DATABASE_URL);
-        app.goToURL(BASE_URL);
+        app.goToURL(LIBRARY_URL);
 
         // find the register user field and enter a username to register
         Element register_username = app.newElement(Locator.ID, "register_username");
