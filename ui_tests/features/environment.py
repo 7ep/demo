@@ -41,12 +41,12 @@ def __open_browser(context):
             # browser.  It's eye-opening. 
             #
             # for instance:
-	    #   [1568045962.076][INFO]: [e18882b1f2abbda89f232f777f98f686] COMMAND TypeElement {
-	    #      "id": "0.47079920350295135-1",
-	    #      "sessionId": "e18882b1f2abbda89f232f777f98f686",
-	    #      "text": "Byron",
-	    #      "value": [ "B", "y", "r", "o", "n" ]
-	    #   }
+	        #   [1568045962.076][INFO]: [e18882b1f2abbda89f232f777f98f686] COMMAND TypeElement {
+	        #      "id": "0.47079920350295135-1",
+	        #      "sessionId": "e18882b1f2abbda89f232f777f98f686",
+	        #      "text": "Byron",
+	        #      "value": [ "B", "y", "r", "o", "n" ]
+	        #   }
             #context.driver = webdriver.Chrome(service_args=["--verbose","--logepath=C:\\temp\\qc1.log"])
             context.driver = webdriver.Chrome()
         return context.driver

@@ -27,6 +27,7 @@ public class LibraryRegisterBorrowerServlet extends HttpServlet {
         final LibraryActionResults libraryActionResults = libraryUtils.registerBorrower(borrower);
 
         request.setAttribute("result", libraryActionResults);
+        request.setAttribute("return_page", "library.html");
         ServletUtils.forwardToResult(request, response, logger);
     }
 

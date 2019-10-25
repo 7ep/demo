@@ -40,6 +40,7 @@ public class LoginServlet extends HttpServlet {
         final Boolean userRegistered = loginUtils.isUserRegistered(username, password);
         String responseText = userRegistered ? "access granted" : "access denied";
         request.setAttribute("result", responseText);
+        request.setAttribute("return_page", "library.html");
         ServletUtils.forwardToResult(request, response, logger);
     }
 

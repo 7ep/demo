@@ -50,6 +50,7 @@ public class RegisterServlet extends HttpServlet {
         final String prettyString = registrationResult.toPrettyString();
 
         request.setAttribute("result", prettyString);
+        request.setAttribute("return_page", "library.html");
         forwardToResult(request, response, logger);
     }
 

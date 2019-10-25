@@ -35,6 +35,7 @@ public class LibraryLendServlet extends HttpServlet {
         final LibraryActionResults libraryActionResults = libraryUtils.lendBook(book, borrower, now);
 
         request.setAttribute("result", libraryActionResults.toString());
+        request.setAttribute("return_page", "library.html");
         ServletUtils.forwardToResult(request, response, logger);
     }
 

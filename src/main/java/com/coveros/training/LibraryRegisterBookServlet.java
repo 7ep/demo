@@ -27,6 +27,7 @@ public class LibraryRegisterBookServlet extends HttpServlet {
         final LibraryActionResults libraryActionResults = libraryUtils.registerBook(book);
 
         request.setAttribute("result", libraryActionResults.toString());
+        request.setAttribute("return_page", "library.html");
         ServletUtils.forwardToResult(request, response, logger);
     }
 

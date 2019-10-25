@@ -36,6 +36,7 @@ public class DbServlet extends HttpServlet {
                 pl.cleanAndMigrateDatabase();
                 request.setAttribute(RESULT, "cleaned and migrated");
         }
+        request.setAttribute("return_page", "library.html");
 
         ServletUtils.forwardToResult(request, response, logger);
     }

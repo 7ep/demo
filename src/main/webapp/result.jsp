@@ -8,6 +8,6 @@
         <p><pre id="result">${result}</pre></p>
     </body>
     <p>
-    <a href="/demo/library">Return</a>
+    <a href="${return_page}">Return</a>
     </p>
 </html>
