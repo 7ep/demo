@@ -11,6 +11,12 @@
       <notes><![CDATA[
       file name: jetty-plus.jar
       ]]></notes>
+      <cve>CVE-2019-0232</cve>
+   </suppress>
+   <suppress>
+      <notes><![CDATA[
+      file name: jetty-plus.jar
+      ]]></notes>
       <filePath regex="true">.*jetty-plus.*\.jar</filePath>
       <cve>CVE-2017-7658</cve>
    </suppress>
