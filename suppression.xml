@@ -7,4 +7,109 @@
       <filePath regex="true">.*jetty-plus.*\.jar</filePath>
       <cve>CVE-2017-7657</cve>
    </suppress>
+   <suppress>
+      <notes><![CDATA[
+      file name: jetty-plus.jar
+      ]]></notes>
+      <filePath regex="true">.*jetty-plus.*\.jar</filePath>
+      <cve>CVE-2017-7658</cve>
+   </suppress>
+   <suppress>
+      <notes><![CDATA[
+      file name: jetty-server.jar
+      ]]></notes>
+      <filePath regex="true">.*jetty-server.*\.jar</filePath>
+      <cve>CVE-2017-7657</cve>
+   </suppress>
+   <suppress>
+      <notes><![CDATA[
+      file name: jetty-server.jar
+      ]]></notes>
+      <filePath regex="true">.*jetty-server.*\.jar</filePath>
+      <cve>CVE-2017-7658</cve>
+   </suppress>
+   <suppress>
+      <notes><![CDATA[
+      file name: jetty-http.jar
+      ]]></notes>
+      <filePath regex="true">.*jetty-http.*\.jar</filePath>
+      <cve>CVE-2017-7657</cve>
+   </suppress>
+   <suppress>
+      <notes><![CDATA[
+      file name: jetty-http.jar
+      ]]></notes>
+      <filePath regex="true">.*jetty-http.*\.jar</filePath>
+      <cve>CVE-2017-7658</cve>
+   </suppress>
+   <suppress>
+      <notes><![CDATA[
+      file name: logback-classic.jar
+      ]]></notes>
+      <filePath regex="true">.*logback-classic.*\.jar</filePath>
+      <cve>CVE-2017-5929</cve>
+   </suppress>
+   <suppress>
+      <notes><![CDATA[
+      file name: logback-core.jar
+      ]]></notes>
+      <filePath regex="true">.*logback-core.*\.jar</filePath>
+      <cve>CVE-2017-5929</cve>
+   </suppress>            
+   <suppress>
+      <notes><![CDATA[
+      file name: jetty-plus.jar
+      ]]></notes>
+      <filePath regex="true">.*jetty-plus-.*\.jar</filePath>
+      <cve>CVE-2017-7658</cve>
+   </suppress>            
+   <suppress>
+      <notes><![CDATA[
+      file name: jetty-server.jar
+      ]]></notes>
+      <filePath regex="true">.*jetty-server-.*\.jar</filePath>
+      <cve>CVE-2017-7657</cve>
+   </suppress>            
+   <suppress>
+      <notes><![CDATA[
+      file name: jetty-server.jar
+      ]]></notes>
+      <filePath regex="true">.*jetty-server-.*\.jar</filePath>
+      <cve>CVE-2017-7658</cve>
+   </suppress>            
+   <suppress>
+      <notes><![CDATA[
+      file name: jetty-http.jar
+      ]]></notes>
+      <filePath regex="true">.*jetty-http-.*\.jar</filePath>
+      <cve>CVE-2017-7657</cve>
+   </suppress>            
+   <suppress>
+      <notes><![CDATA[
+      file name: jetty-http.jar
+      ]]></notes>
+      <filePath regex="true">.*jetty-http-.*\.jar</filePath>
+      <cve>CVE-2017-7658</cve>
+   </suppress>            
+   <suppress>
+      <notes><![CDATA[
+      file name: apache-jsp.jar
+      ]]></notes>
+      <filePath regex="true">.*apache-jsp-.*\.jar</filePath>
+      <cve>CVE-2016-8735</cve>
+   </suppress>            
+   <suppress>
+      <notes><![CDATA[
+      file name: apache-jsp.jar
+      ]]></notes>
+      <filePath regex="true">.*apache-jsp-.*\.jar</filePath>
+      <cve>CVE-2017-5648</cve>
+   </suppress>            
+   <suppress>
+      <notes><![CDATA[
+      file name: apache-jsp.jar
+      ]]></notes>
+      <filePath regex="true">.*apache-jsp-.*\.jar</filePath>
+      <cve>CVE-2018-8014</cve>
+   </suppress>            
 </suppressions>
