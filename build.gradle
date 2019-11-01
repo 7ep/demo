@@ -89,7 +89,7 @@ dependencies {
     // The commons-lang3 package has some utility classes that are very helpful
     // for those interested in safer coding.  Particularly, the equalsbuilder and hashcodebuilder.
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
 
     // a logging framework, so it becomes easily possible to see what is happening
     // in our code in realtime.
