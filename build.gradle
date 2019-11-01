@@ -207,6 +207,7 @@ sonarqube {
 	property "sonar.projectName", "Demo Application"
 	property "sonar.dependencyCheck.reportPath", "$project.buildDir/reports/dependency-check-report.xml"
         property "sonar.scm.provider", "git"
+        property "sonar.scm.forceReloadAll", "true"
     }
 }
 
