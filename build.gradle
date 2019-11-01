@@ -208,6 +208,7 @@ sonarqube {
 	property "sonar.dependencyCheck.reportPath", "$project.buildDir/reports/dependency-check-report.xml"
         property "sonar.scm.provider", "git"
         property "sonar.scm.forceReloadAll", "true"
+        property "sonar.exclusions", "src/main/java/com/coveros/training/autoinsurance/AutoInsuranceScriptServer.java"
     }
 }
 
