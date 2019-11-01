@@ -202,7 +202,7 @@ sonarqube {
         property "sonar.java.binaries", "build/classes/java/main"
         property "sonar.junit.reportPaths", "build/test-results/test/,build/test-results/fastIntegrationTest"
         property "sonar.jacoco.reportPaths", "build/jacoco/test.exec,build/jacoco/fastIntegrationTest.exec"
-	property "sonar.host.url", "https://localhost/sonar"
+	property "sonar.host.url", "https://localhost:9000/sonar"
 	property "sonar.projectKey", "demo"
 	property "sonar.projectName", "Demo Application"
 	property "sonar.dependencyCheck.reportPath", "$project.buildDir/reports/dependency-check-report.xml"
