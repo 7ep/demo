@@ -13,7 +13,7 @@ plugins {
     id 'war'
 
     // provides access to a database versioning tool.
-    id "org.flywaydb.flyway" version "5.2.4"
+    id "org.flywaydb.flyway" version "6.0.8"
 
     // gretty is a gradle plugin to make it easy to run a server and hotswap code at runtime.
     id 'org.gretty' version '2.3.1'
@@ -39,7 +39,7 @@ plugins {
     // Dependency Check analyzes the dependencies for 
     // potential security issues.
     // see https://plugins.gradle.org/plugin/org.owasp.dependencycheck
-    id "org.owasp.dependencycheck" version "5.2.1"
+    id "org.owasp.dependencycheck" version "5.2.2"
 }
 
 // apply our fancy cucumber reporting program, see https://plugins.gradle.org/plugin/com.github.spacialcircumstances.gradle-cucumber-reporting
@@ -93,23 +93,23 @@ dependencies {
 
     // a logging framework, so it becomes easily possible to see what is happening
     // in our code in realtime.
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.12.1'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.1'
 
     // The following gives us the ability to use slf4j api calls.
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
-    compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.11.1'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.12.1'
 
 
     // we'll use this as our database
     // https://mvnrepository.com/artifact/com.h2database/h2
-    localDeps group: 'com.h2database', name: 'h2', version: '1.4.197'
+    localDeps group: 'com.h2database', name: 'h2', version: '1.4.200'
 
     // so we can put a copy of h2 in a convenient place
     compile configurations.localDeps
 
     // so we can programmatically run flyway at startup
-    compile "org.flywaydb:flyway-core:5.2.4"
+    compile "org.flywaydb:flyway-core:6.0.8"
 }
 
 task copyToLib(type: Copy) {
