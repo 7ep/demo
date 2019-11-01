@@ -5,6 +5,6 @@
       file name: jetty-plus.jar
       ]]></notes>
       <filePath regex="true">.*jetty-plus.*\.jar</filePath>
-      <cve>cCVE-2017-7657</cve>
+      <cve>CVE-2017-7657</cve>
    </suppress>
 </suppressions>
