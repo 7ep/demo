@@ -4,7 +4,7 @@
       <notes><![CDATA[
       file name: jetty-plus.jar
       ]]></notes>
-      <filePath regex="true">.*jetty-plus.*jar</filePath>
-      <cpe>cpe:/a:org:eclipse:jetty:jetty-plus</cpe>
+      <filePath regex="true">.*jetty-plus.*\.jar</filePath>
+      <cve>cCVE-2017-7657</cve>
    </suppress>
 </suppressions>
