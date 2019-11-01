@@ -142,7 +142,7 @@ task('printReportPathsPitest') {
 // configure jetty to run on port 8080 when we run "./gradlew appRun"
 gretty {
     httpPort = 8080
-    servletContainer = 'tomcat8'
+    servletContainer = 'tomcat9'
     contextPath = "demo"
     jvmArgs = ['-Dcom.sun.management.jmxremote', '-Dcom.sun.management.jmxremote.port=9999', '-Dcom.sun.management.jmxremote.ssl=false', '-Dcom.sun.management.jmxremote.authenticate=false']
 }
