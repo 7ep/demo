@@ -4,7 +4,7 @@
       <notes><![CDATA[
       file name: jetty-plus.jar
       ]]></notes>
-      <filePath regex="true">.*\jetty-plus-7\.6\.21\.v20160908\.jar</filePath>
+      <filePath regex="true">.*jetty-plus-7\.6\.21\.v20160908\.jar</filePath>
       <cpe>cpe:/a:org:eclipse:jetty:jetty-plus:7.6.21.v20160908</cpe>
    </suppress>
 </suppressions>
