@@ -206,7 +206,7 @@ sonarqube {
 	property "sonar.projectKey", "demo"
 	property "sonar.projectName", "Demo Application"
 	property "sonar.dependencyCheck.reportPath", "$project.buildDir/reports/dependency-check-report.xml"
-        property "sonar.scm.provider", "https://github.com/Coveros/demo.git"
+        property "sonar.scm.provider", "git"
     }
 }
 
