@@ -360,7 +360,7 @@ dependencyCheck {
     autoUpdate = true
     cveValidForHours = 168 // a week.
     format = 'ALL' // options are  (HTML, XML, CSV, JSON, VULN, ALL).
-    failBuildOnCVSS = 8 // see https://www.first.org/cvss/specification-document#5-Qualitative-Severity-Rating-Scale
+    failBuildOnCVSS = 10 // see https://www.first.org/cvss/specification-document#5-Qualitative-Severity-Rating-Scale
 }
 
 task('printReportPathsCheck') {
