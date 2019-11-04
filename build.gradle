@@ -111,8 +111,6 @@ dependencies {
     // so we can programmatically run flyway at startup
     compile "org.flywaydb:flyway-core:6.0.8"
 
-    compile 'org.apache.struts:struts2-apps:2.5.20'
-
 }
 
 task copyToLib(type: Copy) {
