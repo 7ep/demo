@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 public class SelenifiedSample extends Selenified {
 
     static final String BASE_URL =  "http://localhost:8080/demo/";
-    static final String LIBRARY_URL = BASE_URL + "library";
+    static final String LIBRARY_URL = BASE_URL + "library.html";
     static final String RESET_DATABASE_URL = BASE_URL + "flyway";
 
     @BeforeClass(alwaysRun = true)
@@ -29,7 +29,7 @@ public class SelenifiedSample extends Selenified {
         // use this object to manipulate the app
         App app = this.apps.get();
         // verify the correct page title
-        app.azzert().titleEquals("Web Demo");
+        app.azzert().titleEquals("Library");
         // verify no issues
         finish();
     }
@@ -72,9 +72,12 @@ public class SelenifiedSample extends Selenified {
     public void sampleTest3() {
         // arrange
         App app = this.apps.get();
+
         final WebDriver driver = app.getDriver();
         String username = "someuser";
         String password = "passworsdosjfasldf";
+
+        app.goToURL(LIBRARY_URL);
 
         final WebElement login_username = driver.findElement(By.id("login_username"));
         login_username.sendKeys(username);
@@ -103,6 +106,8 @@ public class SelenifiedSample extends Selenified {
         String username = "someuser";
         String password = "passworsdosjfasldf";
 
+        app.goToURL(LIBRARY_URL);
+
         final WebElement register_username = driver.findElement(By.id("register_username"));
         register_username.sendKeys(username);
 
@@ -112,7 +117,7 @@ public class SelenifiedSample extends Selenified {
         final WebElement register_submit = driver.findElement(By.id("register_submit"));
         register_submit.click();
 
-        driver.get(BASE_URL);
+        driver.get(LIBRARY_URL);
 
         final WebElement login_username = driver.findElement(By.id("login_username"));
         login_username.sendKeys(username);
