@@ -3,6 +3,10 @@
     <title>Library</title>
     <style>
 
+  * {
+    font-family: sans-serif;
+  }
+
   form {
     margin: 0;
     padding: 0;
@@ -15,11 +19,11 @@
     margin: 2px;
     padding: 5px;
     float: left;
-    background: lightblue;
+    background: #c9d0ce;
    }
 
   label {
-     font-size: 1.1em;
+     font-size: 0.8em;
   }
 
   p {
@@ -28,7 +32,7 @@
   }
 
   h2 {
-    font-size: 1.3em;
+    font-size: 1.0em;
     margin: 0;
     padding: 0;
   }
@@ -37,12 +41,13 @@
    input[type="number"],
    input[type="password"] {
     background: white;
-    width: 80%
+    width: 100%;
    }
 
    input[type=submit] {
      font-size: 1.0em;
      margin-top: 2px;
+     width: 100%;
    }
 
     </style>
@@ -127,7 +132,7 @@
     <label for="lend_borrower">Borrower:</label>
     <p><input type="text" id="lend_borrower" name="borrower" placeholder="borrower"/></p>
 
-    <p><input type="submit" id="lend_book_submit" value="lend book"/></p>
+    <p><input type="submit" id="lend_book_submit" value="lend"/></p>
 </form>
 
 
@@ -138,7 +143,7 @@
     <label for="register_book">Book:</label>
     <p><input type="text" id="register_book" name="book" placeholder="book"/></p>
 
-    <p><input type="submit" id="register_book_submit" value="register book"/></p>
+    <p><input type="submit" id="register_book_submit" value="register"/></p>
 </form>
 
 
@@ -149,21 +154,21 @@
     <label for="book">Borrower:</label>
     <p><input type="text" id="register_borrower" name="borrower" placeholder="borrower"/></p>
 
-    <p><input type="submit" id="register_borrower_submit" value="register borrower"/></p>
+    <p><input type="submit" id="register_borrower_submit" value="register"/></p>
 </form>
 
 <div class="buttons">
   <h2>Database versioning</h2>
   <form action="flyway" class="button-form">
       <input type="hidden" name="action" value="clean"/>
-      <input type="submit" value="Clean the database"/>
+      <input type="submit" value="Clean"/>
   </form>
   <form action="flyway" class="button-form">
       <input type="hidden" name="action" value="migrate"/>
-      <input type="submit" value="Migrate the database"/>
+      <input type="submit" value="Migrate"/>
   </form>
   <form action="flyway" class="button-form">
-      <input type="submit" value="Clean and Migrate"/>
+      <input type="submit" value="Clean / Migrate"/>
   </form>
     <p><a href="console">Database console</a></p>
 </div>
