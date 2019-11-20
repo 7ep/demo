@@ -123,53 +123,59 @@ class Result:
     def get_result_text(self):
         return self.driver.find_element_by_id("result").text
 
+class LibraryPageObjectModel:
 
+    def __init__(self, driver):
+        self.driver = driver
 
-def register_user(driver, username, password):
-    driver.get(HOMEPAGE)
+    def register_user(self, username, password):
+        self.driver.get(HOMEPAGE)
 
-    reg = Registration(driver)
-    reg.enter_username(username)
-    reg.enter_password(password)
-    reg.enter()
+        reg = Registration(driver)
+        reg.enter_username(username)
+        reg.enter_password(password)
+        reg.enter()
 
-def login_user(driver, username, password):
-    driver.get(HOMEPAGE)
+    def login_user(self, username, password):
+        self.driver.get(HOMEPAGE)
 
-    login = Login(driver)
-    login.enter_username(username)
-    login.enter_password(password)
-    login.enter()
+        login = Login(self.driver)
+        login.enter_username(username)
+        login.enter_password(password)
+        login.enter()
 
-def add_numbers(driver, a, b):
-    driver.get(HOMEPAGE)
+    def add_numbers(self, a, b):
+        self.driver.get(HOMEPAGE)
 
-    sums = Summation(driver)
-    sums.enter_addend_a(a)
-    sums.enter_addend_b(b)
-    sums.enter()
+        sums = Summation(self.driver)
+        sums.enter_addend_a(a)
+        sums.enter_addend_b(b)
+        sums.enter()
 
-def register_borrower(driver, name):
-    driver.get(HOMEPAGE)
+    def register_borrower(self, name):
+        self.driver.get(HOMEPAGE)
 
-    bor = BorrowerRegister(driver)
-    bor.register_borrower(name)
-    bor.enter()
+        bor = BorrowerRegister(self.driver)
+        bor.register_borrower(name)
+        bor.enter()
 
-def register_book(driver, title):
-    driver.get(HOMEPAGE)
+    def register_book(self, title):
+        self.driver.get(HOMEPAGE)
 
-    br = BookRegister(driver)
-    br.register_book(title)
-    br.enter()
+        br = BookRegister(self.driver)
+        br.register_book(title)
+        br.enter()
 
-def lend_book(driver, title, borrower):
-    driver.get(HOMEPAGE)
+    def lend_book(self, title, borrower):
+        self.driver.get(HOMEPAGE)
 
-    bl = BookLend(driver)
-    bl.enter_book(title)
-    bl.enter_borrower(borrower)
-    bl.enter()
+        bl = BookLend(self.driver)
+        bl.enter_book(title)
+        bl.enter_borrower(borrower)
+        bl.enter()
+
+    def result(self):
+        return Result(self.driver)
 
 
 
@@ -211,10 +217,11 @@ def full_lend_book():
     driver.get(RESET_DATABASE)
     book = "alice in wonderland"
     borrower = "bob"
-    register_book(driver, book)
-    register_borrower(driver, borrower)
-    lend_book(driver, book, borrower)
-    result = Result(driver)
+    library = LibraryPageObjectModel(driver)
+    library.register_book(book)
+    library.register_borrower(borrower)
+    library.lend_book(book, borrower)
+    result = library.result()
     assert_that(result.get_result_text(), equal_to("SUCCESS"))
     driver.close()
 
