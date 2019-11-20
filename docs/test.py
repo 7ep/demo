@@ -6,7 +6,7 @@ import time
 
 SERVER = "localhost"
 URL = "http://%s:8080" % SERVER
-HOMEPAGE = "%s/demo" % URL
+HOMEPAGE = "%s/demo/library.html" % URL
 RESET_DATABASE = "%s/demo/flyway" % URL
 
 # used as a simple object during console runs,

@@ -43,7 +43,7 @@ have installed Chromedriver in your path before running these commands.
 
 Let's tell Selenium to go to our application:
 
-	driver.get("localhost:8080/demo")
+	driver.get("localhost:8080/demo/library.html")
 	
 You should see that page show up in the browser, if you did that right.
 
