@@ -116,11 +116,6 @@ dependencies {
     compile "org.flywaydb:flyway-core:5.2.4"
 }
 
-task copyToLib(type: Copy) {
-    from configurations.localDeps
-    into "$buildDir/lib"
-}
-
 pitest {
     targetClasses = ['com.coveros.training.*']  //by default "${project.group}.*"
     threads = 4
@@ -167,10 +162,18 @@ flyway {
     schemas = ['ADMINISTRATIVE', 'LIBRARY', 'AUTH']
 }
 
+/**
+ * Put the h2 dependency in a convenient place so we can run it from
+ * the command line.
+ */
+task copyH2JarToLib(type: Copy) {
+    from configurations.localDeps
+    into "$buildDir/lib"
+}
 
 // starts the h2 console
 task startH2Console(type: Exec) {
-    dependsOn 'copyToLib'
+    dependsOn 'copyH2JarToLib'
     commandLine 'javaw', '-cp', 'build/lib/h2-1.4.197.jar', 'org.h2.tools.Console'
 }
 
@@ -235,6 +238,39 @@ static boolean ScanPathForChromeDriver() {
 
     return pathDirectories.any({ dir -> SearchDirectoryForChromedriver(new File(dir)) })
 }
+
+/**
+ * Put the current Git commit sha in a file accessible while running.
+ */
+task('writeGitCommitToFile') {
+    File file = new File("src/main/webapp/commit.html")
+    file.write(getCurrentGitTag() )
+}
+
+/**
+ * This gnarly little method gets the current commit.  It's really a simple-minded
+ * approach, which makes it easy to read but maybe likely to fail?  time will tell.
+ */
+static String getCurrentGitTag() {
+    String headFileLocation = ".git/HEAD";
+    String commitLocation;
+    new BufferedReader(new FileReader(headFileLocation)).with { br ->
+        // get the directory to the current HEAD
+        String currentHead = br.readLine();
+        int locationOfSpace = currentHead.indexOf(" ");
+        // extract out the portion that is the directory only
+        // the whole contents go something like: "ref: refs/heads/master"
+        commitLocation = currentHead.substring(locationOfSpace + 1);
+        // read the file at that location (e.g. .git/refs/heads/master )
+    }
+    String currentCommit;
+    new BufferedReader(new FileReader(".git/" + commitLocation)).with { br ->
+        currentCommit = br.readLine();
+    }
+    return currentCommit;
+}
+
+compileJava.finalizedBy writeGitCommitToFile
 
 // returns true if the application is running.
 static void checkIfAlive() {
