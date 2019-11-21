@@ -251,32 +251,48 @@ task('writeGitCommitToFile') {
  * This gnarly little method gets the current commit.  It's really a simple-minded
  * approach, which makes it easy to read but maybe likely to fail?  time will tell.
  */
+/**
+ * This gnarly little method gets the current commit.  It's really a simple-minded
+ * approach, which makes it easy to read but maybe likely to fail?  time will tell.
+ */
 static String getCurrentGitHash() {
     String headFileLocation = ".git/HEAD";
     String commitLocation;
     int locationOfSpace;
     String currentHead;
-    new BufferedReader(new FileReader(headFileLocation)).with { br ->
+    FileReader fr_forGitHead;
+    FileReader fr_forGitHash;
+    try {
+        fr_forGitHead = new FileReader(headFileLocation)
+    } catch (Exception ex) {
+        return "NO_GIT_HEAD_FOUND";
+    }
+    new BufferedReader(fr_forGitHead).with { br ->
         // get the directory to the current HEAD
-        currentHead = br.readLine();
+        try {
+            currentHead = br.readLine();
+        } catch (Exception ex) {
+            return "COULD_NOT_READ_HEAD_FILE";
+        }
         locationOfSpace = currentHead.indexOf(" ");
         // extract out the portion that is the directory only
         // the whole contents go something like: "ref: refs/heads/master"
         commitLocation = currentHead.substring(locationOfSpace + 1);
         // read the file at that location (e.g. .git/refs/heads/master )
     }
-    // however, in the Jenkins work directory, when it checks it out
-    // the contents of the HEAD file are simply the hash, so
-    // if the index is less than 1 or more than 4, we'll
-    // presume to be looking at the hash.
-    if (locationOfSpace < 1 || locationOfSpace > 4) {
-        return currentHead;
+    try {
+        fr_forGitHash = new FileReader(".git/" + commitLocation)
+    } catch (Exception ex) {
+        return "NO_GIT_HASH_FILE_FOUND";
     }
-    String currentCommit;
-    new BufferedReader(new FileReader(".git/" + commitLocation)).with { br ->
-        currentCommit = br.readLine();
+    new BufferedReader(fr_forGitHash).with { br ->
+        try {
+            return br.readLine();
+        } catch (Exception ex) {
+            return "COULD_NOT_READ_COMMIT_HASH";
+        }
     }
-    return currentCommit;
+    return "UNABLE_TO_OBTAIN_COMMIT_HASH";
 }
 
 compileJava.finalizedBy writeGitCommitToFile
