@@ -19,8 +19,8 @@ dependencies {
     bddTestRuntime configurations.fastIntegrationTestRuntime
 
     // the cucumber stuff we'll need.  Cucumber is a BDD tool.
-    testCompile 'io.cucumber:cucumber-java:4.2.0'
-    testCompile 'io.cucumber:cucumber-junit:4.2.0'
+    testCompile 'io.cucumber:cucumber-java:4.8.0'
+    testCompile 'io.cucumber:cucumber-junit:4.8.0'
 }
 
 configurations {
