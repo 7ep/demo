@@ -244,14 +244,14 @@ static boolean ScanPathForChromeDriver() {
  */
 task('writeGitCommitToFile') {
     File file = new File("src/main/webapp/commit.html")
-    file.write(getCurrentGitTag() )
+    file.write(getCurrentGitHash() )
 }
 
 /**
  * This gnarly little method gets the current commit.  It's really a simple-minded
  * approach, which makes it easy to read but maybe likely to fail?  time will tell.
  */
-static String getCurrentGitTag() {
+static String getCurrentGitHash() {
     String headFileLocation = ".git/HEAD";
     String commitLocation;
     new BufferedReader(new FileReader(headFileLocation)).with { br ->
@@ -260,6 +260,13 @@ static String getCurrentGitTag() {
         int locationOfSpace = currentHead.indexOf(" ");
         // extract out the portion that is the directory only
         // the whole contents go something like: "ref: refs/heads/master"
+        // however, in the Jenkins work directory, when it check it out
+        // the contents of the HEAD file are simply the hash, so
+        // if the index is less than 1 or more than 4, we'll
+        // presume to be looking at the hash.
+        if (locationOfSpace < 1 || locationOfSpace > 4) {
+            return currentHead;
+        }
         commitLocation = currentHead.substring(locationOfSpace + 1);
         // read the file at that location (e.g. .git/refs/heads/master )
     }
