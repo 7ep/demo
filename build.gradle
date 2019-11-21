@@ -254,21 +254,23 @@ task('writeGitCommitToFile') {
 static String getCurrentGitHash() {
     String headFileLocation = ".git/HEAD";
     String commitLocation;
+    int locationOfSpace;
+    String currentHead;
     new BufferedReader(new FileReader(headFileLocation)).with { br ->
         // get the directory to the current HEAD
-        String currentHead = br.readLine();
-        int locationOfSpace = currentHead.indexOf(" ");
+        currentHead = br.readLine();
+        locationOfSpace = currentHead.indexOf(" ");
         // extract out the portion that is the directory only
         // the whole contents go something like: "ref: refs/heads/master"
-        // however, in the Jenkins work directory, when it check it out
-        // the contents of the HEAD file are simply the hash, so
-        // if the index is less than 1 or more than 4, we'll
-        // presume to be looking at the hash.
-        if (locationOfSpace < 1 || locationOfSpace > 4) {
-            return currentHead;
-        }
         commitLocation = currentHead.substring(locationOfSpace + 1);
         // read the file at that location (e.g. .git/refs/heads/master )
+    }
+    // however, in the Jenkins work directory, when it checks it out
+    // the contents of the HEAD file are simply the hash, so
+    // if the index is less than 1 or more than 4, we'll
+    // presume to be looking at the hash.
+    if (locationOfSpace < 1 || locationOfSpace > 4) {
+        return currentHead;
     }
     String currentCommit;
     new BufferedReader(new FileReader(".git/" + commitLocation)).with { br ->
