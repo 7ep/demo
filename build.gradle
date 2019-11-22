@@ -123,6 +123,7 @@ dependencies {
 tomcat {
     httpProtocol = 'org.apache.coyote.http11.Http11Nio2Protocol'
     ajpProtocol  = 'org.apache.coyote.ajp.AjpNio2Protocol'
+
 }
 
 pitest {
@@ -181,22 +182,15 @@ task startH2Console(type: Exec) {
 generateCucumberReports.dependsOn(cucumber)
 
 jacocoTestReport {
-    executionData("$buildDir/jacoco/combineCoverage.exec")
+    executionData("$buildDir/jacoco/test.exec", "$buildDir/jacoco/fastIntegrationTest.exec", "$buildDir/jacoco/cucumber.exec")
+    reports {
+        xml.enabled true
+        csv.enabled false
+        xml.destination file("${buildDir}/jacoco/jacoco.xml")
+        html.destination file("${buildDir}/jacocoHtml")
+    }
 }
 
-// a way to combine the coverage reports for the purpose of seeing the
-// whole picture when we run jacocoTestReport
-task combineCoverage(type: JacocoMerge) {
-    executionData = files("$buildDir/jacoco/test.exec", "$buildDir/jacoco/fastIntegrationTest.exec")
-    mustRunAfter fastIntegrationTest
-}
-
-task testReport(type: GradleBuild) {
-    tasks = ['test', 'fastIntegrationTest', 'combineCoverage', 'jacocoTestReport']
-}
-
-// Add the combined report when we run check
-check.dependsOn(combineCoverage)
 check.dependsOn(jacocoTestReport)
 
 
@@ -209,7 +203,7 @@ sonarqube {
         property "sonar.tests", "src/test/java,src/integration_test/java,src/bdd_test/java"
         property "sonar.java.binaries", "build/classes/java/main"
         property "sonar.junit.reportPaths", "build/test-results/test/,build/test-results/fastIntegrationTest"
-        property "sonar.jacoco.reportPaths", "build/jacoco/test.exec,build/jacoco/fastIntegrationTest.exec"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/jacoco/jacoco.xml"
     }
 }
 

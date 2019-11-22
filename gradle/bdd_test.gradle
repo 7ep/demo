@@ -30,11 +30,17 @@ configurations {
 }
 // some of the configuration for running Cucumber BDD
 task cucumber (type: Test) {
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = 'Runs the BDD tests.'
     dependsOn assemble, compileTestJava, compileBddTestJava
     testClassesDirs = sourceSets.bddTest.output.classesDirs
     classpath = sourceSets.bddTest.runtimeClasspath
     doLast {
         javaexec {
+            // get the path to the jar file for jacocoagent
+            def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
+            jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/cucumber.exec,append=false"]
+
             main = "cucumber.api.cli.Main"
             classpath = configurations.cucumberRuntime +
                     sourceSets.main.output +
