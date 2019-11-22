@@ -328,7 +328,7 @@ static void checkIfAlive() {
                 " tests you requested                    \n" +
                 "                                        \n" +
                 " To start the app:                      \n" +
-                "    gradlew appRun                      \n" +
+                "    gradlew tomcatrun                   \n" +
                 "****************************************\n";
         throw new Exception(errorMsg);
     }
