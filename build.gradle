@@ -74,7 +74,6 @@ dependencies {
 
     def tomcatVersion = '9.0.27'
     tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
-            "org.apache.tomcat.embed:tomcat-embed-logging-juli:9.0.0.M6",
             "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
 
     providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
