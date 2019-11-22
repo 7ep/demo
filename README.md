@@ -127,7 +127,6 @@ techniques.  Some of the techniques exemplified are:
 * Database versioning, with [Flyway](https://flywaydb.org/)
 * Uses [H2 database](https://www.h2database.com/html/main.html) to simplify operation
 * Security analysis using [DependencyCheck](https://www.owasp.org/index.php/OWASP_Dependency_Check)
-* Uses [Gretty](https://github.com/akhikhl/gretty) which allows us to hot swap Java code at runtime.
 
 Its essential goals:
 * Just works, any platform.
