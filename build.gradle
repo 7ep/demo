@@ -259,17 +259,22 @@ static String getCurrentGitHash() {
     String currentHead;
     FileReader fr_forGitHead;
     FileReader fr_forGitHash;
+    String result;
+    boolean shouldExit = false;
+
     try {
         fr_forGitHead = new FileReader(headFileLocation)
     } catch (Exception ex) {
         return "NO_GIT_HEAD_FOUND";
     }
+
     new BufferedReader(fr_forGitHead).with { br ->
         // get the directory to the current HEAD
         try {
             currentHead = br.readLine();
         } catch (Exception ex) {
-            return "COULD_NOT_READ_HEAD_FILE";
+            result = "COULD_NOT_READ_HEAD_FILE";
+            shouldExit = true;
         }
         finally {
             br.close();
@@ -280,21 +285,26 @@ static String getCurrentGitHash() {
         commitLocation = currentHead.substring(locationOfSpace + 1);
         // read the file at that location (e.g. .git/refs/heads/master )
     }
+    if (shouldExit) {
+        return result;
+    }
+
     try {
         fr_forGitHash = new FileReader(".git/" + commitLocation)
     } catch (Exception ex) {
         return "NO_GIT_HASH_FILE_FOUND";
     }
+
     new BufferedReader(fr_forGitHash).with { br ->
         try {
-            return br.readLine();
+            result = br.readLine();
         } catch (Exception ex) {
-            return "COULD_NOT_READ_COMMIT_HASH";
+            result = "COULD_NOT_READ_COMMIT_HASH";
         } finally {
             br.close();
         }
     }
-    return "UNABLE_TO_OBTAIN_COMMIT_HASH";
+    return result;
 }
 
 compileJava.finalizedBy writeGitCommitToFile
