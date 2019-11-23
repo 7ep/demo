@@ -164,7 +164,7 @@ and get through until you see the chrome://welcome page.  Test it by going to Go
 INSTALL JAVA
 ------------
 
-$ sudo yum -y install java-1.8.0-openjdk-devel
+$ sudo yum -y install java-11-openjdk-devel
 
 INSTALL GIT
 -----------
@@ -205,6 +205,11 @@ $ sudo unzip ~/chromedriver_linux64.zip -d /usr/local/sbin
 
 
 install Tomcat 9:
+
+$TOMCAT_URL = figure out where to download tomcat from: https://tomcat.apache.org/download-90.cgi
+$TOMCAT_FILE_NAME = the name of the tomcat file
+
+for example:
 $ wget http://www.gtlib.gatech.edu/pub/apache/tomcat/tomcat-9/v9.0.14/bin/apache-tomcat-9.0.14.tar.gz
 $ tar zxf apache-tomcat-9.0.14.tar.gz
 $ sudo mv apache-tomcat-9.0.14 /opt/tomcat
