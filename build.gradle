@@ -187,7 +187,7 @@ jacocoTestReport {
         xml.enabled true
         csv.enabled false
         xml.destination file("${buildDir}/jacoco/jacoco.xml")
-        html.destination file("${buildDir}/jacocoHtml")
+        html.destination file("${buildDir}/reports/jacoco")
     }
 }
 
