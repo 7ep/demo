@@ -43,7 +43,6 @@ public class PersistenceLayerTests {
      */
     @Test
     public void testShouldSaveBorrowerToDatabase() {
-        // set up a completely empty database
         pl.cleanAndMigrateDatabase();
 
         long id = pl.saveNewBorrower(DEFAULT_BORROWER.name);
@@ -60,12 +59,13 @@ public class PersistenceLayerTests {
     public void testShouldUpdateBorrowerToDatabase() {
         // the borrower with id of 1 is "alice"
         runRestoreOneBookOneBorrower();
+        final String newName = "bob";
 
-        // change the borrower's name to "bob"
-        pl.updateBorrower(1, "bob");
+        // change the borrower's name
+        pl.updateBorrower(1, newName);
 
         String name = pl.getBorrowerName(1);
-        Assert.assertEquals("bob", name);
+        Assert.assertEquals(newName, name);
     }
 
     /**
@@ -74,13 +74,11 @@ public class PersistenceLayerTests {
      */
     @Test
     public void testShouldBeAbleToSearchBorrowerByName() {
-        // this will set "alice" with id of 1 into the database as a borrower
         runRestoreOneBookOneBorrower();
-        final Borrower expectedBorrower = new Borrower(1, "alice");
 
-        Borrower borrower = pl.searchBorrowerDataByName("alice");
+        Borrower borrower = pl.searchBorrowerDataByName(DEFAULT_BORROWER.name);
 
-        Assert.assertEquals(expectedBorrower, borrower);
+        Assert.assertEquals(DEFAULT_BORROWER, borrower);
     }
 
     /**
@@ -128,18 +126,19 @@ public class PersistenceLayerTests {
     public void testShouldBeAbleToSearchAUserByName() {
         runRestoreOneUser();
 
-        User user = pl.searchForUserByName("alice");
+        User user = pl.searchForUserByName(DEFAULT_BORROWER.name);
 
-        Assert.assertEquals("alice", user.name);
+        Assert.assertEquals(DEFAULT_BORROWER.name, user.name);
         Assert.assertEquals(1, user.id);
     }
 
     @Test
     public void testThatWeCanUpdateAUsersPassword() {
         runRestoreOneUser();
+        final String newPassword = "abc123";
 
-        pl.updateUserWithPassword(1, "abc123");
-        final boolean result = pl.areCredentialsValid("alice", "abc123");
+        pl.updateUserWithPassword(1, newPassword);
+        final boolean result = pl.areCredentialsValid(DEFAULT_BORROWER.name, newPassword);
 
         Assert.assertTrue(result);
     }
@@ -312,6 +311,9 @@ public class PersistenceLayerTests {
         runRestoreOneBookOneBorrower();
     }
 
+    /**
+     * this will set "alice" with id of 1 into the database as a borrower
+     */
     private void runRestoreOneBookOneBorrower() {
         runRestore("db_sample_files/v2_one_book_one_borrower.sql");
     }
