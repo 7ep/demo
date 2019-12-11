@@ -43,11 +43,12 @@ public class PersistenceLayerTests {
      */
     @Test
     public void testShouldSaveBorrowerToDatabase() {
+        // set up a completely empty database
         pl.cleanAndMigrateDatabase();
 
         long id = pl.saveNewBorrower(DEFAULT_BORROWER.name);
 
-        Assert.assertEquals(1, id);
+        Assert.assertEquals("The first row in a database gets an index of 1", 1, id);
     }
 
     /**
@@ -57,8 +58,10 @@ public class PersistenceLayerTests {
      */
     @Test
     public void testShouldUpdateBorrowerToDatabase() {
+        // the borrower with id of 1 is "alice"
         runRestoreOneBookOneBorrower();
 
+        // change the borrower's name to "bob"
         pl.updateBorrower(1, "bob");
 
         String name = pl.getBorrowerName(1);
@@ -71,12 +74,13 @@ public class PersistenceLayerTests {
      */
     @Test
     public void testShouldBeAbleToSearchBorrowerByName() {
+        // this will set "alice" with id of 1 into the database as a borrower
         runRestoreOneBookOneBorrower();
+        final Borrower expectedBorrower = new Borrower(1, "alice");
 
-        Borrower bd = pl.searchBorrowerDataByName("alice");
+        Borrower borrower = pl.searchBorrowerDataByName("alice");
 
-        Assert.assertEquals("alice", bd.name);
-        Assert.assertEquals(1, bd.id);
+        Assert.assertEquals(expectedBorrower, borrower);
     }
 
     /**
@@ -85,11 +89,11 @@ public class PersistenceLayerTests {
     @Test
     public void testShouldBeAbleToSearchForBooksByTitle() {
         runRestoreOneBookOneBorrower();
+        final Book expectedBook = new Book(1, DEFAULT_BOOK.title);
 
         Book book = pl.searchBooksByTitle(DEFAULT_BOOK.title);
 
-        Assert.assertEquals(DEFAULT_BOOK.title, book.title);
-        Assert.assertEquals(1, book.id);
+        Assert.assertEquals(expectedBook, book);
     }
 
     /**
@@ -97,12 +101,14 @@ public class PersistenceLayerTests {
      */
     @Test
     public void testShouldBeAbleToSearchForBooksById() {
+        // this will set the default book into the database
         runRestoreOneBookOneBorrower();
+        final Book expectedBook = new Book(1, DEFAULT_BOOK.title);
 
+        // search for it by id
         Book book = pl.searchBooksById(DEFAULT_BOOK.id);
 
-        Assert.assertEquals(DEFAULT_BOOK.title, book.title);
-        Assert.assertEquals(1, book.id);
+        Assert.assertEquals(expectedBook, book);
     }
 
     /**
