@@ -216,8 +216,8 @@ task runApiTests(type: Exec) {
     doFirst {
         checkIfAlive();
     }
-    workingDir 'api_tests'
-    commandLine 'pipenv', 'run', 'pytest', '--junitxml', '../build/test-results/api_tests/TEST-api_test_results.xml'
+    workingDir 'src/api_tests'
+    commandLine 'pipenv', 'run', 'pytest', '--junitxml', '../../build/test-results/api_tests/TEST-api_test_results.xml'
 }
 
 static boolean SearchDirectoryForChromedriver(File dir) {
@@ -381,9 +381,9 @@ task runBehaveTests(type: Exec) {
             )
         }
     }
-    workingDir 'ui_tests'
+    workingDir 'src/ui_tests'
     // run behave and output a json file (we'll convert that to Cucumber format later for reporting)
-    commandLine 'pipenv', 'run', 'behave', '--format','json','-o','../build/bdd/behave.json', '-D', 'chromedriver_path='+(project.properties['chromedriver.path'] ?: "")
+    commandLine 'pipenv', 'run', 'behave', '--format','json','-o','../../build/bdd/behave.json', '-D', 'chromedriver_path='+(project.properties['chromedriver.path'] ?: "")
 
 }
 

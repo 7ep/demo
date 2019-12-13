@@ -301,7 +301,7 @@ public class PersistenceLayerTests {
      * This can be run here, simply put @Test on top.
      */
     public void runBackup() {
-        pl.runBackup("db_sample_files/v2_one_loan.sql");
+        pl.runBackup("v2_one_loan.sql");
     }
 
     /**
@@ -315,15 +315,15 @@ public class PersistenceLayerTests {
      * this will set "alice" with id of 1 into the database as a borrower
      */
     private void runRestoreOneBookOneBorrower() {
-        runRestore("db_sample_files/v2_one_book_one_borrower.sql");
+        runRestore("v2_one_book_one_borrower.sql");
     }
 
     private void runRestoreOneUser() {
-        runRestore("db_sample_files/v2_one_user.sql");
+        runRestore("v2_one_user.sql");
     }
 
     private void runRestoreOneLoan() {
-        runRestore("db_sample_files/v2_one_loan.sql");
+        runRestore("v2_one_loan.sql");
     }
 
     private void runRestore(String scriptName) {

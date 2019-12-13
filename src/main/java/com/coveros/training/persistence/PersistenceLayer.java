@@ -577,6 +577,8 @@ public class PersistenceLayer {
      * @param backupFileName the path to the sql script, based in the project home directory.
      */
     void runRestore(String backupFileName) {
+        String dbScriptsDirectory="src/main/resources/db/db_sample_files/";
+        String fullPathToBackup = dbScriptsDirectory + backupFileName;
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st = connection.prepareStatement(
                     "DROP SCHEMA IF EXISTS ADMINISTRATIVE CASCADE;" +
@@ -585,7 +587,7 @@ public class PersistenceLayer {
                 st.execute();
             }
             try (PreparedStatement st = connection.prepareStatement("RUNSCRIPT FROM ?")) {
-                st.setString(1, backupFileName);
+                st.setString(1, fullPathToBackup);
                 st.execute();
             }
         } catch (SQLException ex) {
