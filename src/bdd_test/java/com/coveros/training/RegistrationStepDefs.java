@@ -5,9 +5,9 @@ import com.coveros.training.domainobjects.RegistrationResult;
 import com.coveros.training.domainobjects.RegistrationStatusEnums;
 import com.coveros.training.persistence.PersistenceLayer;
 import com.coveros.training.persistence.RegistrationUtils;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.junit.Assert;
 
 import static com.coveros.training.domainobjects.PasswordResultEnums.INSUFFICIENT_ENTROPY;
