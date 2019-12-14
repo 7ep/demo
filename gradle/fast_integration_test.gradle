@@ -22,7 +22,7 @@ task fastIntegrationTest(type: Test) {
     testClassesDirs = sourceSets.fastIntegrationTest.output.classesDirs
     classpath = sourceSets.fastIntegrationTest.runtimeClasspath
     maxHeapSize = '1024m'
-    binResultsDir = file("$buildDir/integration-test-results/binary/integrationTest")
+    binaryResultsDirectory = file("$buildDir/integration-test-results/binary/integrationTest")
     mustRunAfter test
 }
 
