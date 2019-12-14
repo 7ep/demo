@@ -9,8 +9,8 @@ dependencies {
     fastIntegrationTestImplementation sourceSets.main.output
     fastIntegrationTestImplementation sourceSets.test.output
 
-    fastIntegrationTestImplementation configurations.compile
-    fastIntegrationTestImplementation configurations.testCompile
+    fastIntegrationTestImplementation configurations.implementation
+    fastIntegrationTestImplementation configurations.testImplementation
 
     fastIntegrationTestRuntime configurations.runtime
     fastIntegrationTestRuntime configurations.testRuntime

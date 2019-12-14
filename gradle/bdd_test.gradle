@@ -10,17 +10,17 @@ dependencies {
     bddTestImplementation sourceSets.test.output
     bddTestImplementation sourceSets.fastIntegrationTest.output
 
-    bddTestImplementation configurations.compile
-    bddTestImplementation configurations.testCompile
-    bddTestImplementation configurations.fastIntegrationTestCompile
+    bddTestImplementation configurations.implementation
+    bddTestImplementation configurations.testImplementation
+    bddTestImplementation configurations.fastIntegrationTestImplementation
 
     bddTestRuntime configurations.runtime
     bddTestRuntime configurations.testRuntime
     bddTestRuntime configurations.fastIntegrationTestRuntime
 
     // the cucumber stuff we'll need.  Cucumber is a BDD tool.
-    bddTestCompile 'io.cucumber:cucumber-java:4.8.0'
-    bddTestCompile 'io.cucumber:cucumber-junit:4.8.0'
+    bddTestImplementation 'io.cucumber:cucumber-java:4.8.0'
+    bddTestImplementation 'io.cucumber:cucumber-junit:4.8.0'
 }
 
 // some of the configuration for running Cucumber BDD
@@ -37,7 +37,7 @@ task cucumber (type: Test) {
             jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/cucumber.exec,append=false"]
 
             main = "io.cucumber.core.cli.Main"
-            classpath = configurations.bddTestRuntime +
+            classpath = configurations.bddTestCompileClasspath +
                     sourceSets.main.output +
                     sourceSets.test.output +
                     sourceSets.bddTest.output +

@@ -79,34 +79,34 @@ dependencies {
     providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
 
     // junit, for running unit tests
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 
     // mockito, for mocking objects in our unit tests
-    testCompile 'org.mockito:mockito-core:2.28.2'
+    testImplementation 'org.mockito:mockito-core:2.28.2'
 
     // nbvcxz is a tool to determine how robust a password is.  See
     // https://github.com/GoSimpleLLC/nbvcxz
-    compile group: 'me.gosimple', name: 'nbvcxz', version: '1.4.3'
+    implementation group: 'me.gosimple', name: 'nbvcxz', version: '1.4.3'
 
     // the glorious equalsverifier.  This is a tool that tests the contract
     // for equals and hashcode are met.  It's very strict.  Because it's very
     // strict, it forces us to create very safe, very solid code.
     // https://mvnrepository.com/artifact/nl.jqno.equalsverifier/equalsverifier
-    testCompile group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.1.10'
+    testImplementation group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.1.10'
 
     // The commons-lang3 package has some utility classes that are very helpful
     // for those interested in safer coding.  Particularly, the equalsbuilder and hashcodebuilder.
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
 
     // a logging framework, so it becomes easily possible to see what is happening
     // in our code in realtime.
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.12.1'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.1'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.12.1'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.1'
 
     // The following gives us the ability to use slf4j api calls.
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
-    compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.12.1'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.12.1'
 
 
     // we'll use this as our database
@@ -114,10 +114,10 @@ dependencies {
     localDeps group: 'com.h2database', name: 'h2', version: '1.4.200'
 
     // so we can put a copy of h2 in a convenient place
-    compile configurations.localDeps
+    implementation configurations.localDeps
 
     // so we can programmatically run flyway at startup
-    compile "org.flywaydb:flyway-core:6.0.8"
+    implementation "org.flywaydb:flyway-core:6.0.8"
 }
 
 tomcat {
