@@ -94,6 +94,9 @@ dependencies {
     // https://mvnrepository.com/artifact/nl.jqno.equalsverifier/equalsverifier
     testImplementation group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.1.10'
 
+    testImplementation 'io.cucumber:cucumber-java:4.8.0'
+    testImplementation 'io.cucumber:cucumber-junit:4.8.0'
+
     // The commons-lang3 package has some utility classes that are very helpful
     // for those interested in safer coding.  Particularly, the equalsbuilder and hashcodebuilder.
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
