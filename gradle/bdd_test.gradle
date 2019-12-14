@@ -19,15 +19,11 @@ dependencies {
     bddTestRuntime configurations.fastIntegrationTestRuntime
 
     // the cucumber stuff we'll need.  Cucumber is a BDD tool.
-    testCompile 'io.cucumber:cucumber-java:4.8.0'
-    testCompile 'io.cucumber:cucumber-junit:4.8.0'
+    bddTestCompile 'io.cucumber:cucumber-java:4.8.0'
+    bddTestCompile 'io.cucumber:cucumber-junit:4.8.0'
 }
 
-configurations {
-    cucumberRuntime {
-        extendsFrom testRuntime
-    }
-}
+
 // some of the configuration for running Cucumber BDD
 task cucumber (type: Test) {
     group = LifecycleBasePlugin.VERIFICATION_GROUP
@@ -41,8 +37,8 @@ task cucumber (type: Test) {
             def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
             jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/cucumber.exec,append=false"]
 
-            main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime +
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.bddTestRuntime +
                     sourceSets.main.output +
                     sourceSets.test.output +
                     sourceSets.bddTest.output +
