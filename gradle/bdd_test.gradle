@@ -23,7 +23,6 @@ dependencies {
     bddTestCompile 'io.cucumber:cucumber-junit:4.8.0'
 }
 
-
 // some of the configuration for running Cucumber BDD
 task cucumber (type: Test) {
     group = LifecycleBasePlugin.VERIFICATION_GROUP

@@ -6,11 +6,11 @@ sourceSets {
 }
 
 dependencies {
-    fastIntegrationTestCompile sourceSets.main.output
-    fastIntegrationTestCompile sourceSets.test.output
+    fastIntegrationTestImplementation sourceSets.main.output
+    fastIntegrationTestImplementation sourceSets.test.output
 
-    fastIntegrationTestCompile configurations.compile
-    fastIntegrationTestCompile configurations.testCompile
+    fastIntegrationTestImplementation configurations.compile
+    fastIntegrationTestImplementation configurations.testCompile
 
     fastIntegrationTestRuntime configurations.runtime
     fastIntegrationTestRuntime configurations.testRuntime
