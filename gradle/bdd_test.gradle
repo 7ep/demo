@@ -6,13 +6,13 @@ sourceSets {
 }
 
 dependencies {
-    bddTestCompile sourceSets.main.output
-    bddTestCompile sourceSets.test.output
-    bddTestCompile sourceSets.fastIntegrationTest.output
+    bddTestImplementation sourceSets.main.output
+    bddTestImplementation sourceSets.test.output
+    bddTestImplementation sourceSets.fastIntegrationTest.output
 
-    bddTestCompile configurations.compile
-    bddTestCompile configurations.testCompile
-    bddTestCompile configurations.fastIntegrationTestCompile
+    bddTestImplementation configurations.compile
+    bddTestImplementation configurations.testCompile
+    bddTestImplementation configurations.fastIntegrationTestCompile
 
     bddTestRuntime configurations.runtime
     bddTestRuntime configurations.testRuntime
