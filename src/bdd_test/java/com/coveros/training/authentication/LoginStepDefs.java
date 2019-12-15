@@ -1,4 +1,4 @@
-package com.coveros.training;
+package com.coveros.training.authentication;
 
 import com.coveros.training.persistence.LoginUtils;
 import com.coveros.training.persistence.PersistenceLayer;

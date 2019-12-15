@@ -185,7 +185,7 @@ task startH2Console(type: Exec) {
 generateCucumberReports.dependsOn(cucumber)
 
 jacocoTestReport {
-    executionData("$buildDir/jacoco/test.exec", "$buildDir/jacoco/fastIntegrationTest.exec", "$buildDir/jacoco/cucumber.exec")
+    executionData(fileTree(dir: "$buildDir/jacoco", include: '*.exec'))
     reports {
         xml.enabled true
         csv.enabled false
@@ -217,14 +217,14 @@ tasks.withType(Test) {
 
 task runApiTests(type: Exec) {
     doFirst {
-        checkIfAlive();
+        checkIfAlive()
     }
     workingDir 'src/api_tests'
     commandLine 'pipenv', 'run', 'pytest', '--junitxml', '../../build/test-results/api_tests/TEST-api_test_results.xml'
 }
 
 static boolean SearchDirectoryForChromedriver(File dir) {
-    return dir.listFiles({ file -> file.name.contains("chromedriver") } as FileFilter).any();
+    return dir.listFiles({ file -> file.name.contains("chromedriver") } as FileFilter).any()
 }
 
 static boolean ScanPathForChromeDriver() {
@@ -250,73 +250,75 @@ task('writeGitCommitToFile') {
  * approach, which makes it easy to read but maybe likely to fail?  time will tell.
  */
 static String getCurrentGitHash() {
-    String headFileLocation = ".git/HEAD";
-    String commitLocation;
-    int locationOfSpace;
-    String currentHead;
-    FileReader fr_forGitHead;
-    FileReader fr_forGitHash;
-    String result;
-    boolean shouldExit = false;
+    String headFileLocation = ".git/HEAD"
+    String commitLocation
+    int locationOfSpace
+    String currentHead
+    FileReader fr_forGitHead
+    FileReader fr_forGitHash
+    String result
+    boolean shouldExit = false
 
     try {
         fr_forGitHead = new FileReader(headFileLocation)
-    } catch (Exception ex) {
-        return "NO_GIT_HEAD_FOUND";
+    } catch (Exception ignored) {
+        return "NO_GIT_HEAD_FOUND"
     }
 
     new BufferedReader(fr_forGitHead).with { br ->
         // get the directory to the current HEAD
+        result = "EMPTY_INITIAL_VALUE"
         try {
-            currentHead = br.readLine();
-        } catch (Exception ex) {
-            result = "COULD_NOT_READ_HEAD_FILE";
-            shouldExit = true;
+            currentHead = br.readLine()
+        } catch (Exception ignored) {
+            result = "COULD_NOT_READ_HEAD_FILE"
+            shouldExit = true
         }
         finally {
-            br.close();
+            br.close()
         }
-        locationOfSpace = currentHead.indexOf(" ");
+        locationOfSpace = currentHead.indexOf(" ")
         // extract out the portion that is the directory only
         // the whole contents go something like: "ref: refs/heads/master"
-        commitLocation = currentHead.substring(locationOfSpace + 1);
+        commitLocation = currentHead.substring(locationOfSpace + 1)
         // read the file at that location (e.g. .git/refs/heads/master )
     }
     if (shouldExit) {
-        return result;
+        return result
     }
 
     try {
         fr_forGitHash = new FileReader(".git/" + commitLocation)
-    } catch (Exception ex) {
-        return "NO_GIT_HASH_FILE_FOUND";
+    } catch (Exception ignored) {
+        return "NO_GIT_HASH_FILE_FOUND"
     }
 
     new BufferedReader(fr_forGitHash).with { br ->
+        result = "EMPTY_AT_BEGINNING"
         try {
-            result = br.readLine();
-        } catch (Exception ex) {
-            result = "COULD_NOT_READ_COMMIT_HASH";
+            result = br.readLine()
+        } catch (Exception ignored) {
+            result = "COULD_NOT_READ_COMMIT_HASH"
         } finally {
-            br.close();
+            br.close()
         }
     }
-    return result;
+    return result
 }
 
 compileJava.finalizedBy writeGitCommitToFile
 
 // returns true if the application is running.
 static void checkIfAlive() {
-    int code;
+    int code
     try {
-        URL url = new URL("http://localhost:8080/demo");
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        connection.connect();
+        URL url = new URL("http://localhost:8080/demo")
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection()
+        connection.setRequestMethod("GET")
+        connection.connect()
 
-        code = connection.getResponseCode();
-    } catch (Exception ex) {
+        code = connection.getResponseCode()
+    } catch (Exception ignored) {
         String errorMsg = "\n\n\n" +
                 "****************************************\n" +
                 "*       SERVER IS NOT RUNNING          *\n" +
@@ -326,18 +328,18 @@ static void checkIfAlive() {
                 "                                        \n" +
                 " To start the app:                      \n" +
                 "    gradlew tomcatrun                   \n" +
-                "****************************************\n";
-        throw new Exception(errorMsg);
+                "****************************************\n"
+        throw new Exception(errorMsg)
     }
     if (code != 200) {
-        throw new Exception("\n\nServer is not returning a 200.  Instead, it is: " +code + "\n\n");
+        throw new Exception("\n\nServer is not returning a 200.  Instead, it is: " +code + "\n\n")
     }
 }
 
 task runBehaveTests(type: Exec) {
     doFirst {
-        checkIfAlive();
-        def chromedriver_exists_in_ui_tests = ScanPathForChromeDriver();
+        checkIfAlive()
+        def chromedriver_exists_in_ui_tests = ScanPathForChromeDriver()
 		def chrm = project.properties['chromedriver.path']
 
 		// make sure that the path to chromedriver isn't null or empty:

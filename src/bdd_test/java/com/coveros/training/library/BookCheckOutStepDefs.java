@@ -1,4 +1,4 @@
-package com.coveros.training;
+package com.coveros.training.library;
 
 import com.coveros.training.domainobjects.Book;
 import com.coveros.training.domainobjects.Borrower;

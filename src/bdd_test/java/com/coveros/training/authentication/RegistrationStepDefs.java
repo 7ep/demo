@@ -1,4 +1,4 @@
-package com.coveros.training;
+package com.coveros.training.authentication;
 
 import com.coveros.training.domainobjects.PasswordResult;
 import com.coveros.training.domainobjects.RegistrationResult;

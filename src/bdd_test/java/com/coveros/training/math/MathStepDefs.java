@@ -1,4 +1,4 @@
-package com.coveros.training;
+package com.coveros.training.math;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -17,12 +17,12 @@ public class MathStepDefs {
     @When("I add (.*) to (.*)")
     public void i_add_to(String num1, String num2) {
         // Write code here that turns the phrase above into concrete actions
-        calculated_total = Integer.valueOf(num1) + Integer.valueOf(num2);
+        calculated_total = Integer.parseInt(num1) + Integer.parseInt(num2);
     }
 
     @Then("the result should be (.*)")
     public void the_result_should_be(String total) {
-        Assert.assertEquals((int) Integer.valueOf(total), calculated_total);
+        Assert.assertEquals(Integer.parseInt(total), calculated_total);
     }
 
 }

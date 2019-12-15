@@ -17,10 +17,11 @@ task cucumber (type: Test) {
     testClassesDirs = sourceSets.bddTest.output.classesDirs
     classpath = sourceSets.bddTest.runtimeClasspath
     doLast {
+        // For the library
         javaexec {
             // get the path to the jar file for jacocoagent
             def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
-            jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/cucumber.exec,append=false"]
+            jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/library_bdd.exec,append=false"]
 
             main = "io.cucumber.core.cli.Main"
             classpath = configurations.bddTestCompileClasspath +
@@ -31,11 +32,54 @@ task cucumber (type: Test) {
 
             args = ['--monochrome',
                     '--plugin', 'progress',
-                    '--plugin', 'json:build/bdd/file.json',
-                    '--plugin', 'html:build/reports/bdd/cucumber-html-report-basic',
-                    '--glue', 'com.coveros.training',
-                    'src/bdd_test/resources']
+                    '--plugin', 'json:build/bdd/library.json',
+                    '--plugin', 'html:build/reports/bdd/library',
+                    '--glue', 'com.coveros.training.library',
+                    'src/bdd_test/resources/library']
         }
+
+        // for the mathematics
+        javaexec {
+            // get the path to the jar file for jacocoagent
+            def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
+            jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/math_bdd.exec,append=false"]
+
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.bddTestCompileClasspath +
+                    sourceSets.main.output +
+                    sourceSets.test.output +
+                    sourceSets.bddTest.output
+
+            args = ['--monochrome',
+                    '--plugin', 'progress',
+                    '--plugin', 'json:build/bdd/math.json',
+                    '--plugin', 'html:build/reports/bdd/math',
+                    '--glue', 'com.coveros.training.math',
+                    'src/bdd_test/resources/math']
+        }
+
+        // for the authentication stories
+        javaexec {
+            // get the path to the jar file for jacocoagent
+            def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
+            jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/auth_bdd.exec,append=false"]
+
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.bddTestCompileClasspath +
+                    sourceSets.main.output +
+                    sourceSets.test.output +
+                    sourceSets.bddTest.output +
+                    sourceSets.fastIntegrationTest.output
+
+            args = ['--monochrome',
+                    '--plugin', 'progress',
+                    '--plugin', 'json:build/bdd/auth.json',
+                    '--plugin', 'html:build/reports/bdd/authentication',
+                    '--glue', 'com.coveros.training.authentication',
+                    'src/bdd_test/resources/authentication']
+        }
+
+
     }
     mustRunAfter test, fastIntegrationTest
 }

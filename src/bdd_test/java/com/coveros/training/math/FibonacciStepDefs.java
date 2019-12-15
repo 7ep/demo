@@ -1,12 +1,13 @@
-package com.coveros.training;
+package com.coveros.training.math;
 
+import com.coveros.training.Fibonacci;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 
 public class FibonacciStepDefs {
 
-    long result;
+    private long result;
 
     @When("I calculate the {int} Fibonacci number")
     public void i_calculate_the(Integer nth_fibonacci_number) {
