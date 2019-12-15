@@ -155,7 +155,7 @@ task('printReportPathsPitest') {
 cucumberReports {
     outputDir = file('build/reports/bdd')
     buildId = '0'
-    reports = files('build/bdd/file.json', 'build/bdd/behave_cucumber_style.json')
+    reports = files(fileTree(dir: "build/bdd", include: '*.json'))
     testTasksFinalizedByReport = false
 }
 
@@ -388,14 +388,14 @@ task runBehaveTests(type: Exec) {
     }
     workingDir 'src/ui_tests'
     // run behave and output a json file (we'll convert that to Cucumber format later for reporting)
-    commandLine 'pipenv', 'run', 'behave', '--format','json','-o','../../build/bdd/behave.json', '-D', 'chromedriver_path='+(project.properties['chromedriver.path'] ?: "")
+    commandLine 'pipenv', 'run', 'behave', '--format','json','-o','../../build/bdd/behave.output', '-D', 'chromedriver_path='+(project.properties['chromedriver.path'] ?: "")
 
 }
 
 // Run a command to convert the Behave json to Cucumber format.
 // Once this is done, we can run generateCucumberReport again and it will have the Behave results included.
 task convertBehaveOutputToCucumber(type: Exec) {
-    commandLine 'pipenv', 'run', 'python', '-m', 'behave2cucumber', '-i', 'build/bdd/behave.json', '-o', 'build/bdd/behave_cucumber_style.json'
+    commandLine 'pipenv', 'run', 'python', '-m', 'behave2cucumber', '-i', 'build/bdd/behave.output', '-o', 'build/bdd/behave_cucumber_style.json'
 }
 runBehaveTests.finalizedBy convertBehaveOutputToCucumber
 
