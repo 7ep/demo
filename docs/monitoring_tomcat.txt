@@ -9,9 +9,11 @@ export CATALINA_OPTS="$CATALINA_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.ma
 
 make sure it has the proper ownership and permissions:
 
-$ sudo chown jenkins:jenkins setenv.sh
+$ sudo chown tomcat:tomcat setenv.sh
 $ sudo chmod 750 setenv.sh
 
 restart Tomcat, and you will be able to access it from JConsole on port 9999
+
+$ sudo systemctl restart tomcat9
 
 
