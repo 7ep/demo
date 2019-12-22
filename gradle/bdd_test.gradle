@@ -9,6 +9,12 @@ dependencies {
     bddTestImplementation configurations.fastIntegrationTestImplementation
 }
 
+// in the cucumber task, we divide up the different features to lower the scope.
+// Notice that we have a command for running the library tests, then the math tests, then the auth tests.
+// This allows us to have a much smaller universe of step definitions per feature file, which  means
+// that our steps don't need to be nearly as generic.  Genericity has its benefits in many circumstances,
+// but not when it comes to keeping things as transparent and simple as possible, which is one of
+// the points of testing.
 // some of the configuration for running Cucumber BDD
 task cucumber (type: Test) {
     group = LifecycleBasePlugin.VERIFICATION_GROUP
