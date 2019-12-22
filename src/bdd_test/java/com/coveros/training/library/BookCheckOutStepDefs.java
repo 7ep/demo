@@ -142,8 +142,8 @@ public class BookCheckOutStepDefs {
         libraryActionResults = libraryUtils.lendBook(myBookTitle, "someone else", JAN_1ST);
     }
 
-    @Then("they fail to do so")
-    public void they_fail_to_do_so() {
+    @Then("they cannot borrow it because it is already checked out")
+    public void they_cannot_borrow_it_because_it_is_already_checked_out() {
         Assert.assertEquals(LibraryActionResults.BOOK_CHECKED_OUT, libraryActionResults);
     }
 

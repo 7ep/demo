@@ -34,5 +34,5 @@ Feature: A librarian may lend a book from the library
     Scenario: a book can only be loaned to one person
         Given a borrower, "alice", has one book, "The DevOps Handbook", already borrowed
         When another borrower, "bob" tries to borrow that book
-        Then they fail to do so
+        Then they cannot borrow it because it is already checked out
 
