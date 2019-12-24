@@ -4,10 +4,10 @@ Feature: A librarian may lend a book from the library
     I would like to lend a book
     so that patrons may enjoy it outside the library.
 
-    Narrative: A county library system has many books available for borrowing.  If you
-    live in that county, and you have registered for a library card, you are able
-    to borrow books.  The system shall provide the capability to lend out books.
-    The librarians are in control of lending out books.
+#    Narrative: A county library system has many books available for borrowing.  If you
+#    live in that county, and you have registered for a library card, you are able
+#    to borrow books.  The system shall provide the capability to lend out books.
+#    The librarians are in control of lending out books.
 
     Scenario: A registered patron checks out a book
         Given a borrower, "alice", is registered
