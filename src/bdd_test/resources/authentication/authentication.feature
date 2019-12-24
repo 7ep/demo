@@ -4,11 +4,11 @@ Feature: A user may authenticate to system.
     I want to be able to authenticate myself,
     so I can access its capabilities.
 
-    Narrative: A user wants to access the system, but they can only do it if they have
-    an account on it.  To register an account, they simply provide
-    a username and a password.  The password should be sufficiently complex, and the
-    username must not have already been registered.  Later, when they want to
-    authenticate themselves, they must enter that same username and password.
+#    Narrative: A user wants to access the system, but they can only do it if they have
+#    an account on it.  To register an account, they simply provide
+#    a username and a password.  The password should be sufficiently complex, and the
+#    username must not have already been registered.  Later, when they want to
+#    authenticate themselves, they must enter that same username and password.
 
     @login
     Scenario: Entering proper credentials authenticates a user to the system.
