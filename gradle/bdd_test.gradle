@@ -85,6 +85,46 @@ task cucumber (type: Test) {
                     'src/bdd_test/resources/authentication']
         }
 
+        // for the expenses stories
+        javaexec {
+            // get the path to the jar file for jacocoagent
+            def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
+            jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/auth_bdd.exec,append=false"]
+
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.bddTestCompileClasspath +
+                    sourceSets.main.output +
+                    sourceSets.test.output +
+                    sourceSets.bddTest.output
+
+            args = ['--monochrome',
+                    '--plugin', 'progress',
+                    '--plugin', 'json:build/bdd/expenses.json',
+                    '--plugin', 'html:build/reports/bdd/expenses',
+                    '--glue', 'com.coveros.training.expenses',
+                    'src/bdd_test/resources/expenses']
+        }
+
+        // for the cartesian product stories
+        javaexec {
+            // get the path to the jar file for jacocoagent
+            def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
+            jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/auth_bdd.exec,append=false"]
+
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.bddTestCompileClasspath +
+                    sourceSets.main.output +
+                    sourceSets.test.output +
+                    sourceSets.bddTest.output
+
+            args = ['--monochrome',
+                    '--plugin', 'progress',
+                    '--plugin', 'json:build/bdd/cartesianproduct.json',
+                    '--plugin', 'html:build/reports/bdd/cartesianproduct',
+                    '--glue', 'com.coveros.training.cartesianproduct',
+                    'src/bdd_test/resources/cartesianproduct']
+        }
+
 
     }
     mustRunAfter test, fastIntegrationTest
