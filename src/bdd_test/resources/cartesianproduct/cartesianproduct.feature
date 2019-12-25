@@ -10,13 +10,12 @@ Feature: Allow a user to generate a cartesian product from lists
 #    is a tedious practice, which could easily lead to missing certain combinations.
 #    This calculator will produce the correct result.
 
-    Scenario:
+    Scenario: happy path - a typical set of lists
         Given lists as follows:
-            """
-            (a,b)
-            (1,2,3,4)
-            (e,f)
-            """
+            | list    |
+            | a,b     |
+            | 1,2,3,4 |
+            | e,f     |
         When we calculate the combinations
         Then the resulting combinations should be as follows:
             """

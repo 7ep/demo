@@ -16,9 +16,17 @@ dependencies {
 // but not when it comes to keeping things as transparent and simple as possible, which is one of
 // the points of testing.
 // some of the configuration for running Cucumber BDD
-task cucumber (type: Test) {
+task cucumber(type: GradleBuild) {
+    tasks = ['libraryBdd', 'mathBdd', 'authBdd', 'expensesBdd', 'cartesianProductBdd']
+    mustRunAfter test, fastIntegrationTest
+}
+
+task libraryBdd (type: Test) {
+    doFirst {
+        print "\n\nstarting library BDD tests\n\n"
+    }
     group = LifecycleBasePlugin.VERIFICATION_GROUP
-    description = 'Runs the BDD tests.'
+    description = 'Runs the Library BDD tests.'
     dependsOn assemble, compileTestJava, compileBddTestJava
     testClassesDirs = sourceSets.bddTest.output.classesDirs
     classpath = sourceSets.bddTest.runtimeClasspath
@@ -43,6 +51,20 @@ task cucumber (type: Test) {
                     '--glue', 'com.coveros.training.library',
                     'src/bdd_test/resources/library']
         }
+    }
+}
+
+
+task mathBdd (type: Test) {
+    doFirst {
+        print "\n\nstarting math-related BDD tests\n\n"
+    }
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = 'Runs the mathematics BDD tests.'
+    dependsOn assemble, compileTestJava, compileBddTestJava
+    testClassesDirs = sourceSets.bddTest.output.classesDirs
+    classpath = sourceSets.bddTest.runtimeClasspath
+    doLast {
 
         // for the mathematics
         javaexec {
@@ -63,8 +85,21 @@ task cucumber (type: Test) {
                     '--glue', 'com.coveros.training.math',
                     'src/bdd_test/resources/math']
         }
+    }
+}
 
-        // for the authentication stories
+
+task authBdd (type: Test) {
+    doFirst {
+        print "\n\nstarting authentication BDD tests\n\n"
+    }
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = 'Runs the authentication BDD tests.'
+    dependsOn assemble, compileTestJava, compileBddTestJava
+    testClassesDirs = sourceSets.bddTest.output.classesDirs
+    classpath = sourceSets.bddTest.runtimeClasspath
+    doLast {
+         // for the authentication stories
         javaexec {
             // get the path to the jar file for jacocoagent
             def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
@@ -84,7 +119,20 @@ task cucumber (type: Test) {
                     '--glue', 'com.coveros.training.authentication',
                     'src/bdd_test/resources/authentication']
         }
+    }
+}
 
+
+task expensesBdd (type: Test) {
+    doFirst {
+        print "\n\nstarting expenses BDD tests\n\n"
+    }
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = 'Runs the expenses BDD tests.'
+    dependsOn assemble, compileTestJava, compileBddTestJava
+    testClassesDirs = sourceSets.bddTest.output.classesDirs
+    classpath = sourceSets.bddTest.runtimeClasspath
+    doLast {
         // for the expenses stories
         javaexec {
             // get the path to the jar file for jacocoagent
@@ -104,9 +152,23 @@ task cucumber (type: Test) {
                     '--glue', 'com.coveros.training.expenses',
                     'src/bdd_test/resources/expenses']
         }
+    }
+}
 
-        // for the cartesian product stories
+
+task cartesianProductBdd (type: Test) {
+    doFirst {
+        print "\n\nstarting cartesian product BDD tests\n\n"
+    }
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = 'Runs the Cartesian Product BDD tests.'
+    dependsOn assemble, compileTestJava, compileBddTestJava
+    testClassesDirs = sourceSets.bddTest.output.classesDirs
+    classpath = sourceSets.bddTest.runtimeClasspath
+    doLast {
+         // for the cartesian product stories
         javaexec {
+
             // get the path to the jar file for jacocoagent
             def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
             jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/auth_bdd.exec,append=false"]
@@ -124,10 +186,7 @@ task cucumber (type: Test) {
                     '--glue', 'com.coveros.training.cartesianproduct',
                     'src/bdd_test/resources/cartesianproduct']
         }
-
-
     }
-    mustRunAfter test, fastIntegrationTest
 }
 
 check.dependsOn cucumber
