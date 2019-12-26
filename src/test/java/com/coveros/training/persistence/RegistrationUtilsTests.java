@@ -20,7 +20,7 @@ public class RegistrationUtilsTests {
 
     private static final String GOOD_PASSWORD = "LpcVWwRkWSNVH";
     private static final String ALICE = "alice";
-    private static final String BAD_PASSWORD = "abc";
+    private static final String BAD_PASSWORD = "abc123horsestaples";
     private final PersistenceLayer persistenceLayer = mock(PersistenceLayer.class);
     private final RegistrationUtils registrationUtils = new RegistrationUtils(persistenceLayer);
 
@@ -78,45 +78,47 @@ public class RegistrationUtilsTests {
     public void testShouldProcessRegistration_HappyPath() {
         // this needs to not find a user
         when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(User.createEmpty());
+        RegistrationResult expectedResult = new RegistrationResult(true, SUCCESSFULLY_REGISTERED);
 
         final RegistrationResult registrationResult =
                 registrationUtils.processRegistration(ALICE, GOOD_PASSWORD);
 
-        Assert.assertEquals(SUCCESSFULLY_REGISTERED, registrationResult.status);
-        Assert.assertTrue(registrationResult.wasSuccessfullyRegistered);
+        Assert.assertEquals(expectedResult, registrationResult);
     }
 
     @Test
     public void testShouldProcessRegistration_EmptyUsername() {
+        RegistrationResult expectedResult = new RegistrationResult(false, EMPTY_USERNAME);
+
         final RegistrationResult registrationResult =
                 registrationUtils.processRegistration("", GOOD_PASSWORD);
 
-        Assert.assertEquals(EMPTY_USERNAME, registrationResult.status);
-        Assert.assertFalse(registrationResult.wasSuccessfullyRegistered);
+        Assert.assertEquals(expectedResult, registrationResult);
     }
 
     @Test
     public void testShouldProcessRegistration_BadPassword() {
         // this needs to not find a user
         when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(User.createEmpty());
+        final PasswordResult result = RegistrationUtils.isPasswordGood(BAD_PASSWORD);
+        RegistrationResult expectedResult = new RegistrationResult(false, RegistrationStatusEnums.BAD_PASSWORD, result.toPrettyString());
 
         final RegistrationResult registrationResult =
                 registrationUtils.processRegistration(ALICE, BAD_PASSWORD);
 
-        Assert.assertEquals(RegistrationStatusEnums.BAD_PASSWORD, registrationResult.status);
-        Assert.assertFalse(registrationResult.wasSuccessfullyRegistered);
+        Assert.assertEquals(expectedResult, registrationResult);
     }
 
     @Test
     public void testShouldProcessRegistration_ExistingUser() {
-        // this needs to not find a user
+        // this needs to find an existing user - so they are already registered
         when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(new User(ALICE, 1));
+        RegistrationResult expectedResult = new RegistrationResult(false, ALREADY_REGISTERED);
 
         final RegistrationResult registrationResult =
                 registrationUtils.processRegistration(ALICE, GOOD_PASSWORD);
 
-        Assert.assertEquals(ALREADY_REGISTERED, registrationResult.status);
-        Assert.assertFalse(registrationResult.wasSuccessfullyRegistered);
+        Assert.assertEquals(expectedResult, registrationResult);
     }
 
     @Test
