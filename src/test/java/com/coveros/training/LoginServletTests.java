@@ -13,7 +13,6 @@ import static org.mockito.Mockito.*;
 
 public class LoginServletTests {
     private static final String ALICE = "alice";
-    private static final String RESULT_JSP = "result.jsp";
     private HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
     private HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
     private RequestDispatcher requestDispatcher = Mockito.mock(RequestDispatcher.class);
@@ -30,7 +29,7 @@ public class LoginServletTests {
 
     @Test
     public void testHappyPathPost() {
-        when(request.getRequestDispatcher(RESULT_JSP)).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher(ServletUtils.RESULT_JSP)).thenReturn(requestDispatcher);
         when(request.getParameter("username")).thenReturn("alice");
         when(request.getParameter("password")).thenReturn("abc123");
         when(LoginServlet.loginUtils.isUserRegistered("alice", "abc123")).thenReturn(true);
@@ -46,7 +45,7 @@ public class LoginServletTests {
      */
     @Test
     public void testEmptyString_Username() {
-        when(request.getRequestDispatcher(RESULT_JSP)).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher(ServletUtils.RESULT_JSP)).thenReturn(requestDispatcher);
         String emptyString = "";
         when(request.getParameter("username")).thenReturn(emptyString);
 
@@ -63,7 +62,7 @@ public class LoginServletTests {
      */
     @Test
     public void testEmptyString_Password() {
-        when(request.getRequestDispatcher(RESULT_JSP)).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher(ServletUtils.RESULT_JSP)).thenReturn(requestDispatcher);
         String emptyString = "";
         when(request.getParameter("password")).thenReturn(emptyString);
         when(request.getParameter("username")).thenReturn(ALICE);

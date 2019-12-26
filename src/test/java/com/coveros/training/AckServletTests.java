@@ -58,7 +58,7 @@ public class AckServletTests {
 
         ackServlet.doPost(request, response);
 
-        verify(request).getRequestDispatcher("restfulresult.jsp");
+        verify(request).getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP);
         verify(AckServlet.logger, times(0)).error(Mockito.anyString());
     }
 
@@ -76,7 +76,7 @@ public class AckServletTests {
 
         ackServlet.doPost(request, response);
 
-        verify(request).getRequestDispatcher("restfulresult.jsp");
+        verify(request).getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP);
         verify(AckServlet.logger).error(Mockito.anyString());
     }
 

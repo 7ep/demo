@@ -18,7 +18,6 @@ public class RegisterServletTests {
     private static final String ALICE = "alice";
     private static final RegistrationResult EMPTY_USERNAME = new RegistrationResult(false, RegistrationStatusEnums.EMPTY_USERNAME);
     private static final RegistrationResult SUCCESSFUL_REGISTRATION = new RegistrationResult(true, RegistrationStatusEnums.SUCCESSFULLY_REGISTERED);
-    private static final String RESULT_JSP = "result.jsp";
     private HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
     private HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
     private RequestDispatcher requestDispatcher = Mockito.mock(RequestDispatcher.class);
@@ -45,13 +44,13 @@ public class RegisterServletTests {
         mockRequestParam("username", "");
         mockRequestParam("password", "");
         mockRegisterUserToReturnSomeResponse(EMPTY_USERNAME);
-        mockRequestDispatcherForExpectedRedirection(RESULT_JSP);
+        mockRequestDispatcherForExpectedRedirection(ServletUtils.RESULT_JSP);
 
         // do the post
         registerServlet.doPost(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(request).getRequestDispatcher(RESULT_JSP);
+        verify(request).getRequestDispatcher(ServletUtils.RESULT_JSP);
     }
 
     /**
@@ -66,13 +65,13 @@ public class RegisterServletTests {
         mockRequestParam("username", "Alice");
         mockRequestParam("password", "password123");
         mockRegisterUserToReturnSomeResponse(SUCCESSFUL_REGISTRATION);
-        mockRequestDispatcherForExpectedRedirection(RESULT_JSP);
+        mockRequestDispatcherForExpectedRedirection(ServletUtils.RESULT_JSP);
 
         // do the post
         registerServlet.doPost(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(request).getRequestDispatcher(RESULT_JSP);
+        verify(request).getRequestDispatcher(ServletUtils.RESULT_JSP);
     }
 
     /**
@@ -81,7 +80,7 @@ public class RegisterServletTests {
      */
     @Test
     public void testEmptyString_Username() {
-        when(request.getRequestDispatcher("result.jsp")).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher(ServletUtils.RESULT_JSP)).thenReturn(requestDispatcher);
         String emptyString = "";
         when(request.getParameter("username")).thenReturn(emptyString);
         when(request.getParameter("password")).thenReturn("abc123");
@@ -99,7 +98,7 @@ public class RegisterServletTests {
      */
     @Test
     public void testEmptyString_Password() {
-        when(request.getRequestDispatcher("result.jsp")).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher(ServletUtils.RESULT_JSP)).thenReturn(requestDispatcher);
         String emptyString = "";
         when(request.getParameter("password")).thenReturn(emptyString);
         when(request.getParameter("username")).thenReturn(ALICE);

@@ -38,7 +38,7 @@ public class FibonacciParameterizedTests {
     }
 
     /**
-     * Testing an iterative version found on Rosetta Code
+     * Testing an iterative version found on Rosetta Code, see {@link FibonacciIterative}
      */
     @Test
     public void testIterative1() {
@@ -46,7 +46,7 @@ public class FibonacciParameterizedTests {
     }
 
     /**
-     * Testing a second iterative version found on Rosetta Code
+     * Testing a second iterative version found on Rosetta Code, see {@link FibonacciIterative}
      */
     @Test
     public void testIterative2() {

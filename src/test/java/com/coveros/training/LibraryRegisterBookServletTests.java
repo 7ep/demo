@@ -14,7 +14,6 @@ import static org.mockito.Mockito.*;
 
 public class LibraryRegisterBookServletTests {
 
-    private static final String RESULT_JSP = "result.jsp";
     private HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
     private HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
     private LibraryRegisterBookServlet libraryRegisterBookServlet;
@@ -31,7 +30,7 @@ public class LibraryRegisterBookServletTests {
 
     @Test
     public void testHappyPathPost() {
-        when(request.getRequestDispatcher("result.jsp")).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher(ServletUtils.RESULT_JSP)).thenReturn(requestDispatcher);
         when(request.getParameter("book")).thenReturn("The DevOps Handbook");
         when(LibraryRegisterBookServlet.libraryUtils.registerBook(Mockito.anyString()))
                 .thenReturn(LibraryActionResults.SUCCESS);
@@ -40,7 +39,7 @@ public class LibraryRegisterBookServletTests {
         libraryRegisterBookServlet.doPost(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(request).getRequestDispatcher(RESULT_JSP);
+        verify(request).getRequestDispatcher(ServletUtils.RESULT_JSP);
     }
 
     /**
@@ -49,7 +48,7 @@ public class LibraryRegisterBookServletTests {
      */
     @Test
     public void testEmptyString() {
-        when(request.getRequestDispatcher(RESULT_JSP)).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher(ServletUtils.RESULT_JSP)).thenReturn(requestDispatcher);
         String emptyString = "";
         when(request.getParameter("book")).thenReturn(emptyString);
 

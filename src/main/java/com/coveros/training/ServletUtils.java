@@ -8,13 +8,16 @@ import javax.servlet.http.HttpServletResponse;
 
 class ServletUtils {
 
+    public static final String RESTFUL_RESULT_JSP = "restfulresult.jsp";
+    public static final String RESULT_JSP = "result.jsp";
+
     private ServletUtils() {
         // using a private constructor to hide the implicit public one.
     }
 
     static void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
         try {
-            request.getRequestDispatcher("result.jsp").forward(request, response);
+            request.getRequestDispatcher(RESULT_JSP).forward(request, response);
         } catch (Exception ex) {
             logger.error(String.format("failed during forward: %s", ex));
         }
@@ -22,7 +25,7 @@ class ServletUtils {
 
     static void forwardToRestfulResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
         try {
-            request.getRequestDispatcher("restfulresult.jsp").forward(request, response);
+            request.getRequestDispatcher(RESTFUL_RESULT_JSP).forward(request, response);
         } catch (Exception ex) {
             logger.error(String.format("failed during forward: %s", ex));
         }

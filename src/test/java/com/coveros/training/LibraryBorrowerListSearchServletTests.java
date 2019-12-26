@@ -15,7 +15,6 @@ import static org.mockito.Mockito.*;
 
 public class LibraryBorrowerListSearchServletTests {
 
-    private static final String RESULT_JSP = "restfulresult.jsp";
     public static final String A_BORROWER = "abe borrower";
     private HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
     private HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
@@ -37,7 +36,7 @@ public class LibraryBorrowerListSearchServletTests {
      */
     @Test
     public void testListAllBorrowers() {
-        when(request.getRequestDispatcher(RESULT_JSP)).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
 
         // act
         libraryBorrowerListSearch.doGet(request, response);
@@ -51,7 +50,7 @@ public class LibraryBorrowerListSearchServletTests {
      */
     @Test
     public void testSearchById() {
-        when(request.getRequestDispatcher(RESULT_JSP)).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
         when(request.getParameter("id")).thenReturn("1");
         // the following is just to avoid a null pointer exception when the test succeeds
         when(libraryUtils.searchForBorrowerById(1)).thenReturn(Borrower.createEmpty());
@@ -68,7 +67,7 @@ public class LibraryBorrowerListSearchServletTests {
      */
     @Test
     public void testSearchByName() {
-        when(request.getRequestDispatcher(RESULT_JSP)).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
         when(request.getParameter("name")).thenReturn(A_BORROWER);
         // the following is just to avoid a null pointer exception when the test succeeds
         when(libraryUtils.searchForBorrowerByName(A_BORROWER)).thenReturn(Borrower.createEmpty());
