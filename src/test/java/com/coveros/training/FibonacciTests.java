@@ -8,6 +8,18 @@ import java.math.BigInteger;
 public class FibonacciTests {
 
     @Test
+    public void testSmallValuesFibAlgo1() {
+        final BigInteger fib = FibonacciIterative.fib_algo1(43);
+        Assert.assertEquals(new BigInteger("433494437"), fib);
+    }
+
+    @Test
+    public void testSmallValuesFibAlgo2() {
+        final BigInteger fib = FibonacciIterative.fib_algo2(43);
+        Assert.assertEquals(new BigInteger("433494437"), fib);
+    }
+
+    @Test
     public void testLargeValuesFibAlgo1() {
         final BigInteger fib = FibonacciIterative.fib_algo1(200);
         Assert.assertEquals(new BigInteger("280571172992510140037611932413038677189525"), fib);
