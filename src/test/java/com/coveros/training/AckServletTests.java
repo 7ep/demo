@@ -35,6 +35,21 @@ public class AckServletTests {
     }
 
     /**
+     * Testing the tail recursive algorithm
+     */
+    @Test
+    public void testPostService_TailRecursive() {
+        when(request.getParameter("ack_param_m")).thenReturn("2");
+        when(request.getParameter("ack_param_n")).thenReturn("3");
+        when(request.getParameter("ack_algorithm_choice")).thenReturn("tail_recursive");
+        doNothing().when(ackServlet).forwardToResult(Mockito.any(), Mockito.any(), Mockito.any());
+
+        ackServlet.doPost(request, response);
+
+        verify(ackServlet).tailRecursive(request, 2, 3);
+    }
+
+    /**
      * Here we allow a call into the actual forwardToResult method.
      */
     @Test

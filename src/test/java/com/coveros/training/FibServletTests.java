@@ -34,6 +34,34 @@ public class FibServletTests {
     }
 
     /**
+     * Testing algorithm "tail_recursive 1"
+     */
+    @Test
+    public void testPostService_tailRecursive1() {
+        when(request.getParameter("fib_param_n")).thenReturn("2");
+        when(request.getParameter("fib_algorithm_choice")).thenReturn("tail_recursive_1");
+        doNothing().when(fibServlet).forwardToResult(Mockito.any(), Mockito.any(), Mockito.any());
+
+        fibServlet.doPost(request, response);
+
+        verify(fibServlet).tailRecursiveAlgo1Calc(request, 2);
+    }
+
+    /**
+     * Testing algorithm "tail_recursive 2"
+     */
+    @Test
+    public void testPostService_tailRecursive2() {
+        when(request.getParameter("fib_param_n")).thenReturn("2");
+        when(request.getParameter("fib_algorithm_choice")).thenReturn("tail_recursive_2");
+        doNothing().when(fibServlet).forwardToResult(Mockito.any(), Mockito.any(), Mockito.any());
+
+        fibServlet.doPost(request, response);
+
+        verify(fibServlet).tailRecursiveAlgo2Calc(request, 2);
+    }
+
+    /**
      * Here we allow a call into the actual forwardToResult method.
      */
     @Test

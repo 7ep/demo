@@ -13,13 +13,22 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "DbServlet", urlPatterns = {"/flyway"}, loadOnStartup = 1)
 public class DbServlet extends HttpServlet {
 
+    private final PersistenceLayer pl;
+
+    public DbServlet() {
+        pl = new PersistenceLayer();
+    }
+
+    public DbServlet(PersistenceLayer pl) {
+        this.pl = pl;
+    }
+
     private static final String RESULT = "result";
     private static final Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         final String action = StringUtils.makeNotNullable(request.getParameter("action"));
-        final PersistenceLayer pl = new PersistenceLayer();
         switch (action) {
             case "clean":
                 logger.info("received request to clean the database - i.e. remove all data and schema");

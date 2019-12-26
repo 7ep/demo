@@ -41,13 +41,13 @@ public class FibServlet extends HttpServlet {
         forwardToResult(request, response, logger);
     }
 
-    private void tailRecursiveAlgo2Calc(HttpServletRequest request, int fibParamN) {
+    void tailRecursiveAlgo2Calc(HttpServletRequest request, int fibParamN) {
         final BigInteger result = FibonacciIterative.fib_algo2(fibParamN);
         logger.info("Fibonacci value is {}", result);
         request.setAttribute("result", result);
     }
 
-    private void tailRecursiveAlgo1Calc(HttpServletRequest request, int fibParamN) {
+    void tailRecursiveAlgo1Calc(HttpServletRequest request, int fibParamN) {
         final BigInteger result = FibonacciIterative.fib_algo1(fibParamN);
         logger.info("Fibonacci value is {}", result);
         request.setAttribute("result", result);
