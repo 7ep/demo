@@ -1,18 +1,12 @@
 package com.coveros.training.persistence;
 
-import com.coveros.training.domainobjects.PasswordResult;
-import com.coveros.training.domainobjects.RegistrationResult;
-import com.coveros.training.domainobjects.RegistrationStatusEnums;
-import com.coveros.training.domainobjects.User;
+import com.coveros.training.domainobjects.*;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.coveros.training.domainobjects.PasswordResultEnums.EMPTY_PASSWORD;
-import static com.coveros.training.domainobjects.PasswordResultEnums.*;
-import static com.coveros.training.domainobjects.RegistrationStatusEnums.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -27,13 +21,13 @@ public class RegistrationUtilsTests {
     @Test
     public void testShouldFailOnShortPassword() {
         final PasswordResult result = RegistrationUtils.isPasswordGood("abc");
-        Assert.assertEquals(TOO_SHORT, result.status);
+        Assert.assertEquals(PasswordResultEnums.TOO_SHORT, result.status);
     }
 
     @Test
     public void testShouldFailOnEmptyPassword_EmptyString() {
         final PasswordResult result = RegistrationUtils.isPasswordGood("");
-        Assert.assertEquals(EMPTY_PASSWORD, result.status);
+        Assert.assertEquals(PasswordResultEnums.EMPTY_PASSWORD, result.status);
     }
 
     /**
@@ -50,14 +44,14 @@ public class RegistrationUtilsTests {
                         "typical_password_123");
         for (String password : badPasswords) {
             final PasswordResult result = RegistrationUtils.isPasswordGood(password);
-            Assert.assertEquals("password: " + password, INSUFFICIENT_ENTROPY, result.status);
+            Assert.assertEquals("password: " + password, PasswordResultEnums.INSUFFICIENT_ENTROPY, result.status);
         }
     }
 
     @Test
     public void testShouldHaveSufficientEntropyInPassword() {
         final PasswordResult result = RegistrationUtils.isPasswordGood(GOOD_PASSWORD);
-        Assert.assertEquals(SUCCESS, result.status);
+        Assert.assertEquals(PasswordResultEnums.SUCCESS, result.status);
     }
 
     @Test
@@ -78,7 +72,7 @@ public class RegistrationUtilsTests {
     public void testShouldProcessRegistration_HappyPath() {
         // this needs to not find a user
         when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(User.createEmpty());
-        RegistrationResult expectedResult = new RegistrationResult(true, SUCCESSFULLY_REGISTERED);
+        RegistrationResult expectedResult = new RegistrationResult(true, RegistrationStatusEnums.SUCCESSFULLY_REGISTERED);
 
         final RegistrationResult registrationResult =
                 registrationUtils.processRegistration(ALICE, GOOD_PASSWORD);
@@ -88,7 +82,7 @@ public class RegistrationUtilsTests {
 
     @Test
     public void testShouldProcessRegistration_EmptyUsername() {
-        RegistrationResult expectedResult = new RegistrationResult(false, EMPTY_USERNAME);
+        RegistrationResult expectedResult = new RegistrationResult(false, RegistrationStatusEnums.EMPTY_USERNAME);
 
         final RegistrationResult registrationResult =
                 registrationUtils.processRegistration("", GOOD_PASSWORD);
@@ -113,7 +107,7 @@ public class RegistrationUtilsTests {
     public void testShouldProcessRegistration_ExistingUser() {
         // this needs to find an existing user - so they are already registered
         when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(new User(ALICE, 1));
-        RegistrationResult expectedResult = new RegistrationResult(false, ALREADY_REGISTERED);
+        RegistrationResult expectedResult = new RegistrationResult(false, RegistrationStatusEnums.ALREADY_REGISTERED);
 
         final RegistrationResult registrationResult =
                 registrationUtils.processRegistration(ALICE, GOOD_PASSWORD);
