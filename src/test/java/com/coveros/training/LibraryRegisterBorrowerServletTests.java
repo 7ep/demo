@@ -41,4 +41,21 @@ public class LibraryRegisterBorrowerServletTests {
         // verify that the correct redirect was chosen.
         verify(request).getRequestDispatcher(RESULT_JSP);
     }
+
+
+    /**
+     * If they pass in an empty string, it should return a message
+     * indicating that.
+     */
+    @Test
+    public void testEmptyString() {
+        String emptyString = "";
+        when(request.getParameter("borrower")).thenReturn(emptyString);
+
+        // do the post
+        libraryRegisterBorrowerServlet.doPost(request, response);
+
+        // verify that the missing borrower name was handled
+        Mockito.verify(request).setAttribute("result", "NO_BORROWER_PROVIDED");
+    }
 }

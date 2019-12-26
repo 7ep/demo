@@ -20,14 +20,21 @@ public class LibraryRegisterBorrowerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         final String borrower = request.getParameter("borrower");
-        request.setAttribute("borrower", borrower);
+        LibraryActionResults libraryActionResults;
 
-        logger.info("received request to register a borrower, {}", borrower);
+        if (borrower.isEmpty()) {
+            libraryActionResults = LibraryActionResults.NO_BORROWER_PROVIDED;
+            logger.info("input for the borrower field was empty");
+        } else {
+            request.setAttribute("borrower", borrower);
 
-        final LibraryActionResults libraryActionResults = libraryUtils.registerBorrower(borrower);
+            logger.info("received request to register a borrower, {}", borrower);
 
-        request.setAttribute("result", libraryActionResults);
+            libraryActionResults = libraryUtils.registerBorrower(borrower);
+        }
+
         request.setAttribute("return_page", "library.html");
+        request.setAttribute("result", libraryActionResults.toString());
         ServletUtils.forwardToResult(request, response, logger);
     }
 

@@ -2,6 +2,7 @@ package com.coveros.training;
 
 import com.coveros.training.domainobjects.LibraryActionResults;
 import com.coveros.training.persistence.LibraryUtils;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -41,5 +42,21 @@ public class LibraryRegisterBookServletTests {
 
         // verify that the correct redirect was chosen.
         verify(request).getRequestDispatcher(RESULT_JSP);
+    }
+
+    /**
+     * If they pass in an empty string, it should return a message
+     * indicating that.
+     */
+    @Test
+    public void testEmptyString() {
+        String emptyString = "";
+        when(request.getParameter("book")).thenReturn(emptyString);
+
+        // do the post
+        libraryRegisterBookServlet.doPost(request, response);
+
+        // verify that the missing book title was handled
+        Mockito.verify(request).setAttribute("result", "NO_BOOK_TITLE_PROVIDED");
     }
 }

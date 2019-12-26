@@ -15,6 +15,7 @@ import static org.mockito.Mockito.*;
 
 public class RegisterServletTests {
 
+    private static final String ALICE = "alice";
     private static final RegistrationResult EMPTY_USERNAME = new RegistrationResult(false, RegistrationStatusEnums.EMPTY_USERNAME);
     private static final RegistrationResult SUCCESSFUL_REGISTRATION = new RegistrationResult(true, RegistrationStatusEnums.SUCCESSFULLY_REGISTERED);
     private static final String RESULT_JSP = "result.jsp";
@@ -72,6 +73,40 @@ public class RegisterServletTests {
 
         // verify that the correct redirect was chosen.
         verify(request).getRequestDispatcher(RESULT_JSP);
+    }
+
+    /**
+     * If they pass in an empty string, it should return a message
+     * indicating that.
+     */
+    @Test
+    public void testEmptyString_Username() {
+        String emptyString = "";
+        when(request.getParameter("username")).thenReturn(emptyString);
+        when(request.getParameter("password")).thenReturn("abc123");
+
+        // do the post
+        registerServlet.doPost(request, response);
+
+        // verify that the missing book title was handled
+        Mockito.verify(request).setAttribute("result", "no username provided");
+    }
+
+    /**
+     * If they pass in an empty string, it should return a message
+     * indicating that.
+     */
+    @Test
+    public void testEmptyString_Password() {
+        String emptyString = "";
+        when(request.getParameter("password")).thenReturn(emptyString);
+        when(request.getParameter("username")).thenReturn(ALICE);
+
+        // do the post
+        registerServlet.doPost(request, response);
+
+        // verify that the missing book title was handled
+        Mockito.verify(request).setAttribute("result", "no password provided");
     }
 
 

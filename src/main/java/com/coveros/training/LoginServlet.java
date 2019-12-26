@@ -16,29 +16,27 @@ public class LoginServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
     static LoginUtils loginUtils = new LoginUtils();
 
-    private String putUsernameInRequest(HttpServletRequest request) {
-        String username = request.getParameter("username");
-        if (username == null) username = "EMPTY_USERNAME";
-        request.setAttribute("username", username);
-        return username;
-    }
-
-    private String putPasswordInRequest(HttpServletRequest request) {
-        String password = request.getParameter("password");
-        if (password == null) password = "EMPTY_PASSWORD";
-        request.setAttribute("password", password);
-        return password;
-    }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        String username = putUsernameInRequest(request);
-        String password = putPasswordInRequest(request);
+        String username = request.getParameter("username");
+        request.setAttribute("username", username);
 
-        logger.info("received request to authenticate a user, {}", username);
+        String password = request.getParameter("password");
+        request.setAttribute("password", password);
 
-        final Boolean userRegistered = loginUtils.isUserRegistered(username, password);
-        String responseText = userRegistered ? "access granted" : "access denied";
+        String responseText;
+
+        if (username.isEmpty()) {
+            responseText = "no username provided";
+        } else if (password.isEmpty()) {
+            responseText = "no password provided";
+        } else {
+            logger.info("received request to authenticate a user, {}", username);
+
+            final Boolean userRegistered = loginUtils.isUserRegistered(username, password);
+            responseText = userRegistered ? "access granted" : "access denied";
+        }
+
         request.setAttribute("result", responseText);
         request.setAttribute("return_page", "library.html");
         ServletUtils.forwardToResult(request, response, logger);

@@ -20,14 +20,21 @@ public class LibraryRegisterBookServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         final String book = request.getParameter("book");
-        request.setAttribute("book", book);
+        LibraryActionResults libraryActionResults;
 
-        logger.info("received request to register a book, {}", book);
+        if (book.isEmpty()) {
+            libraryActionResults = LibraryActionResults.NO_BOOK_TITLE_PROVIDED;
+            logger.info("input for the book field was empty");
+        } else {
+            request.setAttribute("book", book);
 
-        final LibraryActionResults libraryActionResults = libraryUtils.registerBook(book);
+            logger.info("received request to register a book, {}", book);
 
-        request.setAttribute("result", libraryActionResults.toString());
+            libraryActionResults = libraryUtils.registerBook(book);
+        }
+
         request.setAttribute("return_page", "library.html");
+        request.setAttribute("result", libraryActionResults.toString());
         ServletUtils.forwardToResult(request, response, logger);
     }
 

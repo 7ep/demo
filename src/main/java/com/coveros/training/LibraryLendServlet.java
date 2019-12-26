@@ -21,19 +21,26 @@ public class LibraryLendServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        LibraryActionResults libraryActionResults;
+
         final String book = request.getParameter("book");
         request.setAttribute("book", book);
 
         final String borrower = request.getParameter("borrower");
         request.setAttribute("borrower", borrower);
 
-        final Date now = getDateNow();
-        request.setAttribute("date", now.toString());
+        if (book.isEmpty()) {
+            libraryActionResults = LibraryActionResults.NO_BOOK_TITLE_PROVIDED;
+        } else if (borrower.isEmpty()) {
+            libraryActionResults = LibraryActionResults.NO_BORROWER_PROVIDED;
+        } else {
+            final Date now = getDateNow();
+            request.setAttribute("date", now.toString());
 
-        logger.info("received request to lend a book, {}, to {}", book, borrower);
+            logger.info("received request to lend a book, {}, to {}", book, borrower);
 
-        final LibraryActionResults libraryActionResults = libraryUtils.lendBook(book, borrower, now);
-
+            libraryActionResults = libraryUtils.lendBook(book, borrower, now);
+        }
         request.setAttribute("result", libraryActionResults.toString());
         request.setAttribute("return_page", "library.html");
         ServletUtils.forwardToResult(request, response, logger);
