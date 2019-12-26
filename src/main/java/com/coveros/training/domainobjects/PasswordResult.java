@@ -75,13 +75,11 @@ public final class PasswordResult {
     }
 
     public final String toPrettyString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("status: %s%n", status));
-        sb.append(String.format("entropy: %s%n", entropy));
-        sb.append(String.format("time to crack offline: %s%n", timeToCrackOffline));
-        sb.append(String.format("time to crack online: %s%n", timeToCrackOnline));
-        sb.append(String.format("Nbvcxz response: %s%n", message));
-        return sb.toString();
+        return String.format("status: %s%n", status) +
+                String.format("entropy: %s%n", entropy) +
+                String.format("time to crack offline: %s%n", timeToCrackOffline) +
+                String.format("time to crack online: %s%n", timeToCrackOnline) +
+                String.format("Nbvcxz response: %s%n", message);
     }
 
     /**

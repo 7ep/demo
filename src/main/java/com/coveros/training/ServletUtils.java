@@ -19,4 +19,12 @@ class ServletUtils {
             logger.error(String.format("failed during forward: %s", ex));
         }
     }
+
+    static void forwardToRestfulResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
+        try {
+            request.getRequestDispatcher("restfulresult.jsp").forward(request, response);
+        } catch (Exception ex) {
+            logger.error(String.format("failed during forward: %s", ex));
+        }
+    }
 }

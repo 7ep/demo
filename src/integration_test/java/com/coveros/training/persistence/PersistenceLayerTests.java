@@ -47,7 +47,7 @@ public class PersistenceLayerTests {
 
         long id = pl.saveNewBorrower(DEFAULT_BORROWER.name);
 
-        Assert.assertEquals(1, id);
+        Assert.assertEquals("The first row in a database gets an index of 1", 1, id);
     }
 
     /**
@@ -57,12 +57,15 @@ public class PersistenceLayerTests {
      */
     @Test
     public void testShouldUpdateBorrowerToDatabase() {
+        // the borrower with id of 1 is "alice"
         runRestoreOneBookOneBorrower();
+        final String newName = "bob";
 
-        pl.updateBorrower(1, "bob");
+        // change the borrower's name
+        pl.updateBorrower(1, newName);
 
         String name = pl.getBorrowerName(1);
-        Assert.assertEquals("bob", name);
+        Assert.assertEquals(newName, name);
     }
 
     /**
@@ -73,10 +76,9 @@ public class PersistenceLayerTests {
     public void testShouldBeAbleToSearchBorrowerByName() {
         runRestoreOneBookOneBorrower();
 
-        Borrower bd = pl.searchBorrowerDataByName("alice");
+        Borrower borrower = pl.searchBorrowerDataByName(DEFAULT_BORROWER.name);
 
-        Assert.assertEquals("alice", bd.name);
-        Assert.assertEquals(1, bd.id);
+        Assert.assertEquals(DEFAULT_BORROWER, borrower);
     }
 
     /**
@@ -85,11 +87,11 @@ public class PersistenceLayerTests {
     @Test
     public void testShouldBeAbleToSearchForBooksByTitle() {
         runRestoreOneBookOneBorrower();
+        final Book expectedBook = new Book(1, DEFAULT_BOOK.title);
 
         Book book = pl.searchBooksByTitle(DEFAULT_BOOK.title);
 
-        Assert.assertEquals(DEFAULT_BOOK.title, book.title);
-        Assert.assertEquals(1, book.id);
+        Assert.assertEquals(expectedBook, book);
     }
 
     /**
@@ -97,12 +99,14 @@ public class PersistenceLayerTests {
      */
     @Test
     public void testShouldBeAbleToSearchForBooksById() {
+        // this will set the default book into the database
         runRestoreOneBookOneBorrower();
+        final Book expectedBook = new Book(1, DEFAULT_BOOK.title);
 
+        // search for it by id
         Book book = pl.searchBooksById(DEFAULT_BOOK.id);
 
-        Assert.assertEquals(DEFAULT_BOOK.title, book.title);
-        Assert.assertEquals(1, book.id);
+        Assert.assertEquals(expectedBook, book);
     }
 
     /**
@@ -122,18 +126,19 @@ public class PersistenceLayerTests {
     public void testShouldBeAbleToSearchAUserByName() {
         runRestoreOneUser();
 
-        User user = pl.searchForUserByName("alice");
+        User user = pl.searchForUserByName(DEFAULT_BORROWER.name);
 
-        Assert.assertEquals("alice", user.name);
+        Assert.assertEquals(DEFAULT_BORROWER.name, user.name);
         Assert.assertEquals(1, user.id);
     }
 
     @Test
     public void testThatWeCanUpdateAUsersPassword() {
         runRestoreOneUser();
+        final String newPassword = "abc123";
 
-        pl.updateUserWithPassword(1, "abc123");
-        final boolean result = pl.areCredentialsValid("alice", "abc123");
+        pl.updateUserWithPassword(1, newPassword);
+        final boolean result = pl.areCredentialsValid(DEFAULT_BORROWER.name, newPassword);
 
         Assert.assertTrue(result);
     }
@@ -296,7 +301,7 @@ public class PersistenceLayerTests {
      * This can be run here, simply put @Test on top.
      */
     public void runBackup() {
-        pl.runBackup("db_sample_files/v2_one_loan.sql");
+        pl.runBackup("v2_one_loan.sql");
     }
 
     /**
@@ -306,16 +311,19 @@ public class PersistenceLayerTests {
         runRestoreOneBookOneBorrower();
     }
 
+    /**
+     * this will set "alice" with id of 1 into the database as a borrower
+     */
     private void runRestoreOneBookOneBorrower() {
-        runRestore("db_sample_files/v2_one_book_one_borrower.sql");
+        runRestore("v2_one_book_one_borrower.sql");
     }
 
     private void runRestoreOneUser() {
-        runRestore("db_sample_files/v2_one_user.sql");
+        runRestore("v2_one_user.sql");
     }
 
     private void runRestoreOneLoan() {
-        runRestore("db_sample_files/v2_one_loan.sql");
+        runRestore("v2_one_loan.sql");
     }
 
     private void runRestore(String scriptName) {

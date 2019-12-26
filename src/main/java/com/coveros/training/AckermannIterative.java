@@ -10,22 +10,19 @@ import java.util.stream.Stream;
  * From https://rosettacode.org/wiki/Ackermann_function#Java
  */
 public interface AckermannIterative {
-    public static AckermannIterative new_(BigInteger number1, BigInteger number2, Stack<BigInteger> stack, boolean flag) {
-        return $.new_(number1, number2, stack, flag);
-    }
-    public static BigInteger calculate(int m, int n) {
+    static BigInteger calculate(int m, int n) {
         BigInteger bigM = BigInteger.valueOf(m);
         BigInteger bigN = BigInteger.valueOf(n);
         return $.main(bigM, bigN);
     }
-    public BigInteger number1();
-    public BigInteger number2();
+    BigInteger number1();
+    BigInteger number2();
 
-    public Stack<BigInteger> stack();
+    Stack<BigInteger> stack();
 
-    public boolean flag();
+    boolean flag();
 
-    public enum $ {
+    enum $ {
         $$;
 
         private static final BigInteger ZERO = BigInteger.ZERO;
@@ -129,22 +126,22 @@ public interface AckermannIterative {
         @FunctionalInterface
         private interface FunctionalAckermann extends FunctionalField<Field>, AckermannIterative {
             @Override
-            public default BigInteger number1() {
+            default BigInteger number1() {
                 return field(Field.number1);
             }
 
             @Override
-            public default BigInteger number2() {
+            default BigInteger number2() {
                 return field(Field.number2);
             }
 
             @Override
-            public default Stack<BigInteger> stack() {
+            default Stack<BigInteger> stack() {
                 return field(Field.stack);
             }
 
             @Override
-            public default boolean flag() {
+            default boolean flag() {
                 return field(Field.flag);
             }
         }

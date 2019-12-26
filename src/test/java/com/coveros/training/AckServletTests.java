@@ -35,6 +35,21 @@ public class AckServletTests {
     }
 
     /**
+     * Testing the tail recursive algorithm
+     */
+    @Test
+    public void testPostService_TailRecursive() {
+        when(request.getParameter("ack_param_m")).thenReturn("2");
+        when(request.getParameter("ack_param_n")).thenReturn("3");
+        when(request.getParameter("ack_algorithm_choice")).thenReturn("tail_recursive");
+        doNothing().when(ackServlet).forwardToResult(Mockito.any(), Mockito.any(), Mockito.any());
+
+        ackServlet.doPost(request, response);
+
+        verify(ackServlet).tailRecursive(request, 2, 3);
+    }
+
+    /**
      * Here we allow a call into the actual forwardToResult method.
      */
     @Test
@@ -43,7 +58,7 @@ public class AckServletTests {
 
         ackServlet.doPost(request, response);
 
-        verify(request).getRequestDispatcher("result.jsp");
+        verify(request).getRequestDispatcher("restfulresult.jsp");
         verify(AckServlet.logger, times(0)).error(Mockito.anyString());
     }
 
@@ -55,13 +70,13 @@ public class AckServletTests {
     public void testPostService_realForward_withException() throws ServletException, IOException {
         AckServlet.logger = logger;
         final RequestDispatcher requestDispatcher = mock(RequestDispatcher.class);
-        when(request.getRequestDispatcher("result.jsp")).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher("restfulresult.jsp")).thenReturn(requestDispatcher);
         doThrow(new RuntimeException("hi there, exception here."))
                 .when(requestDispatcher).forward(request, response);
 
         ackServlet.doPost(request, response);
 
-        verify(request).getRequestDispatcher("result.jsp");
+        verify(request).getRequestDispatcher("restfulresult.jsp");
         verify(AckServlet.logger).error(Mockito.anyString());
     }
 

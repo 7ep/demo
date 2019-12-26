@@ -2,7 +2,6 @@ package com.coveros.training;
 
 import com.coveros.training.domainobjects.Book;
 import com.coveros.training.persistence.LibraryUtils;
-import com.coveros.training.persistence.RegistrationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
 @WebServlet(name = "LibraryBookListSearch", urlPatterns = {"/book"}, loadOnStartup = 1)
 public class LibraryBookListSearch extends HttpServlet {
 
-    private static final Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(LibraryBookListSearch.class);
     private static final String RESULT = "result";
     static LibraryUtils libraryUtils = new LibraryUtils();
 
@@ -31,9 +30,7 @@ public class LibraryBookListSearch extends HttpServlet {
             final String allBooks = books.stream().map(Book::toOutputString).collect(Collectors.joining(","));
 
             request.setAttribute(RESULT, allBooks);
-        }
-
-        if (! idString.isEmpty()) {
+        } else if (! idString.isEmpty()) {
             logger.info("Received request for books, id requested - searching for book by id {}", idString);
             int id = 0;
             try {
@@ -43,15 +40,13 @@ public class LibraryBookListSearch extends HttpServlet {
             }
             final Book book = libraryUtils.searchForBookById(id);
             request.setAttribute(RESULT, String.format("book result: Title: %s, Id: %s ", book.title, book.id));
-        }
-
-        if (! title.isEmpty()) {
+        } else {
             logger.info("Received request for books, name requested - searching for book by title {}", title);
             final Book book = libraryUtils.searchForBookByTitle(title);
             request.setAttribute(RESULT, String.format("book result: Title: %s, Id: %s ", book.title, book.id));
         }
 
-        ServletUtils.forwardToResult(request, response, logger);
+        ServletUtils.forwardToRestfulResult(request, response, logger);
     }
 
 }

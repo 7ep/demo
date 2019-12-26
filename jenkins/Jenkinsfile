@@ -38,15 +38,17 @@ pipeline {
       }
     }
 
-    stage('Static Analysis') {
-      steps {
-        sh './gradlew sonarqube'
-      }
-    }
-
     stage('Automated Acceptance Tests') {
       steps {
         sh './gradlew generateCucumberReports'
+        // generate the code coverage report for jacoco
+        sh './gradlew jacocoTestReport'
+      }
+    }
+
+    stage('Static Analysis') {
+      steps {
+        sh './gradlew sonarqube'
       }
     }
 

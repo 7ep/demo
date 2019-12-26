@@ -1,54 +1,45 @@
 package com.coveros.training;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Arrays;
-import java.util.Collection;
-
+import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
-@RunWith(Parameterized.class)
+import java.math.BigInteger;
+
 public class FibonacciTests {
-    @Parameters
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {
-                { 0, 0 }, { 1, 1 }, { 2, 1 }, { 3, 2 }, { 4, 3 }, { 5, 5 }, { 6, 8 }, {20, 6765}, {43, 433494437}
-        });
-    }
 
-    private int fInput;
-
-    private int fExpected;
-
-    public FibonacciTests(int input, int expected) {
-        this.fInput = input;
-        this.fExpected = expected;
-    }
-
-    /**
-     * Testing a very standard recursive version
-     */
     @Test
-    public void test() {
-        assertEquals(String.format("for the %dth number, we expected %d", fInput, fExpected), fExpected, Fibonacci.calculate(fInput));
+    public void testSmallValuesFibAlgo1() {
+        final BigInteger fib = FibonacciIterative.fib_algo1(43);
+        Assert.assertEquals(new BigInteger("433494437"), fib);
     }
 
-    /**
-     * Testing an iterative version found on Rosetta Code
-     */
     @Test
-    public void testIterative1() {
-        assertEquals(String.format("for the %dth number, we expected %d", fInput, fExpected), fExpected, FibonacciIterative.fib(fInput));
+    public void testSmallValuesFibAlgo2() {
+        final BigInteger fib = FibonacciIterative.fib_algo2(43);
+        Assert.assertEquals(new BigInteger("433494437"), fib);
     }
 
-    /**
-     * Testing a second iterative version found on Rosetta Code
-     */
     @Test
-    public void testIterative2() {
-        assertEquals(String.format("for the %dth number, we expected %d", fInput, fExpected), fExpected, FibonacciIterative.itFibN(fInput));
+    public void testLargeValuesFibAlgo1() {
+        final BigInteger fib = FibonacciIterative.fib_algo1(200);
+        Assert.assertEquals(new BigInteger("280571172992510140037611932413038677189525"), fib);
+    }
+
+    @Test
+    public void testLargeValuesFibAlgo2() {
+        final BigInteger fib = FibonacciIterative.fib_algo2(200);
+        Assert.assertEquals(new BigInteger("280571172992510140037611932413038677189525"), fib);
+    }
+
+    @Test
+    public void testLargerValuesFibAlgo1() {
+        final BigInteger fib = FibonacciIterative.fib_algo1(2000);
+        Assert.assertEquals(new BigInteger("4224696333392304878706725602341482782579852840250681098010280137314308584370130707224123599639141511088446087538909603607640194711643596029271983312598737326253555802606991585915229492453904998722256795316982874482472992263901833716778060607011615497886719879858311468870876264597369086722884023654422295243347964480139515349562972087652656069529806499841977448720155612802665404554171717881930324025204312082516817125"), fib);
+    }
+
+    @Test
+    public void testLargerValuesFibAlgo2() {
+        final BigInteger fib = FibonacciIterative.fib_algo2(2000);
+        Assert.assertEquals(new BigInteger("4224696333392304878706725602341482782579852840250681098010280137314308584370130707224123599639141511088446087538909603607640194711643596029271983312598737326253555802606991585915229492453904998722256795316982874482472992263901833716778060607011615497886719879858311468870876264597369086722884023654422295243347964480139515349562972087652656069529806499841977448720155612802665404554171717881930324025204312082516817125"), fib);
     }
 }

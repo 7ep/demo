@@ -44,4 +44,38 @@ public class LibraryLendServletTests {
         Assert.assertNotEquals(dateNow, Date.valueOf(LocalDate.MAX));
     }
 
+    /**
+     * If they pass in an empty string for either field, it should return a message
+     * indicating that.
+     */
+    @Test
+    public void testEmptyString_Book() {
+        String emptyString = "";
+        when(request.getParameter("book")).thenReturn(emptyString);
+        when(request.getParameter("borrower")).thenReturn(ALICE);
+
+        // do the post
+        libraryLendServlet.doPost(request, response);
+
+        // verify that the missing book title was handled
+        Mockito.verify(request).setAttribute("result", "NO_BOOK_TITLE_PROVIDED");
+    }
+
+    /**
+     * If they pass in an empty string for either field, it should return a message
+     * indicating that.
+     */
+    @Test
+    public void testEmptyString_Borrower() {
+        String emptyString = "";
+        when(request.getParameter("borrower")).thenReturn(emptyString);
+        when(request.getParameter("book")).thenReturn(BOOK_TITLE);
+
+        // do the post
+        libraryLendServlet.doPost(request, response);
+
+        // verify that the missing borrower was handled
+        Mockito.verify(request).setAttribute("result", "NO_BORROWER_PROVIDED");
+    }
+
 }

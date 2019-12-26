@@ -6,11 +6,11 @@ sourceSets {
 }
 
 dependencies {
-    fastIntegrationTestCompile sourceSets.main.output
-    fastIntegrationTestCompile sourceSets.test.output
+    fastIntegrationTestImplementation sourceSets.main.output
+    fastIntegrationTestImplementation sourceSets.test.output
 
-    fastIntegrationTestCompile configurations.compile
-    fastIntegrationTestCompile configurations.testCompile
+    fastIntegrationTestImplementation configurations.implementation
+    fastIntegrationTestImplementation configurations.testImplementation
 
     fastIntegrationTestRuntime configurations.runtime
     fastIntegrationTestRuntime configurations.testRuntime
@@ -22,7 +22,7 @@ task fastIntegrationTest(type: Test) {
     testClassesDirs = sourceSets.fastIntegrationTest.output.classesDirs
     classpath = sourceSets.fastIntegrationTest.runtimeClasspath
     maxHeapSize = '1024m'
-    binResultsDir = file("$buildDir/integration-test-results/binary/integrationTest")
+    binaryResultsDirectory = file("$buildDir/integration-test-results/binary/integrationTest")
     mustRunAfter test
 }
 

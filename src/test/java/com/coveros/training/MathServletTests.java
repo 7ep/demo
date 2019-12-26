@@ -42,7 +42,7 @@ public class MathServletTests {
 
         mathServlet.doPost(request, response);
 
-        verify(request).getRequestDispatcher("result.jsp");
+        verify(request).getRequestDispatcher("restfulresult.jsp");
         verify(MathServlet.logger, times(0)).error(Mockito.anyString());
     }
 
@@ -54,13 +54,13 @@ public class MathServletTests {
     public void testPostService_realForward_withException() throws ServletException, IOException {
         MathServlet.logger = logger;
         final RequestDispatcher requestDispatcher = mock(RequestDispatcher.class);
-        when(request.getRequestDispatcher("result.jsp")).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher("restfulresult.jsp")).thenReturn(requestDispatcher);
         doThrow(new RuntimeException("hi there, exception here."))
                 .when(requestDispatcher).forward(request, response);
 
         mathServlet.doPost(request, response);
 
-        verify(request).getRequestDispatcher("result.jsp");
+        verify(request).getRequestDispatcher("restfulresult.jsp");
         verify(MathServlet.logger).error(Mockito.anyString());
     }
 

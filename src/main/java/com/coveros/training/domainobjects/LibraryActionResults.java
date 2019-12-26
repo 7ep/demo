@@ -9,5 +9,7 @@ public enum LibraryActionResults {
     BORROWER_NOT_REGISTERED,
     BOOK_CHECKED_OUT, // someone already has this book checked out.
     SUCCESS,
+    NO_BOOK_TITLE_PROVIDED,  // if a method needs a book and none is provided
+    NO_BORROWER_PROVIDED,   // if a method needs a borrower and none is provided
     NULL // may be used when initializing a variable of this type
 }

@@ -2,7 +2,6 @@ package com.coveros.training;
 
 import com.coveros.training.domainobjects.LibraryActionResults;
 import com.coveros.training.persistence.LibraryUtils;
-import com.coveros.training.persistence.RegistrationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,25 +15,33 @@ import java.time.LocalDate;
 @WebServlet(name = "LibraryLendServlet", urlPatterns = {"/lend"}, loadOnStartup = 1)
 public class LibraryLendServlet extends HttpServlet {
 
-    private static final Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(LibraryLendServlet.class);
     static LibraryUtils libraryUtils = new LibraryUtils();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        LibraryActionResults libraryActionResults;
+
         final String book = request.getParameter("book");
         request.setAttribute("book", book);
 
         final String borrower = request.getParameter("borrower");
         request.setAttribute("borrower", borrower);
 
-        final Date now = getDateNow();
-        request.setAttribute("date", now.toString());
+        if (book.isEmpty()) {
+            libraryActionResults = LibraryActionResults.NO_BOOK_TITLE_PROVIDED;
+        } else if (borrower.isEmpty()) {
+            libraryActionResults = LibraryActionResults.NO_BORROWER_PROVIDED;
+        } else {
+            final Date now = getDateNow();
+            request.setAttribute("date", now.toString());
 
-        logger.info("received request to lend a book, {}, to {}", book, borrower);
+            logger.info("received request to lend a book, {}, to {}", book, borrower);
 
-        final LibraryActionResults libraryActionResults = libraryUtils.lendBook(book, borrower, now);
-
+            libraryActionResults = libraryUtils.lendBook(book, borrower, now);
+        }
         request.setAttribute("result", libraryActionResults.toString());
+        request.setAttribute("return_page", "library.html");
         ServletUtils.forwardToResult(request, response, logger);
     }
 

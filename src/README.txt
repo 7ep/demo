@@ -1,12 +1,18 @@
 Contents of the src directory
 -----------------------------
 
+application code directory
+--------------------------
 main             : Code for the application
 
+test code directories
+---------------------
 bdd_test         : Tests that use Cucumber to test at the feature level
 integration_test : Primarily tests that hit the database, but really any integration test
 selenified_tests : Tests that use Selenified
 test             : Unit tests
+api_tests        : tests that target the API's
+ui_tests         : tests that target the UI
 
 
 

@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigInteger;
 
 @WebServlet(name = "FibServlet", urlPatterns = {"/fibonacci"}, loadOnStartup = 1)
 public class FibServlet extends HttpServlet {
@@ -25,7 +26,7 @@ public class FibServlet extends HttpServlet {
             int fibParamN = putNumberInRequest("fib_param_n", request);
             String algorithm = request.getParameter("fib_algorithm_choice");
 
-            logger.info("received request to defaultRecursiveCalculation the {}th fibonacci number by {}", fibParamN, algorithm);
+            logger.info("received request to calculate the {}th fibonacci number by {}", fibParamN, algorithm);
 
             if (algorithm.equals("tail_recursive_1")) {
                 tailRecursiveAlgo1Calc(request, fibParamN);
@@ -40,14 +41,14 @@ public class FibServlet extends HttpServlet {
         forwardToResult(request, response, logger);
     }
 
-    private void tailRecursiveAlgo2Calc(HttpServletRequest request, int fibParamN) {
-        final long result = FibonacciIterative.fib(fibParamN);
+    void tailRecursiveAlgo2Calc(HttpServletRequest request, int fibParamN) {
+        final BigInteger result = FibonacciIterative.fib_algo2(fibParamN);
         logger.info("Fibonacci value is {}", result);
         request.setAttribute("result", result);
     }
 
-    private void tailRecursiveAlgo1Calc(HttpServletRequest request, int fibParamN) {
-        final long result = FibonacciIterative.itFibN(fibParamN);
+    void tailRecursiveAlgo1Calc(HttpServletRequest request, int fibParamN) {
+        final BigInteger result = FibonacciIterative.fib_algo1(fibParamN);
         logger.info("Fibonacci value is {}", result);
         request.setAttribute("result", result);
     }
@@ -56,7 +57,7 @@ public class FibServlet extends HttpServlet {
      * Wrapping a static method call for testing.
      */
     void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
-        ServletUtils.forwardToResult(request, response, logger);
+        ServletUtils.forwardToRestfulResult(request, response, logger);
     }
 
     /**

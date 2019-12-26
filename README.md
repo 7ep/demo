@@ -5,13 +5,13 @@ software practices.
 
 #### Dependencies:
 
-* [Open Java Development Kit](https://jdk.java.net/12/) _or_ [Oracle Java Development Kit](https://www.oracle.com/technetwork/java/javase/downloads/jdk12-downloads-5295953.html) (If you don't have an opinion, go with the first.)
+* [Open Java Development Kit](https://jdk.java.net/13/) _or_ [Oracle Java Development Kit](https://www.oracle.com/technetwork/java/javase/downloads/index.html) (If you don't have an opinion, go with the first.)
 
 #### Quick Start:
 
 * Download this repo: https://github.com/7ep/demo/archive/master.zip
 * unzip the file to a directory.
-* On the command line in that directory, run _gradlew check_ , then _gradlew appRun_
+* On the command line in that directory, run _gradlew check_ , then _gradlew apprun_
 * visit the application at http://localhost:8080/demo
 
 
@@ -65,11 +65,11 @@ On the command line, run the following:
 
 On Mac/Linux
 
-    ./gradlew appRun
+    ./gradlew apprun
 
 On Windows
 
-    gradlew appRun
+    gradlew apprun
     
 Then, head to http://localhost:8080/demo    
     
@@ -93,7 +93,7 @@ On Windows
 * http://localhost:8080/demo/console - the database viewer - use URL of jdbc:h2:mem:training and no user or password
 
 #### Summary of relevant Gradle commands
-* gradlew appRun - runs the application
+* gradlew apprun - runs the application
 * gradlew check - runs all tests possible with only dependency being Java 8.  No need for app to be running.
 * gradlew runAllTests - runs the whole set of tests**  
 * gradlew clean - cleans build products and installs pre-push hook. (see the file in this directory, pre-push)
@@ -127,7 +127,7 @@ techniques.  Some of the techniques exemplified are:
 * Database versioning, with [Flyway](https://flywaydb.org/)
 * Uses [H2 database](https://www.h2database.com/html/main.html) to simplify operation
 * Security analysis using [DependencyCheck](https://www.owasp.org/index.php/OWASP_Dependency_Check)
-* Uses [Gretty](https://github.com/akhikhl/gretty) which allows us to hot swap Java code at runtime.
+* Uses [Gretty](https://github.com/gretty-gradle-plugin/gretty) which allows us to hot swap Java code at runtime.
 
 Its essential goals:
 * Just works, any platform.

@@ -2,7 +2,6 @@ package com.coveros.training;
 
 import com.coveros.training.domainobjects.Borrower;
 import com.coveros.training.persistence.LibraryUtils;
-import com.coveros.training.persistence.RegistrationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
 @WebServlet(name = "LibraryBorrowerListSearch", urlPatterns = {"/borrower"}, loadOnStartup = 1)
 public class LibraryBorrowerListSearch extends HttpServlet {
 
-    private static final Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(LibraryBorrowerListSearch.class);
     private static final String RESULT = "result";
     static LibraryUtils libraryUtils = new LibraryUtils();
 
@@ -51,7 +50,7 @@ public class LibraryBorrowerListSearch extends HttpServlet {
             request.setAttribute(RESULT, String.format("borrower result: Name: %s, Id: %s ", borrower.name, borrower.id));
         }
 
-        ServletUtils.forwardToResult(request, response, logger);
+        ServletUtils.forwardToRestfulResult(request, response, logger);
     }
 
 }

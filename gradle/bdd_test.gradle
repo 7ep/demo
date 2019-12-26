@@ -6,37 +6,39 @@ sourceSets {
 }
 
 dependencies {
-    bddTestCompile sourceSets.main.output
-    bddTestCompile sourceSets.test.output
-    bddTestCompile sourceSets.fastIntegrationTest.output
-
-    bddTestCompile configurations.compile
-    bddTestCompile configurations.testCompile
-    bddTestCompile configurations.fastIntegrationTestCompile
-
-    bddTestRuntime configurations.runtime
-    bddTestRuntime configurations.testRuntime
-    bddTestRuntime configurations.fastIntegrationTestRuntime
-
-    // the cucumber stuff we'll need.  Cucumber is a BDD tool.
-    testCompile 'io.cucumber:cucumber-java:4.2.0'
-    testCompile 'io.cucumber:cucumber-junit:4.2.0'
+    bddTestImplementation configurations.fastIntegrationTestImplementation
 }
 
-configurations {
-    cucumberRuntime {
-        extendsFrom testRuntime
-    }
-}
+// in the cucumber task, we divide up the different features to lower the scope.
+// Notice that we have a command for running the library tests, then the math tests, then the auth tests.
+// This allows us to have a much smaller universe of step definitions per feature file, which  means
+// that our steps don't need to be nearly as generic.  Genericity has its benefits in many circumstances,
+// but not when it comes to keeping things as transparent and simple as possible, which is one of
+// the points of testing.
 // some of the configuration for running Cucumber BDD
-task cucumber (type: Test) {
+task cucumber(type: GradleBuild) {
+    tasks = ['libraryBdd', 'mathBdd', 'authBdd', 'expensesBdd', 'cartesianProductBdd']
+    mustRunAfter test, fastIntegrationTest
+}
+
+task libraryBdd (type: Test) {
+    doFirst {
+        print "\n\nstarting library BDD tests\n\n"
+    }
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = 'Runs the Library BDD tests.'
     dependsOn assemble, compileTestJava, compileBddTestJava
     testClassesDirs = sourceSets.bddTest.output.classesDirs
     classpath = sourceSets.bddTest.runtimeClasspath
     doLast {
+        // For the library
         javaexec {
-            main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime +
+            // get the path to the jar file for jacocoagent
+            def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
+            jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/library_bdd.exec,append=false"]
+
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.bddTestCompileClasspath +
                     sourceSets.main.output +
                     sourceSets.test.output +
                     sourceSets.bddTest.output +
@@ -44,13 +46,147 @@ task cucumber (type: Test) {
 
             args = ['--monochrome',
                     '--plugin', 'progress',
-                    '--plugin', 'json:build/bdd/file.json',
-                    '--plugin', 'html:build/reports/bdd/cucumber-html-report-basic',
-                    '--glue', 'com.coveros.training',
-                    'src/bdd_test/resources']
+                    '--plugin', 'json:build/bdd/library.json',
+                    '--plugin', 'html:build/reports/bdd/library',
+                    '--glue', 'com.coveros.training.library',
+                    'src/bdd_test/resources/library']
         }
     }
-    mustRunAfter test, fastIntegrationTest
+}
+
+
+task mathBdd (type: Test) {
+    doFirst {
+        print "\n\nstarting math-related BDD tests\n\n"
+    }
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = 'Runs the mathematics BDD tests.'
+    dependsOn assemble, compileTestJava, compileBddTestJava
+    testClassesDirs = sourceSets.bddTest.output.classesDirs
+    classpath = sourceSets.bddTest.runtimeClasspath
+    doLast {
+
+        // for the mathematics
+        javaexec {
+            // get the path to the jar file for jacocoagent
+            def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
+            jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/math_bdd.exec,append=false"]
+
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.bddTestCompileClasspath +
+                    sourceSets.main.output +
+                    sourceSets.test.output +
+                    sourceSets.bddTest.output
+
+            args = ['--monochrome',
+                    '--plugin', 'progress',
+                    '--plugin', 'json:build/bdd/math.json',
+                    '--plugin', 'html:build/reports/bdd/math',
+                    '--glue', 'com.coveros.training.math',
+                    'src/bdd_test/resources/math']
+        }
+    }
+}
+
+
+task authBdd (type: Test) {
+    doFirst {
+        print "\n\nstarting authentication BDD tests\n\n"
+    }
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = 'Runs the authentication BDD tests.'
+    dependsOn assemble, compileTestJava, compileBddTestJava
+    testClassesDirs = sourceSets.bddTest.output.classesDirs
+    classpath = sourceSets.bddTest.runtimeClasspath
+    doLast {
+         // for the authentication stories
+        javaexec {
+            // get the path to the jar file for jacocoagent
+            def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
+            jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/auth_bdd.exec,append=false"]
+
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.bddTestCompileClasspath +
+                    sourceSets.main.output +
+                    sourceSets.test.output +
+                    sourceSets.bddTest.output +
+                    sourceSets.fastIntegrationTest.output
+
+            args = ['--monochrome',
+                    '--plugin', 'progress',
+                    '--plugin', 'json:build/bdd/auth.json',
+                    '--plugin', 'html:build/reports/bdd/authentication',
+                    '--glue', 'com.coveros.training.authentication',
+                    'src/bdd_test/resources/authentication']
+        }
+    }
+}
+
+
+task expensesBdd (type: Test) {
+    doFirst {
+        print "\n\nstarting expenses BDD tests\n\n"
+    }
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = 'Runs the expenses BDD tests.'
+    dependsOn assemble, compileTestJava, compileBddTestJava
+    testClassesDirs = sourceSets.bddTest.output.classesDirs
+    classpath = sourceSets.bddTest.runtimeClasspath
+    doLast {
+        // for the expenses stories
+        javaexec {
+            // get the path to the jar file for jacocoagent
+            def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
+            jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/auth_bdd.exec,append=false"]
+
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.bddTestCompileClasspath +
+                    sourceSets.main.output +
+                    sourceSets.test.output +
+                    sourceSets.bddTest.output
+
+            args = ['--monochrome',
+                    '--plugin', 'progress',
+                    '--plugin', 'json:build/bdd/expenses.json',
+                    '--plugin', 'html:build/reports/bdd/expenses',
+                    '--glue', 'com.coveros.training.expenses',
+                    'src/bdd_test/resources/expenses']
+        }
+    }
+}
+
+
+task cartesianProductBdd (type: Test) {
+    doFirst {
+        print "\n\nstarting cartesian product BDD tests\n\n"
+    }
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = 'Runs the Cartesian Product BDD tests.'
+    dependsOn assemble, compileTestJava, compileBddTestJava
+    testClassesDirs = sourceSets.bddTest.output.classesDirs
+    classpath = sourceSets.bddTest.runtimeClasspath
+    doLast {
+         // for the cartesian product stories
+        javaexec {
+
+            // get the path to the jar file for jacocoagent
+            def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
+            jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/auth_bdd.exec,append=false"]
+
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.bddTestCompileClasspath +
+                    sourceSets.main.output +
+                    sourceSets.test.output +
+                    sourceSets.bddTest.output
+
+            args = ['--monochrome',
+                    '--plugin', 'progress',
+                    '--plugin', 'json:build/bdd/cartesianproduct.json',
+                    '--plugin', 'html:build/reports/bdd/cartesianproduct',
+                    '--glue', 'com.coveros.training.cartesianproduct',
+                    'src/bdd_test/resources/cartesianproduct']
+        }
+    }
 }
 
 check.dependsOn cucumber

@@ -192,7 +192,7 @@ From here on out, all commands should be run from ssh.
 INSTALL JAVA
 ------------
 
-$ sudo yum -y install java-1.8.0-openjdk-devel
+$ sudo yum install java-11-openjdk-devel
 
 INSTALL GIT
 -----------
@@ -367,7 +367,7 @@ INSTALL SONARQUBE
 
 download it to your home directory:
 
-$ curl https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-7.5.zip > ~/sonarqube-7.5.zip
+$ curl https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-8.0.zip > ~/sonarqube-8.0.zip
 
 install the unzip command:
 
@@ -377,11 +377,11 @@ make a new directory and unzip it to there
 (importantly, don't do this as root.  It will fail):
 
 $ mkdir ~/sonarqube
-$ sudo unzip ~/sonarqube-7.5.zip -d ~/sonarqube/
+$ sudo unzip ~/sonarqube-8.0.zip -d ~/sonarqube/
 
 move the directory to opt:
 
-$ sudo mv ~/sonarqube/sonarqube-7.5 /opt/sonarqube
+$ sudo mv ~/sonarqube/sonarqube-8.0 /opt/sonarqube
 
 create a sonarqube user:
 
@@ -403,7 +403,7 @@ Type=simple
 User=sonarqube
 Group=sonarqube
 PermissionsStartOnly=true
-ExecStart=/bin/nohup /bin/java -Xms32m -Xmx32m -Djava.net.preferIPv4Stack=true -jar /opt/sonarqube/lib/sonar-application-7.5.jar
+ExecStart=/bin/nohup /bin/java -Xms32m -Xmx32m -Djava.net.preferIPv4Stack=true -jar /opt/sonarqube/lib/sonar-application-8.0.jar
 StandardOutput=syslog
 LimitNOFILE=65536
 LimitNPROC=8192

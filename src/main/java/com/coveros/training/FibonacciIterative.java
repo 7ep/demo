@@ -1,5 +1,7 @@
 package com.coveros.training;
 
+import java.math.BigInteger;
+
 /**
  * From https://rosettacode.org/wiki/Fibonacci_sequence#Iterative_35
  */
@@ -8,42 +10,47 @@ public class FibonacciIterative {
     /**
      * O(log(n))
      */
-    public static long fib(long n) {
+    public static BigInteger fib_algo1(long n) {
         if (n <= 0)
-            return 0;
+            return BigInteger.ZERO;
 
-        long i = (int) (n - 1);
-        long a = 1, b = 0, c = 0, d = 1, tmp1,tmp2;
+        BigInteger i =  (BigInteger.valueOf(n).subtract(BigInteger.ONE));
+        BigInteger a = BigInteger.ONE;
+        BigInteger b = BigInteger.ZERO;
+        BigInteger c = BigInteger.ZERO;
+        BigInteger d = BigInteger.ONE;
+        BigInteger tmp1;
+        BigInteger tmp2;
 
-        while (i > 0) {
-            if (i % 2 != 0) {
-                tmp1 = d * b + c * a;
-                tmp2 = d * (b + a) + c * b;
+        while (i.compareTo(BigInteger.ZERO) > 0) {
+            if (!i.mod(BigInteger.valueOf(2)).equals(BigInteger.ZERO)) {
+                tmp1 = d.multiply(b).add(c.multiply(a));
+                tmp2 = d.multiply (b.add(a)).add(c.multiply(b));
                 a = tmp1;
                 b = tmp2;
             }
 
-            tmp1 = (long) (Math.pow(c, 2) + Math.pow(d, 2));
-            tmp2 = d * (2 * c + d);
+            tmp1 = c.pow(2).add(d.pow(2));
+            tmp2 = d.multiply(c.multiply(BigInteger.valueOf(2)).add(d));
 
             c = tmp1;
             d = tmp2;
 
-            i = i / 2;
+            i = i.divide(BigInteger.valueOf(2));
         }
-        return a + b;
+        return a.add(b);
     }
 
-    public static long itFibN(int n)
+    public static BigInteger fib_algo2(int n)
     {
         if (n < 2)
-            return n;
-        long ans = 0;
-        long n1 = 0;
-        long n2 = 1;
+            return BigInteger.valueOf(n);
+        BigInteger ans = BigInteger.ZERO;
+        BigInteger n1 =  BigInteger.ZERO;
+        BigInteger n2 =  BigInteger.ONE;
         for(n--; n > 0; n--)
         {
-            ans = n1 + n2;
+            ans = n1.add(n2);
             n1 = n2;
             n2 = ans;
         }
