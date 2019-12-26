@@ -2,7 +2,6 @@ package com.coveros.training;
 
 import com.coveros.training.domainobjects.Book;
 import com.coveros.training.persistence.LibraryUtils;
-import com.coveros.training.persistence.RegistrationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
 @WebServlet(name = "LibraryBookListSearch", urlPatterns = {"/book"}, loadOnStartup = 1)
 public class LibraryBookListSearch extends HttpServlet {
 
-    private static final Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(LibraryBookListSearch.class);
     private static final String RESULT = "result";
     static LibraryUtils libraryUtils = new LibraryUtils();
 

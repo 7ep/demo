@@ -75,12 +75,11 @@ public final class PasswordResult {
     }
 
     public final String toPrettyString() {
-        String sb = String.format("status: %s%n", status) +
+        return String.format("status: %s%n", status) +
                 String.format("entropy: %s%n", entropy) +
                 String.format("time to crack offline: %s%n", timeToCrackOffline) +
                 String.format("time to crack online: %s%n", timeToCrackOnline) +
                 String.format("Nbvcxz response: %s%n", message);
-        return sb;
     }
 
     /**

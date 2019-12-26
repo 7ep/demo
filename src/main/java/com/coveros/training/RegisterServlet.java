@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 public class RegisterServlet extends HttpServlet {
 
     private static final String PASSWORD_PARAM = "password";
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(RegisterServlet.class);
     private static final String USERNAME_PARAM = "username";
     static RegistrationUtils registrationUtils = new RegistrationUtils();
 

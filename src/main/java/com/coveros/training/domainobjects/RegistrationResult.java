@@ -54,10 +54,9 @@ public final class RegistrationResult {
     }
 
     public final String toPrettyString() {
-        String sb = String.format("successfully registered: %s%n", wasSuccessfullyRegistered) +
+        return String.format("successfully registered: %s%n", wasSuccessfullyRegistered) +
                 String.format("status: %s%n", status) +
                 String.format("message: %n%n%s%n", message);
-        return sb;
     }
 
     public static RegistrationResult createEmpty() {

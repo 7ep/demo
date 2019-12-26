@@ -2,7 +2,6 @@ package com.coveros.training;
 
 import com.coveros.training.domainobjects.LibraryActionResults;
 import com.coveros.training.persistence.LibraryUtils;
-import com.coveros.training.persistence.RegistrationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +15,7 @@ import java.time.LocalDate;
 @WebServlet(name = "LibraryLendServlet", urlPatterns = {"/lend"}, loadOnStartup = 1)
 public class LibraryLendServlet extends HttpServlet {
 
-    private static final Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(LibraryLendServlet.class);
     static LibraryUtils libraryUtils = new LibraryUtils();
 
     @Override

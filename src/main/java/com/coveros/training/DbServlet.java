@@ -1,7 +1,6 @@
 package com.coveros.training;
 
 import com.coveros.training.persistence.PersistenceLayer;
-import com.coveros.training.persistence.RegistrationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +23,7 @@ public class DbServlet extends HttpServlet {
     }
 
     private static final String RESULT = "result";
-    private static final Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(DbServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
