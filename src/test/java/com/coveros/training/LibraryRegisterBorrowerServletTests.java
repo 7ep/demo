@@ -49,6 +49,7 @@ public class LibraryRegisterBorrowerServletTests {
      */
     @Test
     public void testEmptyString() {
+        when(request.getRequestDispatcher("result.jsp")).thenReturn(requestDispatcher);
         String emptyString = "";
         when(request.getParameter("borrower")).thenReturn(emptyString);
 

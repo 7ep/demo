@@ -46,6 +46,7 @@ public class LoginServletTests {
      */
     @Test
     public void testEmptyString_Username() {
+        when(request.getRequestDispatcher(RESULT_JSP)).thenReturn(requestDispatcher);
         String emptyString = "";
         when(request.getParameter("username")).thenReturn(emptyString);
 
@@ -62,6 +63,7 @@ public class LoginServletTests {
      */
     @Test
     public void testEmptyString_Password() {
+        when(request.getRequestDispatcher(RESULT_JSP)).thenReturn(requestDispatcher);
         String emptyString = "";
         when(request.getParameter("password")).thenReturn(emptyString);
         when(request.getParameter("username")).thenReturn(ALICE);

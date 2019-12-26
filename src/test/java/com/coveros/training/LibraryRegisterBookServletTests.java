@@ -49,6 +49,7 @@ public class LibraryRegisterBookServletTests {
      */
     @Test
     public void testEmptyString() {
+        when(request.getRequestDispatcher(RESULT_JSP)).thenReturn(requestDispatcher);
         String emptyString = "";
         when(request.getParameter("book")).thenReturn(emptyString);
 

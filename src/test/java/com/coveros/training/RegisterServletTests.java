@@ -81,6 +81,7 @@ public class RegisterServletTests {
      */
     @Test
     public void testEmptyString_Username() {
+        when(request.getRequestDispatcher("result.jsp")).thenReturn(requestDispatcher);
         String emptyString = "";
         when(request.getParameter("username")).thenReturn(emptyString);
         when(request.getParameter("password")).thenReturn("abc123");
@@ -98,6 +99,7 @@ public class RegisterServletTests {
      */
     @Test
     public void testEmptyString_Password() {
+        when(request.getRequestDispatcher("result.jsp")).thenReturn(requestDispatcher);
         String emptyString = "";
         when(request.getParameter("password")).thenReturn(emptyString);
         when(request.getParameter("username")).thenReturn(ALICE);

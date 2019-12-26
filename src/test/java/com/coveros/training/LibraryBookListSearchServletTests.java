@@ -15,7 +15,7 @@ import static org.mockito.Mockito.*;
 
 public class LibraryBookListSearchServletTests {
 
-    private static final String RESULT_JSP = "result.jsp";
+    private static final String RESULT_JSP = "restfulresult.jsp";
     public static final String A_BOOK = "a book";
     private HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
     private HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
@@ -37,7 +37,7 @@ public class LibraryBookListSearchServletTests {
      */
     @Test
     public void testListAllBooks() {
-        when(request.getRequestDispatcher("result.jsp")).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher(RESULT_JSP)).thenReturn(requestDispatcher);
 
         // act
         libraryBookListSearch.doGet(request, response);
@@ -51,7 +51,7 @@ public class LibraryBookListSearchServletTests {
      */
     @Test
     public void testSearchById() {
-        when(request.getRequestDispatcher("result.jsp")).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher(RESULT_JSP)).thenReturn(requestDispatcher);
         when(request.getParameter("id")).thenReturn("1");
         // the following is just to avoid a null pointer exception when the test succeeds
         when(libraryUtils.searchForBookById(1)).thenReturn(Book.createEmpty());
@@ -68,7 +68,7 @@ public class LibraryBookListSearchServletTests {
      */
     @Test
     public void testSearchByTitle() {
-        when(request.getRequestDispatcher("result.jsp")).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher(RESULT_JSP)).thenReturn(requestDispatcher);
         when(request.getParameter("title")).thenReturn(A_BOOK);
         // the following is just to avoid a null pointer exception when the test succeeds
         when(libraryUtils.searchForBookByTitle(A_BOOK)).thenReturn(Book.createEmpty());
