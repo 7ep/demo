@@ -48,24 +48,32 @@ public class RegistrationUtilsTests {
         }
     }
 
+    /**
+     * If we provide a good password, then by golly we should get that
+     * as a result from our {@link RegistrationUtils#isPasswordGood} method.
+     */
     @Test
     public void testShouldHaveSufficientEntropyInPassword() {
         final PasswordResult result = RegistrationUtils.isPasswordGood(GOOD_PASSWORD);
         Assert.assertEquals(PasswordResultEnums.SUCCESS, result.status);
     }
 
+    /**
+     * Not really a lot to test here...
+     */
     @Test
     public void testShouldDetermineIfUserInDatabase() {
+        // mock that a user is found when we search for them
         when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(new User(ALICE, 1));
+
         final boolean result = registrationUtils.isUserInDatabase(ALICE);
+
         Assert.assertTrue(result);
     }
 
     /**
      * Testing registration without hitting the actual database.
-     * <p>
      * The password has to be sufficient to meet the entropy stipulations.
-     * <p>
      * We need to mock the calls that will have been sent to the database.
      */
     @Test
@@ -80,6 +88,10 @@ public class RegistrationUtilsTests {
         Assert.assertEquals(expectedResult, registrationResult);
     }
 
+    /**
+     * If we pass in an empty username, we should get a response that
+     * registration failed.
+     */
     @Test
     public void testShouldProcessRegistration_EmptyUsername() {
         RegistrationResult expectedResult = new RegistrationResult(false, RegistrationStatusEnums.EMPTY_USERNAME);
@@ -90,6 +102,9 @@ public class RegistrationUtilsTests {
         Assert.assertEquals(expectedResult, registrationResult);
     }
 
+    /**
+     * Registration should fail if the password isn't good enough.
+     */
     @Test
     public void testShouldProcessRegistration_BadPassword() {
         // this needs to not find a user
@@ -103,6 +118,9 @@ public class RegistrationUtilsTests {
         Assert.assertEquals(expectedResult, registrationResult);
     }
 
+    /**
+     * Registration should fail if we're trying to register an already-existing user.
+     */
     @Test
     public void testShouldProcessRegistration_ExistingUser() {
         // this needs to find an existing user - so they are already registered
