@@ -16,8 +16,6 @@ public class RegisterServlet extends HttpServlet {
     private static final String PASSWORD_PARAM = "password";
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
     private static final String USERNAME_PARAM = "username";
-    private static final String EMPTY_USERNAME = "EMPTY_USERNAME";
-    private static final String EMPTY_PASSWORD = "EMPTY_PASSWORD";
     static RegistrationUtils registrationUtils = new RegistrationUtils();
 
     @Override
