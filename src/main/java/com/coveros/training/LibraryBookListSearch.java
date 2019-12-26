@@ -47,7 +47,7 @@ public class LibraryBookListSearch extends HttpServlet {
             request.setAttribute(RESULT, String.format("book result: Title: %s, Id: %s ", book.title, book.id));
         }
 
-        ServletUtils.forwardToResult(request, response, logger);
+        ServletUtils.forwardToRestfulResult(request, response, logger);
     }
 
 }

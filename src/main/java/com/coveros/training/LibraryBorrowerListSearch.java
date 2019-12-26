@@ -51,7 +51,7 @@ public class LibraryBorrowerListSearch extends HttpServlet {
             request.setAttribute(RESULT, String.format("borrower result: Name: %s, Id: %s ", borrower.name, borrower.id));
         }
 
-        ServletUtils.forwardToResult(request, response, logger);
+        ServletUtils.forwardToRestfulResult(request, response, logger);
     }
 
 }

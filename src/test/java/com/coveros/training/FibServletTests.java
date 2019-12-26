@@ -70,7 +70,7 @@ public class FibServletTests {
 
         fibServlet.doPost(request, response);
 
-        verify(request).getRequestDispatcher("result.jsp");
+        verify(request).getRequestDispatcher("restfulresult.jsp");
         verify(FibServlet.logger, times(0)).error(Mockito.anyString());
     }
 
@@ -82,13 +82,13 @@ public class FibServletTests {
     public void testPostService_realForward_withException() throws ServletException, IOException {
         FibServlet.logger = logger;
         final RequestDispatcher requestDispatcher = mock(RequestDispatcher.class);
-        when(request.getRequestDispatcher("result.jsp")).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher("restfulresult.jsp")).thenReturn(requestDispatcher);
         doThrow(new RuntimeException("hi there, exception here."))
                 .when(requestDispatcher).forward(request, response);
 
         fibServlet.doPost(request, response);
 
-        verify(request).getRequestDispatcher("result.jsp");
+        verify(request).getRequestDispatcher("restfulresult.jsp");
         verify(FibServlet.logger).error(Mockito.anyString());
     }
 

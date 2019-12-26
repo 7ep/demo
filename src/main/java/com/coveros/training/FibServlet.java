@@ -57,7 +57,7 @@ public class FibServlet extends HttpServlet {
      * Wrapping a static method call for testing.
      */
     void forwardToResult(HttpServletRequest request, HttpServletResponse response, Logger logger) {
-        ServletUtils.forwardToResult(request, response, logger);
+        ServletUtils.forwardToRestfulResult(request, response, logger);
     }
 
     /**

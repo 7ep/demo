@@ -58,7 +58,7 @@ public class AckServletTests {
 
         ackServlet.doPost(request, response);
 
-        verify(request).getRequestDispatcher("result.jsp");
+        verify(request).getRequestDispatcher("restfulresult.jsp");
         verify(AckServlet.logger, times(0)).error(Mockito.anyString());
     }
 
@@ -70,13 +70,13 @@ public class AckServletTests {
     public void testPostService_realForward_withException() throws ServletException, IOException {
         AckServlet.logger = logger;
         final RequestDispatcher requestDispatcher = mock(RequestDispatcher.class);
-        when(request.getRequestDispatcher("result.jsp")).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher("restfulresult.jsp")).thenReturn(requestDispatcher);
         doThrow(new RuntimeException("hi there, exception here."))
                 .when(requestDispatcher).forward(request, response);
 
         ackServlet.doPost(request, response);
 
-        verify(request).getRequestDispatcher("result.jsp");
+        verify(request).getRequestDispatcher("restfulresult.jsp");
         verify(AckServlet.logger).error(Mockito.anyString());
     }
 
