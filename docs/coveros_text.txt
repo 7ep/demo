@@ -14,7 +14,7 @@
    \CCCCCCCCCCCCCC\                         |  _ \| ____|  \/  |/ _ \          Summary of relevant Gradle commands
     \CCCCCCCCCCCCCCc\                       | | | |  _| | |\/| | | | |         ------------------------------------
        \CCCCCCCCCCCCCCc                     | |_| | |___| |  | | |_| |
-          .CCCCCCCCCCCCCCCc                 |____/|_____|_|  |_|\___/          gradlew tomcatRun      - Runs the application
+          .CCCCCCCCCCCCCCCc                 |____/|_____|_|  |_|\___/          gradlew apprun         - Runs the application
              *\CCCCCCCCCCCCCCCC\c                                              gradlew check          - Runs all tests solely using Java
                   ^\CCCCCCCCCCCCCCCCccc                                        gradlew runAllTests    - Runs the whole set of tests**
                         ^^^*CCCCCCCCCCCCCCCCCCCCCCCCCCcc..                     gradlew clean          - Cleans build products and installs pre-push hook.

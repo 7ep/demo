@@ -5,12 +5,12 @@ Let's start by running our application locally, as something to test.
 
 In a terminal window, start up the application.  In the home directory for this application, run this:
 on Windows:
-	gradlew tomcatRun
+	gradlew apprun
 on Mac/Linux:
-	./gradlew tomcatRun
+	./gradlew apprun
 	
 It should return a message like this:
-	$ gradlew tomcatRun
+	$ gradlew apprun
   17:10:53 INFO  Tomcat 8.0.53 started and listening on port 8080
   17:10:53 INFO  demo runs at:
   17:10:53 INFO    http://localhost:8080/demo

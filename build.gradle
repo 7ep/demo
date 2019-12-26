@@ -12,7 +12,8 @@ buildscript {
 plugins {
     id 'war'
 
-    id "com.bmuschko.tomcat" version "2.5"
+    // gretty is a gradle plugin to make it easy to run a server and hotswap code at runtime.
+    id 'org.gretty' version '3.0.1'
 
     // provides access to a database versioning tool.
     id "org.flywaydb.flyway" version "6.0.8"
@@ -61,6 +62,14 @@ tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked"
 }
 
+// configure jetty to run on port 8080 when we run "./gradlew appRun"
+gretty {
+    httpPort = 8080
+    servletContainer = 'tomcat9'
+    contextPath = "demo"
+    jvmArgs = ['-Dcom.sun.management.jmxremote', '-Dcom.sun.management.jmxremote.port=9999', '-Dcom.sun.management.jmxremote.ssl=false', '-Dcom.sun.management.jmxremote.authenticate=false']
+}
+
 repositories {
     jcenter()
     mavenCentral()
@@ -71,10 +80,6 @@ configurations {
 }
 
 dependencies {
-
-    def tomcatVersion = '9.0.27'
-    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
-            "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
 
     providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
 
@@ -114,19 +119,13 @@ dependencies {
 
     // we'll use this as our database
     // https://mvnrepository.com/artifact/com.h2database/h2
-    localDeps group: 'com.h2database', name: 'h2', version: '1.4.200'
+    localDeps group: 'com.h2database', name: 'h2', version: '1.4.199'
 
     // so we can put a copy of h2 in a convenient place
     implementation configurations.localDeps
 
     // so we can programmatically run flyway at startup
     implementation "org.flywaydb:flyway-core:6.0.8"
-}
-
-tomcat {
-    httpProtocol = 'org.apache.coyote.http11.Http11Nio2Protocol'
-    ajpProtocol  = 'org.apache.coyote.ajp.AjpNio2Protocol'
-
 }
 
 pitest {
@@ -327,7 +326,7 @@ static void checkIfAlive() {
                 " tests you requested                    \n" +
                 "                                        \n" +
                 " To start the app:                      \n" +
-                "    gradlew tomcatrun                   \n" +
+                "    gradlew apprun                   \n" +
                 "****************************************\n"
         throw new Exception(errorMsg)
     }
