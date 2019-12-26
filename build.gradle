@@ -427,9 +427,13 @@ test {
 }
 
 dependencyCheck {
+    // if we don't include the specific configurations to scan, it will scan everything,
+    // which means getting into the dependencies of tomcat and jetty, which should
+    // have no bearing on us.
+    scanConfigurations = ['default']
     showSummary = false
     autoUpdate = true
-    cveValidForHours = 168 // a week.
+    cveValidForHours = 24 * 30 // about a month.
     format = 'HTML' // options are  (HTML, XML, CSV, JSON, VULN, ALL).
     failBuildOnCVSS = 8 // see https://www.first.org/cvss/specification-document#5-Qualitative-Severity-Rating-Scale
 }
