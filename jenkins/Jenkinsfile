@@ -48,17 +48,7 @@ pipeline {
 
     stage('Deploy to test') {
       steps {
-        // move the web app to the box in the proper place.
-        sh 'scp /var/lib/jenkins/workspace/demo/build/libs/demo*.war cuser@uitestbox:~/demo.war'
-        sh 'ssh cuser@uitestbox sudo mv demo.war /opt/tomcat/webapps/'
-
-        // need demo_tests on the box, that's where we have the UI tests located.
-        sh 'ssh cuser@uitestbox rm -fr demo_tests'
-        sh 'ssh cuser@uitestbox git clone cuser@jenkinsbox:~/demo demo_tests --branch master'
-        sh 'ssh cuser@uitestbox "cd demo_tests;pipenv install 2>/dev/null"'
-
-        // need a little time to wait for Tomcat to initialize the application...
-        sh 'sleep 10'
+      sh './gradlew deployToTest'
       }
     }
 

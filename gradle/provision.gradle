@@ -2,18 +2,19 @@
 // and copying files to/from those servers.
 
 remotes {
-    testbox {
+    uitestbox {
         host = 'uitestbox'
         user = 'cuser'
+        fileTransfer = 'scp'
     }
 }
 
-task fobar {
+task deployToTest {
     doLast {
         ssh.runInOrder {
-            session(remotes.testbox)
+            session(remotes.uitestbox)
                     {
-                        put from: '/var/lib/jenkins/workspace/demo/build/libs/demo*.war', into: '~/demo.war'
+                        put from: '/var/lib/jenkins/workspace/demo/build/libs/demo-1.0.0.war', into: '~/demo.war'
                         execute 'sudo mv demo.war /opt/tomcat/webapps/'
                         execute 'rm -fr demo_tests'
                         execute 'git clone cuser@jenkinsbox:~/demo demo_tests --branch master'
