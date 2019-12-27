@@ -1,6 +1,35 @@
 // This file provides tasks related to running commands on servers
 // and copying files to/from those servers.
 
+remotes {
+    web01 {
+        role 'masterNode'
+        host = 'renomad.com'
+        user = 'byron'
+        identity = file(System.getProperty("user.home") + '/.ssh/id_rsa')
+    }
+}
+
+task checkWebServers {
+    doLast {
+        ssh.run {
+            session(remotes.web01) {
+                // Execute a command
+                def result = execute 'ls'
+
+                // Any Gradle methods or properties are available in a session closure
+                copy {
+                    from "src/main/resources/example"
+                    into "$buildDir/tmp"
+                }
+
+                // Also Groovy methods or properties are available in a session closure
+                println result
+            }
+        }
+    }
+}
+
 task deployToTest {
     // move the web app to the box in the proper place.
 //    scp ("build/libs/demo*.war cuser@uitestbox:~/demo.war")

@@ -7,8 +7,10 @@ sourceSets {
 dependencies {
     // provides programmatic access to Amazon Web Services
     // we could use this to, for example, provision a test environment.
-    implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.228')
-    implementation 'com.amazonaws:aws-java-sdk-s3'
+    // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk
+    awsCodeImplementation group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.699'
+
+    awsCodeImplementation 'junit:junit:4.12'
 }
 
 /**
