@@ -1,0 +1,32 @@
+dependencies {
+    // provides programmatic access to Amazon Web Services
+    // we could use this to, for example, provision a test environment.
+    implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.228')
+    implementation 'com.amazonaws:aws-java-sdk-s3'
+
+}
+
+/**
+ * Get a new machine ready for testing.
+ *
+ * At the end, write to a file with the credentials to log
+ * into the box.
+ */
+task provisionNewTestEnvironment {
+    // use environment variables to log into AWS (Amazon Web Services) account
+//    logIntoAWS()
+//    id = startTestInstance()
+//    data = getInfoOnNewInstance(id)
+//    writeToFile(data)
+}
+
+/**
+ * Check if the test environment is alive
+ */
+task isTestEnvironmentReady {
+//    data = getConnectionInfoFromFile()
+//    result = tryLoginToMachine(data)
+//    return result == SUCCESSFUL_LOGIN
+}
+
+

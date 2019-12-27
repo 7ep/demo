@@ -1,0 +1,16 @@
+// This file provides tasks related to running commands on servers
+// and copying files to/from those servers.
+
+task deployToTest {
+    // move the web app to the box in the proper place.
+//    scp ("build/libs/demo*.war cuser@uitestbox:~/demo.war")
+//    ssh ("cuser@uitestbox sudo mv demo.war /opt/tomcat/webapps/")
+//
+//    // need demo_tests on the box, that's where we have the UI tests located.
+//    ssh ("cuser@uitestbox rm -fr demo_tests")
+//    ssh ("cuser@uitestbox git clone cuser@jenkinsbox:~/demo demo_tests --branch master")
+//    ssh ('cuser@uitestbox "cd demo_tests;pipenv install 2>/dev/null"')
+//
+//    // need a little time to wait for Tomcat to initialize the application...
+//    sleep 10
+}
