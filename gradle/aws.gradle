@@ -1,9 +1,14 @@
+sourceSets {
+    awsCode {
+        java.srcDir 'src/aws/java'
+    }
+}
+
 dependencies {
     // provides programmatic access to Amazon Web Services
     // we could use this to, for example, provision a test environment.
     implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.228')
     implementation 'com.amazonaws:aws-java-sdk-s3'
-
 }
 
 /**
@@ -28,5 +33,4 @@ task isTestEnvironmentReady {
 //    result = tryLoginToMachine(data)
 //    return result == SUCCESSFUL_LOGIN
 }
-
 
