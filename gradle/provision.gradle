@@ -19,7 +19,7 @@ task runUiTestsOnUITestMachine {
                 // run the UI tests
                 execute ". /etc/profile; cd demo_tests ; export DISPLAY=:0; ./gradlew runBehaveTests"
                 // copy over the test results
-                get from: "~/demo_tests/build/test-results/bdd_ui", into: "build/test-results/bdd_ui"
+                get from: "~/demo_tests/build/test-results/bdd_ui", into: "build/test-results/"
                 get from: "~/demo_tests/build/bdd/behave_cucumber_style.json", into: "build/bdd/"
                 // following line will generate a new report and store it at ~/zap_report.html
                 execute "curl http://zap/OTHER/core/other/htmlreport --proxy localhost:8888 > ~/zap_report.html"
