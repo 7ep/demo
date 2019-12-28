@@ -2,10 +2,6 @@ pipeline {
 
   agent any
 
-  options {
-      parallelsAlwaysFailFast()
-  }
-
   stages {
 
     stage('Build') {
@@ -14,34 +10,27 @@ pipeline {
       }
     }
 
-    stage('Unit / DB tests') {
-          parallel {
-           stage('Unit Tests') {
-                steps {
-                  sh './gradlew test'
-                }
-                post {
-                  always {
-                    junit 'build/test-results/test/*.xml'
-                  }
-                }
-            }
-           stage('Database Tests') {
-                steps {
-                  sh './gradlew fastIntegrationTest'
-                }
-                post {
-                  always {
-                    junit 'build/test-results/fastIntegrationTest/*.xml'
-                  }
-                }
-            }
-          }
+    stage('Unit Tests') {
+      steps {
+        sh './gradlew test'
+      }
+      post {
+        always {
+          junit 'build/test-results/test/*.xml'
         }
+      }
+    }
 
-
-
-
+    stage('Database Tests') {
+      steps {
+        sh './gradlew fastIntegrationTest'
+      }
+      post {
+        always {
+          junit 'build/test-results/fastIntegrationTest/*.xml'
+        }
+      }
+    }
 
     stage('Automated Acceptance Tests') {
       steps {
