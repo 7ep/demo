@@ -9,6 +9,39 @@ remotes {
     }
 }
 
+task runUiTestsOnUITestMachine {
+    doLast {
+        mkdir 'build/test-results/bdd_ui'
+        ssh.runInOrder {
+            session(remotes.uitestbox) {
+                // following line will clear Zap's memory:
+                execute "curl http://zap/JSON/core/action/newSession -s --proxy localhost:8888"
+                // run the UI tests
+                execute ". /etc/profile; cd demo_tests ; export DISPLAY=:0; ./gradlew runBehaveTests"
+                // copy over the test results
+                get from: "~/demo_tests/build/test-results/bdd_ui", into: "build/test-results/bdd_ui"
+                get from: "~/demo_tests/build/bdd/behave_cucumber_style.json", into: "build/bdd/"
+                // following line will generate a new report and store it at ~/zap_report.html
+                execute "curl http://zap/OTHER/core/other/htmlreport --proxy localhost:8888 > ~/zap_report.html"
+                // copy that report to our server
+                get from: "~/zap_report.html", into: "build/reports/"
+            }
+        }
+    }
+}
+
+task runApiTestsOnUiTest {
+    doLast {
+        mkdir 'build/test-results/api_tests'
+        ssh.runInOrder {
+            session(remotes.uitestbox) {
+                execute "cd demo_tests ; ./gradlew runApiTests"
+                get from: '~/demo_tests/build/test-results/api_tests', into: 'build/test-results/api_tests'
+            }
+        }
+    }
+}
+
 task deployToTest {
     doLast {
         ssh.runInOrder {
@@ -22,6 +55,5 @@ task deployToTest {
                     }
         }
         sleep 10 * 1000
-
     }
 }
