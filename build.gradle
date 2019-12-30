@@ -60,7 +60,7 @@ apply from: "$rootDir/gradle/bdd_test.gradle"
 apply from: "$rootDir/gradle/aws.gradle"
 
 // our script plugin for provisioning servers
-apply from: "$rootDir/gradle/provision.gradle"
+apply from: "$rootDir/gradle/remote_actions.gradle"
 
 // including our script plugin for running Selenified
 //
