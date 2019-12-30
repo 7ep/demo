@@ -9,8 +9,11 @@ dependencies {
     // we could use this to, for example, provision a test environment.
     // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk
     awsCodeImplementation group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.699'
+}
 
-    awsCodeImplementation 'junit:junit:4.12'
+task requestInstance(type:JavaExec) {
+    classpath = sourceSets.awsCode.runtimeClasspath
+    main = 'com.coveros.training.aws.StartAws'
 }
 
 /**

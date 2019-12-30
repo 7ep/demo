@@ -17,7 +17,6 @@ import com.amazonaws.services.ec2.model.RequestSpotInstancesRequest;
 import com.amazonaws.services.ec2.model.RequestSpotInstancesResult;
 import com.amazonaws.services.ec2.model.SpotInstanceRequest;
 import com.amazonaws.services.ec2.model.TerminateInstancesRequest;
-import org.junit.Test;
 
 /**
  * Welcome to your new AWS Java SDK based project!
@@ -54,18 +53,68 @@ public class StartAws {
      *      the credentials file in your source directory.
      */
 
-    @Test
-    public void shouldSubmitRequest() {
+    public static void main(String args[]) {
+        makeARequestAndReturn();
+    }
+
+    private static void makeARequestAndReturn() {
         //============================================================================================//
         //=============================== Submitting a Request =======================================//
         //============================================================================================//
 
-        /*
-         * The ProfileCredentialsProvider will return your [default]
-         * credential profile by reading from the credentials file located at
-         * (~/.aws/credentials).
-         */
-        AWSCredentials credentials = null;
+        AWSCredentials credentials = getAwsCredentials();;
+        AmazonEC2 ec2 = getAmazonEC2ClientObject(credentials);
+
+        // Initializes a Spot Instance Request
+        RequestSpotInstancesRequest requestRequest = new RequestSpotInstancesRequest();
+
+        // Request 1 x t1.micro instance with a bid price of $0.15.
+//        requestRequest.setSpotPrice("0.15");
+        requestRequest.setInstanceCount(1);
+
+        LaunchSpecification launchSpecification = new LaunchSpecification();
+        configureLaunchSpecForFTA(launchSpecification);
+
+        // Add the launch specifications to the request.
+        requestRequest.setLaunchSpecification(launchSpecification);
+
+        //============================================================================================//
+        //=========================== Getting the Request ID from the Request ========================//
+        //============================================================================================//
+
+        // Call the RequestSpotInstance API.
+        RequestSpotInstancesResult requestResult = ec2.requestSpotInstances(requestRequest);
+        System.out.println(requestResult);
+    }
+
+    private static void configureLaunchSpecForFTA(LaunchSpecification launchSpecification) {
+        // image id for the FTA box is ami-08bf41e441c3eca20
+        launchSpecification.setImageId("ami-08bf41e441c3eca20");
+        launchSpecification.setInstanceType("t2.large");
+
+        // Add the security group to the request.
+        ArrayList<String> securityGroups = new ArrayList<>();
+        securityGroups.add("all_traffic_open_insecure");
+        launchSpecification.setSecurityGroups(securityGroups);
+    }
+
+    /**
+     * Create the AmazonEC2Client object so we can call various APIs.
+      */
+    private static AmazonEC2 getAmazonEC2ClientObject(AWSCredentials credentials) {
+        return AmazonEC2ClientBuilder.standard()
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withRegion("us-east-2")
+                .build();
+    }
+
+    /**
+     * The ProfileCredentialsProvider will return your [default]
+     * credential profile by reading from the credentials file located at
+     * (~/.aws/credentials).
+     */
+    private static AWSCredentials getAwsCredentials() {
+        AWSCredentials credentials;
         try {
             credentials = new ProfileCredentialsProvider().getCredentials();
         } catch (Exception e) {
@@ -75,19 +124,26 @@ public class StartAws {
                             "location (~/.aws/credentials), and is in valid format.",
                     e);
         }
+        return credentials;
+    }
 
-        // Create the AmazonEC2Client object so we can call various APIs.
-        AmazonEC2 ec2 = AmazonEC2ClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withRegion("us-east-2")
-                .build();
+
+    private static void oldRequestCode() {
+
+        //============================================================================================//
+        //=============================== Submitting a Request =======================================//
+        //============================================================================================//
+
+
+        AWSCredentials credentials = getAwsCredentials();
+        AmazonEC2 ec2 = getAmazonEC2ClientObject(credentials);
 
         // Initializes a Spot Instance Request
         RequestSpotInstancesRequest requestRequest = new RequestSpotInstancesRequest();
 
         // Request 1 x t1.micro instance with a bid price of $0.03.
-        requestRequest.setSpotPrice("0.03");
-        requestRequest.setInstanceCount(Integer.valueOf(1));
+        requestRequest.setSpotPrice("0.30");
+        requestRequest.setInstanceCount(1);
 
         // Setup the specifications of the launch. This includes the instance type (e.g. t1.micro)
         // and the latest Amazon Linux AMI id available. Note, you should always use the latest
@@ -95,13 +151,7 @@ public class StartAws {
         LaunchSpecification launchSpecification = new LaunchSpecification();
 
         // image id for the FTA box is ami-08bf41e441c3eca20
-        launchSpecification.setImageId("ami-08bf41e441c3eca20");
-        launchSpecification.setInstanceType("t2.micro");
-
-        // Add the security group to the request.
-        ArrayList<String> securityGroups = new ArrayList<String>();
-        securityGroups.add("all_traffic_open_insecure");
-        launchSpecification.setSecurityGroups(securityGroups);
+        configureLaunchSpecForFTA(launchSpecification);
 
         // Add the launch specifications to the request.
         requestRequest.setLaunchSpecification(launchSpecification);
@@ -208,7 +258,5 @@ public class StartAws {
             System.out.println("Error Code: " + e.getErrorCode());
             System.out.println("Request ID: " + e.getRequestId());
         }
-
     }
-
 }
