@@ -1,0 +1,20 @@
+feature: able to use AWS to CI/CD "Demo"
+
+user story:
+   As a Coveros trainer
+   I want to be able to demonstrate the CI/CD process for Demo on AWS
+   So that I can show something that resembles a realistic cloud CI/CD
+
+Scenario: Happy path 
+  When I start the CI/CD process
+  Then it carries all the way through
+
+Scenario: Doing this without minimal authentication
+  Given the CI/CD system is all up and running
+  When I log into Jenkins with minimal security
+  I can kick off a successful CI/CD
+
+Scenario: booting the system
+  Given I have secure access to AWS
+  When I carry out a few simple and easy commands
+  Then the system becomes booted up for later usage
