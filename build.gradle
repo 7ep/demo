@@ -64,10 +64,7 @@ apply from: "$rootDir/gradle/remote_actions.gradle"
 
 // including our script plugin for running Selenified
 //
-//  we are freezing this for now, at least until 3.3.0 is published,
-//  which has the ability to run up to JDK 12 and has less logging.
-//
-// apply from: "$rootDir/gradle/selenified_tests.gradle"
+apply from: "$rootDir/gradle/selenified_tests.gradle"
 
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked"
