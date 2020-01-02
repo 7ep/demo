@@ -40,6 +40,11 @@ plugins {
     // potential security issues.
     // see https://plugins.gradle.org/plugin/org.owasp.dependencycheck
     id "org.owasp.dependencycheck" version "5.2.4"
+
+    // this gives us the abilities of SSH - specifically, the
+    // ability to run commands on a remote server, and to copy
+    // files to/from servers
+    id 'org.hidetake.ssh' version '2.10.1'
 }
 
 // apply our fancy cucumber reporting program, see https://plugins.gradle.org/plugin/com.github.spacialcircumstances.gradle-cucumber-reporting
@@ -51,12 +56,15 @@ apply from: "$rootDir/gradle/fast_integration_test.gradle"
 // including our script plugin for running BDD-type tests
 apply from: "$rootDir/gradle/bdd_test.gradle"
 
+// our script plugin for accessing aws - Amazon Web Services
+apply from: "$rootDir/gradle/aws.gradle"
+
+// our script plugin for provisioning servers
+apply from: "$rootDir/gradle/remote_actions.gradle"
+
 // including our script plugin for running Selenified
 //
-//  we are freezing this for now, at least until 3.3.0 is published,
-//  which has the ability to run up to JDK 12 and has less logging.
-//
-// apply from: "$rootDir/gradle/selenified_tests.gradle"
+apply from: "$rootDir/gradle/selenified_tests.gradle"
 
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked"
@@ -80,7 +88,7 @@ configurations {
 }
 
 dependencies {
-
+    // necessary for the servlet functionality.  See any class ending in "Servlet"
     providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
 
     // junit, for running unit tests
@@ -115,7 +123,6 @@ dependencies {
     // The following gives us the ability to use slf4j api calls.
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
     implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.12.1'
-
 
     // we'll use this as our database
     // https://mvnrepository.com/artifact/com.h2database/h2

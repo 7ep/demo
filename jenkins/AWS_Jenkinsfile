@@ -1,10 +1,16 @@
-// This jenkinsfile is used for the local (Virtualbox) CI/CD servers.
+// this is the Jenkinsfile when used on the Amazon cloud servers for CI/CD.
 
 pipeline {
 
   agent any
 
   stages {
+
+    stage('Request test instance') {
+      steps {
+        sh './gradlew provisionTestInstance'
+      }
+    }
 
     stage('Build') {
       steps {
@@ -44,18 +50,21 @@ pipeline {
 
     stage('Static Analysis') {
       steps {
+       // TODO find a way to pass this to the URL for our sonarqube
         sh './gradlew sonarqube'
       }
     }
 
     stage('Deploy to test') {
       steps {
+      // TODO find a way to pass in URL to deploy to
       sh './gradlew deployToTest'
       }
     }
 
     stage('API Tests') {
       steps {
+      // TODO find a way to pass in URL to run tests on box and where the UI box should point.
         sh './gradlew runApiTestsOnUiTest'
       }
       post {
@@ -69,6 +78,7 @@ pipeline {
     // when it comes to experimentation with UI tests.  You can try things and see how they work out.
     stage('UI Tests') {
       steps {
+      // TODO find a way to pass in URL to run tests on box and where the UI box should point.
         sh './gradlew runUiTestsOnUITestMachine'
         sh './gradlew generateCucumberReport'
       }
@@ -85,15 +95,21 @@ pipeline {
       }
     }
 
+    stage('Analyze performance') {
+      steps {
+      // TODO provide all URL's.  Run perf tests from UI test box.
+        sh './gradlew runPerfTests'
+      }
+    }
+
 
     // This is the stage where we deploy to production.  If any test
-    // fails, we won't get here.  Note that we aren't really doing anything - this
-    // is a token step, to indicate whether we would have deployed or not.  Nothing actually
-    // happens, since this is a demo project.
+    // fails, we won't get here.
+    // We will deploy to a powerful machine.  We'll provision it first, synchronously.
     stage('Deploy to Prod') {
       steps {
-        // just a token operation while we pretend to deploy
-        sh 'sleep 5'
+        sh './gradlew provisionProd'
+        sh './gradlew deployToProd'
       }
     }
 
