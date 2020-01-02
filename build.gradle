@@ -160,9 +160,10 @@ task('printReportPathsPitest') {
 // configuration for the cucumber reports.
 cucumberReports {
     outputDir = file('build/reports/bdd')
-    buildId = '0'
+    buildId = '1'
     reports = files(fileTree(dir: "build/bdd", include: '*.json'))
     testTasksFinalizedByReport = false
+    projectNameOverride = "$name"
 }
 
 flyway {
@@ -205,8 +206,8 @@ check.dependsOn(jacocoTestReport)
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "demo"
-        property "sonar.projectName", "demo"
+        property "sonar.projectKey", "$name"
+        property "sonar.projectName", "$name"
         property "sonar.projectDescription", "A demonstration of a web application with good test coverage and best practices"
         property "sonar.sources", "src/main/java"
         property "sonar.tests", "src/test/java,src/integration_test/java,src/bdd_test/java"
