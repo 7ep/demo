@@ -161,14 +161,19 @@ task('printReportPathsPitest') {
 cucumberReports {
     outputDir = file('build/reports/bdd')
     buildId = '1'
+    // merge together all the cucumber reports with a suffix of "json"
     reports = files(fileTree(dir: "build/bdd", include: '*.json'))
     testTasksFinalizedByReport = false
     projectNameOverride = "$name"
 }
 
 flyway {
+    // with this URL, H2 will create a file at build/db/training, will use
+    // postgresql syntax for the SQL (mode=postgresql), and the first time you hit the database
+    // will open the database's server up for further connections (auto_server = true)
     url = 'jdbc:h2:./build/db/training;AUTO_SERVER=TRUE;MODE=POSTGRESQL'
     driver = 'org.h2.Driver'
+    // no point in using a username or password, security slows our teaching down.
     user = ""
     password = ""
     schemas = ['ADMINISTRATIVE', 'LIBRARY', 'AUTH']
