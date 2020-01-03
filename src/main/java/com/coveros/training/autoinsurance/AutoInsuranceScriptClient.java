@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class AutoInsuranceScriptClient {
 
     public static final String QUIT = "quit";
+    public static final String CLOSE = "close";
 
     public static void main(String[] args) {
         String hostName = "localhost";
@@ -52,8 +53,8 @@ public class AutoInsuranceScriptClient {
     }
 
     private static void processLineOfInput(Socket echoSocket, PrintWriter out, BufferedReader in, String userInput) throws IOException {
-        if (userInput.equals(QUIT)) {
-            out.println(QUIT);
+        if (userInput.equals(QUIT) || userInput.equals(CLOSE)) {
+            out.println(userInput);
             System.out.println("bye!");
             echoSocket.close();
             System.exit(0);

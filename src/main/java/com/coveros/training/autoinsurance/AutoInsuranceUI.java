@@ -187,4 +187,11 @@ public class AutoInsuranceUI extends JPanel {
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
+
+    // stops and closes the application
+    public void close() {
+        this.frame.dispose();
+        System.exit(0);
+    }
 }
+

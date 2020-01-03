@@ -6,8 +6,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
+import static com.coveros.training.autoinsurance.AutoInsuranceScriptClient.CLOSE;
 import static com.coveros.training.autoinsurance.AutoInsuranceScriptClient.QUIT;
+import static java.util.stream.Collectors.toList;
 
 public class AutoInsuranceScriptServer implements Runnable {
 
@@ -38,8 +41,18 @@ public class AutoInsuranceScriptServer implements Runnable {
                 while ((inputLine = in.readLine()) != null) {
                     String result = "OK";
 
-                    final String[] inputTokens = inputLine.split(" ");
-                    if (inputTokens[0].equals(QUIT)) {
+                    final String[] inputTokens =
+                            Arrays.stream(inputLine.split(" "))
+                                    .map(t -> t.toLowerCase())
+                                    .collect(toList())
+                                    .toArray(new String[0]);
+
+                    if (inputTokens[0].toLowerCase().equals(QUIT)) {
+                        loopAgain = false;
+                    }
+
+                    if (inputTokens[0].equals(CLOSE)) {
+                        autoInsuranceUI.close();
                         loopAgain = false;
                     }
 
