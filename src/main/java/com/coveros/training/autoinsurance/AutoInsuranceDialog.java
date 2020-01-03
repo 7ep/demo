@@ -20,14 +20,6 @@ public class AutoInsuranceDialog extends JDialog
     private String btnString1 = "Enter";
     private String btnString2 = "Cancel";
 
-    /**
-     * Returns null if the typed string was invalid;
-     * otherwise, returns the string as the user entered it.
-     */
-    public String getValidatedText() {
-        return typedText;
-    }
-
     /** Creates the reusable dialog. */
     public AutoInsuranceDialog(Frame aFrame, String aWord, AutoInsuranceUI parent) {
         super(aFrame, true);

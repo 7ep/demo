@@ -23,57 +23,59 @@ public class AutoInsuranceScriptServer implements Runnable {
 
         int portNumber = 8000;
 
-        try (
-                ServerSocket serverSocket = new ServerSocket(portNumber);
-                Socket clientSocket = serverSocket.accept();
+        while (true) {
+            try (
+                    ServerSocket serverSocket = new ServerSocket(portNumber);
+                    Socket clientSocket = serverSocket.accept();
+            ) {
                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(clientSocket.getInputStream()));
-        ) {
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                String result = "OK";
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    String result = "OK";
 
-                final String[] inputTokens = inputLine.split(" ");
+                    final String[] inputTokens = inputLine.split(" ");
 
-                if (inputTokens[0].equals("set")) {
-                    if (inputTokens[1].equals("label")) {
-                        autoInsuranceUI.setLabel(inputTokens[2]);
+                    if (inputTokens[0].equals("set")) {
+                        if (inputTokens[1].equals("label")) {
+                            autoInsuranceUI.setLabel(inputTokens[2]);
+                        }
+                        if (inputTokens[1].equals("age")) {
+                            autoInsuranceUI.setClaimsAge(inputTokens[2]);
+                        }
+                        if (inputTokens[1].equals("claims")) {
+                            final int i = Integer.parseInt(inputTokens[2]);
+                            autoInsuranceUI.setPreviousClaims(i);
+                        }
                     }
-                    if (inputTokens[1].equals("age")) {
-                        autoInsuranceUI.setClaimsAge(inputTokens[2]);
+
+                    if (inputTokens[0].equals("get")) {
+                        if (inputTokens[1].equals("label")) {
+                            result = autoInsuranceUI.label.getText();
+                        }
+                        if (inputTokens[1].equals("age")) {
+                            result = autoInsuranceUI.ageField.getText();
+                        }
+                        if (inputTokens[1].equals("claims")) {
+                            result = autoInsuranceUI.claimsDropDown.getSelectedItem().toString();
+                        }
                     }
-                    if (inputTokens[1].equals("claims")) {
-                        final int i = Integer.parseInt(inputTokens[2]);
-                        autoInsuranceUI.setPreviousClaims(i);
+
+                    if (inputTokens[0].equals("click")) {
+                        if (inputTokens[1].equals("calculate")) {
+                            autoInsuranceUI.claimsCalcButton.doClick();
+                        }
                     }
+
+                    out.println(result);
+
                 }
-
-                if (inputTokens[0].equals("get")) {
-                    if (inputTokens[1].equals("label")) {
-                        result = autoInsuranceUI.label.getText();
-                    }
-                    if (inputTokens[1].equals("age")) {
-                        result = autoInsuranceUI.ageField.getText();
-                    }
-                    if (inputTokens[1].equals("claims")) {
-                        result = autoInsuranceUI.claimsDropDown.getSelectedItem().toString();
-                    }
-                }
-
-                if (inputTokens[0].equals("click")) {
-                    if (inputTokens[1].equals("calculate")) {
-                        autoInsuranceUI.claimsCalcButton.doClick();
-                    }
-                }
-
-                out.println(result);
-
+            } catch (IOException e) {
+                System.out.println("Exception caught when trying to listen on port "
+                        + portNumber + " or listening for a connection");
+                System.out.println(e.getMessage());
             }
-        } catch (IOException e) {
-            System.out.println("Exception caught when trying to listen on port "
-                    + portNumber + " or listening for a connection");
-            System.out.println(e.getMessage());
         }
     }
 

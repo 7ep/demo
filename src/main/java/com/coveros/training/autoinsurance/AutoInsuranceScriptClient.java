@@ -13,7 +13,7 @@ public class AutoInsuranceScriptClient {
 
         String hostName = "localhost";
         int portNumber = 8000;
-
+        String[] runThis = {"set age 22", "set claims 1", "click calculate", "get label"};
         try (
                 Socket echoSocket = new Socket(hostName, portNumber);
                 PrintWriter out = new PrintWriter(echoSocket.getOutputStream(), true);
@@ -24,12 +24,15 @@ public class AutoInsuranceScriptClient {
                         new BufferedReader(
                                 new InputStreamReader(System.in))
         ) {
-            String userInput;
-            while ((userInput = stdIn.readLine()) != null) {
+//            String userInput;
+//            while ((userInput = stdIn.readLine()) != null) {
+            for (String userInput : runThis) {
                 if (userInput.equals("quit") || userInput.equals("exit")) {
                     System.out.println("bye!");
+                    echoSocket.close();
                     System.exit(0);
                 }
+                System.out.println("sending: " + userInput);
                 out.println(userInput);
                 System.out.println("response: " + in.readLine());
             }
