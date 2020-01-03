@@ -16,14 +16,11 @@ public class AutoInsuranceUI extends JPanel {
     JTextField ageField;
     JButton claimsCalcButton;
     JFrame frame;
-    AutoInsuranceDialog autoInsuranceDialog;
 
     /** Creates the GUI shown inside the frame's content pane. */
     public AutoInsuranceUI(JFrame frame) {
         super(new BorderLayout());
         this.frame = frame;
-        autoInsuranceDialog = new AutoInsuranceDialog(frame, "geisel", this);
-        autoInsuranceDialog.pack();
 
         JPanel autoInsurancePanel = createAutoInsurancePanel();
 
