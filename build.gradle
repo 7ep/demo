@@ -225,6 +225,7 @@ sonarqube {
 // parallellize the tests, making them finish sooner.
 tasks.withType(Test) {
     maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+    failFast = true
 }
 
 task runApiTests(type: Exec) {
