@@ -63,8 +63,10 @@ apply from: "$rootDir/gradle/aws.gradle"
 apply from: "$rootDir/gradle/remote_actions.gradle"
 
 // including our script plugin for running Selenified
-//
 apply from: "$rootDir/gradle/selenified_tests.gradle"
+
+// including our script plugin for running Selenified
+apply from: "$rootDir/gradle/desktop_tests.gradle"
 
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked"
@@ -500,15 +502,5 @@ task startui(type:JavaExec) {
     main = 'com.coveros.training.autoinsurance.AutoInsuranceUI'
 }
 
-/**
- * This starts the client that controls the automation script
- * server that can control the UI for the auto insurance processor
- */
-task startscriptclient(type:JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
-    main = 'com.coveros.training.autoinsurance.AutoInsuranceScriptClient'
-    args = ["set age 22", "set claims 1", "click calculate", "get label"]
-}
 
 

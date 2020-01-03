@@ -1,18 +1,15 @@
 package com.coveros.training.autoinsurance;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 public class AutoInsuranceScriptClient {
 
     public static final String QUIT = "quit";
 
     public static void main(String[] args) {
-        System.out.println(String.join(";", args));
         String hostName = "localhost";
         int portNumber = 8000;
         try (
@@ -27,8 +24,15 @@ public class AutoInsuranceScriptClient {
         ) {
 
             if (args.length > 0) {
-                for (String userInput : args) {
-                    processLineOfInput(echoSocket, out, in, userInput);
+                // loop through all the script files, if any exist.
+                for (String file : args) {
+                    System.out.println("running script: " + file);
+                    Scanner scanner = new Scanner(new File(file));
+                    while (scanner.hasNextLine()) {
+                        String userInput = scanner.nextLine();
+                        System.out.println(userInput);
+                        processLineOfInput(echoSocket, out, in, userInput);
+                    }
                 }
             } else {
                 String userInput;

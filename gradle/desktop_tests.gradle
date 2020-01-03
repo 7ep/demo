@@ -1,0 +1,20 @@
+sourceSets {
+    desktopTests {
+        resources.srcDir 'src/desktop_ui_tests/resources'
+    }
+}
+
+dependencies {
+    desktopTestsCompile sourceSets.main.output
+}
+
+/**
+ * This starts the client that controls the automation script
+ * server that can control the UI for the auto insurance processor
+ */
+task startscriptclient(type:JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    main = 'com.coveros.training.autoinsurance.AutoInsuranceScriptClient'
+    args = files(fileTree(dir: 'src/desktop_ui_tests/resources', include: '*.txt'))
+}

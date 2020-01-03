@@ -1,0 +1,4 @@
+set age 22
+set claims 1
+click calculate
+get label
