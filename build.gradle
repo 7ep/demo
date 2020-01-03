@@ -508,6 +508,7 @@ task startscriptclient(type:JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
     main = 'com.coveros.training.autoinsurance.AutoInsuranceScriptClient'
+    args = ["set age 22", "set claims 1", "click calculate", "get label"]
 }
 
 

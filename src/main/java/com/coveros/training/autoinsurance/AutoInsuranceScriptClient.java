@@ -15,7 +15,6 @@ public class AutoInsuranceScriptClient {
         System.out.println(String.join(";", args));
         String hostName = "localhost";
         int portNumber = 8000;
-        String[] runThis = {"set age 22", "set claims 1", "click calculate", "get label"};
         try (
                 Socket echoSocket = new Socket(hostName, portNumber);
                 PrintWriter out = new PrintWriter(echoSocket.getOutputStream(), true);
@@ -26,19 +25,18 @@ public class AutoInsuranceScriptClient {
                         new BufferedReader(
                                 new InputStreamReader(System.in))
         ) {
-//            String userInput;
-//            while ((userInput = stdIn.readLine()) != null) {
-            for (String userInput : runThis) {
-                if (userInput.equals(QUIT)) {
-                    out.println(QUIT);
-                    System.out.println("bye!");
-                    echoSocket.close();
-                    System.exit(0);
+
+            if (args.length > 0) {
+                for (String userInput : args) {
+                    processLineOfInput(echoSocket, out, in, userInput);
                 }
-                System.out.println("sending: " + userInput);
-                out.println(userInput);
-                System.out.println("response: " + in.readLine());
+            } else {
+                String userInput;
+                while ((userInput = stdIn.readLine()) != null) {
+                    processLineOfInput(echoSocket, out, in, userInput);
+                }
             }
+
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
             System.exit(1);
@@ -47,5 +45,17 @@ public class AutoInsuranceScriptClient {
                     hostName);
             System.exit(1);
         }
+    }
+
+    private static void processLineOfInput(Socket echoSocket, PrintWriter out, BufferedReader in, String userInput) throws IOException {
+        if (userInput.equals(QUIT)) {
+            out.println(QUIT);
+            System.out.println("bye!");
+            echoSocket.close();
+            System.exit(0);
+        }
+        System.out.println("sending: " + userInput);
+        out.println(userInput);
+        System.out.println("response: " + in.readLine());
     }
 }
