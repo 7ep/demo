@@ -1,11 +1,15 @@
+repositories {
+    mavenCentral()
+}
+
 sourceSets {
     desktopTests {
         resources.srcDir 'src/desktop_ui_tests/resources'
     }
 }
 
-dependencies {
-    desktopTestsCompile sourceSets.main.output
+task testDesktopUI(type: GradleBuild) {
+    tasks = ['startscriptclient', 'obtainExecutionCoverageDesktopUI']
 }
 
 /**
@@ -13,8 +17,19 @@ dependencies {
  * server that can control the UI for the auto insurance processor
  */
 task startscriptclient(type:JavaExec) {
+    // get the path to the jar file for jacocoagent
+    def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
+    jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/desktop_tests.exec,append=false"]
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
     main = 'com.coveros.training.autoinsurance.AutoInsuranceScriptClient'
     args = files(fileTree(dir: 'src/desktop_ui_tests/resources', include: '*.txt'))
 }
+
+task obtainExecutionCoverageDesktopUI(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    main = 'com.coveros.training.autoinsurance.ExecutionDataClient'
+    args = ["6301", "$buildDir/jacoco/desktop_ui.exec"]
+}
+
