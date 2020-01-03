@@ -62,7 +62,10 @@ public class AutoInsuranceUI extends JPanel {
 
                 final AutoInsuranceAction result = AutoInsuranceProcessor.process(intPreviousClaims, intCustomerAge);
 
-                setLabel("Premium increase: $" + result.premiumIncreaseDollars + " Warning Ltr: " + result.warningLetterEnum);
+                setLabel(
+                        "Premium increase: $" +  result.premiumIncreaseDollars +
+                        " Warning Ltr: " + result.warningLetterEnum +
+                        " is canceled: " + result.isPolicyCanceled);
             }
         });
 
