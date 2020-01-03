@@ -47,10 +47,6 @@ public class AutoInsuranceScriptServer implements Runnable {
                         final int i = Integer.parseInt(inputTokens[2]);
                         autoInsuranceUI.setPreviousClaims(i);
                     }
-                    if (inputTokens[1].equals("tab")) {
-                        final int i = Integer.parseInt(inputTokens[2]);
-                        autoInsuranceUI.setTab(i);
-                    }
                 }
 
                 if (inputTokens[0].equals("get")) {
