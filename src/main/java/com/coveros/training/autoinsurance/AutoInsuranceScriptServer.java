@@ -7,6 +7,8 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import static com.coveros.training.autoinsurance.AutoInsuranceScriptClient.QUIT;
+
 public class AutoInsuranceScriptServer implements Runnable {
 
     private AutoInsuranceUI autoInsuranceUI;
@@ -22,8 +24,9 @@ public class AutoInsuranceScriptServer implements Runnable {
     public void serverStart() {
 
         int portNumber = 8000;
+        boolean loopAgain = true;
 
-        while (true) {
+        while(loopAgain) {
             try (
                     ServerSocket serverSocket = new ServerSocket(portNumber);
                     Socket clientSocket = serverSocket.accept();
@@ -36,6 +39,9 @@ public class AutoInsuranceScriptServer implements Runnable {
                     String result = "OK";
 
                     final String[] inputTokens = inputLine.split(" ");
+                    if (inputTokens[0].equals(QUIT)) {
+                        loopAgain = false;
+                    }
 
                     if (inputTokens[0].equals("set")) {
                         if (inputTokens[1].equals("label")) {

@@ -9,8 +9,10 @@ import java.net.UnknownHostException;
 
 public class AutoInsuranceScriptClient {
 
-    public static void main(String[] args) {
+    public static final String QUIT = "quit";
 
+    public static void main(String[] args) {
+        System.out.println(String.join(";", args));
         String hostName = "localhost";
         int portNumber = 8000;
         String[] runThis = {"set age 22", "set claims 1", "click calculate", "get label"};
@@ -27,7 +29,8 @@ public class AutoInsuranceScriptClient {
 //            String userInput;
 //            while ((userInput = stdIn.readLine()) != null) {
             for (String userInput : runThis) {
-                if (userInput.equals("quit") || userInput.equals("exit")) {
+                if (userInput.equals(QUIT)) {
+                    out.println(QUIT);
                     System.out.println("bye!");
                     echoSocket.close();
                     System.exit(0);
