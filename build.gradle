@@ -63,8 +63,10 @@ apply from: "$rootDir/gradle/aws.gradle"
 apply from: "$rootDir/gradle/remote_actions.gradle"
 
 // including our script plugin for running Selenified
-//
 apply from: "$rootDir/gradle/selenified_tests.gradle"
+
+// including our script plugin for running Selenified
+apply from: "$rootDir/gradle/desktop_tests.gradle"
 
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked"
@@ -75,7 +77,22 @@ gretty {
     httpPort = 8080
     servletContainer = 'tomcat9'
     contextPath = "demo"
-    jvmArgs = ['-Dcom.sun.management.jmxremote', '-Dcom.sun.management.jmxremote.port=9999', '-Dcom.sun.management.jmxremote.ssl=false', '-Dcom.sun.management.jmxremote.authenticate=false']
+    def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
+    jvmArgs = ["-javaagent:$jacocoAgent=output=tcpserver,address=localhost,port=6300", '-Dcom.sun.management.jmxremote', '-Dcom.sun.management.jmxremote.port=9999', '-Dcom.sun.management.jmxremote.ssl=false', '-Dcom.sun.management.jmxremote.authenticate=false']
+}
+
+task obtainExecutionCoverageWebApplication(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    main = 'com.coveros.training.autoinsurance.ExecutionDataClient'
+    args = ["6300", "$buildDir/jacoco/webapp_ui.exec"]
+}
+
+task obtainExecutionCoverageWebAPI(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    main = 'com.coveros.training.autoinsurance.ExecutionDataClient'
+    args = ["6300", "$buildDir/jacoco/web_api.exec"]
 }
 
 repositories {
@@ -160,14 +177,20 @@ task('printReportPathsPitest') {
 // configuration for the cucumber reports.
 cucumberReports {
     outputDir = file('build/reports/bdd')
-    buildId = '0'
+    buildId = '1'
+    // merge together all the cucumber reports with a suffix of "json"
     reports = files(fileTree(dir: "build/bdd", include: '*.json'))
     testTasksFinalizedByReport = false
+    projectNameOverride = "$name"
 }
 
 flyway {
+    // with this URL, H2 will create a file at build/db/training, will use
+    // postgresql syntax for the SQL (mode=postgresql), and the first time you hit the database
+    // will open the database's server up for further connections (auto_server = true)
     url = 'jdbc:h2:./build/db/training;AUTO_SERVER=TRUE;MODE=POSTGRESQL'
     driver = 'org.h2.Driver'
+    // no point in using a username or password, security slows our teaching down.
     user = ""
     password = ""
     schemas = ['ADMINISTRATIVE', 'LIBRARY', 'AUTH']
@@ -205,8 +228,8 @@ check.dependsOn(jacocoTestReport)
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "demo"
-        property "sonar.projectName", "demo"
+        property "sonar.projectKey", "$name"
+        property "sonar.projectName", "$name"
         property "sonar.projectDescription", "A demonstration of a web application with good test coverage and best practices"
         property "sonar.sources", "src/main/java"
         property "sonar.tests", "src/test/java,src/integration_test/java,src/bdd_test/java"
@@ -219,6 +242,7 @@ sonarqube {
 // parallellize the tests, making them finish sooner.
 tasks.withType(Test) {
     maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+    failFast = true
 }
 
 task runApiTests(type: Exec) {
@@ -227,6 +251,9 @@ task runApiTests(type: Exec) {
     }
     workingDir 'src/api_tests'
     commandLine 'pipenv', 'run', 'pytest', '--junitxml', '../../build/test-results/api_tests/TEST-api_test_results.xml'
+    doLast {
+        obtainExecutionCoverageWebApplication
+    }
 }
 
 static boolean SearchDirectoryForChromedriver(File dir) {
@@ -395,6 +422,9 @@ task runBehaveTests(type: Exec) {
     workingDir 'src/ui_tests'
     // run behave and output a json file (we'll convert that to Cucumber format later for reporting)
     commandLine 'pipenv', 'run', 'behave', '--format','json','-o','../../build/bdd/behave.output', '-D', 'chromedriver_path='+(project.properties['chromedriver.path'] ?: "")
+    doLast {
+        obtainExecutionCoverageWebAPI
+    }
 
 }
 
@@ -489,18 +519,13 @@ dependencyCheckAnalyze.finalizedBy 'printReportPathsDependencyCheck'
  *  and its accompanying automation script server
  */
 task startui(type:JavaExec) {
+    def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
+    jvmArgs = ["-javaagent:$jacocoAgent=output=tcpserver,address=localhost,port=6301,append=false"]
     classpath = sourceSets.main.runtimeClasspath
     main = 'com.coveros.training.autoinsurance.AutoInsuranceUI'
 }
 
-/**
- * This starts the client that controls the automation script
- * server that can control the UI for the auto insurance processor
- */
-task startscriptclient(type:JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
-    main = 'com.coveros.training.autoinsurance.AutoInsuranceScriptClient'
-}
+
+
 
 

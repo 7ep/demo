@@ -5,16 +5,23 @@ import java.math.BigInteger;
 
 public class Ackermann {
 
+    private Ackermann() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Ackerman function.
      *
      * This version found at https://rosettacode.org/wiki/Ackermann_function#Java
      */
     public static BigInteger ack(BigInteger m, BigInteger n) {
-        return m.equals(BigInteger.ZERO)
-                ? n.add(BigInteger.ONE)
-                : ack(m.subtract(BigInteger.ONE),
-                n.equals(BigInteger.ZERO) ? BigInteger.ONE : ack(m, n.subtract(BigInteger.ONE)));
+        if (m.equals(BigInteger.ZERO)) {
+            return n.add(BigInteger.ONE);
+        }
+        if (n.equals(BigInteger.ZERO)) {
+            return ack(m.subtract(BigInteger.ONE), BigInteger.ONE);
+        }
+        return ack(m.subtract(BigInteger.ONE), ack(m, n.subtract(BigInteger.ONE)));
     }
 
     /**

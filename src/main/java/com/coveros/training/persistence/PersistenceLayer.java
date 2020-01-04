@@ -481,7 +481,7 @@ public class PersistenceLayer {
      * A book cannot be loaned to two people at the same time!
      */
     public List<Loan> searchForLoanByBorrower(Borrower borrower) {
-        Function<ResultSet, List<Loan>> extractor = throwingFunctionWrapper((rs) -> {
+        Function<ResultSet, List<Loan>> extractor = throwingFunctionWrapper(rs -> {
             List<Loan> loans = new ArrayList<>();
             if (rs.next()) {
                 do {
@@ -511,7 +511,7 @@ public class PersistenceLayer {
     }
 
     Loan searchForLoanByBook(Book book) {
-        Function<ResultSet, Loan> extractor = throwingFunctionWrapper((rs) -> {
+        Function<ResultSet, Loan> extractor = throwingFunctionWrapper(rs -> {
             if (rs.next()) {
                 final long loanId = rs.getLong(1);
                 final Date borrowDate = rs.getDate(2);

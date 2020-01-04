@@ -7,6 +7,10 @@ import org.apache.commons.lang3.tuple.Pair;
  */
 public class Calculator {
 
+    private Calculator() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Simply add two integers
      */

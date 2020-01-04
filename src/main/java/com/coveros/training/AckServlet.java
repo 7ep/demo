@@ -12,6 +12,7 @@ import java.math.BigInteger;
 @WebServlet(name = "AckServlet", urlPatterns = {"/ackermann"}, loadOnStartup = 1)
 public class AckServlet extends HttpServlet {
 
+    public static final String RESULT = "result";
     static Logger logger = LoggerFactory.getLogger(AckServlet.class);
 
     private int putNumberInRequest(String itemName, HttpServletRequest request) {
@@ -36,7 +37,7 @@ public class AckServlet extends HttpServlet {
             }
 
         } catch (NumberFormatException ex) {
-            request.setAttribute("result", "Error: only accepts integers");
+            request.setAttribute(RESULT, "Error: only accepts integers");
         }
         forwardToResult(request, response, logger);
     }
@@ -54,7 +55,7 @@ public class AckServlet extends HttpServlet {
     void regularRecursive(HttpServletRequest request, int itemA, int itemB) {
         final BigInteger result = Ackermann.calculate(itemA, itemB);
         logger.info("Ackermann's result is {}", result);
-        request.setAttribute("result", result);
+        request.setAttribute(RESULT, result);
     }
 
     /**
@@ -63,7 +64,7 @@ public class AckServlet extends HttpServlet {
     void tailRecursive(HttpServletRequest request, int itemA, int itemB) {
         final BigInteger result = AckermannIterative.calculate(itemA, itemB);
         logger.info("Ackermann's result is {}", result);
-        request.setAttribute("result", result);
+        request.setAttribute(RESULT, result);
     }
 
 }

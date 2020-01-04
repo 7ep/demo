@@ -7,10 +7,14 @@ import java.math.BigInteger;
  */
 public class FibonacciIterative {
 
+    private FibonacciIterative() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * O(log(n))
      */
-    public static BigInteger fib_algo1(long n) {
+    public static BigInteger fibAlgo1(long n) {
         if (n <= 0)
             return BigInteger.ZERO;
 
@@ -41,7 +45,7 @@ public class FibonacciIterative {
         return a.add(b);
     }
 
-    public static BigInteger fib_algo2(int n)
+    public static BigInteger fibAlgo2(int n)
     {
         if (n < 2)
             return BigInteger.valueOf(n);

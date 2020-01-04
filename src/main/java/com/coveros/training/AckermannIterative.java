@@ -1,7 +1,8 @@
 package com.coveros.training;
 
 import java.math.BigInteger;
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,26 +19,25 @@ public interface AckermannIterative {
     BigInteger number1();
     BigInteger number2();
 
-    Stack<BigInteger> stack();
+    Deque<BigInteger> stack();
 
     boolean flag();
 
     enum $ {
-        $$;
+        END;
 
         private static final BigInteger ZERO = BigInteger.ZERO;
         private static final BigInteger ONE = BigInteger.ONE;
         private static final BigInteger TWO = BigInteger.valueOf(2);
         private static final BigInteger THREE = BigInteger.valueOf(3);
-        private static final BigInteger FOUR = BigInteger.valueOf(4);
 
-        private static AckermannIterative new_(BigInteger number1, BigInteger number2, Stack<BigInteger> stack, boolean flag) {
+        private static AckermannIterative tail(BigInteger number1, BigInteger number2, Deque<BigInteger> stack, boolean flag) {
             return (FunctionalAckermann) field -> {
                 switch (field) {
-                    case number1: return number1;
-                    case number2: return number2;
-                    case stack: return stack;
-                    case flag: return flag;
+                    case NUMBER_1: return number1;
+                    case NUMBER_2: return number2;
+                    case STACK: return stack;
+                    case FLAG: return flag;
                     default: throw new UnsupportedOperationException(
                             field instanceof Field
                                     ? "Field checker has not been updated properly."
@@ -48,13 +48,13 @@ public interface AckermannIterative {
         }
 
         private static final BinaryOperator<BigInteger> ACKERMANN =
-                TailRecursive.new_(
+                TailRecursive.tailie(
                         (BigInteger number1, BigInteger number2) ->
-                                new_(
+                                tail(
                                         number1,
                                         number2,
                                         Stream.of(number1).collect(
-                                                Collectors.toCollection(Stack::new)
+                                                Collectors.toCollection(ArrayDeque::new)
                                         ),
                                         false
                                 )
@@ -62,27 +62,27 @@ public interface AckermannIterative {
                         ackermann -> {
                             BigInteger number1 = ackermann.number1();
                             BigInteger number2 = ackermann.number2();
-                            Stack<BigInteger> stack = ackermann.stack();
-                            if (!stack.empty() && !ackermann.flag()) {
+                            Deque<BigInteger> stack = ackermann.stack();
+                            if (!stack.isEmpty() && !ackermann.flag()) {
                                 number1 = stack.pop();
                             }
                             switch (number1.intValue()) {
                                 case 0:
-                                    return new_(
+                                    return tail(
                                             number1,
                                             number2.add(ONE),
                                             stack,
                                             false
                                     );
                                 case 1:
-                                    return new_(
+                                    return tail(
                                             number1,
                                             number2.add(TWO),
                                             stack,
                                             false
                                     );
                                 case 2:
-                                    return new_(
+                                    return tail(
                                             number1,
                                             number2.multiply(TWO).add(THREE),
                                             stack,
@@ -90,7 +90,7 @@ public interface AckermannIterative {
                                     );
                                 default:
                                     if (ZERO.equals(number2)) {
-                                        return new_(
+                                        return tail(
                                                 number1.subtract(ONE),
                                                 ONE,
                                                 stack,
@@ -98,7 +98,7 @@ public interface AckermannIterative {
                                         );
                                     } else {
                                         stack.push(number1.subtract(ONE));
-                                        return new_(
+                                        return tail(
                                                 number1,
                                                 number2.subtract(ONE),
                                                 stack,
@@ -107,42 +107,42 @@ public interface AckermannIterative {
                                     }
                             }
                         },
-                        ackermann -> ackermann.stack().empty(),
+                        ackermann -> ackermann.stack().isEmpty(),
                         AckermannIterative::number2
                 )::apply
                 ;
 
-        private static BigInteger main(BigInteger M, BigInteger N) {
-            return ACKERMANN.apply(M, N);
+        private static BigInteger main(BigInteger m, BigInteger n) {
+            return ACKERMANN.apply(m, n);
         }
 
         private enum Field {
-            number1,
-            number2,
-            stack,
-            flag
+            NUMBER_1,
+            NUMBER_2,
+            STACK,
+            FLAG
         }
 
         @FunctionalInterface
         private interface FunctionalAckermann extends FunctionalField<Field>, AckermannIterative {
             @Override
             default BigInteger number1() {
-                return field(Field.number1);
+                return field(Field.NUMBER_1);
             }
 
             @Override
             default BigInteger number2() {
-                return field(Field.number2);
+                return field(Field.NUMBER_2);
             }
 
             @Override
-            default Stack<BigInteger> stack() {
-                return field(Field.stack);
+            default Deque<BigInteger> stack() {
+                return field(Field.STACK);
             }
 
             @Override
             default boolean flag() {
-                return field(Field.flag);
+                return field(Field.FLAG);
             }
         }
     }

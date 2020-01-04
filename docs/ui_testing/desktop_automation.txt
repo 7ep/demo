@@ -39,7 +39,6 @@ commands possible:
     set label <TEXT>
     set age <AGE>
     set claims <CLAIMS>
-    set tab <TAB-INDEX>
 
     get label
     get age
@@ -47,7 +46,8 @@ commands possible:
 
     click calculate
 
-    quit
+    quit - quits the test script client
+    close - closes down the claims application
 
 
 Note: this is all still at a very rudimentary stage.

@@ -25,6 +25,7 @@ task libraryBdd (type: Test) {
     doFirst {
         print "\n\nstarting library BDD tests\n\n"
     }
+    reports.html.enabled = false
     group = LifecycleBasePlugin.VERIFICATION_GROUP
     description = 'Runs the Library BDD tests.'
     dependsOn assemble, compileTestJava, compileBddTestJava
@@ -59,6 +60,7 @@ task mathBdd (type: Test) {
     doFirst {
         print "\n\nstarting math-related BDD tests\n\n"
     }
+    reports.html.enabled = false
     group = LifecycleBasePlugin.VERIFICATION_GROUP
     description = 'Runs the mathematics BDD tests.'
     dependsOn assemble, compileTestJava, compileBddTestJava
@@ -93,6 +95,7 @@ task authBdd (type: Test) {
     doFirst {
         print "\n\nstarting authentication BDD tests\n\n"
     }
+    reports.html.enabled = false
     group = LifecycleBasePlugin.VERIFICATION_GROUP
     description = 'Runs the authentication BDD tests.'
     dependsOn assemble, compileTestJava, compileBddTestJava
@@ -127,6 +130,7 @@ task expensesBdd (type: Test) {
     doFirst {
         print "\n\nstarting expenses BDD tests\n\n"
     }
+    reports.html.enabled = false
     group = LifecycleBasePlugin.VERIFICATION_GROUP
     description = 'Runs the expenses BDD tests.'
     dependsOn assemble, compileTestJava, compileBddTestJava
@@ -160,6 +164,7 @@ task cartesianProductBdd (type: Test) {
     doFirst {
         print "\n\nstarting cartesian product BDD tests\n\n"
     }
+    reports.html.enabled = false
     group = LifecycleBasePlugin.VERIFICATION_GROUP
     description = 'Runs the Cartesian Product BDD tests.'
     dependsOn assemble, compileTestJava, compileBddTestJava

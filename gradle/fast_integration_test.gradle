@@ -6,6 +6,11 @@ sourceSets {
 }
 
 dependencies {
+    // the following is necessary to provide access to calling the Jacoco
+    // agent by a socket to obtain execution coverage data
+    // https://mvnrepository.com/artifact/org.jacoco/org.jacoco.core
+    compile group: 'org.jacoco', name: 'org.jacoco.core', version: '0.8.5'
+
     fastIntegrationTestImplementation sourceSets.main.output
     fastIntegrationTestImplementation sourceSets.test.output
 
@@ -22,8 +27,12 @@ task fastIntegrationTest(type: Test) {
     testClassesDirs = sourceSets.fastIntegrationTest.output.classesDirs
     classpath = sourceSets.fastIntegrationTest.runtimeClasspath
     maxHeapSize = '1024m'
-    binaryResultsDirectory = file("$buildDir/integration-test-results/binary/integrationTest")
     mustRunAfter test
+}
+
+task obtainCoverageData(type: JavaExec) {
+    classpath = sourceSets.fastIntegrationTest.runtimeClasspath
+    main = 'com.coveros.training.ExecutionDataClient'
 }
 
 check.dependsOn fastIntegrationTest
