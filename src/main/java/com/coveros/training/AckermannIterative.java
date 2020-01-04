@@ -24,7 +24,7 @@ public interface AckermannIterative {
     boolean flag();
 
     enum $ {
-        end;
+        END;
 
         private static final BigInteger ZERO = BigInteger.ZERO;
         private static final BigInteger ONE = BigInteger.ONE;

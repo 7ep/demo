@@ -54,7 +54,7 @@ public class AutoInsuranceScriptServer implements Runnable, Transient {
                                     .collect(toList())
                                     .toArray(new String[0]);
 
-                    if (inputTokens[0].toLowerCase().equals(QUIT)) {
+                    if (inputTokens[0].equals(QUIT)) {
                         loopAgain = false;
                     }
 
@@ -81,10 +81,8 @@ public class AutoInsuranceScriptServer implements Runnable, Transient {
     }
 
     private void handleClickActions(String[] inputTokens) {
-        if (inputTokens[0].equals("click")) {
-            if (inputTokens[1].equals("calculate")) {
-                autoInsuranceUI.claimsCalcButton.doClick();
-            }
+        if (inputTokens[0].equals("click") && inputTokens[1].equals("calculate")) {
+            autoInsuranceUI.claimsCalcButton.doClick();
         }
     }
 

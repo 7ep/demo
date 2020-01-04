@@ -3,8 +3,6 @@ package com.coveros.training.autoinsurance;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import static javax.swing.SwingConstants.CENTER;

@@ -22,7 +22,7 @@ public interface TailRecursive {
     }
 
     enum $ {
-        end;
+        END;
 
         private static <I, O> O epsilon(Stream<I> stream, Predicate<I> predicate, Function<I, O> function) {
             return stream

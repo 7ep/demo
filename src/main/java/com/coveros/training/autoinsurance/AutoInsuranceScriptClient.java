@@ -1,6 +1,5 @@
 package com.coveros.training.autoinsurance;
 
-import com.coveros.training.AckServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +31,7 @@ public class AutoInsuranceScriptClient {
             if (args.length > 0) {
                 // loop through all the script files, if any exist.
                 for (String file : args) {
-                    logger.info("running script: " + file);
+                    logger.info("running script: %s", file);
                     try (Scanner scanner = new Scanner(new File(file))) {
                         while (scanner.hasNextLine()) {
                             String userInput = scanner.nextLine();
@@ -49,11 +48,10 @@ public class AutoInsuranceScriptClient {
             }
 
         } catch (UnknownHostException e) {
-            logger.error("Don't know about host " + hostName);
+            logger.error("Don't know about host %s", hostName);
             System.exit(1);
         } catch (IOException e) {
-            logger.error("Couldn't get I/O for the connection to " +
-                    hostName);
+            logger.error("Couldn't get I/O for the connection to %s", hostName);
             System.exit(1);
         }
     }
@@ -61,12 +59,13 @@ public class AutoInsuranceScriptClient {
     private static void processLineOfInput(Socket echoSocket, PrintWriter out, BufferedReader in, String userInput) throws IOException {
         if (userInput.equals(QUIT) || userInput.equals(CLOSE)) {
             out.println(userInput);
-            System.out.println("bye!");
+            logger.info("bye!");
             echoSocket.close();
             System.exit(0);
         }
-        logger.info("sending: " + userInput);
+        logger.info("sending: %s", userInput);
         out.println(userInput);
-        logger.info("response: " + in.readLine());
+        final String response = in.readLine();
+        logger.info("response: %s", response);
     }
 }
