@@ -1,5 +1,9 @@
 package com.coveros.training.autoinsurance;
 
+import com.coveros.training.AckServlet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -9,6 +13,7 @@ public class AutoInsuranceScriptClient {
 
     public static final String QUIT = "quit";
     public static final String CLOSE = "close";
+    static Logger logger = LoggerFactory.getLogger(AutoInsuranceScriptClient.class);
 
     public static void main(String[] args) {
         String hostName = "localhost";
@@ -27,12 +32,13 @@ public class AutoInsuranceScriptClient {
             if (args.length > 0) {
                 // loop through all the script files, if any exist.
                 for (String file : args) {
-                    System.out.println("running script: " + file);
-                    Scanner scanner = new Scanner(new File(file));
-                    while (scanner.hasNextLine()) {
-                        String userInput = scanner.nextLine();
-                        System.out.println(userInput);
-                        processLineOfInput(echoSocket, out, in, userInput);
+                    logger.info("running script: " + file);
+                    try (Scanner scanner = new Scanner(new File(file))) {
+                        while (scanner.hasNextLine()) {
+                            String userInput = scanner.nextLine();
+                            logger.info(userInput);
+                            processLineOfInput(echoSocket, out, in, userInput);
+                        }
                     }
                 }
             } else {
@@ -43,10 +49,10 @@ public class AutoInsuranceScriptClient {
             }
 
         } catch (UnknownHostException e) {
-            System.err.println("Don't know about host " + hostName);
+            logger.error("Don't know about host " + hostName);
             System.exit(1);
         } catch (IOException e) {
-            System.err.println("Couldn't get I/O for the connection to " +
+            logger.error("Couldn't get I/O for the connection to " +
                     hostName);
             System.exit(1);
         }
@@ -59,8 +65,8 @@ public class AutoInsuranceScriptClient {
             echoSocket.close();
             System.exit(0);
         }
-        System.out.println("sending: " + userInput);
+        logger.info("sending: " + userInput);
         out.println(userInput);
-        System.out.println("response: " + in.readLine());
+        logger.info("response: " + in.readLine());
     }
 }

@@ -6,6 +6,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static javax.swing.JFrame.EXIT_ON_CLOSE;
+import static javax.swing.SwingConstants.CENTER;
+
 public class AutoInsuranceUI extends JPanel {
 
     // server used for automating the UI
@@ -31,7 +34,7 @@ public class AutoInsuranceUI extends JPanel {
         add(autoInsurancePanel, BorderLayout.CENTER);
         label = new JLabel("Click the \"Crunch\" button"
                 + " to calculate your auto insurance results",
-                JLabel.CENTER);
+                CENTER);
         add(label, BorderLayout.PAGE_END);
         label.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
@@ -50,20 +53,17 @@ public class AutoInsuranceUI extends JPanel {
         ageField = addClaimsAgeTextField(box);
 
         claimsCalcButton = addClaimsCalcButton(box);
-        claimsCalcButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                final int intPreviousClaims = getIntPreviousClaims();
-                final String customerAge = ageField.getText();
-                final int intCustomerAge = Integer.parseInt(customerAge);
+        claimsCalcButton.addActionListener(e -> {
+            final int intPreviousClaims = getIntPreviousClaims();
+            final String customerAge = ageField.getText();
+            final int intCustomerAge = Integer.parseInt(customerAge);
 
-                final AutoInsuranceAction result = AutoInsuranceProcessor.process(intPreviousClaims, intCustomerAge);
+            final AutoInsuranceAction result = AutoInsuranceProcessor.process(intPreviousClaims, intCustomerAge);
 
-                setLabel(
-                        "Premium increase: $" +  result.premiumIncreaseDollars +
-                        " Warning Ltr: " + result.warningLetterEnum +
-                        " is canceled: " + result.isPolicyCanceled);
-            }
+            setLabel(
+                    "Premium increase: $" +  result.premiumIncreaseDollars +
+                    " Warning Ltr: " + result.warningLetterEnum +
+                    " is canceled: " + result.isPolicyCanceled);
         });
 
         return box;
@@ -81,7 +81,7 @@ public class AutoInsuranceUI extends JPanel {
             case "2-4" : return 2;
             case ">=5" : return 5;
             default:
-                throw new RuntimeException("invalid value entered");
+                throw new InvalidClaimsException("invalid value entered");
         }
     }
 
@@ -107,7 +107,7 @@ public class AutoInsuranceUI extends JPanel {
 
     private JComboBox<String> addClaimsDropDown(JPanel box) {
         String[] previousClaims = {"0", "1", "2-4", ">=5"};
-        final JComboBox<String> cb = new JComboBox<String>(previousClaims);
+        final JComboBox<String> cb = new JComboBox<>(previousClaims);
         cb.setVisible(true);
         box.add(cb);
         return cb;
@@ -170,7 +170,7 @@ public class AutoInsuranceUI extends JPanel {
     private static void createAndShowGUI() {
         //Create and set up the window.
         JFrame frame = new JFrame("AutoInsuranceUI");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         //Create and set up the content pane.
         AutoInsuranceUI newContentPane = new AutoInsuranceUI(frame);

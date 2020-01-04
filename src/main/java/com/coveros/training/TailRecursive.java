@@ -7,22 +7,10 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 public interface TailRecursive {
-    public static <INPUT, INTERMEDIARY, OUTPUT> Function<INPUT, OUTPUT> new_(Function<INPUT, INTERMEDIARY> toIntermediary, UnaryOperator<INTERMEDIARY> unaryOperator, Predicate<INTERMEDIARY> predicate, Function<INTERMEDIARY, OUTPUT> toOutput) {
-        return input ->
-                $.new_(
-                        Stream.iterate(
-                                toIntermediary.apply(input),
-                                unaryOperator
-                        ),
-                        predicate,
-                        toOutput
-                )
-                ;
-    }
 
-    public static <INPUT1, INPUT2, INTERMEDIARY, OUTPUT> BiFunction<INPUT1, INPUT2, OUTPUT> new_(BiFunction<INPUT1, INPUT2, INTERMEDIARY> toIntermediary, UnaryOperator<INTERMEDIARY> unaryOperator, Predicate<INTERMEDIARY> predicate, Function<INTERMEDIARY, OUTPUT> toOutput) {
+    static <M, N, I, O> BiFunction<M, N, O> tailie(BiFunction<M, N, I> toIntermediary, UnaryOperator<I> unaryOperator, Predicate<I> predicate, Function<I, O> toOutput) {
         return (input1, input2) ->
-                $.new_(
+                $.epsilon(
                         Stream.iterate(
                                 toIntermediary.apply(input1, input2),
                                 unaryOperator
@@ -33,10 +21,10 @@ public interface TailRecursive {
                 ;
     }
 
-    public enum $ {
-        $$;
+    enum $ {
+        end;
 
-        private static <INTERMEDIARY, OUTPUT> OUTPUT new_(Stream<INTERMEDIARY> stream, Predicate<INTERMEDIARY> predicate, Function<INTERMEDIARY, OUTPUT> function) {
+        private static <I, O> O epsilon(Stream<I> stream, Predicate<I> predicate, Function<I, O> function) {
             return stream
                     .filter(predicate)
                     .map(function)

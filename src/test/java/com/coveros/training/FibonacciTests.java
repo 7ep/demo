@@ -13,37 +13,37 @@ public class FibonacciTests {
 
     @Test
     public void testSmallValuesFibAlgo1() {
-        final BigInteger fib = FibonacciIterative.fib_algo1(43);
+        final BigInteger fib = FibonacciIterative.fibAlgo1(43);
         Assert.assertEquals(new BigInteger(FIB_FOR_43), fib);
     }
 
     @Test
     public void testSmallValuesFibAlgo2() {
-        final BigInteger fib = FibonacciIterative.fib_algo2(43);
+        final BigInteger fib = FibonacciIterative.fibAlgo2(43);
         Assert.assertEquals(new BigInteger(FIB_FOR_43), fib);
     }
 
     @Test
     public void testLargeValuesFibAlgo1() {
-        final BigInteger fib = FibonacciIterative.fib_algo1(200);
+        final BigInteger fib = FibonacciIterative.fibAlgo1(200);
         Assert.assertEquals(new BigInteger(FIB_FOR_200), fib);
     }
 
     @Test
     public void testLargeValuesFibAlgo2() {
-        final BigInteger fib = FibonacciIterative.fib_algo2(200);
+        final BigInteger fib = FibonacciIterative.fibAlgo2(200);
         Assert.assertEquals(new BigInteger(FIB_FOR_200), fib);
     }
 
     @Test
     public void testLargerValuesFibAlgo1() {
-        final BigInteger fib = FibonacciIterative.fib_algo1(2000);
+        final BigInteger fib = FibonacciIterative.fibAlgo1(2000);
         Assert.assertEquals(new BigInteger(FIB_FOR_2000), fib);
     }
 
     @Test
     public void testLargerValuesFibAlgo2() {
-        final BigInteger fib = FibonacciIterative.fib_algo2(2000);
+        final BigInteger fib = FibonacciIterative.fibAlgo2(2000);
         Assert.assertEquals(new BigInteger(FIB_FOR_2000), fib);
     }
 }

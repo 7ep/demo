@@ -42,7 +42,7 @@ public class FibonacciParameterizedTests {
      */
     @Test
     public void testIterative1() {
-        assertEquals(String.format("for the %dth number, we expected %d", fInput, fExpected), fExpected, FibonacciIterative.fib_algo1(fInput).intValue());
+        assertEquals(String.format("for the %dth number, we expected %d", fInput, fExpected), fExpected, FibonacciIterative.fibAlgo1(fInput).intValue());
     }
 
     /**
@@ -50,6 +50,6 @@ public class FibonacciParameterizedTests {
      */
     @Test
     public void testIterative2() {
-        assertEquals(String.format("for the %dth number, we expected %d", fInput, fExpected), fExpected, FibonacciIterative.fib_algo2(fInput).intValue());
+        assertEquals(String.format("for the %dth number, we expected %d", fInput, fExpected), fExpected, FibonacciIterative.fibAlgo2(fInput).intValue());
     }
 }

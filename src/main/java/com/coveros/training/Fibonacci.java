@@ -2,6 +2,10 @@ package com.coveros.training;
 
 public class Fibonacci {
 
+    private Fibonacci() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static long calculate(long n) {
         long result = 0;
 

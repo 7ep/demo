@@ -1,11 +1,11 @@
 package com.coveros.training;
 
 @FunctionalInterface
-public interface FunctionalField<FIELD extends Enum<?>> {
-    public Object untypedField(FIELD field);
+public interface FunctionalField<F extends Enum<?>> {
+    public Object untypedField(F field);
 
     @SuppressWarnings("unchecked")
-    public default <VALUE> VALUE field(FIELD field) {
-        return (VALUE) untypedField(field);
+    public default <V> V field(F field) {
+        return (V) untypedField(field);
     }
 }

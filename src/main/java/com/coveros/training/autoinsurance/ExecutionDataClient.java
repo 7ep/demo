@@ -43,21 +43,21 @@ public final class ExecutionDataClient {
                 localFile);
 
         // Open a socket to the coverage agent:
-        final Socket socket = new Socket(InetAddress.getByName(ADDRESS), port);
-        final RemoteControlWriter writer = new RemoteControlWriter(
-                socket.getOutputStream());
-        final RemoteControlReader reader = new RemoteControlReader(
-                socket.getInputStream());
-        reader.setSessionInfoVisitor(localWriter);
-        reader.setExecutionDataVisitor(localWriter);
+        try (Socket socket = new Socket(InetAddress.getByName(ADDRESS), port)) {
+            final RemoteControlWriter writer = new RemoteControlWriter(
+                    socket.getOutputStream());
+            final RemoteControlReader reader = new RemoteControlReader(
+                    socket.getInputStream());
+            reader.setSessionInfoVisitor(localWriter);
+            reader.setExecutionDataVisitor(localWriter);
 
-        // Send a dump command and read the response:
-        writer.visitDumpCommand(true, true);
-        if (!reader.read()) {
-            throw new IOException("Socket closed unexpectedly.");
+            // Send a dump command and read the response:
+            writer.visitDumpCommand(true, true);
+            if (!reader.read()) {
+                throw new IOException("Socket closed unexpectedly.");
+            }
+
         }
-
-        socket.close();
         localFile.close();
     }
 

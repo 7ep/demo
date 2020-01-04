@@ -46,7 +46,7 @@ final class SqlData<R> {
      * and then carries out actions on it, per the user's intentions, to convert it
      * into something of type {@link R}.
      */
-    final public Function<ResultSet, R> extractor;
+    public final Function<ResultSet, R> extractor;
 
     SqlData(String description, String preparedStatement) {
         this(description, preparedStatement, null);

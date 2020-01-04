@@ -12,6 +12,8 @@ import java.math.BigInteger;
 @WebServlet(name = "FibServlet", urlPatterns = {"/fibonacci"}, loadOnStartup = 1)
 public class FibServlet extends HttpServlet {
 
+    public static final String RESULT = "result";
+    public static final String FIBONACCI_VALUE_IS = "Fibonacci value is {}";
     static Logger logger = LoggerFactory.getLogger(FibServlet.class);
 
     private int putNumberInRequest(String itemName, HttpServletRequest request) {
@@ -36,21 +38,21 @@ public class FibServlet extends HttpServlet {
                 defaultRecursiveCalculation(request, fibParamN);
             }
         } catch (NumberFormatException ex) {
-            request.setAttribute("result", "Error: only accepts integers");
+            request.setAttribute(RESULT, "Error: only accepts integers");
         }
         forwardToResult(request, response, logger);
     }
 
     void tailRecursiveAlgo2Calc(HttpServletRequest request, int fibParamN) {
-        final BigInteger result = FibonacciIterative.fib_algo2(fibParamN);
-        logger.info("Fibonacci value is {}", result);
-        request.setAttribute("result", result);
+        final BigInteger result = FibonacciIterative.fibAlgo2(fibParamN);
+        logger.info(FIBONACCI_VALUE_IS, result);
+        request.setAttribute(RESULT, result);
     }
 
     void tailRecursiveAlgo1Calc(HttpServletRequest request, int fibParamN) {
-        final BigInteger result = FibonacciIterative.fib_algo1(fibParamN);
-        logger.info("Fibonacci value is {}", result);
-        request.setAttribute("result", result);
+        final BigInteger result = FibonacciIterative.fibAlgo1(fibParamN);
+        logger.info(FIBONACCI_VALUE_IS, result);
+        request.setAttribute(RESULT, result);
     }
 
     /**
@@ -65,8 +67,8 @@ public class FibServlet extends HttpServlet {
      */
     void defaultRecursiveCalculation(HttpServletRequest request, int itemA) {
         final long result = Fibonacci.calculate(itemA);
-        logger.info("Fibonacci value is {}", result);
-        request.setAttribute("result", result);
+        logger.info(FIBONACCI_VALUE_IS, result);
+        request.setAttribute(RESULT, result);
     }
 
 }
