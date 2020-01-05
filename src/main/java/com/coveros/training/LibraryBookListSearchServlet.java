@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @WebServlet(name = "LibraryBookListSearch", urlPatterns = {"/book"}, loadOnStartup = 1)
-public class LibraryBookListSearch extends HttpServlet {
+public class LibraryBookListSearchServlet extends HttpServlet {
 
-    private static final Logger logger = LoggerFactory.getLogger(LibraryBookListSearch.class);
+    private static final Logger logger = LoggerFactory.getLogger(LibraryBookListSearchServlet.class);
     private static final String RESULT = "result";
     static LibraryUtils libraryUtils = new LibraryUtils();
 

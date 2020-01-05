@@ -1,7 +1,6 @@
 package com.coveros.training;
 
 import com.coveros.training.domainobjects.Book;
-import com.coveros.training.domainobjects.Borrower;
 import com.coveros.training.persistence.LibraryUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,12 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import static org.mockito.Mockito.*;
 
-public class LibraryBorrowerListSearchServletTests {
+public class LibraryBookListSearchServletServletTests {
 
-    public static final String A_BORROWER = "abe borrower";
+    public static final String A_BOOK = "a book";
     private HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
     private HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-    private LibraryBorrowerListSearch libraryBorrowerListSearch;
+    private LibraryBookListSearchServlet libraryBookListSearchServlet;
     private final RequestDispatcher requestDispatcher = Mockito.mock(RequestDispatcher.class);
     private LibraryUtils libraryUtils = Mockito.mock(LibraryUtils.class);
 
@@ -27,56 +26,56 @@ public class LibraryBorrowerListSearchServletTests {
     public void before() {
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
-        libraryBorrowerListSearch = spy(new LibraryBorrowerListSearch());
-        LibraryBorrowerListSearch.libraryUtils = this.libraryUtils;
+        libraryBookListSearchServlet = spy(new LibraryBookListSearchServlet());
+        LibraryBookListSearchServlet.libraryUtils = this.libraryUtils;
     }
 
     /**
-     * If we don't pass a name or an id, we'll get a list of all borrowers
+     * If we don't pass a title or an id, we'll get a list of all books
      */
     @Test
-    public void testListAllBorrowers() {
+    public void testListAllBooks() {
         when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
 
         // act
-        libraryBorrowerListSearch.doGet(request, response);
+        libraryBookListSearchServlet.doGet(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(libraryUtils).listAllBorrowers();
+        verify(libraryUtils).listAllBooks();
     }
 
     /**
-     * If we pass an id, we'll get a particular borrower
+     * If we pass an id, we'll get a particular book
      */
     @Test
     public void testSearchById() {
         when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
         when(request.getParameter("id")).thenReturn("1");
         // the following is just to avoid a null pointer exception when the test succeeds
-        when(libraryUtils.searchForBorrowerById(1)).thenReturn(Borrower.createEmpty());
+        when(libraryUtils.searchForBookById(1)).thenReturn(Book.createEmpty());
 
         // act
-        libraryBorrowerListSearch.doGet(request, response);
+        libraryBookListSearchServlet.doGet(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(libraryUtils).searchForBorrowerById(1);
+        verify(libraryUtils).searchForBookById(1);
     }
 
     /**
-     * If we pass a name, we'll get a particular borrower
+     * If we pass a title, we'll get a particular book
      */
     @Test
-    public void testSearchByName() {
+    public void testSearchByTitle() {
         when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
-        when(request.getParameter("name")).thenReturn(A_BORROWER);
+        when(request.getParameter("title")).thenReturn(A_BOOK);
         // the following is just to avoid a null pointer exception when the test succeeds
-        when(libraryUtils.searchForBorrowerByName(A_BORROWER)).thenReturn(Borrower.createEmpty());
+        when(libraryUtils.searchForBookByTitle(A_BOOK)).thenReturn(Book.createEmpty());
 
         // act
-        libraryBorrowerListSearch.doGet(request, response);
+        libraryBookListSearchServlet.doGet(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(libraryUtils).searchForBorrowerByName(A_BORROWER);
+        verify(libraryUtils).searchForBookByTitle(A_BOOK);
     }
 
 }
