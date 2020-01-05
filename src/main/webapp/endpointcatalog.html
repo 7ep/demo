@@ -21,7 +21,7 @@
         </p>
         <p>
             <label for="math_response">Response:</label>
-            <textarea id="math_response" rows="1" readonly ></textarea>
+            <textarea class="responsearea" id="math_response" rows="1" readonly ></textarea>
         </p>
         <p>
             <button id="postToDemoMathButton">POST</button>
@@ -29,8 +29,30 @@
     </fieldset>
 </form>
 
-<div>/fib</div>
-<div>/book</div>
+<form id="post_fib_form" method="POST" action="fibonacci" autocomplete="off">
+    <fieldset>
+        <legend class="title" id="fibonacci_title">The "fibonacci" endpoint</legend>
+        <p>
+            <label for="fibonacci_param_fib_param_n">fib_param_n</label>
+            <input type="number" id="fibonacci_param_fib_param_n" name="fib_param_n">
+        </p>
+        <p>
+            <label for="fibonacci_param_fib_algorithm_choice">fib_algorithm_choice</label>
+            <select id="fibonacci_param_fib_algorithm_choice" name="fib_algorithm_choice">
+                <option value="default_recursive">default_recursive</option>
+                <option value="tail_recursive_1">tail_recursive_1</option>
+                <option value="tail_recursive_2">tail_recursive_2</option>
+            </select>
+        </p>
+        <p>
+            <label for="fibonacci_response">Response:</label>
+            <textarea class="responsearea" id="fibonacci_response" rows="1" readonly ></textarea>
+        </p>
+        <p>
+            <button id="postToDemoFibonacciButton">POST</button>
+        </p>
+    </fieldset>
+</form>
 
 </body>
 <script type="text/javascript" src="catalog.js"></script>

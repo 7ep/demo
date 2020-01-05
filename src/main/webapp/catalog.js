@@ -1,15 +1,14 @@
 window.addEventListener( "load", function () {
-  function sendData() {
+  function sendData(formObject) {
     const XHR = new XMLHttpRequest();
 
     // Bind the FormData object and the form element
-    const FD = new FormData( form );
+    const FD = new FormData( formObject );
 
     // Define what happens on successful data submission
     XHR.addEventListener( "load", function(event) {
-      var responseArea = document.getElementById("math_response");
+      var responseArea = formObject.getElementsByClassName("responsearea")[0];
       responseArea.innerText = event.target.responseText;
-//       alert( event.target.responseText );
     } );
 
     // Define what happens in case of error
@@ -18,19 +17,26 @@ window.addEventListener( "load", function () {
     } );
 
     // Set up our request
-    XHR.open( "POST", "math" );
+    XHR.open( "POST", formObject.action );
 
     // The data sent is what the user provided in the form
     XHR.send( FD );
   }
- 
-  // Access the form element...
-  let form = document.getElementById( "post_math_form" );
 
-  // ...and take over its submit event.
-  form.addEventListener( "submit", function ( event ) {
-    event.preventDefault();
 
-    sendData();
-  } );
+  let forms = document.querySelectorAll("form");
+  for (let j = 0; j < forms.length; j++){
+    // Access the form element...
+    let form = forms[j];
+
+    // ...and take over its submit event.
+    form.addEventListener( "submit", function ( event ) {
+      event.preventDefault();
+      sendData(form);
+    } );
+    console.log("taking over submit event for " + form.action);
+  }
+
+
+
 } );
