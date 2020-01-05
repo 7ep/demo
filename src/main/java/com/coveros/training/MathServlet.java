@@ -3,11 +3,16 @@ package com.coveros.training;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+// Multipart config is necessary so that we can properly receive data when
+// sending via the "FormData" API.  Using FormData is part of the modern
+// API and also allows sending files.
+@MultipartConfig
 @WebServlet(name = "MathServlet", urlPatterns = {"/math"}, loadOnStartup = 1)
 public class MathServlet extends HttpServlet {
 

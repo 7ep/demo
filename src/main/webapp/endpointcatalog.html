@@ -4,20 +4,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <title>Catalog of endpoints for Demo</title>
-    <link rel="stylesheet" href="catalog.css">    
+    <link rel="stylesheet" href="catalog.css">
 </head>
 <body>
 
-<div>
-    <div class="title" id="math_title">/math</div>
-    <div class="action" id="math_action_post">POST</div>
-    <label for="math_param_item_a">item_a</label>
-    <input type="number" id="math_param_item_a" name="math_param_item_a" minlength="0" maxlength="8">
-    <label for="math_param_item_b">item_b</label>
-    <input type="number" id="math_param_item_b" name="math_param_item_b" minlength="0" maxlength="8">
-    <label for="math_response">Response:</label>
-    <textarea id="math_response"></textarea>
-</div>
+<form id="post_math_form" method="POST" action="math" autocomplete="off">
+    <fieldset>
+        <legend class="title" id="math_title">The "math" endpoint</legend>
+        <p>
+            <label for="math_param_item_a">item_a</label>
+            <input type="number" id="math_param_item_a" name="item_a">
+        </p>
+        <p>
+            <label for="math_param_item_b">item_b</label>
+            <input type="number" id="math_param_item_b" name="item_b">
+        </p>
+        <p>
+            <label for="math_response">Response:</label>
+            <textarea id="math_response" rows="1" readonly="true"></textarea>
+        </p>
+        <p>
+            <button id="postToDemoMathButton">POST</button>
+        </p>
+    </fieldset>
+</form>
 
 <div>/fib</div>
 <div>/book</div>
