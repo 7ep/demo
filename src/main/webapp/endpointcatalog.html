@@ -29,7 +29,7 @@
     </fieldset>
 </form>
 
-<form id="post_fib_form" method="POST" action="fibonacci" autocomplete="off">
+<form id="post_fibonacci_form" method="POST" action="fibonacci" autocomplete="off">
     <fieldset>
         <legend class="title" id="fibonacci_title">The "fibonacci" endpoint</legend>
         <p>
@@ -50,6 +50,27 @@
         </p>
         <p>
             <button id="postToDemoFibonacciButton">POST</button>
+        </p>
+    </fieldset>
+</form>
+
+<form id="get_book_form" method="GET" action="book" autocomplete="off">
+    <fieldset>
+        <legend class="title" id="book_title">The "book" endpoint</legend>
+        <p>
+            <label for="book_param_id">id</label>
+            <input type="number" id="book_param_id" name="id">
+        </p>
+        <p>
+            <label for="book_param_title">title</label>
+            <input type="text" id="book_param_title" name="title">
+        </p>
+        <p>
+            <label for="book_response">Response:</label>
+            <textarea class="responsearea" id="book_response" rows="1" readonly ></textarea>
+        </p>
+        <p>
+            <button id="postToDemoBookButton">POST</button>
         </p>
     </fieldset>
 </form>

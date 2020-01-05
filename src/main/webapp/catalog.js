@@ -16,8 +16,18 @@ window.addEventListener( "load", function () {
       alert( 'Oops! Something went wrong.' );
     } );
 
+
+    let queryString = '';
+    if (formObject.method == "get") {
+        entries = [];
+        for(var pair of FD.entries()) {
+           entries.push(pair[0]+ '='+ pair[1]);
+        }
+        queryString = '?'+entries.join('&');
+    }
+
     // Set up our request
-    XHR.open( "POST", formObject.action );
+    XHR.open( formObject.method, formObject.action + queryString);
 
     // The data sent is what the user provided in the form
     XHR.send( FD );
@@ -34,8 +44,8 @@ window.addEventListener( "load", function () {
       event.preventDefault();
       sendData(form);
     } );
-    console.log("taking over submit event for " + form.action);
   }
+
 
 
 
