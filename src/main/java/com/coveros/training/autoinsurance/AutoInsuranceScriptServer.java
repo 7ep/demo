@@ -50,9 +50,7 @@ public class AutoInsuranceScriptServer implements Runnable, Transient {
 
                     final String[] inputTokens =
                             Arrays.stream(inputLine.split(" "))
-                                    .map(t -> t.toLowerCase())
-                                    .collect(toList())
-                                    .toArray(new String[0]);
+                                    .map(String::toLowerCase).toArray(String[]::new);
 
                     if (inputTokens[0].equals(QUIT)) {
                         loopAgain = false;

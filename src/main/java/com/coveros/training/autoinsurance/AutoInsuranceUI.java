@@ -73,6 +73,7 @@ public class AutoInsuranceUI extends JPanel {
     private int getIntPreviousClaims() {
         final String numberPreviousClaims = (String)claimsDropDown.getSelectedItem();
 
+        assert numberPreviousClaims != null;
         switch (numberPreviousClaims) {
             case "0" : return 0;
             case "1" : return 1;

@@ -31,7 +31,7 @@ public class AutoInsuranceScriptClient {
             if (args.length > 0) {
                 // loop through all the script files, if any exist.
                 for (String file : args) {
-                    logger.info("running script: %s", file);
+                    logger.info("running script: {}", file);
                     try (Scanner scanner = new Scanner(new File(file))) {
                         while (scanner.hasNextLine()) {
                             String userInput = scanner.nextLine();
@@ -48,10 +48,10 @@ public class AutoInsuranceScriptClient {
             }
 
         } catch (UnknownHostException e) {
-            logger.error("Don't know about host %s", hostName);
+            logger.error("Don't know about host {}", hostName);
             System.exit(1);
         } catch (IOException e) {
-            logger.error("Couldn't get I/O for the connection to %s", hostName);
+            logger.error("Couldn't get I/O for the connection to {}", hostName);
             System.exit(1);
         }
     }
@@ -63,9 +63,9 @@ public class AutoInsuranceScriptClient {
             echoSocket.close();
             System.exit(0);
         }
-        logger.info("sending: %s", userInput);
+        logger.info("sending: {}", userInput);
         out.println(userInput);
         final String response = in.readLine();
-        logger.info("response: %s", response);
+        logger.info("response: {}", response);
     }
 }
