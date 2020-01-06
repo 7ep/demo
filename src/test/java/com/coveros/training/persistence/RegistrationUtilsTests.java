@@ -35,6 +35,7 @@ public class RegistrationUtilsTests {
      * examples of passwords that can be easily cracked, as
      * measured by a tool we use.
      */
+    @Test
     public void testShouldHaveInsufficientEntropyInPassword() {
         final List<String> badPasswords =
                 Arrays.asList(
