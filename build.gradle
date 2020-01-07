@@ -526,6 +526,22 @@ task startui(type:JavaExec) {
 }
 
 
+// This is for when we run tests on the local Windows box
+task deployToTestWindowsLocal(type: Copy) {
+    dependsOn war
+    from ("$buildDir/libs/") {
+        include "demo-1.0.0.war"
+        rename { "demo.war"}
+    }
+    into "C:/Users/byron/Desktop/test_tools/tomcat/apache-tomcat-9.0.30/webapps/"
+
+    // a bit of time so Tomcat can load the app.
+    doLast {
+        sleep 5 * 1000
+    }
+}
+
+
 
 
 
