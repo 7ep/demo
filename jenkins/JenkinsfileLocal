@@ -51,6 +51,8 @@ pipeline {
     stage('Deploy to test') {
       steps {
       sh './gradlew deployToTestWindowsLocal'
+      // pipenv needs to be installed and on the path for this to work.
+      sh 'pipenv install'
       }
     }
 
