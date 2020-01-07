@@ -50,7 +50,7 @@ pipeline {
 
     stage('Deploy to test') {
       steps {
-      sh './gradlew deployToTest'
+      sh './gradlew deployToTestWindowsLocal'
       }
     }
 
