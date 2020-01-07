@@ -533,7 +533,7 @@ task deployToTestWindowsLocal(type: Copy) {
         include "demo-1.0.0.war"
         rename { "demo.war"}
     }
-    into "C:/Users/byron/Desktop/test_tools/tomcat/apache-tomcat-9.0.30/webapps/"
+    into "C:/Users/byron/Desktop/test_tools/tomcat-9/webapps"
 
     // a bit of time so Tomcat can load the app.
     doLast {
