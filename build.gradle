@@ -525,22 +525,17 @@ task startui(type:JavaExec) {
     main = 'com.coveros.training.autoinsurance.AutoInsuranceUI'
 }
 
-task deployToTestWindowsLocal(type: GradleBuild) {
-    tasks = ['copyToLocalTomcatWindows']
-    mustRunAfter test, fastIntegrationTest
-    doLast {
-        sleep 5 * 1000
-    }
-}
-
 // This is for when we run tests on the local Windows box
-task copyToLocalTomcatWindows(type: Copy) {
+task deployToTestWindowsLocal(type: Copy) {
     dependsOn war
     from ("$buildDir/libs/") {
         include "demo-1.0.0.war"
         rename { "demo.war"}
     }
     into "C:/Users/byron/Desktop/test_tools/tomcat-9/webapps"
+    doLast {
+        sleep 5 * 1000
+    }
 }
 
 
