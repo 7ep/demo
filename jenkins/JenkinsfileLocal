@@ -1,0 +1,102 @@
+// This jenkinsfile is used to run CI/CD on my local (Windows) box, no VM's needed.
+
+pipeline {
+
+  agent any
+
+  stages {
+
+    stage('Build') {
+      steps {
+        sh './gradlew clean assemble'
+      }
+    }
+
+    stage('Unit Tests') {
+      steps {
+        sh './gradlew test'
+      }
+      post {
+        always {
+          junit 'build/test-results/test/*.xml'
+        }
+      }
+    }
+
+    stage('Database Tests') {
+      steps {
+        sh './gradlew fastIntegrationTest'
+      }
+      post {
+        always {
+          junit 'build/test-results/fastIntegrationTest/*.xml'
+        }
+      }
+    }
+
+    stage('Automated Acceptance Tests') {
+      steps {
+        sh './gradlew generateCucumberReports'
+        // generate the code coverage report for jacoco
+        sh './gradlew jacocoTestReport'
+      }
+    }
+
+    stage('Static Analysis') {
+      steps {
+        sh './gradlew sonarqube'
+      }
+    }
+
+    stage('Deploy to test') {
+      steps {
+      sh './gradlew deployToTest'
+      }
+    }
+
+    stage('API Tests') {
+      steps {
+        sh './gradlew runApiTests'
+      }
+      post {
+        always {
+          junit 'build/test-results/api_tests/*.xml'
+        }
+      }
+    }
+
+    // We use a different framework for UI tests, Behave, because Python rules
+    // when it comes to experimentation with UI tests.  You can try things and see how they work out.
+    stage('UI Tests') {
+      steps {
+        sh './gradlew runBehaveTests'
+        sh './gradlew generateCucumberReport'
+      }
+      post {
+        always {
+          junit 'build/test-results/bdd_ui/*.xml'
+        }
+      }
+    }
+
+    stage('Analyze security of dependencies') {
+      steps {
+         sh './gradlew dependencyCheckAnalyze'
+      }
+    }
+
+
+    // This is the stage where we deploy to production.  If any test
+    // fails, we won't get here.  Note that we aren't really doing anything - this
+    // is a token step, to indicate whether we would have deployed or not.  Nothing actually
+    // happens, since this is a demo project.
+    stage('Deploy to Prod') {
+      steps {
+        // just a token operation while we pretend to deploy
+        sh 'sleep 5'
+      }
+    }
+
+  }
+
+}
