@@ -47,6 +47,10 @@ plugins {
     id 'org.hidetake.ssh' version '2.10.1'
 }
 
+repositories {
+    mavenCentral()
+}
+
 // apply our fancy cucumber reporting program, see https://plugins.gradle.org/plugin/com.github.spacialcircumstances.gradle-cucumber-reporting
 apply plugin: "com.github.spacialcircumstances.gradle-cucumber-reporting"
 
@@ -64,9 +68,6 @@ apply from: "$rootDir/gradle/remote_actions.gradle"
 
 // including our script plugin for running Selenified
 apply from: "$rootDir/gradle/selenified_tests.gradle"
-
-// including our script plugin for running Selenified
-apply from: "$rootDir/gradle/desktop_tests.gradle"
 
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked"
@@ -460,7 +461,8 @@ test {
     // Fail the 'test' task on the first test failure
     failFast = true
 
-
+    // generate a report on coverage
+    finalizedBy jacocoTestReport
 }
 
 dependencyCheck {
@@ -525,17 +527,6 @@ task deployToTestWindowsLocal(type: Copy) {
     doLast {
         sleep 5 * 1000
     }
-}
-
-/**
- * this starts the desktop UI for the auto insurance processor
- *  and its accompanying automation script server
- */
-task startui(type:JavaExec) {
-    def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
-    jvmArgs = ["-javaagent:$jacocoAgent=output=tcpserver,address=localhost,port=6301,append=false"]
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'com.coveros.training.autoinsurance.AutoInsuranceUI'
 }
 
 

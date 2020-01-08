@@ -2,6 +2,7 @@ Directories and files at the top level:
 
 Directories
 -----------
+autoinsurance - a project to demonstrate testing of desktop apps
 docs - documents related to this application
 gradle - necessary wrapper files and some capabilities related to certain tests
 jenkins - holds the Jenkinsfile for CI/CD
