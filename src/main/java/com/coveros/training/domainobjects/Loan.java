@@ -27,7 +27,7 @@ public final class Loan {
     /**
      * The identifier of this loan in our database
      */
-    private final long id;
+    public final long id;
 
     public Loan(Book book, Borrower borrower, long id, Date checkoutDate) {
         this.book = book;

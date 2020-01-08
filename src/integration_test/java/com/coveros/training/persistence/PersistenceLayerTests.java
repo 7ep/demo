@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -25,9 +26,12 @@ import static org.mockito.Mockito.when;
  */
 public class PersistenceLayerTests {
 
+    private final static String DEFAULT_NAME = "alice";
     private final static Date BORROW_DATE = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 1));
     private static final Book DEFAULT_BOOK = new Book(1, "The DevOps Handbook");
-    private static final Borrower DEFAULT_BORROWER = new Borrower(1, "alice");
+    private static final Borrower DEFAULT_BORROWER = new Borrower(1, DEFAULT_NAME);
+    private static final Loan DEFAULT_LOAN = new Loan(DEFAULT_BOOK, DEFAULT_BORROWER, 1, BORROW_DATE);
+    private static final User DEFAULT_USER = new User(DEFAULT_NAME, 1);
     PersistenceLayer pl;
 
     @Before
@@ -118,18 +122,16 @@ public class PersistenceLayerTests {
 
         Borrower borrower = pl.searchBorrowersById(DEFAULT_BORROWER.id);
 
-        Assert.assertEquals(DEFAULT_BORROWER.name, borrower.name);
-        Assert.assertEquals(1, borrower.id);
+        Assert.assertEquals(DEFAULT_BORROWER, borrower);
     }
 
     @Test
     public void testShouldBeAbleToSearchAUserByName() {
         runRestoreOneUser();
 
-        User user = pl.searchForUserByName(DEFAULT_BORROWER.name);
+        User user = pl.searchForUserByName(DEFAULT_USER.name);
 
-        Assert.assertEquals(DEFAULT_BORROWER.name, user.name);
-        Assert.assertEquals(1, user.id);
+        Assert.assertEquals(DEFAULT_USER, user);
     }
 
     @Test
@@ -159,37 +161,34 @@ public class PersistenceLayerTests {
 
         Loan loan = pl.searchForLoanByBook(DEFAULT_BOOK);
 
-        Assert.assertEquals(DEFAULT_BOOK, loan.book);
-        Assert.assertEquals(DEFAULT_BORROWER, loan.borrower);
+        Assert.assertEquals(DEFAULT_LOAN, loan);
     }
 
     @Test
     public void testWeCanSearchForALoanByABorrower() {
         runRestoreOneLoan();
 
-        List<Loan> loans = pl.searchForLoanByBorrower(DEFAULT_BORROWER);
+        Loan loan = pl.searchForLoanByBorrower(DEFAULT_BORROWER).get(0);
 
-        final Loan loan = loans.get(0);
-        Assert.assertEquals(DEFAULT_BOOK, loan.book);
-        Assert.assertEquals(DEFAULT_BORROWER, loan.borrower);
+        Assert.assertEquals(DEFAULT_LOAN, loan);
     }
 
     @Test
     public void testWeCanSaveANewUser() {
         pl.cleanAndMigrateDatabase();
 
-        long id = pl.saveNewUser("alice");
+        long id = pl.saveNewUser(DEFAULT_USER.name);
 
-        Assert.assertEquals(1, id);
+        Assert.assertEquals(DEFAULT_USER.id, id);
     }
 
     @Test
     public void testWeCanSaveABook() {
         pl.cleanAndMigrateDatabase();
 
-        long id = pl.saveNewBook("The DevOps Handbook");
+        long id = pl.saveNewBook(DEFAULT_BOOK.title);
 
-        Assert.assertEquals(1, id);
+        Assert.assertEquals(DEFAULT_BOOK.id, id);
     }
 
     @Test
@@ -198,7 +197,7 @@ public class PersistenceLayerTests {
 
         long id = pl.createLoan(DEFAULT_BOOK, DEFAULT_BORROWER, BORROW_DATE);
 
-        Assert.assertEquals(1, id);
+        Assert.assertEquals(DEFAULT_LOAN.id, id);
     }
 
     @Test
@@ -224,21 +223,21 @@ public class PersistenceLayerTests {
     @Test
     public void testShouldListAllBooks() {
         runRestoreOneBookOneBorrower();
+        List<Book> expectedList = Arrays.asList(DEFAULT_BOOK);
 
         final List<Book> books = pl.listAllBooks();
 
-        Assert.assertTrue(books.size() > 0);
-        Assert.assertTrue(books.contains(DEFAULT_BOOK));
+        Assert.assertEquals(expectedList, books);
     }
 
     @Test
     public void testShouldListAllBorrowers() {
         runRestoreOneBookOneBorrower();
+        List<Borrower> expectedList = Arrays.asList(DEFAULT_BORROWER);
 
         final List<Borrower> borrowers = pl.listAllBorrowers();
 
-        Assert.assertTrue(borrowers.size() > 0);
-        Assert.assertTrue(borrowers.contains(DEFAULT_BORROWER));
+        Assert.assertEquals(expectedList, borrowers);
     }
 
     @Test(expected = SqlRuntimeException.class)
@@ -248,6 +247,7 @@ public class PersistenceLayerTests {
         final ResultSet resultSet = Mockito.mock(ResultSet.class);
         when(resultSet.next()).thenReturn(false);
         when(preparedStatement.getGeneratedKeys()).thenReturn(resultSet);
+
         persistenceLayer.executeInsertOnPreparedStatement(SqlData.createEmpty(), preparedStatement);
     }
 
