@@ -1,4 +1,4 @@
-package com.coveros.training.autoinsurance;
+package com.coveros.training;
 
 /*******************************************************************************
  * Copyright (c) 2009, 2020 Mountainminds GmbH & Co. KG and Contributors

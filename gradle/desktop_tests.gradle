@@ -4,32 +4,18 @@ repositories {
 
 sourceSets {
     desktopTests {
-        resources.srcDir 'src/desktop_ui_tests/resources'
+        java.srcDir 'src/desktop_ui_tests/java'
     }
 }
 
-task testDesktopUI(type: GradleBuild) {
-    tasks = ['startscriptclient', 'obtainExecutionCoverageDesktopUI']
+dependencies {
+    desktopTestsImplementation configurations.fastIntegrationTestImplementation
 }
 
-/**
- * This starts the client that controls the automation script
- * server that can control the UI for the auto insurance processor
- */
-task startscriptclient(type:JavaExec) {
-    // get the path to the jar file for jacocoagent
-    def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
-    jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/desktop_tests.exec,append=false"]
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
-    main = 'com.coveros.training.autoinsurance.AutoInsuranceScriptClient'
-    args = files(fileTree(dir: 'src/desktop_ui_tests/resources', include: '*.txt'))
+task desktopTest(type: Test) {
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = 'Runs the tests on the Desktop UI.'
+    jacoco {
+        port = 6301
+    }
 }
-
-task obtainExecutionCoverageDesktopUI(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
-    main = 'com.coveros.training.autoinsurance.ExecutionDataClient'
-    args = ["6301", "$buildDir/jacoco/desktop_ui.exec"]
-}
-

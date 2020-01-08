@@ -514,17 +514,6 @@ task('printReportPathsDependencyCheck') {
 
 dependencyCheckAnalyze.finalizedBy 'printReportPathsDependencyCheck'
 
-/**
- * this starts the desktop UI for the auto insurance processor
- *  and its accompanying automation script server
- */
-task startui(type:JavaExec) {
-    def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
-    jvmArgs = ["-javaagent:$jacocoAgent=output=tcpserver,address=localhost,port=6301,append=false"]
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'com.coveros.training.autoinsurance.AutoInsuranceUI'
-}
-
 // This is for when we run tests on the local Windows box
 task deployToTestWindowsLocal(type: Copy) {
     dependsOn war
@@ -538,7 +527,16 @@ task deployToTestWindowsLocal(type: Copy) {
     }
 }
 
-
+/**
+ * this starts the desktop UI for the auto insurance processor
+ *  and its accompanying automation script server
+ */
+task startui(type:JavaExec) {
+    def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
+    jvmArgs = ["-javaagent:$jacocoAgent=output=tcpserver,address=localhost,port=6301,append=false"]
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.coveros.training.autoinsurance.AutoInsuranceUI'
+}
 
 
 
