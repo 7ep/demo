@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class LibraryBookListSearchServlet extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(LibraryBookListSearchServlet.class);
-    private static final String RESULT = "result";
+    public static final String RESULT = "result";
     static LibraryUtils libraryUtils = new LibraryUtils();
 
     @Override

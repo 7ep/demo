@@ -442,7 +442,9 @@ task runAllTests(type: GradleBuild) {
         checkIfAlive()
     }
     tasks = ['check', 'runApiTests', 'runBehaveTests']
+    finalizedBy(jacocoTestReport)
 }
+
 // more info on test logging: https://discuss.gradle.org/t/whats-upcoming-in-gradle-1-1-test-logging/7741
 test {
     testLogging {

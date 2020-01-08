@@ -33,7 +33,6 @@ window.addEventListener( "load", function () {
     XHR.send( FD );
   }
 
-
   let forms = document.querySelectorAll("form");
   for (let j = 0; j < forms.length; j++){
     // Access the form element...
@@ -45,8 +44,4 @@ window.addEventListener( "load", function () {
       sendData(form);
     } );
   }
-
-
-
-
 } );
