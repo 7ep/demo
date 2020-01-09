@@ -8,6 +8,9 @@ The gist of the following is as follows: we install and run Tomcat, Sonarqube, a
 
 I did this on Windows, other operating systems would require some slight changes.
 
+Install the latest Git.
+Put this on your path: C:\Program Files\Git\usr\bin (so Jenkins has access to unix-style commands while running the pipeline)
+
 Download and install JDK11, put it on your path (Sonarqube 8 requires JDK11)
 
 Download Demo somewhere - it's at https://github.com/7ep/demo
@@ -18,16 +21,16 @@ Unzip the file somewhere and drop down into its bin directory and start it up.
 Create a fake central repo on your machine.  This is where Jenkins will look
 for new code changes.  I put mine at C:\Users\byron\fake_central_repo\demo, you can put yours anywhere.
 
-create the directory, then in that directory run a git init:
+create the directory, then in that directory, run a git init:
 git init --bare
 
-Then, create a git remote that points to it.  I called mine "localfakerepo"
+Back in the original Demo directory, create a git remote that points to the fake repo.  I called mine "fakecentralrepo"
 
 # the following will add the remote location
-git remote add ../fake_central_repo/demo
+git remote add fakecentralrepo ../fake_central_repo/demo
 
 # the following will set the remote location as the default remote
-git branch -u localfakerepo/master
+git push -u fakecentralrepo master
 
 Download Tomcat9 core binary distribution for your machine: https://tomcat.apache.org/download-90.cgi
 
@@ -38,7 +41,7 @@ Modify the server.xml in the Tomcat "conf/" directory, at the bottom of the file
 
         <Context docBase="/c:/Users/YOUR_USERNAME_HERE/.jenkins/workspace/Demo/build/reports/" path="/reports" />
 
-Start up Tomcat, look in the bin directory for a "startup" file
+Start up Tomcat (look in the bin directory for a "startup" file)
 
 Download the Jenkins war file:
 
@@ -54,6 +57,8 @@ I created an admin with the following characteristics:
 username: admin
 password: admin
 email: admin@test.com
+
+(save and continue)
 
 To install the Sidebar-Link plugin, go to:
 
@@ -76,7 +81,7 @@ http://localhost:8080/jenkins/jnlpJars/jenkins-cli.jar
 
 Place it in the user's home directory (mine is C:\Users\byron)
 
-Now, create the following file, at /demo/hooks/post-receive
+Now, create the following file, at /fakecentralrepo/demo/hooks/post-receive
 
 ------------------------ FILE START
 #!/bin/sh
@@ -91,7 +96,7 @@ exec java -jar ~/jenkins-cli.jar -s http://localhost:8080/jenkins -auth admin:ad
 Now let's create a pipeline so it does some actual work.
 
 
-- In Jenkins, create a pipeline, name it:  Demo
+- In Jenkins, create a pipeline, name it:  Demo      (capitalization matters here!!)
 - Check the box for "discard old builds",
     Strategy: log rotation
     Max # of builds to keep: 5
