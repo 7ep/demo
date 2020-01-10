@@ -1,4 +1,4 @@
-installing a ci/cd pipeline on your own computer.
+installing a ci/cd pipeline on a Windows computer.
 -------------------------------------------------
 
 The following assumes you have already installed the necessary components to run "gradlew runalltests" on your computer - this entails having JDK11, Python, Chromedriver in a directory on your path, etc... see README.md in the top directory of Demo.
@@ -40,6 +40,10 @@ Modify the server.xml in the Tomcat "conf/" directory, at the bottom of the file
             unpackWARs="true" autoDeploy="true">
 
         <Context docBase="/c:/Users/YOUR_USERNAME_HERE/.jenkins/workspace/Demo/build/reports/" path="/reports" />
+
+In the Tomcat /bin directory, create a new file, setenv.bat
+Give it this content (this is so we can connect with JMX dynamic analysis tools to Tomcat):
+set CATALINA_OPTS=%CATALINA_OPTS% -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9999 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Djava.rmi.server.hostname=localhost
 
 Start up Tomcat (look in the bin directory for a "startup" file)
 
