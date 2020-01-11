@@ -528,8 +528,6 @@ task deployToTestWindowsLocal(type: Copy) {
     dependsOn war
 
     if (project.hasProperty('deploy_directory')) {
-        print "deploying to " + deploy_directory
-
         from("$buildDir/libs/") {
             // a bit of a hack - would prefer to directly target the output of the war task
             include "*-1.0.0.war"
