@@ -82,20 +82,6 @@ gretty {
     jvmArgs = ["-javaagent:$jacocoAgent=output=tcpserver,address=localhost,port=6300", '-Dcom.sun.management.jmxremote', '-Dcom.sun.management.jmxremote.port=9999', '-Dcom.sun.management.jmxremote.ssl=false', '-Dcom.sun.management.jmxremote.authenticate=false']
 }
 
-task obtainExecutionCoverageWebApplication(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
-    main = 'com.coveros.training.autoinsurance.ExecutionDataClient'
-    args = ["6300", "$buildDir/jacoco/webapp_ui.exec"]
-}
-
-task obtainExecutionCoverageWebAPI(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
-    main = 'com.coveros.training.autoinsurance.ExecutionDataClient'
-    args = ["6300", "$buildDir/jacoco/web_api.exec"]
-}
-
 repositories {
     jcenter()
     mavenCentral()
@@ -252,9 +238,6 @@ task runApiTests(type: Exec) {
     }
     workingDir 'src/api_tests'
     commandLine 'pipenv', 'run', 'pytest', '--junitxml', '../../build/test-results/api_tests/TEST-api_test_results.xml'
-    doLast {
-        obtainExecutionCoverageWebApplication
-    }
 }
 
 static boolean SearchDirectoryForChromedriver(File dir) {
@@ -423,10 +406,6 @@ task runBehaveTests(type: Exec) {
     workingDir 'src/ui_tests'
     // run behave and output a json file (we'll convert that to Cucumber format later for reporting)
     commandLine 'pipenv', 'run', 'behave', '--format','json','-o','../../build/bdd/behave.output', '-D', 'chromedriver_path='+(project.properties['chromedriver.path'] ?: "")
-    doLast {
-        obtainExecutionCoverageWebAPI
-    }
-
 }
 
 // Run a command to convert the Behave json to Cucumber format.

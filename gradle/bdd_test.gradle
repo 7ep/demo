@@ -7,6 +7,7 @@ sourceSets {
 
 dependencies {
     bddTestImplementation configurations.fastIntegrationTestImplementation
+    bddTestImplementation sourceSets.test.output
 }
 
 // in the cucumber task, we divide up the different features to lower the scope.
