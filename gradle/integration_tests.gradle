@@ -1,0 +1,22 @@
+sourceSets {
+    integrationTests {
+        java.srcDir 'src/integration_test/java'
+        resources.srcDir 'src/integration_test/resources'
+    }
+}
+
+dependencies {
+    integrationTestsImplementation sourceSets.main.output
+    integrationTestsImplementation configurations.testImplementation
+}
+
+task integrate(type: Test) {
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = 'Runs the integration tests.'
+    testClassesDirs = sourceSets.integrationTests.output.classesDirs
+    classpath = sourceSets.integrationTests.runtimeClasspath
+    maxHeapSize = '1024m'
+    mustRunAfter test
+}
+
+check.dependsOn integrate

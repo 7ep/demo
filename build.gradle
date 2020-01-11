@@ -55,7 +55,7 @@ repositories {
 apply plugin: "com.github.spacialcircumstances.gradle-cucumber-reporting"
 
 // including our script plugin for running our integration tests
-apply from: "$rootDir/gradle/fast_integration_test.gradle"
+apply from: "$rootDir/gradle/integration_tests.gradle"
 
 // including our script plugin for running BDD-type tests
 apply from: "$rootDir/gradle/bdd_test.gradle"

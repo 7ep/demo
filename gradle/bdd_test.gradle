@@ -6,7 +6,7 @@ sourceSets {
 }
 
 dependencies {
-    bddTestImplementation configurations.fastIntegrationTestImplementation
+    bddTestImplementation configurations.integrationTestsImplementation
     bddTestImplementation sourceSets.test.output
 }
 
@@ -19,7 +19,7 @@ dependencies {
 // some of the configuration for running Cucumber BDD
 task cucumber(type: GradleBuild) {
     tasks = ['libraryBdd', 'mathBdd', 'authBdd', 'expensesBdd', 'cartesianProductBdd']
-    mustRunAfter test, fastIntegrationTest
+    mustRunAfter test
 }
 
 task libraryBdd (type: Test) {
@@ -44,7 +44,7 @@ task libraryBdd (type: Test) {
                     sourceSets.main.output +
                     sourceSets.test.output +
                     sourceSets.bddTest.output +
-                    sourceSets.fastIntegrationTest.output
+                    sourceSets.integrationTests.output
 
             args = ['--monochrome',
                     '--plugin', 'progress',
@@ -114,7 +114,7 @@ task authBdd (type: Test) {
                     sourceSets.main.output +
                     sourceSets.test.output +
                     sourceSets.bddTest.output +
-                    sourceSets.fastIntegrationTest.output
+                    sourceSets.integrationTests.output
 
             args = ['--monochrome',
                     '--plugin', 'progress',
