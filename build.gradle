@@ -58,7 +58,7 @@ apply plugin: "com.github.spacialcircumstances.gradle-cucumber-reporting"
 apply from: "$rootDir/gradle/integration_tests.gradle"
 
 // including our script plugin for running BDD-type tests
-apply from: "$rootDir/gradle/bdd_test.gradle"
+apply from: "$rootDir/gradle/cucumber_bdd_tests.gradle"
 
 // our script plugin for accessing aws - Amazon Web Services
 apply from: "$rootDir/gradle/aws.gradle"

@@ -1,13 +1,13 @@
 sourceSets {
-    bddTest {
+    cucumberBddTest {
         java.srcDir 'src/bdd_test/java'
         resources.srcDir 'src/bdd_test/resources'
     }
 }
 
 dependencies {
-    bddTestImplementation configurations.integrationTestsImplementation
-    bddTestImplementation sourceSets.test.output
+    cucumberBddTestImplementation configurations.integrationTestsImplementation
+    cucumberBddTestImplementation sourceSets.test.output
 }
 
 // in the cucumber task, we divide up the different features to lower the scope.
@@ -29,9 +29,9 @@ task libraryBdd (type: Test) {
     reports.html.enabled = false
     group = LifecycleBasePlugin.VERIFICATION_GROUP
     description = 'Runs the Library BDD tests.'
-    dependsOn assemble, compileTestJava, compileBddTestJava
-    testClassesDirs = sourceSets.bddTest.output.classesDirs
-    classpath = sourceSets.bddTest.runtimeClasspath
+    dependsOn assemble, compileTestJava, compileCucumberBddTestJava
+    testClassesDirs = sourceSets.cucumberBddTest.output.classesDirs
+    classpath = sourceSets.cucumberBddTest.runtimeClasspath
     doLast {
         // For the library
         javaexec {
@@ -40,10 +40,10 @@ task libraryBdd (type: Test) {
             jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/library_bdd.exec,append=false"]
 
             main = "io.cucumber.core.cli.Main"
-            classpath = configurations.bddTestCompileClasspath +
+            classpath = configurations.cucumberBddTestCompileClasspath +
                     sourceSets.main.output +
                     sourceSets.test.output +
-                    sourceSets.bddTest.output +
+                    sourceSets.cucumberBddTest.output +
                     sourceSets.integrationTests.output
 
             args = ['--monochrome',
@@ -64,9 +64,9 @@ task mathBdd (type: Test) {
     reports.html.enabled = false
     group = LifecycleBasePlugin.VERIFICATION_GROUP
     description = 'Runs the mathematics BDD tests.'
-    dependsOn assemble, compileTestJava, compileBddTestJava
-    testClassesDirs = sourceSets.bddTest.output.classesDirs
-    classpath = sourceSets.bddTest.runtimeClasspath
+    dependsOn assemble, compileTestJava, compileCucumberBddTestJava
+    testClassesDirs = sourceSets.cucumberBddTest.output.classesDirs
+    classpath = sourceSets.cucumberBddTest.runtimeClasspath
     doLast {
 
         // for the mathematics
@@ -76,10 +76,10 @@ task mathBdd (type: Test) {
             jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/math_bdd.exec,append=false"]
 
             main = "io.cucumber.core.cli.Main"
-            classpath = configurations.bddTestCompileClasspath +
+            classpath = configurations.cucumberBddTestCompileClasspath +
                     sourceSets.main.output +
                     sourceSets.test.output +
-                    sourceSets.bddTest.output
+                    sourceSets.cucumberBddTest.output
 
             args = ['--monochrome',
                     '--plugin', 'progress',
@@ -99,9 +99,9 @@ task authBdd (type: Test) {
     reports.html.enabled = false
     group = LifecycleBasePlugin.VERIFICATION_GROUP
     description = 'Runs the authentication BDD tests.'
-    dependsOn assemble, compileTestJava, compileBddTestJava
-    testClassesDirs = sourceSets.bddTest.output.classesDirs
-    classpath = sourceSets.bddTest.runtimeClasspath
+    dependsOn assemble, compileTestJava, compileCucumberBddTestJava
+    testClassesDirs = sourceSets.cucumberBddTest.output.classesDirs
+    classpath = sourceSets.cucumberBddTest.runtimeClasspath
     doLast {
          // for the authentication stories
         javaexec {
@@ -110,10 +110,10 @@ task authBdd (type: Test) {
             jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/auth_bdd.exec,append=false"]
 
             main = "io.cucumber.core.cli.Main"
-            classpath = configurations.bddTestCompileClasspath +
+            classpath = configurations.cucumberBddTestCompileClasspath +
                     sourceSets.main.output +
                     sourceSets.test.output +
-                    sourceSets.bddTest.output +
+                    sourceSets.cucumberBddTest.output +
                     sourceSets.integrationTests.output
 
             args = ['--monochrome',
@@ -134,9 +134,9 @@ task expensesBdd (type: Test) {
     reports.html.enabled = false
     group = LifecycleBasePlugin.VERIFICATION_GROUP
     description = 'Runs the expenses BDD tests.'
-    dependsOn assemble, compileTestJava, compileBddTestJava
-    testClassesDirs = sourceSets.bddTest.output.classesDirs
-    classpath = sourceSets.bddTest.runtimeClasspath
+    dependsOn assemble, compileTestJava, compileCucumberBddTestJava
+    testClassesDirs = sourceSets.cucumberBddTest.output.classesDirs
+    classpath = sourceSets.cucumberBddTest.runtimeClasspath
     doLast {
         // for the expenses stories
         javaexec {
@@ -145,10 +145,10 @@ task expensesBdd (type: Test) {
             jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/auth_bdd.exec,append=false"]
 
             main = "io.cucumber.core.cli.Main"
-            classpath = configurations.bddTestCompileClasspath +
+            classpath = configurations.cucumberBddTestCompileClasspath +
                     sourceSets.main.output +
                     sourceSets.test.output +
-                    sourceSets.bddTest.output
+                    sourceSets.cucumberBddTest.output
 
             args = ['--monochrome',
                     '--plugin', 'progress',
@@ -168,9 +168,9 @@ task cartesianProductBdd (type: Test) {
     reports.html.enabled = false
     group = LifecycleBasePlugin.VERIFICATION_GROUP
     description = 'Runs the Cartesian Product BDD tests.'
-    dependsOn assemble, compileTestJava, compileBddTestJava
-    testClassesDirs = sourceSets.bddTest.output.classesDirs
-    classpath = sourceSets.bddTest.runtimeClasspath
+    dependsOn assemble, compileTestJava, compileCucumberBddTestJava
+    testClassesDirs = sourceSets.cucumberBddTest.output.classesDirs
+    classpath = sourceSets.cucumberBddTest.runtimeClasspath
     doLast {
          // for the cartesian product stories
         javaexec {
@@ -180,10 +180,10 @@ task cartesianProductBdd (type: Test) {
             jvmArgs = ["-javaagent:$jacocoAgent=destfile=$buildDir/jacoco/auth_bdd.exec,append=false"]
 
             main = "io.cucumber.core.cli.Main"
-            classpath = configurations.bddTestCompileClasspath +
+            classpath = configurations.cucumberBddTestCompileClasspath +
                     sourceSets.main.output +
                     sourceSets.test.output +
-                    sourceSets.bddTest.output
+                    sourceSets.cucumberBddTest.output
 
             args = ['--monochrome',
                     '--plugin', 'progress',
