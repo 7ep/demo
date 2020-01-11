@@ -13,21 +13,21 @@ package com.coveros.training.autoinsurance;
  *
  *******************************************************************************/
 
+import org.jacoco.core.data.ExecutionDataWriter;
+import org.jacoco.core.runtime.RemoteControlReader;
+import org.jacoco.core.runtime.RemoteControlWriter;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-
-import org.jacoco.core.data.ExecutionDataWriter;
-import org.jacoco.core.runtime.RemoteControlReader;
-import org.jacoco.core.runtime.RemoteControlWriter;
 
 /**
  * This example connects to a coverage agent that run in output mode
  * <code>tcpserver</code> and requests execution data. The collected data is
  * dumped to a local file.
  */
-public final class ExecutionDataClient {
+public class ExecutionDataClient {
 
     private static final String ADDRESS = "localhost";
 

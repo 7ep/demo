@@ -13,10 +13,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
 
-import static com.coveros.training.autoinsurance.AutoInsuranceScriptClient.CLOSE;
-import static com.coveros.training.autoinsurance.AutoInsuranceScriptClient.QUIT;
-import static java.util.stream.Collectors.toList;
-
 public class AutoInsuranceScriptServer implements Runnable, Transient {
 
     static Logger logger = LoggerFactory.getLogger(AutoInsuranceScriptServer.class);
@@ -34,9 +30,8 @@ public class AutoInsuranceScriptServer implements Runnable, Transient {
     public void serverStart() {
 
         int portNumber = 8000;
-        boolean loopAgain = true;
 
-        while(loopAgain) {
+        while(true) {
             try (
                     ServerSocket serverSocket = new ServerSocket(portNumber);
                     Socket clientSocket = serverSocket.accept();
@@ -50,25 +45,18 @@ public class AutoInsuranceScriptServer implements Runnable, Transient {
 
                     final String[] inputTokens =
                             Arrays.stream(inputLine.split(" "))
-                                    .map(t -> t.toLowerCase())
-                                    .collect(toList())
-                                    .toArray(new String[0]);
+                                    .map(String::toLowerCase).toArray(String[]::new);
 
-                    if (inputTokens[0].equals(QUIT)) {
-                        loopAgain = false;
+                    try {
+                        handleSetCases(inputTokens);
+
+                        result = handleGetCases(result, inputTokens);
+
+                        handleClickActions(inputTokens);
+                    } catch (Exception ex) {
+                        logger.error(ex.getMessage());
+                        result = "FAILURE";
                     }
-
-                    if (inputTokens[0].equals(CLOSE)) {
-                        autoInsuranceUI.close();
-                        loopAgain = false;
-                    }
-
-                    handleSetCases(inputTokens);
-
-                    result = handleGetCases(result, inputTokens);
-
-                    handleClickActions(inputTokens);
-
                     out.println(result);
 
                 }

@@ -1,0 +1,96 @@
+plugins {
+    // Apply the java plugin to add support for Java
+    id 'java'
+
+    // provides unit test coverage
+    id 'jacoco'
+}
+
+repositories {
+    // Use jcenter for resolving dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    jcenter()
+}
+
+dependencies {
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:28.0-jre'
+
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+
+    // the glorious equalsverifier.  This is a tool that tests the contract
+    // for equals and hashcode are met.  It's very strict.  Because it's very
+    // strict, it forces us to create very safe, very solid code.
+    // https://mvnrepository.com/artifact/nl.jqno.equalsverifier/equalsverifier
+    testImplementation group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.1.10'
+
+    // The commons-lang3 package has some utility classes that are very helpful
+    // for those interested in safer coding.  Particularly, the equalsbuilder and hashcodebuilder.
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+
+    // a logging framework, so it becomes easily possible to see what is happening
+    // in our code in realtime.
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.12.1'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.1'
+
+    // The following gives us the ability to use slf4j api calls.
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.12.1'
+
+    compile group: 'org.jacoco', name: 'org.jacoco.core', version: '0.8.5'
+}
+
+/**
+ * this starts the desktop UI for the auto insurance processor
+ *  and its accompanying automation script server
+ */
+task startui(type:JavaExec) {
+    def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
+    jvmArgs = ["-javaagent:$jacocoAgent=output=tcpserver,address=localhost,port=6301,append=false"]
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.coveros.training.autoinsurance.AutoInsuranceUI'
+}
+
+task obtainExecutionCoverageDesktopUI(type: JavaExec) {
+    classpath = sourceSets.test.runtimeClasspath
+    main = 'com.coveros.training.autoinsurance.ExecutionDataClient'
+    args = ["6301", "$buildDir/jacoco/desktop_ui.exec"]
+}
+
+jacocoTestReport {
+    executionData(fileTree(dir: "$buildDir/jacoco", include: '*.exec'))
+    reports {
+        xml.enabled true
+        csv.enabled false
+        xml.destination file("${buildDir}/jacoco/jacoco.xml")
+        html.destination file("${buildDir}/reports/jacoco")
+    }
+}
+
+// more info on test logging: https://discuss.gradle.org/t/whats-upcoming-in-gradle-1-1-test-logging/7741
+test {
+    testLogging {
+        exceptionFormat "full" // default is "short"
+        // uncomment the following to see the unit test progress in the output
+        //events "started", "passed", "skipped", "failed", "standardOut", "standardError"
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+
+        // set to false to disable detailed failure logs
+        showExceptions true
+
+        // enable to see standard out and error streams inline with the test results
+        showStandardStreams true
+    }
+
+    // Fail the 'test' task on the first test failure
+    failFast = true
+}
+
+task getAllCoverageAndCreateReport (type: GradleBuild) {
+    tasks = ['obtainExecutionCoverageDesktopUI', 'jacocoTestReport']
+    mustRunAfter test
+}
+
+test.finalizedBy(getAllCoverageAndCreateReport)

@@ -1,0 +1,144 @@
+installing a ci/cd pipeline on a Windows computer.
+-------------------------------------------------
+
+The following assumes you have already installed the necessary components to run "gradlew runalltests" on your computer - this entails having JDK11, Python, Chromedriver in a directory on your path, etc... see README.md in the top directory of Demo.
+
+The gist of the following is as follows: we install and run Tomcat, Sonarqube, and Jenkins.  We configure the Jenkins pipeline.  We set up a fake central repository in a local directory so that when we push any code to it, Jenkins starts up.  This should go smoothly, but there are inevitable kinks when configuring real software.  Please contact me with any issues found.
+
+
+I did this on Windows, other operating systems would require some slight changes.
+
+Install the latest Git.
+Put this on your path: C:\Program Files\Git\usr\bin (so Jenkins has access to unix-style commands while running the pipeline)
+
+Download and install JDK11, put it on your path (Sonarqube 8 requires JDK11)
+
+Download Demo somewhere - it's at https://github.com/7ep/demo
+
+Download Sonarqube https://www.sonarqube.org/downloads/
+Unzip the file somewhere and drop down into its bin directory and start it up.
+
+Create a fake central repo on your machine.  This is where Jenkins will look
+for new code changes.  I put mine at C:\Users\byron\fake_central_repo\demo, you can put yours anywhere.
+
+create the directory, then in that directory, run a git init:
+git init --bare
+
+Back in the original Demo directory, create a git remote that points to the fake repo.  I called mine "fakecentralrepo"
+
+# the following will add the remote location
+git remote add fakecentralrepo ../fake_central_repo/demo
+
+# the following will set the remote location as the default remote
+git push -u fakecentralrepo master
+
+Download Tomcat9 core binary distribution for your machine: https://tomcat.apache.org/download-90.cgi
+
+Modify the server.xml in the Tomcat "conf/" directory, at the bottom of the file there is a <Host> section.  This will allow Tomcat to serve the static content that is generated during a build. Place the following inside, so that you get something like this:
+
+      <Host name="localhost"  appBase="webapps"
+            unpackWARs="true" autoDeploy="true">
+
+        <Context docBase="/c:/Users/YOUR_USERNAME_HERE/.jenkins/workspace/Demo/build/reports/" path="/reports" />
+
+In the Tomcat /bin directory, create a new file, setenv.bat
+Give it this content (this is so we can connect with JMX dynamic analysis tools to Tomcat):
+set CATALINA_OPTS=%CATALINA_OPTS% -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9999 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Djava.rmi.server.hostname=localhost
+
+Start up Tomcat (look in the bin directory for a "startup" file)
+
+Download the Jenkins war file:
+
+http://mirrors.jenkins.io/war-stable/latest/jenkins.war
+
+Place the war into the webapps directory in Tomcat.  Doing so will boot up Jenkins.
+
+go to localhost:8080/jenkins once it has a few seconds to finish booting.
+
+Choose "Install Suggested Plugins"
+
+I created an admin with the following characteristics:
+username: admin
+password: admin
+email: admin@test.com
+
+(save and continue)
+
+To install the Sidebar-Link plugin, go to:
+
+http://localhost:8080/jenkins/pluginManager/available
+
+and search for "sidebar".  Choose Sidebar Link and "Install without restart"
+
+
+
+CONFIGURE PIPELINE TO RUN AT GIT RECEIVE
+----------------------------------------
+
+We want to have the ability to notify Jenkins whenever we push
+to our new repo.  Jenkins has a capability of running builds whenever
+a certain endpoint is hit. 
+
+Download the command-line-interface (CLI) tool from Jenkins:
+
+http://localhost:8080/jenkins/jnlpJars/jenkins-cli.jar
+
+Place it in the user's home directory (mine is C:\Users\byron)
+
+Now, create the following file, at /fakecentralrepo/demo/hooks/post-receive
+
+------------------------ FILE START
+#!/bin/sh
+
+# the following runs the jenkins-cli command located in the user's home directory
+# it uses admin as a username and admin as a password for Jenkins
+# this will kick off a build on the "demo" pipeline
+exec java -jar ~/jenkins-cli.jar -s http://localhost:8080/jenkins -auth admin:admin build demo
+------------------------ FILE END
+
+
+Now let's create a pipeline so it does some actual work.
+
+
+- In Jenkins, create a pipeline, name it:  Demo      (capitalization matters here!!)
+- Check the box for "discard old builds",
+    Strategy: log rotation
+    Max # of builds to keep: 5
+- Check the box labeled "Do not allow concurrent builds".  (We don't want race conditions in our pipeline, and we don't want excessive memory usage on this demo machine)
+- Check the box for "Sidebar links". Add a link.  Enter this:
+
+  Link URL: http://localhost:8080/reports/bdd/cucumber-html-reports/overview-features.html
+  Link Text: Cucumber report.
+
+  Click Add Link.
+
+  Link URL: http://localhost:9000/
+  Link Text: SonarQube
+
+  Click Add Link.
+
+  Link URL: http://localhost:8080/reports/dependency-check-report.html
+  Link Text: Dependency check report
+
+  Click Add Link.
+
+  Link URL: http://localhost:8080/demo
+  Link Text: Demo
+
+- Under Pipeline, click on the dropdown and select "Pipeline script from SCM"
+- on the dropdown next to SCM, select Git.
+- fill in these values:
+     In Repositories:
+     Repository URL: C:\Users\byron\fake_central_repo\demo  (Yours may be a different place)
+     In Branches to Build:
+     Branch specifier: refs/heads/master
+     In Script Path: jenkins/JenkinsfileLocal
+
+     Click save
+
+Congratulations!  You should now be able to run a full pipeline.
+
+Summary:
+Jenkins is at http://localhost:8080/jenkins/
+Demo is at http://localhost:8080/demo/
+Sonarqube is at http://localhost:9000/

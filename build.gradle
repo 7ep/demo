@@ -47,14 +47,18 @@ plugins {
     id 'org.hidetake.ssh' version '2.10.1'
 }
 
+repositories {
+    mavenCentral()
+}
+
 // apply our fancy cucumber reporting program, see https://plugins.gradle.org/plugin/com.github.spacialcircumstances.gradle-cucumber-reporting
 apply plugin: "com.github.spacialcircumstances.gradle-cucumber-reporting"
 
 // including our script plugin for running our integration tests
-apply from: "$rootDir/gradle/fast_integration_test.gradle"
+apply from: "$rootDir/gradle/integration_tests.gradle"
 
 // including our script plugin for running BDD-type tests
-apply from: "$rootDir/gradle/bdd_test.gradle"
+apply from: "$rootDir/gradle/cucumber_bdd_tests.gradle"
 
 // our script plugin for accessing aws - Amazon Web Services
 apply from: "$rootDir/gradle/aws.gradle"
@@ -64,9 +68,6 @@ apply from: "$rootDir/gradle/remote_actions.gradle"
 
 // including our script plugin for running Selenified
 apply from: "$rootDir/gradle/selenified_tests.gradle"
-
-// including our script plugin for running Selenified
-apply from: "$rootDir/gradle/desktop_tests.gradle"
 
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked"
@@ -79,20 +80,6 @@ gretty {
     contextPath = "demo"
     def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
     jvmArgs = ["-javaagent:$jacocoAgent=output=tcpserver,address=localhost,port=6300", '-Dcom.sun.management.jmxremote', '-Dcom.sun.management.jmxremote.port=9999', '-Dcom.sun.management.jmxremote.ssl=false', '-Dcom.sun.management.jmxremote.authenticate=false']
-}
-
-task obtainExecutionCoverageWebApplication(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
-    main = 'com.coveros.training.autoinsurance.ExecutionDataClient'
-    args = ["6300", "$buildDir/jacoco/webapp_ui.exec"]
-}
-
-task obtainExecutionCoverageWebAPI(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
-    main = 'com.coveros.training.autoinsurance.ExecutionDataClient'
-    args = ["6300", "$buildDir/jacoco/web_api.exec"]
 }
 
 repositories {
@@ -251,9 +238,6 @@ task runApiTests(type: Exec) {
     }
     workingDir 'src/api_tests'
     commandLine 'pipenv', 'run', 'pytest', '--junitxml', '../../build/test-results/api_tests/TEST-api_test_results.xml'
-    doLast {
-        obtainExecutionCoverageWebApplication
-    }
 }
 
 static boolean SearchDirectoryForChromedriver(File dir) {
@@ -422,10 +406,6 @@ task runBehaveTests(type: Exec) {
     workingDir 'src/ui_tests'
     // run behave and output a json file (we'll convert that to Cucumber format later for reporting)
     commandLine 'pipenv', 'run', 'behave', '--format','json','-o','../../build/bdd/behave.output', '-D', 'chromedriver_path='+(project.properties['chromedriver.path'] ?: "")
-    doLast {
-        obtainExecutionCoverageWebAPI
-    }
-
 }
 
 // Run a command to convert the Behave json to Cucumber format.
@@ -441,7 +421,9 @@ task runAllTests(type: GradleBuild) {
         checkIfAlive()
     }
     tasks = ['check', 'runApiTests', 'runBehaveTests']
+    finalizedBy(jacocoTestReport)
 }
+
 // more info on test logging: https://discuss.gradle.org/t/whats-upcoming-in-gradle-1-1-test-logging/7741
 test {
     testLogging {
@@ -460,7 +442,8 @@ test {
     // Fail the 'test' task on the first test failure
     failFast = true
 
-
+    // generate a report on coverage
+    finalizedBy jacocoTestReport
 }
 
 dependencyCheck {
@@ -514,18 +497,28 @@ task('printReportPathsDependencyCheck') {
 
 dependencyCheckAnalyze.finalizedBy 'printReportPathsDependencyCheck'
 
-/**
- * this starts the desktop UI for the auto insurance processor
- *  and its accompanying automation script server
- */
-task startui(type:JavaExec) {
-    def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
-    jvmArgs = ["-javaagent:$jacocoAgent=output=tcpserver,address=localhost,port=6301,append=false"]
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'com.coveros.training.autoinsurance.AutoInsuranceUI'
+// This is for when we run tests on the local Windows box
+// you can pass in the property directly on the command line
+// like this: gradlew deployToTestWindowsLocal -Pdeploy_directory="C:/Users/byron/Desktop/test_tools/tomcat-9/webapps"
+//
+// or, you can have it set as a system property, like this:
+// ORG_GRADLE_PROJECT_deploy_directory="C:/Users/byron/Desktop/test_tools/tomcat-9/webapps"
+task deployToTestWindowsLocal(type: Copy) {
+    dependsOn war
+
+    if (project.hasProperty('deploy_directory')) {
+        from("$buildDir/libs/") {
+            // a bit of a hack - would prefer to directly target the output of the war task
+            include "*-1.0.0.war"
+            rename { "demo.war" }
+        }
+        into "${deploy_directory}"
+    }
+
+    doLast {
+        sleep 5 * 1000
+    }
 }
-
-
 
 
 

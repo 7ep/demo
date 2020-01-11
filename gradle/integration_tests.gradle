@@ -1,0 +1,38 @@
+sourceSets {
+    integrationTests {
+        java.srcDir 'src/integration_test/java'
+        resources.srcDir 'src/integration_test/resources'
+    }
+}
+
+dependencies {
+    integrationTestsImplementation sourceSets.main.output
+    integrationTestsImplementation configurations.testImplementation
+}
+
+task integrate(type: Test) {
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = 'Runs the integration tests.'
+    testClassesDirs = sourceSets.integrationTests.output.classesDirs
+    classpath = sourceSets.integrationTests.runtimeClasspath
+    maxHeapSize = '1024m'
+    mustRunAfter test
+
+    testLogging {
+        exceptionFormat "full" // default is "short"
+        // uncomment the following to see the unit test progress in the output
+        //events "started", "passed", "skipped", "failed", "standardOut", "standardError"
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+
+        // set to false to disable detailed failure logs
+        showExceptions true
+
+        // enable to see standard out and error streams inline with the test results
+        showStandardStreams true
+    }
+
+    // Fail the 'test' task on the first test failure
+    failFast = true
+}
+
+check.dependsOn integrate

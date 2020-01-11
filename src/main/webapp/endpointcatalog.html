@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>Catalog of endpoints for Demo</title>
+    <link rel="stylesheet" href="catalog.css">
+    <script type="text/javascript" src="catalog.js"></script>
+</head>
+<body>
+
+<form id="post_math_form" method="POST" action="math" autocomplete="off">
+    <fieldset>
+        <legend class="title" id="math_title">The "math" endpoint</legend>
+        <p>
+            <label>Description:</label>
+            <span>Simply adds two integers where the integers are each
+                between -2147483648 and 2147483647, and their sum also does
+                not exceed that range</span>
+        </p>
+        <p>
+            <label for="math_param_item_a">item_a</label>
+            <input type="number" id="math_param_item_a" name="item_a">
+        </p>
+        <p>
+            <label for="math_param_item_b">item_b</label>
+            <input type="number" id="math_param_item_b" name="item_b">
+        </p>
+        <p>
+            <label for="math_response">Response:</label>
+            <textarea class="responsearea" id="math_response" rows="1" readonly ></textarea>
+        </p>
+        <p>
+            <button id="postToDemoMathButton">POST</button>
+        </p>
+    </fieldset>
+</form>
+
+<form id="post_fibonacci_form" method="POST" action="fibonacci" autocomplete="off">
+    <fieldset>
+        <legend class="title" id="fibonacci_title">The "fibonacci" endpoint</legend>
+        <p>
+            <label>Description:</label>
+            <span>Calculates the nth value in the Fibonacci sequence, per one of three algorithms.  The
+            default, naive, recursive approach is "default recursive".  The other two use more sophisticated
+            tail-recursive techniques.</span>
+        </p>
+        <p>
+            <label for="fibonacci_param_fib_param_n">fib_param_n</label>
+            <input type="number" id="fibonacci_param_fib_param_n" name="fib_param_n">
+        </p>
+        <p>
+            <label for="fibonacci_param_fib_algorithm_choice">fib_algorithm_choice</label>
+            <select id="fibonacci_param_fib_algorithm_choice" name="fib_algorithm_choice">
+                <option value="default_recursive">default_recursive</option>
+                <option value="tail_recursive_1">tail_recursive_1</option>
+                <option value="tail_recursive_2">tail_recursive_2</option>
+            </select>
+        </p>
+        <p>
+            <label for="fibonacci_response">Response:</label>
+            <textarea class="responsearea" id="fibonacci_response" rows="1" readonly ></textarea>
+        </p>
+        <p>
+            <button id="postToDemoFibonacciButton">POST</button>
+        </p>
+    </fieldset>
+</form>
+
+<form id="post_ackermann_form" method="POST" action="ackermann" autocomplete="off">
+    <fieldset>
+        <legend class="title" id="ackermann_title">The "ackermann" endpoint</legend>
+        <p>
+            <label>Description:</label>
+            <span>Calculates the nth value in the Ackermann sequence, per one of two algorithms.  The
+            default, naive, recursive approach is "default recursive".  The other one uses a sophisticated
+            tail-recursive technique.</span>
+        </p>
+        <p>
+            <label for="ackermann_param_ack_param_m">ack_param_m</label>
+            <input type="number" id="ackermann_param_ack_param_m" name="ack_param_m">
+        </p>
+        <p>
+            <label for="ackermann_param_ack_param_n">ack_param_n</label>
+            <input type="number" id="ackermann_param_ack_param_n" name="ack_param_n">
+        </p>
+        <p>
+            <label for="ackermann_param_ack_algorithm_choice">ack_algorithm_choice</label>
+            <select id="ackermann_param_ack_algorithm_choice" name="ack_algorithm_choice">
+                <option value="default_recursive">default_recursive</option>
+                <option value="tail_recursive">tail_recursive</option>
+            </select>
+        </p>
+        <p>
+            <label for="ackermann_response">Response:</label>
+            <textarea class="responsearea" id="ackermann_response" rows="1" readonly ></textarea>
+        </p>
+        <p>
+            <button id="postToDemoAckermannButton">POST</button>
+        </p>
+    </fieldset>
+</form>
+
+<form id="get_book_form" method="GET" action="book" autocomplete="off">
+    <fieldset>
+        <legend class="title" id="book_title">The "book" endpoint</legend>
+        <p>
+            <label>Description:</label>
+            <span>Lists and searches books.  If you provide no input, it will list all books.  If you provide
+            an identifier number or a title, it will search by those.  If you provide both an identifier
+            and a title, it will return an error message.</span>
+        </p>
+        <p>
+            <label for="book_param_id">id</label>
+            <input type="number" id="book_param_id" name="id">
+        </p>
+        <p>
+            <label for="book_param_title">title</label>
+            <input type="text" id="book_param_title" name="title">
+        </p>
+        <p>
+            <label for="book_response">Response:</label>
+            <textarea class="responsearea" id="book_response" rows="1" readonly ></textarea>
+        </p>
+        <p>
+            <button id="postToDemoBookButton">POST</button>
+        </p>
+    </fieldset>
+</form>
+
+<form id="get_borrower_form" method="GET" action="borrower" autocomplete="off">
+    <fieldset>
+        <legend class="title" id="borrower_title">The "borrower" endpoint</legend>
+        <p>
+            <label>Description:</label>
+            <span>Lists and searches borrowers.  If you provide no input, it will list all borrowers.  If you provide
+            an identifier number or a name, it will search by those.  If you provide both an identifier
+            and a name, it will return an error message.</span>
+        </p>
+        <p>
+            <label for="borrower_param_id">id</label>
+            <input type="number" id="borrower_param_id" name="id">
+        </p>
+        <p>
+            <label for="borrower_param_name">name</label>
+            <input type="text" id="borrower_param_name" name="name">
+        </p>
+        <p>
+            <label for="borrower_response">Response:</label>
+            <textarea class="responsearea" id="borrower_response" rows="1" readonly ></textarea>
+        </p>
+        <p>
+            <button id="postToDemoBorrowerButton">POST</button>
+        </p>
+    </fieldset>
+</form>
+
+</body>
+
+</html>

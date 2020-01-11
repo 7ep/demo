@@ -30,6 +30,7 @@ task runUiTestsOnUITestMachine {
     }
 }
 
+// This runs the API tests by using SSH.  It does so on a remote server.
 task runApiTestsOnUiTest {
     doLast {
         mkdir 'build/test-results/api_tests'
@@ -42,8 +43,11 @@ task runApiTestsOnUiTest {
     }
 }
 
+// This is for the virtual machine CentOS UI test box
+// see also: deployToTestWindowsLocal, for when the CI/CD pipeline
+// is on the local windows box of the teacher.
 task deployToTest {
-    doLast {
+    doFirst {
         ssh.runInOrder {
             session(remotes.uitestbox)
                     {
@@ -53,7 +57,10 @@ task deployToTest {
                         execute 'git clone cuser@jenkinsbox:~/demo demo_tests --branch master'
                         execute 'cd demo_tests;pipenv install 2>/dev/null'
                     }
+
         }
-        sleep 10 * 1000
+    }
+    doLast {
+        sleep 5 * 1000
     }
 }
