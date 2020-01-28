@@ -1,6 +1,0 @@
-For the Amazon Web Services (AWS) architecture:
-
-    Demo needs to be running somewhere, so we need a test server - spooled up as needed
-    Jenkins (for CI/CD) needs a box - stays up
-    Jenkins also requires a Windows box for running UI tests - stays up
-    Sonarqube (for static analysis) needs a box - stays up
