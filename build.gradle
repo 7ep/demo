@@ -60,9 +60,6 @@ apply from: "$rootDir/gradle/integration_tests.gradle"
 // including our script plugin for running BDD-type tests
 apply from: "$rootDir/gradle/cucumber_bdd_tests.gradle"
 
-// our script plugin for accessing aws - Amazon Web Services
-apply from: "$rootDir/gradle/aws.gradle"
-
 // our script plugin for provisioning servers
 apply from: "$rootDir/gradle/remote_actions.gradle"
 

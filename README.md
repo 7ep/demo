@@ -5,7 +5,31 @@ software practices.
 
 #### Dependencies:
 
-* [Open Java Development Kit](https://jdk.java.net/13/) _or_ [Oracle Java Development Kit](https://www.oracle.com/technetwork/java/javase/downloads/index.html) (If you don't have an opinion, go with the first.)
+[Oracle Java Development Kit](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
+
+To install: download the development kit, make note of the installation directory.  Add that directory 
+to your path.  For example, on Windows, press the Windows button, type "env" to edit the environment
+variables for your account.  Under _user variables_ click New and add:
+
+*  Variable name: JAVA_HOME
+*  Variable value: C:\Program Files\Java\jdk-11.0.5   _replace this with the correct path_
+
+Click OK.
+Click the PATH user variable and click edit, and then click New, and add a new line for Java
+as follows:
+
+    %JAVA_HOME%\bin
+    
+Test this out by opening a command terminal, for example run the program called "cmd", and run this:
+    
+    javac -version
+    
+You should get something similar to the following:
+
+    C:\Users\byron>javac -version
+    javac 11.0.5
+    
+Now you are ready!
 
 #### Quick Start:
 
