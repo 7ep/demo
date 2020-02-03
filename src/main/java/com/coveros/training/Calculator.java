@@ -46,6 +46,12 @@ public class Calculator {
         }
     }
 
+    public static int doComplexStuff(int a, int b, Foo foo, Bar bar) {
+        int c = foo.doComplexThing(a);
+        int d = bar.doOtherComplexThing(c);
+        return a + b + c + d;
+    }
+
     /**
      * Add two pairs.
      */
@@ -53,5 +59,17 @@ public class Calculator {
         int newLeftValue = pair1.getLeft() + pair2.getLeft();
         int newRightValue = pair1.getRight() + pair2.getRight();
         return Pair.of(newLeftValue, newRightValue);
+    }
+
+    public static class Foo {
+        public int doComplexThing(int a) {
+            return a + 1;
+        }
+    }
+
+    public static class Bar {
+        public int doOtherComplexThing(int c) {
+            return c - 1;
+        }
     }
 }
