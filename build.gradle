@@ -192,7 +192,7 @@ task copyH2JarToLib(type: Copy) {
 // starts the h2 console
 task startH2Console(type: Exec) {
     dependsOn 'copyH2JarToLib'
-    commandLine 'javaw', '-cp', 'build/lib/h2-1.4.197.jar', 'org.h2.tools.Console'
+    commandLine 'javaw', '-cp', 'build/lib/h2-1.4.199.jar', 'org.h2.tools.Console'
 }
 
 generateCucumberReports.dependsOn(cucumber)

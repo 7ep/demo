@@ -7,9 +7,16 @@ import org.apache.commons.lang3.tuple.Pair;
  */
 public class Calculator {
 
-    private Calculator() {
-        throw new IllegalStateException("Utility class");
+    private final Baz baz;
+
+    public Calculator() {
+        this.baz = new Baz();
     }
+
+    public Calculator(Baz baz) {
+        this.baz = baz;
+    }
+
 
     /**
      * Simply add two integers
@@ -46,10 +53,15 @@ public class Calculator {
         }
     }
 
-    public static int doComplexStuff(int a, int b, Foo foo, Bar bar) {
+    public static int calculateAndMore(int a, int b, Foo foo, Bar bar) {
         int c = foo.doComplexThing(a);
         int d = bar.doOtherComplexThing(c);
         return a + b + c + d;
+    }
+
+    public int calculateAndMorePart2(int a) {
+        int b = baz.doThirdPartyThing(a);
+        return a + b;
     }
 
     /**
@@ -70,6 +82,13 @@ public class Calculator {
     public static class Bar {
         public int doOtherComplexThing(int c) {
             return c - 1;
+        }
+    }
+
+    public class Baz {
+
+        public int doThirdPartyThing(int a) {
+            return 42;
         }
     }
 }
