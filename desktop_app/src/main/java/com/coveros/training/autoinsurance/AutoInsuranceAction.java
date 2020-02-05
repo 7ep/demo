@@ -10,12 +10,14 @@ public final class AutoInsuranceAction {
     final int premiumIncreaseDollars;
     final WarningLetterEnum warningLetterEnum;
     final boolean isPolicyCanceled;
+    final boolean isError;
 
-    public AutoInsuranceAction(int premiumIncreaseDollars, WarningLetterEnum warningLetterEnum, boolean isPolicyCanceled) {
+    public AutoInsuranceAction(int premiumIncreaseDollars, WarningLetterEnum warningLetterEnum, boolean isPolicyCanceled, boolean isError) {
 
         this.premiumIncreaseDollars = premiumIncreaseDollars;
         this.warningLetterEnum = warningLetterEnum;
         this.isPolicyCanceled = isPolicyCanceled;
+        this.isError = isError;
     }
 
 
@@ -34,6 +36,7 @@ public final class AutoInsuranceAction {
                 .append(premiumIncreaseDollars, rhs.premiumIncreaseDollars)
                 .append(warningLetterEnum, rhs.warningLetterEnum)
                 .append(isPolicyCanceled, rhs.isPolicyCanceled)
+                .append(isError, rhs.isError)
                 .isEquals();
     }
 
@@ -44,11 +47,16 @@ public final class AutoInsuranceAction {
                 append(premiumIncreaseDollars).
                 append(warningLetterEnum).
                 append(isPolicyCanceled).
+                append(isError).
                 toHashCode();
     }
 
     public static AutoInsuranceAction createEmpty() {
-        return new AutoInsuranceAction(-1, WarningLetterEnum.NONE, false);
+        return new AutoInsuranceAction(-1, WarningLetterEnum.NONE, false, false);
+    }
+
+    public static AutoInsuranceAction createErrorResponse() {
+        return new AutoInsuranceAction(-1, WarningLetterEnum.NONE, false, true);
     }
 
     public boolean isEmpty() {

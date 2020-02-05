@@ -20,7 +20,7 @@ public class AutoInsuranceActionTests {
     }
 
     public static AutoInsuranceAction createTestAutoInsuranceAction() {
-        return new AutoInsuranceAction(50, LTR1, false);
+        return new AutoInsuranceAction(50, LTR1, false, false);
     }
 
     @Test
