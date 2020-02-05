@@ -53,12 +53,6 @@ task startui(type:JavaExec) {
     main = 'com.coveros.training.autoinsurance.AutoInsuranceUI'
 }
 
-task obtainExecutionCoverageDesktopUI(type: JavaExec) {
-    classpath = sourceSets.test.runtimeClasspath
-    main = 'com.coveros.training.autoinsurance.ExecutionDataClient'
-    args = ["6301", "$buildDir/jacoco/desktop_ui.exec"]
-}
-
 jacocoTestReport {
     executionData(fileTree(dir: "$buildDir/jacoco", include: '*.exec'))
     reports {
@@ -87,10 +81,3 @@ test {
     // Fail the 'test' task on the first test failure
     failFast = true
 }
-
-task getAllCoverageAndCreateReport (type: GradleBuild) {
-    tasks = ['obtainExecutionCoverageDesktopUI', 'jacocoTestReport']
-    mustRunAfter test
-}
-
-test.finalizedBy(getAllCoverageAndCreateReport)

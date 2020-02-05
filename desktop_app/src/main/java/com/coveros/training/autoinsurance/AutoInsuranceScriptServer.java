@@ -16,7 +16,7 @@ import java.util.Arrays;
 public class AutoInsuranceScriptServer implements Runnable, Transient {
 
     static Logger logger = LoggerFactory.getLogger(AutoInsuranceScriptServer.class);
-
+    private boolean shouldRepeat = true;
     private AutoInsuranceUI autoInsuranceUI;
 
     /**
@@ -31,7 +31,8 @@ public class AutoInsuranceScriptServer implements Runnable, Transient {
 
         int portNumber = 8000;
 
-        while(true) {
+
+        while(shouldRepeat) {
             try (
                     ServerSocket serverSocket = new ServerSocket(portNumber);
                     Socket clientSocket = serverSocket.accept();
@@ -48,6 +49,8 @@ public class AutoInsuranceScriptServer implements Runnable, Transient {
                                     .map(String::toLowerCase).toArray(String[]::new);
 
                     try {
+                        handleQuit(inputTokens);
+
                         handleSetCases(inputTokens);
 
                         result = handleGetCases(result, inputTokens);
@@ -101,6 +104,12 @@ public class AutoInsuranceScriptServer implements Runnable, Transient {
                 final int i = Integer.parseInt(inputTokens[2]);
                 autoInsuranceUI.setPreviousClaims(i);
             }
+        }
+    }
+
+    private void handleQuit(String[] inputTokens) {
+        if (inputTokens[0].equals("quit")) {
+            shouldRepeat = false;
         }
     }
 
