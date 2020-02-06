@@ -50,15 +50,8 @@ public class MathServlet extends HttpServlet {
      * Wrapping a request set for easier testing and clarity.
      */
     void setResultToSum(HttpServletRequest request, int itemA, int itemB) {
-        final int result = doAdd(itemA, itemB);
+        final int result = Calculator.add(itemA, itemB);
         request.setAttribute("result", result);
     }
 
-
-    private int doAdd(int a, int b) {
-        logger.info("adding a: {} to b: {}", a, b);
-        int result = a + b;
-        logger.info("result is {}", result);
-        return result;
-    }
 }
