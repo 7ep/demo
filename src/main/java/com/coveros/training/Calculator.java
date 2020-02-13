@@ -53,15 +53,31 @@ public class Calculator {
         }
     }
 
+    /**
+     * Used in the Unit Test / TDD classes.
+     * testing stubs.
+     */
     public static int calculateAndMore(int a, int b, Foo foo, Bar bar) {
         int c = foo.doComplexThing(a);
         int d = bar.doOtherComplexThing(c);
         return a + b + c + d;
     }
 
+    /**
+     * Used in the Unit Test / TDD classes.
+     * testing stubs.
+     */
     public int calculateAndMorePart2(int a) {
         int b = baz.doThirdPartyThing(a);
         return a + b;
+    }
+
+    /**
+     * Used in the Unit Test / TDD classes.
+     * testing mocks.
+     */
+    public void calculateAndMorePart3(int a) {
+        baz.doThirdPartyThing(a);
     }
 
     /**
