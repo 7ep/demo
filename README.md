@@ -7,6 +7,23 @@ software practices.
 
 [Oracle Java Development Kit](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
 
+#### Quick Start:
+
+* Download this repo: https://github.com/7ep/demo/archive/master.zip
+* unzip the file to a directory.
+* On the command line in that directory, run _gradlew check_ , then _gradlew apprun_
+* visit the application at http://localhost:8080/demo
+
+
+###### Optional Dependencies - needed for API testing and Selenium testing.
+* [Python](https://www.python.org/downloads/)
+* [Chromedriver](http://chromedriver.chromium.org/downloads)
+* [Chrome internet browser](https://www.google.com/chrome/)
+
+---
+
+#### Java installation notes
+
 To install: download the development kit, make note of the installation directory.  Add that directory 
 to your path.  For example, on Windows, press the Windows button, type "env" to edit the environment
 variables for your account.  Under _user variables_ click New and add:
@@ -31,20 +48,6 @@ You should get something similar to the following:
     
 Now you are ready!
 
-#### Quick Start:
-
-* Download this repo: https://github.com/7ep/demo/archive/master.zip
-* unzip the file to a directory.
-* On the command line in that directory, run _gradlew check_ , then _gradlew apprun_
-* visit the application at http://localhost:8080/demo
-
-
-###### Optional Dependencies - needed for API testing and Selenium testing.
-* [Python](https://www.python.org/downloads/)
-* [Chromedriver](http://chromedriver.chromium.org/downloads)
-* [Chrome internet browser](https://www.google.com/chrome/)
-
----
 
 #### Chromedriver notes
 make sure that the Chromedriver executable is installed in one of the directories that is 
@@ -168,19 +171,14 @@ Its essential goals:
     
 #### The whole shebang - a CI/CD pipeline
 
-Follow the directions to [create a Jenkins box](https://github.com/7ep/demo/blob/master/docs/jenkins_box_guide.txt) and [a UI-testing-box](https://github.com/7ep/demo/blob/master/docs/ui_test_box.txt), per the instructions
-in docs.  *or*, see the appliance notes below.
+Details on building out a CI/CD pipeline are found in the "docs/ci_and_cd" directory.
+For example, to set it all up on a [local Windows box](https://raw.githubusercontent.com/7ep/demo/master/docs/ci_and_cd/ci_and_cd_for_localhost.txt) 
 
 ###### Features of the pipeline:
 * Instructions for setting up virtual machines (with VirtualBox).
 * A fully functioning demonstration CI/CD pipeline using Jenkins.
 * Incorporates static analysis using SonarQube
-* Zap attack proxy security analysis
 * UI tests running on Chrome
-#### Appliance
- I've stored an appliance for running
- the pipeline [here](https://www.dropbox.com/sh/vk1hi9zs0fj9xus/AABBYo766-EGGn2IH0h9awTIa?dl=0).
- Details for using the appliance are in the README there.
 
 
 ---
