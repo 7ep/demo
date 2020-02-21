@@ -1,17 +1,26 @@
 installing a ci/cd pipeline on a Windows computer.
 -------------------------------------------------
 
-The following assumes you have already installed the necessary components to run "gradlew runalltests" on your computer - this entails having JDK11, Python, Chromedriver in a directory on your path, etc... see README.md in the top directory of Demo.
+The following assumes you have already installed the necessary components to run "gradlew runalltests" on your computer -
+this entails having JDK11, Python, Chromedriver in a directory on your path, etc... see README.md in the top directory of Demo.
 
-The gist of the following is as follows: we install and run Tomcat, Sonarqube, and Jenkins.  We configure the Jenkins pipeline.  We set up a fake central repository in a local directory so that when we push any code to it, Jenkins starts up.  This should go smoothly, but there are inevitable kinks when configuring real software.  Please contact me with any issues found.
+The gist of the following is as follows:
+we install and run Tomcat, Sonarqube, and Jenkins.
+We configure the Jenkins pipeline.
+We set up a fake central repository in a local directory so that when we push any code to it, Jenkins starts up.
+This should go smoothly, but there are inevitable kinks when configuring real software.
+Please contact me with any issues found.
 
 
-I did this on Windows, other operating systems would require some slight changes.
+I did this on Windows, other operating systems would require some changes.
 
 Install the latest Git.
 Put this on your path: C:\Program Files\Git\usr\bin (so Jenkins has access to unix-style commands while running the pipeline)
 
 Download and install JDK11, put it on your path (Sonarqube 8 requires JDK11)
+
+Install Jmeter, put the path to its bin directory on the path.
+Read "Installing Jmeter" in the document "perf_testing_with_jmeter.txt", follow that.
 
 Download Demo somewhere - it's at https://github.com/7ep/demo
 
@@ -124,6 +133,16 @@ Now let's create a pipeline so it does some actual work.
 
   Link URL: http://localhost:8080/demo
   Link Text: Demo
+
+  Click Add Link
+
+  Link URL: http://localhost:8080/reports/jacoco/index.html
+  Link Text: Jacoco coverage report
+
+  Click Add Link
+
+  Link URL: http://localhost:8080/reports/pitest/index.html
+  Link Text: Pitest Mutation Testing
 
 - Under Pipeline, click on the dropdown and select "Pipeline script from SCM"
 - on the dropdown next to SCM, select Git.

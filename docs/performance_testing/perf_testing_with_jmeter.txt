@@ -1,6 +1,8 @@
 Demonstrating Performance testing with JMeter
 ---------------------------------------------
 
+Installing Jmeter
+-----------------
 First and foremost, have Jmeter installed: https://jmeter.apache.org/download_jmeter.cgi
 Then, install plugin manager: https://jmeter-plugins.org/wiki/PluginsManager/
   Installing plugin manager is described on the plugin's page:
