@@ -93,6 +93,12 @@ pipeline {
       }
     }
 
+    stage('Mutation testing') {
+      steps {
+         sh './gradlew pitest'
+      }
+    }
+
 
     // This is the stage where we deploy to production.  If any test
     // fails, we won't get here.  Note that we aren't really doing anything - this

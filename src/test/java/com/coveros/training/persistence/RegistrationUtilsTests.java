@@ -67,7 +67,7 @@ public class RegistrationUtilsTests {
         long timeElapsed = finish - start;
 
         Assert.assertTrue("All these calls should have finished in a short time.  " +
-                "Time elapsed was " + timeElapsed, timeElapsed < 1000);
+                "Time elapsed was " + timeElapsed, timeElapsed < 1500);
     }
 
     /**
