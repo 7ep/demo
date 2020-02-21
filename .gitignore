@@ -57,3 +57,7 @@ test-output/
 # the current commit hash in the UI.
 #  see writeGitCommitToFile in "build.gradle"
 src/main/webapp/commit.html
+
+# artifacts from perf testing
+jmeter.log
+test.jtl
