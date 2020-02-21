@@ -517,5 +517,20 @@ task deployToTestWindowsLocal(type: Copy) {
     }
 }
 
+task runPerfTests(type:Exec) {
+    workingDir '.'
+
+    //on windows:
+    commandLine 'jmeter.bat', '-n', '-t', 'docs\\250_users_at_once.jmx', '-l', 'test.jtl'
+
+    //store the output instead of printing to the console:
+    standardOutput = new ByteArrayOutputStream()
+
+    //extension method stopTomcat.output() can be used to obtain the output:
+    ext.output = {
+        return standardOutput.toString()
+    }
+}
+
 
 
