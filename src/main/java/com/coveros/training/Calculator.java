@@ -54,7 +54,16 @@ public class Calculator {
     }
 
     /**
-     * Used in the Unit Test / TDD classes.
+     * Add two pairs.
+     */
+    public static Pair<Integer, Integer> add(Pair<Integer, Integer> pair1, Pair<Integer, Integer> pair2) {
+        int newLeftValue = pair1.getLeft() + pair2.getLeft();
+        int newRightValue = pair1.getRight() + pair2.getRight();
+        return Pair.of(newLeftValue, newRightValue);
+    }
+
+    /**
+     * Used for teaching
      * testing stubs.
      */
     public static int calculateAndMore(int a, int b, Foo foo, Bar bar) {
@@ -64,7 +73,7 @@ public class Calculator {
     }
 
     /**
-     * Used in the Unit Test / TDD classes.
+     * Used for teaching
      * testing stubs.
      */
     public int calculateAndMorePart2(int a) {
@@ -73,7 +82,7 @@ public class Calculator {
     }
 
     /**
-     * Used in the Unit Test / TDD classes.
+     * Used for teaching
      * testing mocks.
      */
     public void calculateAndMorePart3(int a) {
@@ -81,26 +90,26 @@ public class Calculator {
     }
 
     /**
-     * Add two pairs.
+     * An artificial class needed as a dependency
      */
-    public static Pair<Integer, Integer> add(Pair<Integer, Integer> pair1, Pair<Integer, Integer> pair2) {
-        int newLeftValue = pair1.getLeft() + pair2.getLeft();
-        int newRightValue = pair1.getRight() + pair2.getRight();
-        return Pair.of(newLeftValue, newRightValue);
-    }
-
     public static class Foo {
         public int doComplexThing(int a) {
             return a + 1;
         }
     }
 
+    /**
+     * An artificial class needed as a dependency
+     */
     public static class Bar {
         public int doOtherComplexThing(int c) {
             return c - 1;
         }
     }
 
+    /**
+     * An artificial class needed as a dependency
+     */
     public class Baz {
 
         public int doThirdPartyThing(int a) {

@@ -9,30 +9,42 @@ import static org.mockito.Mockito.when;
 
 public class CalculatorTests {
 
-    @Ignore("this test is for teaching unit testing")
+    // ----------------------------------------------------------
+    //
+    //          Unit tests not requiring mocks
+    //
+    // ----------------------------------------------------------
+
+    @Ignore("this test is for teaching")
     @Test
     public void testShouldAddTwoIntegers() {
     }
 
-    @Ignore("this test is for teaching unit testing")
+    @Ignore("this test is for teaching")
     @Test
     public void testShouldAddTwoDecimals() {
     }
 
-    @Ignore("this test is for teaching unit testing")
+    @Ignore("this test is for teaching")
     @Test
     public void testShouldGetStringVersionOfResult() {
     }
 
-    @Ignore("this test is for teaching unit testing")
+    @Ignore("this test is for teaching")
     @Test
-    public void testShouldGetVectorResult() {
+    public void testShouldGetPairResult() {
     }
+
+    // ----------------------------------------------------------
+    //
+    //          Unit tests requiring mocks
+    //
+    // ----------------------------------------------------------
 
     /**
      * Tests calculateAndMore
      */
-    @Ignore("this test is for teaching unit testing with mocking")
+    @Ignore("this test is for teaching")
     @Test
     public void testShouldMockOutsideMethods() {
     }
@@ -40,7 +52,7 @@ public class CalculatorTests {
     /**
      * Tests calculateAndMorePart2
      */
-    @Ignore("this test is for teaching unit testing with mocking")
+    @Ignore("this test is for teaching")
     @Test
     public void testShouldMockOutsideMethodsPart2() {
     }
