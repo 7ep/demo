@@ -4,6 +4,8 @@ from hamcrest import *
 empty_database = ''
 one_user_registered = 'alice password123'
 URL = 'http://localhost:8080/demo/library.html'
+DEFAULT_USERNAME = 'alice'
+DEFAULT_PASSWORD = 'asdfkljhasdfishdfksaljdfh'
 
 
 @given('I am not registered')
@@ -11,9 +13,9 @@ def step_impl(context):
     pass
 
 
-@when('I register with a username of "{username_text}" and a password of "{password_text}"')
-def step_impl(context, username_text, password_text):
-    __register_user(context, username_text, password_text)
+@when('I register with a valid username and password')
+def step_impl(context):
+    __register_user(context, DEFAULT_USERNAME, DEFAULT_PASSWORD)
     pass
 
 
@@ -23,15 +25,15 @@ def step_impl(context):
     assert_that(result.text, contains_string('successfully registered: true'))
 
 
-@given('I am registered as "{username}" with a password of "{password}"')
-def step_impl(context, username, password):
-    context.username = username
-    context.password = password
+@given('I am registered as a user')
+def step_impl(context):
+    context.username = DEFAULT_USERNAME
+    context.password = DEFAULT_PASSWORD
     __register_user(context, context.username, context.password)
     pass
 
 
-@when('I login with those credentials')
+@when('I login')
 def step_impl(context):
     __login_user(context, context.username, context.password)
     pass

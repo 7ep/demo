@@ -10,11 +10,11 @@ Feature: A user may authenticate to the system through the UI
 
     Scenario: Registering a new user
         Given I am not registered
-        When I register with a username of "Coveros" and a password of "OAh8Wq8CajGZwURSXI8uSS"
+        When I register with a valid username and password
         Then it indicates I am successfully registered
 
     Scenario: Login with valid user
-        Given I am registered as "Coveros" with a password of "OAh8Wq8CajGZwURSXI8uSS"
-        When I login with those credentials
+        Given I am registered as a user
+        When I login
         Then the system allows secure access
 
