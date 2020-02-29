@@ -66,7 +66,7 @@ public class Calculator {
      * Used for teaching
      * testing stubs.
      */
-    public static int calculateAndMore(int a, int b, Foo foo, Bar bar) {
+    public static int calculateAndMore(int a, int b, iFoo foo, iBar bar) {
         int c = foo.doComplexThing(a);
         int d = bar.doOtherComplexThing(c);
         return a + b + c + d;
@@ -89,6 +89,10 @@ public class Calculator {
         baz.doThirdPartyThing(a);
     }
 
+    public interface iFoo {
+        int doComplexThing(int a);
+    }
+
     /**
      * An artificial class needed as a dependency
      */
@@ -96,6 +100,11 @@ public class Calculator {
         public int doComplexThing(int a) {
             return a + 1;
         }
+    }
+
+
+    public interface iBar {
+        int doOtherComplexThing(int c);
     }
 
     /**
