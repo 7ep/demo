@@ -1405,9 +1405,9 @@ in src/ui_tests/features/steps/returnBookStepDefs.py:
       URL = 'http://localhost:8080/demo/library.html'
 
 
-      @given('a borrower had checked out a book, "{book_title}"')
+      @given('a borrower had checked out a book,')
       def step_impl(context, book_title):
-          context.book = book_title
+          context.book = 'some book'
           context.borrower = 'alice'
           __register_borrower(context, context.borrower)
           __register_book(context, context.book)
