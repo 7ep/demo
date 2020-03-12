@@ -9,10 +9,9 @@ software practices.
 
 #### Quick Start:
 
-* Download this repo: https://github.com/7ep/demo/archive/master.zip
-* unzip the file to a directory.
-* On the command line in that directory, run _gradlew check_ , then _gradlew apprun_
-* visit the application at http://localhost:8080/demo
+* Clone or download this repo.  (if you download, unzip the file to a directory.)
+* On the command line in the top directory of this repo, run _gradlew apprun_
+* Visit the application at http://localhost:8080/demo
 
 
 ###### Optional Dependencies - needed for API testing and Selenium testing.
