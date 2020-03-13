@@ -148,7 +148,7 @@ techniques.  Some of the techniques exemplified are:
 * Unit tests using [Junit](https://junit.org/junit5/) and [Mockito](https://site.mockito.org/), with coverage reports.
 * BDD-style tests using gherkin
   * [Cucumber](https://docs.cucumber.io/) tests, with reports
-  * [Behave](https://behave.readthedocs.io/en/latest/) tests
+  * [Behave](https://behave.readthedocs.io/en/latest/) tests that use [Selenium](https://www.selenium.dev/)
 * Integration tests that test the database
 * Database versioning, with [Flyway](https://flywaydb.org/)
 * Uses [H2 database](https://www.h2database.com/html/main.html) to simplify operation
