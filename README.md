@@ -145,10 +145,10 @@ On Windows
 Demo consists of a simple web application and tests.  Its goal is to provide 
 an environment suitable for demonstration and practice in valuable development
 techniques.  Some of the techniques exemplified are:
-* Unit tests using [Junit](https://junit.org/junit5/) and [Mockito](https://site.mockito.org/), with coverage reports.
+* Unit tests in TDD style using [Junit](https://junit.org/junit5/) as a driver and [Mockito](https://site.mockito.org/) for mocks, with coverage reports.
 * BDD-style tests using gherkin
   * [Cucumber](https://docs.cucumber.io/) tests, with reports
-  * [Behave](https://behave.readthedocs.io/en/latest/) tests that use [Selenium](https://www.selenium.dev/)
+  * [Behave](https://behave.readthedocs.io/en/latest/) UI tests that use [Selenium](https://www.selenium.dev/) web driver.
 * Integration tests that test the database
 * Database versioning, with [Flyway](https://flywaydb.org/)
 * Uses [H2 database](https://www.h2database.com/html/main.html) to simplify operation
