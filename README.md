@@ -85,7 +85,7 @@ Now you are ready!
 
 
 #### Chromedriver installation notes
-make sure that the Chromedriver executable is installed in one of the directories that is 
+make sure that the [Chromedriver](https://chromedriver.chromium.org/) executable is installed in one of the directories that is 
 on your path.  To see your path, type the following in a command line: 
 
 on Windows:
@@ -143,10 +143,10 @@ Then, head to http://localhost:8080/demo
     
 
 #### To run API and UI tests:
-Note: The app has to be already running for these tests to pass, and you _need_
+Note: The app has to be [already running](#to-run-the-web-application) for these tests to pass, and you _need_
 to have installed [Python] and [Chromedriver].
 
-On the command line, run the following:
+In a new terminal, separate from the one where the server is running, run the following:
 
 On Mac/Linux
 
@@ -156,10 +156,6 @@ On Windows
 
     gradlew runAllTests    
     
-#### Interesting links when the system is up:
-* http://localhost:8080/demo - the main application
-* http://localhost:8080/demo/console - the database viewer - use URL of jdbc:h2:mem:training and no user or password
-
 #### Summary of relevant Gradle commands
 * gradlew apprun - runs the application
 * gradlew check - runs all tests possible with only dependency being Java 8.  No need for app to be running.
@@ -187,11 +183,9 @@ Details on building out a CI/CD pipeline are found in the "docs/ci_and_cd" direc
 For example, to set it all up on a [local Windows box](https://raw.githubusercontent.com/7ep/demo/master/docs/ci_and_cd/ci_and_cd_for_localhost.txt) 
 
 ###### Features of the pipeline:
-* Instructions for setting up virtual machines (with VirtualBox).
 * A fully functioning demonstration CI/CD pipeline using Jenkins.
 * Incorporates static analysis using SonarQube
 * UI tests running on Chrome
-
 
 ---
 
