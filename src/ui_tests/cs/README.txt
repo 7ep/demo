@@ -1,0 +1,1 @@
+Tested with Visual Studio 2019 Community edition.
