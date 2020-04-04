@@ -68,3 +68,6 @@ test.jtl
 # C# build results
 obj/
 bin/
+
+# Javascript dependencies
+node_modules/

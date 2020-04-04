@@ -6,16 +6,18 @@ describe('test1', function() {
   this.timeout(30000)
   let driver
   let vars
+
   beforeEach(async function() {
     driver = await new Builder().forBrowser('chrome').build()
     vars = {}
   })
+
   afterEach(async function() {
     await driver.quit();
   })
+
   it('test1', async function() {
     await driver.get("http://localhost:8080/demo/library.html")
-    await driver.manage().window().setRect(1464, 666)
     await driver.findElement(By.css(".button-form:nth-child(4) > input")).click()
     await driver.findElement(By.linkText("Return")).click()
     await driver.findElement(By.id("register_book")).click()
@@ -32,4 +34,5 @@ describe('test1', function() {
     await driver.findElement(By.id("lend_book_submit")).click()
     assert(await driver.findElement(By.id("result")).getText() == "SUCCESS")
   })
+
 })
