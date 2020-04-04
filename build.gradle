@@ -39,7 +39,7 @@ plugins {
     // Dependency Check analyzes the dependencies for 
     // potential security issues.
     // see https://plugins.gradle.org/plugin/org.owasp.dependencycheck
-    id "org.owasp.dependencycheck" version "5.2.4"
+    id "org.owasp.dependencycheck" version "5.3.2"
 
     // this gives us the abilities of SSH - specifically, the
     // ability to run commands on a remote server, and to copy
