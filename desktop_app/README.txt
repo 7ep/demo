@@ -1,10 +1,7 @@
 This is a desktop application to demonstrate testing.
 
-To show it off:
-  you'll need to open two consoles.
+To see the application, run: gradlew startui
 
-  In one, run: gradlew startui
-
-  In the other, run: gradlew test
+To run the tests: gradlew test
 
 Review the reports at build/reports/jacoco
