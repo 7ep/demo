@@ -61,3 +61,10 @@ src/main/webapp/commit.html
 # artifacts from perf testing
 jmeter.log
 test.jtl
+
+# Visual studio cache/options directory
+.vs
+
+# C# build results
+obj/
+bin/
