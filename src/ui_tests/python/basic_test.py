@@ -20,7 +20,6 @@ class TestTest1():
   
   def test_test1(self):
     self.driver.get("http://localhost:8080/demo/library.html")
-    self.driver.set_window_size(1464, 666)
     self.driver.find_element(By.CSS_SELECTOR, ".button-form:nth-child(4) > input").click()
     self.driver.find_element(By.LINK_TEXT, "Return").click()
     self.driver.find_element(By.ID, "register_book").click()
