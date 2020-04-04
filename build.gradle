@@ -400,7 +400,10 @@ task runBehaveTests(type: Exec) {
             )
         }
     }
-    workingDir 'src/ui_tests'
+
+    workingDir 'src/ui_tests/behave'
+    // PIPENV defaults to only two directories down respecting PIPFILE in ancestry.
+    environment "PIPENV_MAX_DEPTH", "10"
     // run behave and output a json file (we'll convert that to Cucumber format later for reporting)
     commandLine 'pipenv', 'run', 'behave', '--format','json','-o','../../build/bdd/behave.output', '-D', 'chromedriver_path='+(project.properties['chromedriver.path'] ?: "")
 }
