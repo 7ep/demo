@@ -8,7 +8,7 @@ namespace Tests
 
 
     [TestFixture]
-    public class Tests
+    public class UiTest
     {
 
         private IWebDriver driver;
