@@ -23,4 +23,11 @@ public class DesktopTester {
     public String getLabel() {
         return scriptClient.send("get label");
     }
+
+    /**
+     * kill the desktop UI and the tester client
+     */
+    public void quit() {
+        scriptClient.send(AutoInsuranceScriptClient.QUIT);
+    }
 }

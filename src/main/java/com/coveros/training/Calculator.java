@@ -7,9 +7,16 @@ import org.apache.commons.lang3.tuple.Pair;
  */
 public class Calculator {
 
-    private Calculator() {
-        throw new IllegalStateException("Utility class");
+    private final Baz baz;
+
+    public Calculator() {
+        this.baz = new Baz();
     }
+
+    public Calculator(Baz baz) {
+        this.baz = baz;
+    }
+
 
     /**
      * Simply add two integers
@@ -53,5 +60,69 @@ public class Calculator {
         int newLeftValue = pair1.getLeft() + pair2.getLeft();
         int newRightValue = pair1.getRight() + pair2.getRight();
         return Pair.of(newLeftValue, newRightValue);
+    }
+
+    /**
+     * Used for teaching
+     * testing stubs.
+     */
+    public static int calculateAndMore(int a, int b, iFoo foo, iBar bar) {
+        int c = foo.doComplexThing(a);
+        int d = bar.doOtherComplexThing(c);
+        return a + b + c + d;
+    }
+
+    /**
+     * Used for teaching
+     * testing stubs.
+     */
+    public int calculateAndMorePart2(int a) {
+        int b = baz.doThirdPartyThing(a);
+        return a + b;
+    }
+
+    /**
+     * Used for teaching
+     * testing mocks.
+     */
+    public void calculateAndMorePart3(int a) {
+        baz.doThirdPartyThing(a);
+    }
+
+    public interface iFoo {
+        int doComplexThing(int a);
+    }
+
+    /**
+     * An artificial class needed as a dependency
+     */
+    public static class Foo {
+        public int doComplexThing(int a) {
+            return a + 1;
+        }
+    }
+
+
+    public interface iBar {
+        int doOtherComplexThing(int c);
+    }
+
+    /**
+     * An artificial class needed as a dependency
+     */
+    public static class Bar {
+        public int doOtherComplexThing(int c) {
+            return c - 1;
+        }
+    }
+
+    /**
+     * An artificial class needed as a dependency
+     */
+    public class Baz {
+
+        public int doThirdPartyThing(int a) {
+            return 42;
+        }
     }
 }

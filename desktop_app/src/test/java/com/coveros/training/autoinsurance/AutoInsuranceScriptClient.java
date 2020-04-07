@@ -26,7 +26,7 @@ public class AutoInsuranceScriptClient {
                             new InputStreamReader(echoSocket.getInputStream()));
             logger.info("running command: {}", command);
             if (command.equals(QUIT)) {
-                echoSocket.close();
+                result = processCommand(out, in, command);
             }
             result = processCommand(out, in, command);
         } catch (UnknownHostException e) {

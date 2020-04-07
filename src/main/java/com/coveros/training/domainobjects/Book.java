@@ -49,7 +49,7 @@ public final class Book {
     }
 
     public final String toOutputString() {
-        return String.format("{Title: %s, Id: %s}", title, id);
+        return String.format("{\"Title\": \"%s\", \"Id\": \"%s\"}", title, id);
     }
 
     public final String toString() {

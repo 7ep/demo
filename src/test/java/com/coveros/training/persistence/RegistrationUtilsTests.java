@@ -50,6 +50,27 @@ public class RegistrationUtilsTests {
     }
 
     /**
+     * A lightweight performance test for a slow call
+     */
+    @Test
+    public void testShouldPerformWell() {
+        long start = System.currentTimeMillis();
+        final List<String> goodPasswords =
+                Arrays.asList(
+                        "XaZE}SkOC/@k#blv}U+wOlDfj=a]q",
+                        "-MzlAim%Zuh.=B|8N|Vd~`l5?*Cs,ZH\\'l/76t-9]W\\D$Il#vynO+~y_@",
+                        "lm=U(#C;@Bl*jvEy_*U1QlR@3sje");
+        for (String password : goodPasswords) {
+            RegistrationUtils.isPasswordGood(password);
+        }
+        long finish = System.currentTimeMillis();
+        long timeElapsed = finish - start;
+
+        Assert.assertTrue("All these calls should have finished in a short time.  " +
+                "Time elapsed was " + timeElapsed, timeElapsed < 1500);
+    }
+
+    /**
      * If we provide a good password, then by golly we should get that
      * as a result from our {@link RegistrationUtils#isPasswordGood} method.
      */

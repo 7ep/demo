@@ -1,9 +1,19 @@
 package com.coveros.training;
 
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mockito;
+
+import static org.mockito.Mockito.when;
 
 public class CalculatorTests {
+
+    // ----------------------------------------------------------
+    //
+    //          Unit tests not requiring mocks
+    //
+    // ----------------------------------------------------------
 
     @Ignore("this test is for teaching")
     @Test
@@ -22,6 +32,28 @@ public class CalculatorTests {
 
     @Ignore("this test is for teaching")
     @Test
-    public void testShouldGetVectorResult() {
+    public void testShouldGetPairResult() {
+    }
+
+    // ----------------------------------------------------------
+    //
+    //          Unit tests requiring mocks
+    //
+    // ----------------------------------------------------------
+
+    /**
+     * Tests calculateAndMore
+     */
+    @Ignore("this test is for teaching")
+    @Test
+    public void testShouldMockOutsideMethods() {
+    }
+
+    /**
+     * Tests calculateAndMorePart2
+     */
+    @Ignore("this test is for teaching")
+    @Test
+    public void testShouldMockOutsideMethodsPart2() {
     }
 }

@@ -1,13 +1,65 @@
 ## Demo - demonstrates an application and tests
 
-This is an application used by [Coveros](https://www.coveros.com/) to demonstrate a multitude of good
+This is an application by [Coveros](https://www.coveros.com/) to demonstrate good
 software practices.  
 
-#### Dependencies:
+#### Quick Start:
 
-[Oracle Java Development Kit](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
+* You must have javac available in your PATH (see [JDK notes](#java-installation-notes))
+* Clone or [download](https://github.com/7ep/demo/archive/master.zip) this repo.  (if you download, unzip the file to a directory.)
+* On the command line in the top directory of this repo, run `gradlew apprun`
+* Visit the application with your browser at http://localhost:8080/demo
 
-To install: download the development kit, make note of the installation directory.  Add that directory 
+#### Summary:
+ 
+Demo consists of a simple web application and tests.  Its goal is to provide 
+an environment suitable for demonstration and practice in valuable development
+techniques.  Some of the techniques exemplified are:
+* Unit tests in TDD style using [Junit](https://junit.org/junit5/) as a driver and [Mockito](https://site.mockito.org/) for mocks, with coverage reports.
+* BDD-style tests using gherkin
+  * [Cucumber](https://docs.cucumber.io/) tests, with reports
+  * [Behave](https://behave.readthedocs.io/en/latest/) UI tests that use [Selenium](https://www.selenium.dev/) web driver.
+* Integration tests that test the [H2 database](https://www.h2database.com/html/main.html)
+* Database versioning, with [Flyway](https://flywaydb.org/)
+* Security analysis using [DependencyCheck](https://www.owasp.org/index.php/OWASP_Dependency_Check)
+* Hot-swap code with [Gretty](https://github.com/gretty-gradle-plugin/gretty)
+
+Its essential goals:
+* Just works, any platform.
+* As simple as possible
+* Minimal system requirements
+* Fast and easy to install and to run
+* High test coverage
+* Multiple business domains
+* Easy to maintain and improve
+* Well documented
+* High performance
+* Illustrates maximum number of techniques
+* Easy to get up to speed
+
+#### Table of contents:
+1. [Optional dependencies](#optional-dependencies)
+1. [Java installation notes](#java-installation-notes)
+1. [Chromedriver installation notes](#chromedriver-installation-notes)
+1. [Python installation notes](#python-installation-notes)
+1. [To build and run tests](#to-build-and-run-tests)
+1. [To run the application](#to-run-the-web-application)
+1. [To run API and UI tests](#to-run-api-and-ui-tests)
+1. [Summary of relevant Gradle commands](#summary-of-relevant-gradle-commands)
+1. [The whole shebang - CI/CD pipeline](#the-whole-shebang---a-cicd-pipeline)
+
+###### Optional Dependencies
+If you want API testing and Selenium testing, you will need
+to visit these links and download / install the applications found there.
+* [Python](https://www.python.org/downloads/)
+* [Chromedriver](http://chromedriver.chromium.org/downloads)
+* [Chrome internet browser](https://www.google.com/chrome/)
+
+---
+
+#### Java installation notes
+
+To install: download the [development kit](https://www.oracle.com/technetwork/java/javase/downloads/index.html), make note of the installation directory.  Add that directory 
 to your path.  For example, on Windows, press the Windows button, type "env" to edit the environment
 variables for your account.  Under _user variables_ click New and add:
 
@@ -31,23 +83,9 @@ You should get something similar to the following:
     
 Now you are ready!
 
-#### Quick Start:
 
-* Download this repo: https://github.com/7ep/demo/archive/master.zip
-* unzip the file to a directory.
-* On the command line in that directory, run _gradlew check_ , then _gradlew apprun_
-* visit the application at http://localhost:8080/demo
-
-
-###### Optional Dependencies - needed for API testing and Selenium testing.
-* [Python](https://www.python.org/downloads/)
-* [Chromedriver](http://chromedriver.chromium.org/downloads)
-* [Chrome internet browser](https://www.google.com/chrome/)
-
----
-
-#### Chromedriver notes
-make sure that the Chromedriver executable is installed in one of the directories that is 
+#### Chromedriver installation notes
+make sure that the [Chromedriver](https://chromedriver.chromium.org/) executable is installed in one of the directories that is 
 on your path.  To see your path, type the following in a command line: 
 
 on Windows:
@@ -58,7 +96,13 @@ On Mac/Linux:
 
     echo $PATH
     
-#### Python notes
+If you run the command, `chromedriver` on the command  line, you should get a result similar to this:
+
+    Starting ChromeDriver ...
+        
+#### Python installation notes
+Python can be downloaded [here](https://www.python.org/downloads/)
+
 To run API tests and Selenium tests, an easy way to handle its 
 dependencies is to use *pipenv*.  To get this installed, first download
 [get-pip.py](https://bootstrap.pypa.io/get-pip.py), and run the following on the command line:
@@ -99,10 +143,10 @@ Then, head to http://localhost:8080/demo
     
 
 #### To run API and UI tests:
-Note: The app has to be already running for these tests to pass, and you _need_
-to have installed Python and Chromedriver.
+Note: The app has to be [already running](#to-run-the-web-application) for these tests to pass, and you _need_
+to have installed [Python] and [Chromedriver].
 
-On the command line, run the following:
+In a new terminal, separate from the one where the server is running, run the following:
 
 On Mac/Linux
 
@@ -112,10 +156,6 @@ On Windows
 
     gradlew runAllTests    
     
-#### Interesting links when the system is up:
-* http://localhost:8080/demo - the main application
-* http://localhost:8080/demo/console - the database viewer - use URL of jdbc:h2:mem:training and no user or password
-
 #### Summary of relevant Gradle commands
 * gradlew apprun - runs the application
 * gradlew check - runs all tests possible with only dependency being Java 8.  No need for app to be running.
@@ -134,54 +174,18 @@ On Windows
 * gradlew <task 1>...<task N> taskTree - a utility that will show the task tree for a particular task
 
 
-
   ** Requires the app to be running 
      (usually in another terminal) and all optional dependencies installed.
-
-#### Summary:
- 
-Demo consists of a simple web application and tests.  Its goal is to provide 
-an environment suitable for demonstration and practice in valuable development
-techniques.  Some of the techniques exemplified are:
-* Unit tests using [Junit](https://junit.org/junit5/) and [Mockito](https://site.mockito.org/), with coverage reports.
-* BDD-style tests using gherkin
-  * [Cucumber](https://docs.cucumber.io/) tests, with reports
-  * [Behave](https://behave.readthedocs.io/en/latest/) tests
-* Integration tests that test the database
-* Database versioning, with [Flyway](https://flywaydb.org/)
-* Uses [H2 database](https://www.h2database.com/html/main.html) to simplify operation
-* Security analysis using [DependencyCheck](https://www.owasp.org/index.php/OWASP_Dependency_Check)
-* Uses [Gretty](https://github.com/gretty-gradle-plugin/gretty) which allows us to hot swap Java code at runtime.
-
-Its essential goals:
-* Just works, any platform.
-* As simple as possible
-* Minimal system requirements
-* Fast and easy to install and to run
-* High test coverage
-* Multiple business domains
-* Easy to maintain and improve
-* Well documented
-* High performance
-* Illustrates maximum number of techniques
-* Easy to get up to speed
     
 #### The whole shebang - a CI/CD pipeline
 
-Follow the directions to [create a Jenkins box](https://github.com/7ep/demo/blob/master/docs/jenkins_box_guide.txt) and [a UI-testing-box](https://github.com/7ep/demo/blob/master/docs/ui_test_box.txt), per the instructions
-in docs.  *or*, see the appliance notes below.
+Details on building out a CI/CD pipeline are found in the "docs/ci_and_cd" directory.
+For example, to set it all up on a [local Windows box](https://raw.githubusercontent.com/7ep/demo/master/docs/ci_and_cd/ci_and_cd_for_localhost.txt) 
 
 ###### Features of the pipeline:
-* Instructions for setting up virtual machines (with VirtualBox).
 * A fully functioning demonstration CI/CD pipeline using Jenkins.
 * Incorporates static analysis using SonarQube
-* Zap attack proxy security analysis
 * UI tests running on Chrome
-#### Appliance
- I've stored an appliance for running
- the pipeline [here](https://www.dropbox.com/sh/vk1hi9zs0fj9xus/AABBYo766-EGGn2IH0h9awTIa?dl=0).
- Details for using the appliance are in the README there.
-
 
 ---
 

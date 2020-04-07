@@ -57,7 +57,7 @@ public final class Borrower {
     }
 
     public final String toOutputString() {
-        return String.format("{Name: %s, Id: %s}", name, id);
+        return String.format("{\"Name\": \"%s\", \"Id\": \"%s\"}", name, id);
     }
 
     public final String toString() {

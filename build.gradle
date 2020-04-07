@@ -13,7 +13,7 @@ plugins {
     id 'war'
 
     // gretty is a gradle plugin to make it easy to run a server and hotswap code at runtime.
-    id 'org.gretty' version '3.0.1'
+    id 'org.gretty' version '3.0.2'
 
     // provides access to a database versioning tool.
     id "org.flywaydb.flyway" version "6.0.8"
@@ -39,7 +39,7 @@ plugins {
     // Dependency Check analyzes the dependencies for 
     // potential security issues.
     // see https://plugins.gradle.org/plugin/org.owasp.dependencycheck
-    id "org.owasp.dependencycheck" version "5.2.4"
+    id "org.owasp.dependencycheck" version "5.3.2"
 
     // this gives us the abilities of SSH - specifically, the
     // ability to run commands on a remote server, and to copy
@@ -165,7 +165,7 @@ cucumberReports {
     // merge together all the cucumber reports with a suffix of "json"
     reports = files(fileTree(dir: "build/bdd", include: '*.json'))
     testTasksFinalizedByReport = false
-    projectNameOverride = "$name"
+    projectNameOverride = "$projectname"
 }
 
 flyway {
@@ -192,7 +192,7 @@ task copyH2JarToLib(type: Copy) {
 // starts the h2 console
 task startH2Console(type: Exec) {
     dependsOn 'copyH2JarToLib'
-    commandLine 'javaw', '-cp', 'build/lib/h2-1.4.197.jar', 'org.h2.tools.Console'
+    commandLine 'javaw', '-cp', 'build/lib/h2-1.4.199.jar', 'org.h2.tools.Console'
 }
 
 generateCucumberReports.dependsOn(cucumber)
@@ -212,8 +212,8 @@ check.dependsOn(jacocoTestReport)
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "$name"
-        property "sonar.projectName", "$name"
+        property "sonar.projectKey", "$projectname"
+        property "sonar.projectName", "$projectname"
         property "sonar.projectDescription", "A demonstration of a web application with good test coverage and best practices"
         property "sonar.sources", "src/main/java"
         property "sonar.tests", "src/test/java,src/integration_test/java,src/bdd_test/java"
@@ -400,9 +400,12 @@ task runBehaveTests(type: Exec) {
             )
         }
     }
-    workingDir 'src/ui_tests'
+
+    workingDir 'src/ui_tests/behave'
+    // PIPENV defaults to only two directories down respecting PIPFILE in ancestry.
+    environment "PIPENV_MAX_DEPTH", "10"
     // run behave and output a json file (we'll convert that to Cucumber format later for reporting)
-    commandLine 'pipenv', 'run', 'behave', '--format','json','-o','../../build/bdd/behave.output', '-D', 'chromedriver_path='+(project.properties['chromedriver.path'] ?: "")
+    commandLine 'pipenv', 'run', 'behave', '--format','json','-o','../../../build/bdd/behave.output', '-D', 'chromedriver_path='+(project.properties['chromedriver.path'] ?: "")
 }
 
 // Run a command to convert the Behave json to Cucumber format.
@@ -514,6 +517,21 @@ task deployToTestWindowsLocal(type: Copy) {
 
     doLast {
         sleep 5 * 1000
+    }
+}
+
+task runPerfTests(type:Exec) {
+    workingDir '.'
+
+    //on windows:
+    commandLine 'jmeter.bat', '-n', '-t', 'docs\\50_users_at_once.jmx', '-l', 'test.jtl'
+
+    //store the output instead of printing to the console:
+    standardOutput = new ByteArrayOutputStream()
+
+    //extension method stopTomcat.output() can be used to obtain the output:
+    ext.output = {
+        return standardOutput.toString()
     }
 }
 

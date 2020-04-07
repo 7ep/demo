@@ -48,7 +48,7 @@ public class LibraryBookListSearchServlet extends HttpServlet {
         if (book.isEmpty()) {
             return "No books found with a title of " + title;
         }
-        return String.format("book result: Title: %s, Id: %s ", book.title, book.id);
+        return "[" + book.toOutputString() + "]";
     }
 
     private String searchById(String idString) {
@@ -63,7 +63,7 @@ public class LibraryBookListSearchServlet extends HttpServlet {
         if (book.isEmpty()) {
             return "No books found with an id of " + idString;
         }
-        return String.format("book result: Title: %s, Id: %s ", book.title, book.id);
+        return "[" + book.toOutputString() + "]";
     }
 
     private String listAllBooks() {
@@ -73,7 +73,7 @@ public class LibraryBookListSearchServlet extends HttpServlet {
         if (allBooks.isEmpty()) {
             return "No books exist in the database";
         }
-        return allBooks;
+        return "[" + allBooks + "]";
     }
 
 }
