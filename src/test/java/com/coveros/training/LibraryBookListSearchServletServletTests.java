@@ -78,7 +78,7 @@ public class LibraryBookListSearchServletServletTests {
 
         // verify that the correct redirect was chosen.
         verify(libraryUtils).searchForBookByTitle(A_BOOK);
-        verify(request).setAttribute(LibraryBookListSearchServlet.RESULT, "book result: Title: a book, Id: 1 ");
+        verify(request).setAttribute(LibraryBookListSearchServlet.RESULT, "[{\"Title\": \"a book\", \"Id\": \"1\"}]");
     }
 
     /**

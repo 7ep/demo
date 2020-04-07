@@ -48,7 +48,7 @@ public class LibraryBorrowerListSearchServlet extends HttpServlet {
         if (borrower.isEmpty()) {
             return "No borrowers found with a name of " + name;
         }
-        return String.format("borrower result: Name: %s, Id: %s ", borrower.name, borrower.id);
+        return "["+borrower.toOutputString()+"]";
     }
 
     private String searchById(String idString) {
@@ -63,7 +63,7 @@ public class LibraryBorrowerListSearchServlet extends HttpServlet {
         if (borrower.isEmpty()) {
             return "No borrowers found with an id of " + idString;
         }
-        return String.format("borrower result: Name: %s, Id: %s ", borrower.name, borrower.id);
+        return "["+borrower.toOutputString()+"]";
     }
 
     private String listAllBorrowers() {
@@ -73,7 +73,7 @@ public class LibraryBorrowerListSearchServlet extends HttpServlet {
         if (allBorrowers.isEmpty()) {
             return "No borrowers exist in the database";
         }
-        return allBorrowers;
+        return "["+allBorrowers+"]";
     }
 
 
