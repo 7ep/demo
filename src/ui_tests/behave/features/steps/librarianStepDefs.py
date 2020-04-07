@@ -4,13 +4,15 @@ from hamcrest import *
 URL = 'http://localhost:8080/demo/library.html'
 
 
-@given('a borrower, "{borrower_name}", is registered')
-def step_impl(context, borrower_name):
+@given('a borrower is registered')
+def step_impl(context):
+    borrower_name = "some borrower"
     __register_borrower(context, borrower_name)
     context.my_borrower_name = borrower_name
 
-@given('a book, "{book_title}" is available for borrowing')
-def step_impl(context, book_title):
+@given('a book is available for borrowing')
+def step_impl(context):
+    book_title = "some book"
     __register_book(context, book_title)
     context.my_book_title = book_title
 

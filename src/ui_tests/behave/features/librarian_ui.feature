@@ -9,8 +9,8 @@ Feature: A librarian may lend a book from the library
     # is just to test the UI
 
     Scenario: A registered patron checks out a book
-        Given a borrower, "alice", is registered
-        And a book, "Specification By Example" is available for borrowing
+        Given a borrower is registered
+        And a book is available for borrowing
         When they try to check out the book
         Then the system indicates success
 
