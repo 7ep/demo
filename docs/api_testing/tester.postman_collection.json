@@ -1,0 +1,334 @@
+{
+	"info": {
+		"_postman_id": "70251e20-e7d7-4fad-a126-f85753e54fd7",
+		"name": "tester",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "basic math happy path",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e9f77377-24dc-448a-813b-5529f090fec8",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"8\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/demo/math?item_a=3&item_b=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"demo",
+						"math"
+					],
+					"query": [
+						{
+							"key": "item_a",
+							"value": "3"
+						},
+						{
+							"key": "item_b",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "maximum positive number plus 0",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "74f49090-3e21-4ded-a420-2b944b5cdeb8",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"2147483647\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/demo/math?item_a=2147483647&item_b=0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"demo",
+						"math"
+					],
+					"query": [
+						{
+							"key": "item_a",
+							"value": "2147483647"
+						},
+						{
+							"key": "item_b",
+							"value": "0"
+						}
+					]
+				},
+				"description": "This should return the maximum positive int in a signed 32-bit integer"
+			},
+			"response": []
+		},
+		{
+			"name": "maximum negative number plus 0",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "55b23df5-815a-412f-a613-e1e2b7041c9e",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"-2147483648\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/demo/math?item_a=-2147483648&item_b=0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"demo",
+						"math"
+					],
+					"query": [
+						{
+							"key": "item_a",
+							"value": "-2147483648"
+						},
+						{
+							"key": "item_b",
+							"value": "0"
+						}
+					]
+				},
+				"description": "This should return the maximum positive int in a signed 32-bit integer"
+			},
+			"response": []
+		},
+		{
+			"name": "maximum positive number plus maximum positive number",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b6fea037-956d-44d5-9b54-3c92397ba997",
+						"exec": [
+							"// is this a good test?  do we want to accept negative 2 as an answer?",
+							"// In my opinion, we should assert that some kind of overflor error message has been returned,",
+							"// and change the code to suit that.",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"-2\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/demo/math?item_a=2147483647&item_b=2147483647",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"demo",
+						"math"
+					],
+					"query": [
+						{
+							"key": "item_a",
+							"value": "2147483647"
+						},
+						{
+							"key": "item_b",
+							"value": "2147483647"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "maximum negative number plus maximum negative number",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b9973844-ec4c-420d-ad01-5c5bc80f2a95",
+						"exec": [
+							"// is this a good test?  do we want to accept this as an answer?",
+							"// In my opinion, we should assert that some kind of overflor error message has been returned,",
+							"// and change the code to suit that.",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"2\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/demo/math?item_a=-2147483648 &item_b=-2147483648 ",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"demo",
+						"math"
+					],
+					"query": [
+						{
+							"key": "item_a",
+							"value": "-2147483648 "
+						},
+						{
+							"key": "item_b",
+							"value": "-2147483648 "
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "maximum positive number plus 1 - return error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c89f1166-b079-462f-a1c0-7966aaf6f8fc",
+						"exec": [
+							"// is this a good test?  do we want to accept this as an answer?",
+							"// In my opinion, we should assert that some kind of overflor error message has been returned,",
+							"// and change the code to suit that.",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"-2\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/demo/math?item_a=2147483647&item_b=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"demo",
+						"math"
+					],
+					"query": [
+						{
+							"key": "item_a",
+							"value": "2147483647"
+						},
+						{
+							"key": "item_b",
+							"value": "1"
+						}
+					]
+				},
+				"description": "This should return the maximum negative int in a signed 32-bit integer"
+			},
+			"response": []
+		},
+		{
+			"name": "maximum negative number minus 1 - return error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a77f3bfe-a528-4cdf-8f9d-908a201c64d7",
+						"exec": [
+							"// is this a good test?  do we want to accept this as an answer?",
+							"// In my opinion, we should assert that some kind of overflor error message has been returned,",
+							"// and change the code to suit that.",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"-2\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/demo/math?item_a=-2147483648&item_b=-1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"demo",
+						"math"
+					],
+					"query": [
+						{
+							"key": "item_a",
+							"value": "-2147483648"
+						},
+						{
+							"key": "item_b",
+							"value": "-1"
+						}
+					]
+				},
+				"description": "This should return the maximum positive int in a signed 32-bit integer"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
