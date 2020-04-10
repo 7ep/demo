@@ -63,24 +63,6 @@ function createSearchBox(input_id) {
     return searchbox;
 }
 
-let bookdata;
-let bookrequest = new XMLHttpRequest();
-bookrequest.open("GET", "book", true);
-bookrequest.onreadystatechange = function () {
-  if (bookrequest.readyState != 4 || bookrequest.status != 200) return;
-  bookdata = JSON.parse(bookrequest.responseText).map(book => book.Title);
-};
-bookrequest.send();
-
-let borrowerdata;
-let borrowerrequest = new XMLHttpRequest();
-borrowerrequest.open("GET", "borrower", true);
-borrowerrequest.onreadystatechange = function () {
-  if (borrowerrequest.readyState != 4 || borrowerrequest.status != 200) return;
-  borrowerdata = JSON.parse(borrowerrequest.responseText).map(borrower => borrower.Name);
-};
-borrowerrequest.send();
-
 function addAutoComplete(id, getdata) {
 
     let list = createList(id);
@@ -93,11 +75,16 @@ function addAutoComplete(id, getdata) {
         }
     }
 
-    // if the user clicks outside the searchbox, delete the searchbox
-    element.addEventListener('blur', deleteSearchBox(id));
+    function considerKillingThisModalIfOutsideClick(event) {
+      if (event.target != document.getElementById(id+"searchbox")) {
+        deleteSearchBox(id);
+      }
+    }
 
     // if the user is typing and presses escape, kill the searchbox
     document.addEventListener('keydown', considerRemovingSearchBoxOnPressingEscape);
+    document.addEventListener('click', considerKillingThisModalIfOutsideClick);
+    element.addEventListener('blur', function(event){deleteSearchBox(id)});
 
     function considerAutoComplete(event) {
         if (event.key === "Escape") return;
@@ -138,23 +125,66 @@ function addAutoComplete(id, getdata) {
 
 }
 
-addAutoComplete("lend_book", function() {return bookdata});
-addAutoComplete("lend_borrower", function() {return borrowerdata});
 
 
+function talk(verb, path, data) {
+  return new Promise((resolve, reject) => {
+    let r = new XMLHttpRequest();
+    r.open(verb, path, true);
+    //Send the proper header information along with the request
+    r.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    r.onreadystatechange = function () {
+      if (r.readyState != 4 || r.status != 200) {
+        return;
+      } else {
+          resolve(r.responseText);
+      }
+
+    }
+    r.send(data);
+  });
+}
+
+talk("GET", "book")
+.then(function(v){
+  let bookdata;
+  try {
+    bookdata = JSON.parse(v).map(book => book.Title);  
+  } catch (error) {
+    console.log("unable to parse the following as JSON: " + v);
+  }
+  addAutoComplete("lend_book", function() {return bookdata});    
+});
+
+talk("GET", "borrower")
+.then(function(v) {
+  let borrowerdata;
+  try {
+    borrowerdata = JSON.parse(v).map(borrower => borrower.Name);  
+  } catch (error) {
+    console.log("unable to parse the following as JSON: " + v);
+  }
+  addAutoComplete("lend_borrower", function() {return borrowerdata});
+});
 
 
+/*
+// this should clean the database
+
+talk("GET", "flyway")
+.then(function(v){
+  return talk("POST", "registerborrower", "borrower=alice");
+})
+.then(function(v){
+  return talk("GET", "borrower");  
+})
+.then(function(v){
+  console.assert(v === '[{"Name": "alice", "Id": "1"}]', 'result was ' + v);  
+  return JSON.parse(v).map(borrower => borrower.Name);
+})
+.then(function(v) {console.assert(v[0] === "alice", "result should be alice, was " + v[0])});
+
+*/
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+   
