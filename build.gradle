@@ -524,7 +524,7 @@ task runPerfTests(type:Exec) {
     workingDir '.'
 
     //on windows:
-    commandLine 'jmeter.bat', '-n', '-t', 'docs\\50_users_at_once.jmx', '-l', 'test.jtl'
+    commandLine 'jmeter.bat', '-n', '-t', 'docs\\performance_tesing\\50_users_at_once.jmx', '-l', 'test.jtl'
 
     //store the output instead of printing to the console:
     standardOutput = new ByteArrayOutputStream()
