@@ -3,18 +3,6 @@ function createItemForList(text, input_id) {
     item.setAttribute("data",text);
     item.appendChild(document.createTextNode(text));
 
-    // if the user puts their mouse over it, highlight it
-    item.addEventListener('mouseover', function() {
-      item.style.background = "black";
-      item.style.color = "white";
-    });
-
-    // if the user moves their mouse away, go to default style
-    item.addEventListener('mouseout', function() {
-      item.style.background = "white";
-      item.style.color = "black";
-    });
-
     // if the user clicks, put the value in the input field
     item.addEventListener('click', function(event) {
       let lend_book = document.getElementById(input_id);
@@ -45,21 +33,13 @@ function removeItemFromList(list, text) {
 function createList(input_id) {
     var innerList = document.createElement('ul');
     innerList.setAttribute("id", input_id+"_searchlist");
-    innerList.style.listStyleType="none";
-    innerList.style.margin="0";
-    innerList.style.padding="0";
-
     return innerList;
 }
 
 function createSearchBox(input_id) {
     let searchbox = document.createElement('div');
     searchbox.setAttribute("id", input_id+"_searchbox");
-    searchbox.style.height="auto"
-    searchbox.style.width ="162px"
-    searchbox.style.position = "absolute"
-    searchbox.style.background = "white"
-    searchbox.style.border = "solid 1px"
+    searchbox.setAttribute("class", "searchbox");
     return searchbox;
 }
 
@@ -75,8 +55,27 @@ function addAutoComplete(id, getdata) {
         }
     }
 
+    function handleBlurEvent(event) {
+        // if we tab from this input to another, we'll get a "relatedTarget", and that's
+        // the only situation where we would want to close the searchbox - tabbing to another field.
+        // so if it's null, ignore the blur event.
+        if (event.relatedTarget === null) {
+            return;
+        } else {
+            deleteSearchBox(id);
+        }
+
+    }
+
+    function considerKillingThisModalIfOutsideClick(event) {
+      if (event.target != document.getElementById(id+"searchbox")) {
+        deleteSearchBox(id);
+      }
+    }
+
     document.addEventListener('keydown', considerRemovingSearchBoxOnPressingEscape);
-    element.addEventListener('blur', function(event){deleteSearchBox(id)});
+    document.addEventListener('click', considerKillingThisModalIfOutsideClick);
+    element.addEventListener('blur', handleBlurEvent);
 
     function considerAutoComplete(event) {
         if (event.key === "Escape") return;

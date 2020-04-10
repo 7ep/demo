@@ -18,6 +18,26 @@
     background: #c9d0ce;
    }
 
+   div.searchbox > ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+   }
+
+   div.searchbox {
+    width: 162px;
+    height: auto;
+    position: absolute;
+    background: white;
+    border: solid 1px;
+
+   }
+
+   li:hover {
+    background: black;
+    color: white;
+   }
+
   label {
      font-size: 0.8em;
   }
