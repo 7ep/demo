@@ -15,12 +15,13 @@ software practices.
 Demo consists of a simple web application and tests.  Its goal is to provide 
 an environment suitable for demonstration and practice in valuable development
 techniques.  Some of the techniques exemplified are:
-* Unit tests in TDD style using [Junit](https://junit.org/junit5/) as a driver and [Mockito](https://site.mockito.org/) for mocks, with coverage reports.
-* BDD-style tests using gherkin
+* [Unit](https://github.com/7ep/demo/blob/master/src/test/java/com/coveros/training/persistence/RegistrationUtilsTests.java) [tests](https://github.com/7ep/demo/blob/master/src/test/java/com/coveros/training/persistence/LibraryUtilsTests.java) developed by [TDD](https://en.wikipedia.org/wiki/Test-driven_development) using [Junit](https://junit.org/junit5/) as a driver and [Mockito](https://site.mockito.org/) for mocks, with coverage reports.
+* [UI tests](https://github.com/7ep/demo/blob/master/src/ui_tests/behave/features/librarian_ui.feature) using [multiple frameworks](https://github.com/7ep/demo/tree/master/src/ui_tests)
+* [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) [tests](https://github.com/7ep/demo/blob/master/src/bdd_test/resources/library/check_out_a_book.feature) using gherkin
   * [Cucumber](https://docs.cucumber.io/) tests, with reports
   * [Behave](https://behave.readthedocs.io/en/latest/) UI tests that use [Selenium](https://www.selenium.dev/) web driver.
-* Integration tests that test the [H2 database](https://www.h2database.com/html/main.html)
-* Database versioning, with [Flyway](https://flywaydb.org/)
+* [Integration tests](https://github.com/7ep/demo/blob/master/src/integration_test/java/com/coveros/training/persistence/PersistenceLayerTests.java) that test the [H2 database](https://www.h2database.com/html/main.html)
+* [Database versioning](https://github.com/7ep/demo/blob/master/src/main/resources/db/migration/V2__Rest_of_tables_for_auth_and_library.sql), with [Flyway](https://flywaydb.org/)
 * Security analysis using [DependencyCheck](https://www.owasp.org/index.php/OWASP_Dependency_Check)
 * Hot-swap code with [Gretty](https://github.com/gretty-gradle-plugin/gretty)
 
