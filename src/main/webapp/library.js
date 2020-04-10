@@ -75,15 +75,7 @@ function addAutoComplete(id, getdata) {
         }
     }
 
-    function considerKillingThisModalIfOutsideClick(event) {
-      if (event.target != document.getElementById(id+"searchbox")) {
-        deleteSearchBox(id);
-      }
-    }
-
-    // if the user is typing and presses escape, kill the searchbox
     document.addEventListener('keydown', considerRemovingSearchBoxOnPressingEscape);
-    document.addEventListener('click', considerKillingThisModalIfOutsideClick);
     element.addEventListener('blur', function(event){deleteSearchBox(id)});
 
     function considerAutoComplete(event) {
