@@ -1,18 +1,17 @@
-                    BDD / TDD exercise
-                          v1.0
-                     ==============
+##BDD / TDD exercise v1.0
+
 
 Contents
 --------
 
-The feature file and glue code
-Unit testing and test-driven development (TDD)
-Developing the database code using TDD
-Back to the business layer
-Cycling with the glue code
-The second scenario
-Moving on to the API
-Developing the UI
+- The feature file and glue code
+- Unit testing and test-driven development (TDD)
+- Developing the database code using TDD
+- Back to the business layer
+- Cycling with the glue code
+- The second scenario
+- Moving on to the API
+- Developing the UI
 
 
 
@@ -26,7 +25,7 @@ We want to add a feature, an ability to return a library book.  Here's how that 
 First, the BDD feature file - the user story and scenarios.  The presumption is that the team had a 3 amigos meeting (someone from development, from testing, and from the business) and determined that the feature consisted of the following from conversation, at src/bdd_test/resources/library/return_a_book.feature
 
 
--- FILE STARTS -- 
+
 
 Feature: A librarian may return books that were borrowed
 
@@ -44,12 +43,11 @@ Feature: A librarian may return books that were borrowed
         When I enter that book as returned
         Then I am presented an error about it already being available
 
--- FILE ENDS --
 
 
 This is a good point to commit our work. 
 
-git commit -m "New feature file - returning a book"
+    git commit -m "New feature file - returning a book"
 
 Run the command, gradlew librarybdd, and it complains, because we don't have any glue code (also known as "step definitions") for our feature file.  We're going to fix that soon, but first, open the reports at build/reports/bdd/library/index.html  
 
@@ -86,7 +84,7 @@ It tells us that we have pending and skipped test steps, rather than undefined s
         152 Steps (4 skipped, 2 pending, 146 passed)
         0m4.971s
 
-cucumber.api.PendingException: TODO: implement me
+    cucumber.api.PendingException: TODO: implement me
         at com.coveros.training.ReturnBookStepDefs.a_borrower_had_checked_out_a_book(ReturnBookStepDefs.java:12)
         at ?.a borrower had checked out a book, "The Devops Handbook", (src/bdd_test/resources/com/coveros/training/return_a_book.feature:8)
         ...
@@ -142,6 +140,7 @@ Now, at this point we have implemented one of the steps of the first scenario:
 
 
 Run Cucumber:  
+
         gradlew librarybdd
 
 Review the report again.  Note that the step "Given a borrower had checked out..." is showing as green, indicating that the next step, "When I enter that book.." is next to do.
@@ -195,9 +194,14 @@ What do we want this to return when we run it?  maybe it should return a Library
 
 You will find this adds two new errors highlighted by the IDE.  One is that there is currently nothing being returned from returnBook(), and the other is that there is no such enumeration BOOK_RETURNED.  To fix that:
 
-1) Add a new entry to LibraryActionResults, 
-     BOOK_RETURNED, // successfully returned a book
+1) Add a new entry to LibraryActionResults
+
+
+    BOOK_RETURNED, // successfully returned a book
+     
 2) Go back and make the returnBook method return LibraryActionResults.BOOK_RETURNED
+
+
     public LibraryActionResults returnBook(Book myBook, Date returnDate) {
         return LibraryActionResults.BOOK_RETURNED;
     }
@@ -209,12 +213,12 @@ Now if you run the unit test, it should pass.  This is a good point to commit ou
 
 
 A common mnemonic used with unit testing is right BICEP - standing for: 
-    * Make sure the calculation is "right"
-    * Boundaries
-    * Inverse
-    * Cross-check
-    * Errors
-    * Performance
+* Make sure the calculation is "right"
+* Boundaries
+* Inverse
+* Cross-check
+* Errors
+* Performance
 Let's add a unit test that uses the inverse - a test that we should not return a book if it wasn't loaned.
 
 
@@ -228,7 +232,8 @@ Let's add a unit test that uses the inverse - a test that we should not return a
 We'll need to add another enumeration to LibraryActionResults for this to compile:
 
 
-BOOK_WAS_NOT_LOANED_OUT_WHEN_RETURNED, // someone tried returning a book that wasn't actually loaned out
+    // someone tried returning a book that wasn't actually loaned out
+    BOOK_WAS_NOT_LOANED_OUT_WHEN_RETURNED, 
 
 
 Now we can run the test... and it fails.
@@ -446,7 +451,7 @@ Also, because our returnBook does just one thing - return a book - there isn't a
 
 This doesn't currently compile.  Let's use the IDE to generate these new methods.  Also, like before, create a new RETURN_DATE from the BORROW_DATE.
 
-**** Slow down!  Bumpy road ahead! ****
+###*Slow down!  Bumpy road ahead!*
 
 We're about to hit an inflection point in our process, so we want to reflect on what we've done to now, and what we're about to do.
 
@@ -1066,12 +1071,12 @@ Nonetheless, for the purpose of this exercise we'll be doing it this way.
 
 For the following sections on API and UI, I have to admit, there's a strong pressure to be less disciplined with the TDD approach and jump ahead.  For example, there will usually be similar parts (as exists in Demo), which we can just copy and paste, thereby skipping past the (admittedly sometimes tedious) baby steps forward we've shown up until now.  I'm not saying that you are doing wrong when you give in to this pressure.  In fact I myself do it regularly - when I see a shortcut forward, I often cannot help but take it.  However, for two reasons I want to show this more incremental approach:
 
-    a) For pedagogical reasons, so you can see how TDD can look at API or UI levels
-    b) Despite the above, it really is a bit better to avoid the shortcut and be disciplined, if you can manage it.
+1. For pedagogical reasons, so you can see how TDD can look at API or UI levels
+2. Despite the above, it really is a bit better to avoid the shortcut and be disciplined, if you can manage it.
 
 For example, I wanted to rearrange the directories and rename some things in Demo.  Unable to hold myself back, I just made all the changes at once, first, without running tests - I made a new directory, put many directories in it, renamed several of them, renamed several of the Gradle scripts, and then ran my tests.  
 
-Everything failed.  
+*Everything failed*
 
 I tried for hours to get everything working, and I did make a lot of headway, but ran into a bunch of unexpected dead ends and built up a lot of technical debt in my hurry.  At the end I found myself so much painted into a corner that I just reset everything back to how it was and started again.  It turns out that the old adage, "haste makes waste", is certainly in effect in programming.  
 
@@ -1273,7 +1278,7 @@ At this point there's not a whole lot going on in the UI - in many instances it'
 
 However, it is also often the case that you want to drive UI creation in TDD style.  Since we have a simple UI, we may be able to afford to just do a happy-path case:
 
-in src/ui_tests/features/return_book_ui.feature:
+in src/ui_tests/behave/features/return_book_ui.feature:
 
 
         Feature: A librarian may use the UI to return books that were borrowed
@@ -1398,7 +1403,8 @@ The browser just sent the book to be returned to the application for processing.
 This has been an example of how to piecemeal build up a UI through TDD commands.  Naturally, there will be times when you want to jump ahead, but like previously mentioned, it is better to take your time.  For instance, note how doing it this way we had to give real consideration to how testable to UI was. How the names of elements had to be clear.
 
 Following is one way to include all the UI tests, through Behave (a Python-based BDD testing framework):
-in src/ui_tests/features/steps/returnBookStepDefs.py:
+
+in src/ui_tests/behave/features/steps/returnBookStepDefs.py:
 
 
       from behave import given, when, then
@@ -1514,6 +1520,6 @@ If we are following the practice of leaving the work in a clean state each day s
 
 The best way to think about coding is not that we are writing instructions for the computer to follow.  Rather, it is that we are explaining to a colleague precisely what we want the computer to do.  We emphasize human-to-human communication rather than human-to-computer.
 
-� 2020, Coveros. All rights reserved.
+Copyright 2020, Coveros. All rights reserved.
 
 
