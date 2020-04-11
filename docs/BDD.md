@@ -1,5 +1,5 @@
-# BDD / TDD exercise v1.0
-
+BDD / TDD exercise v1.0
+=======================
 
 Contents
 --------
@@ -18,7 +18,8 @@ Contents
 
 
 
-## The feature file and glue code
+The feature file and glue code
+------------------------------
 
 We want to add a feature, an ability to return a library book.  Here's how that could look.  A quick caveat: This is a simulation of what an entire sprint could entail.  Unlike what we'll see in this exercise, there are many points during the sprint where the team must make decisions and will inevitably run into walls.  Be aware I tried to remove such slowdowns in the name of efficient teaching.
 
@@ -49,7 +50,11 @@ This is a good point to commit our work.
 
     git commit -m "New feature file - returning a book"
 
-Run the command, gradlew librarybdd, and it complains, because we don't have any glue code (also known as "step definitions") for our feature file.  We're going to fix that soon, but first, open the reports at build/reports/bdd/library/index.html  
+Run the command, 
+
+    gradlew librarybdd
+    
+and it complains, because we don't have any glue code (also known as "step definitions") for our feature file.  We're going to fix that soon, but first, open the reports at build/reports/bdd/library/index.html  
 
 Look at the report generated.  It shows the pending feature at the bottom.
 
@@ -167,9 +172,8 @@ The method returnBook doesn't yet exist, which is why the IDE is highlighting it
 
 
 
-## Unit testing and test-driven development (TDD)
-
-
+Unit testing and test-driven development (TDD)
+-----------------------------------------------
 
 Use the IDE to automatically create the method.  It will define a method that returns nothing.  Let's now create a unit test for that method:
 
@@ -219,6 +223,7 @@ A common mnemonic used with unit testing is right BICEP - standing for:
 * Cross-check
 * Errors
 * Performance
+
 Let's add a unit test that uses the inverse - a test that we should not return a book if it wasn't loaned.
 
 
@@ -407,9 +412,8 @@ What should go in those tests?  Should there be more? fewer? different?  Now thi
 
 
 
-## Developing the database code using TDD
-
-
+Developing the database code using TDD
+--------------------------------------
 
 An experienced developer might write something like this 
 
@@ -451,7 +455,7 @@ Also, because our returnBook does just one thing - return a book - there isn't a
 
 This doesn't currently compile.  Let's use the IDE to generate these new methods.  Also, like before, create a new RETURN_DATE from the BORROW_DATE.
 
-### *Slow down!  Bumpy road ahead!*
+  *Slow down!  Bumpy road ahead!*
 
 We're about to hit an inflection point in our process, so we want to reflect on what we've done to now, and what we're about to do.
 
@@ -758,9 +762,8 @@ Time for another commit!
 
 
 
-## Back to the business layer
-
-
+Back to the business layer
+--------------------------
 
 Now that's done, we step up a layer into the unit tests at LibraryUtilsTests.  If we run all our tests again, we see that testShouldNotReturnBookNotLoaned is not passing - because it's calling a method that does nothing except return a hard-coded value.  Let's change that now that we know what's happening at the lower level.
 The implementation at LibraryUtils.returnBook should be more like this:
@@ -849,9 +852,8 @@ git commit -m "adding more documentation on tests"
 
 
 
-## Cycling with the glue code
-
-
+Cycling with the glue code
+--------------------------
 
 Let's go up a level to the BDD tests in return_a_book.feature.  
 
@@ -956,8 +958,8 @@ Time for another commit!
 
 
 
-## The second scenario
-
+The second scenario
+--------------------
 
 Now the first scenario is done.  Most of our work is done - let's take a look at what the second scenario entails.  Following is the filled-out code for the remainder of the glue code:
 
@@ -1056,9 +1058,8 @@ Let's assess where we are at.  We've developed the core functionality of a new f
 
 
 
-## Moving on to the API
-
-
+Moving on to the API
+--------------------
 
 Form follows function - let's move into tests for the API and the UI. 
  
@@ -1267,9 +1268,8 @@ Time for another commit!
 
 
 
-## Developing the UI
-
-
+Developing the UI
+-----------------
 
 Almost everything is done - except the UI.
 
