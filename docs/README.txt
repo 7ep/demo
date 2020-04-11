@@ -10,5 +10,5 @@ Contents of the docs directory
 coveros_text.txt                  : help text with a fancy Coveros ascii graphic (also shown with gradlew coveros).
 desktop_automation.txt            : A guide on automating non-web-applications
 test.py                           : A Python script that shows page object model techniques for web testing.
-BDD.txt                           : A BDD / TDD walkthrough.
+BDD.md                            : A BDD / TDD walkthrough.
 
