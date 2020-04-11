@@ -6,12 +6,12 @@ Contents
 
 - [The feature file and glue code](#the-feature-file-and-glue-code)
 - [Unit testing and test-driven development (TDD)](#unit-testing-and-test-driven-development-tdd)
-- [Developing the database code using TDD](#developing_the_database_code_using_tdd)
-- [Back to the business layer](#back_to_the_business_layer)
-- [Cycling with the glue code](#cycling_with_the_glue_code)
-- [The second scenario](#the_second_scenario)
-- [Moving on to the API](#moving_on_to_the_api)
-- [Developing the UI](#developing_the_ui)
+- [Developing the database code using TDD](#developing-the-database-code-using-tdd)
+- [Back to the business layer](#back-to-the-business-layer)
+- [Cycling with the glue code](#cycling-with-the-glue-code)
+- [The second scenario](#the-second-scenario)
+- [Moving on to the API](#moving-on-to-the-api)
+- [Developing the UI](#developing-the-ui)
 
 
 
