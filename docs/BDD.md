@@ -1,25 +1,25 @@
-## BDD / TDD exercise v1.0
+# BDD / TDD exercise v1.0
 
 
 Contents
 --------
 
-- The feature file and glue code
-- Unit testing and test-driven development (TDD)
-- Developing the database code using TDD
-- Back to the business layer
-- Cycling with the glue code
-- The second scenario
-- Moving on to the API
-- Developing the UI
+- [The feature file and glue code](#the-feature-file-and-glue-code)
+- [Unit testing and test-driven development (TDD)](#unit-testing-and-test-driven-development-(TDD))
+- [Developing the database code using TDD](#Developing_the_database_code_using_TDD)
+- [Back to the business layer](#Back_to_the_business_layer)
+- [Cycling with the glue code](#Cycling_with_the_glue_code)
+- [The second scenario](#The_second_scenario)
+- [Moving on to the API](#Moving_on_to_the_API)
+- [Developing the UI](#Developing_the_UI)
 
 
 
 
 
 
-The feature file and glue code
-------------------------------
+## The feature file and glue code
+
 We want to add a feature, an ability to return a library book.  Here's how that could look.  A quick caveat: This is a simulation of what an entire sprint could entail.  Unlike what we'll see in this exercise, there are many points during the sprint where the team must make decisions and will inevitably run into walls.  Be aware I tried to remove such slowdowns in the name of efficient teaching.
 
 First, the BDD feature file - the user story and scenarios.  The presumption is that the team had a 3 amigos meeting (someone from development, from testing, and from the business) and determined that the feature consisted of the following from conversation, at src/bdd_test/resources/library/return_a_book.feature
@@ -167,8 +167,8 @@ The method returnBook doesn't yet exist, which is why the IDE is highlighting it
 
 
 
-Unit testing and test-driven development (TDD)
-----------------------------------------------
+## Unit testing and test-driven development (TDD)
+
 
 
 Use the IDE to automatically create the method.  It will define a method that returns nothing.  Let's now create a unit test for that method:
@@ -407,8 +407,8 @@ What should go in those tests?  Should there be more? fewer? different?  Now thi
 
 
 
-Developing the database code using TDD
---------------------------------------
+## Developing the database code using TDD
+
 
 
 An experienced developer might write something like this 
@@ -758,8 +758,8 @@ Time for another commit!
 
 
 
-Back to the business layer
---------------------------
+## Back to the business layer
+
 
 
 Now that's done, we step up a layer into the unit tests at LibraryUtilsTests.  If we run all our tests again, we see that testShouldNotReturnBookNotLoaned is not passing - because it's calling a method that does nothing except return a hard-coded value.  Let's change that now that we know what's happening at the lower level.
@@ -849,8 +849,8 @@ git commit -m "adding more documentation on tests"
 
 
 
-Cycling with the glue code
---------------------------
+## Cycling with the glue code
+
 
 
 Let's go up a level to the BDD tests in return_a_book.feature.  
@@ -956,8 +956,7 @@ Time for another commit!
 
 
 
-The second scenario
--------------------
+## The second scenario
 
 
 Now the first scenario is done.  Most of our work is done - let's take a look at what the second scenario entails.  Following is the filled-out code for the remainder of the glue code:
@@ -1057,8 +1056,8 @@ Let's assess where we are at.  We've developed the core functionality of a new f
 
 
 
-Moving on to the API
---------------------
+## Moving on to the API
+
 
 
 Form follows function - let's move into tests for the API and the UI. 
@@ -1268,8 +1267,8 @@ Time for another commit!
 
 
 
-Developing the UI
------------------
+## Developing the UI
+
 
 
 Almost everything is done - except the UI.
