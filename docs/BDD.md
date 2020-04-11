@@ -1,4 +1,4 @@
-##BDD / TDD exercise v1.0
+## BDD / TDD exercise v1.0
 
 
 Contents
@@ -451,7 +451,7 @@ Also, because our returnBook does just one thing - return a book - there isn't a
 
 This doesn't currently compile.  Let's use the IDE to generate these new methods.  Also, like before, create a new RETURN_DATE from the BORROW_DATE.
 
-###*Slow down!  Bumpy road ahead!*
+### *Slow down!  Bumpy road ahead!*
 
 We're about to hit an inflection point in our process, so we want to reflect on what we've done to now, and what we're about to do.
 
