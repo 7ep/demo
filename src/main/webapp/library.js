@@ -102,7 +102,7 @@ function addAutoComplete(id, getdata) {
             list.innerHTML = '';
 
             // add filtered data to the list
-            let filteredList = getdata().filter(text => text.includes(currentContent));
+            let filteredList = getdata().filter(text => text.includes(currentContent)).slice(0,5);
             for (var i = 0; i < filteredList.length; i++) {
                 list.appendChild(createItemForList(filteredList[i], id))
             }
@@ -136,27 +136,28 @@ function talk(verb, path, data) {
   });
 }
 
+let extractData = function(value, extractor) {
+  try {
+    return JSON.parse(value).map(extractor).sort();
+  } catch (error) {
+    console.log("unable to parse the following as JSON: " + value);
+  }
+}
+
+
 talk("GET", "book")
 .then(function(v){
-  let bookdata;
-  try {
-    bookdata = JSON.parse(v).map(book => book.Title);  
-  } catch (error) {
-    console.log("unable to parse the following as JSON: " + v);
-  }
-  addAutoComplete("lend_book", function() {return bookdata});    
+  let bookdata = extractData(v, book => book.Title);
+  addAutoComplete("lend_book", function() {return bookdata});
 });
 
 talk("GET", "borrower")
 .then(function(v) {
-  let borrowerdata;
-  try {
-    borrowerdata = JSON.parse(v).map(borrower => borrower.Name);  
-  } catch (error) {
-    console.log("unable to parse the following as JSON: " + v);
-  }
+  let borrowerdata = extractData(v, borrower => borrower.Name);
   addAutoComplete("lend_borrower", function() {return borrowerdata});
 });
+
+
 
 
 /*
