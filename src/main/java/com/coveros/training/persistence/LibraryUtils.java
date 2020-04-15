@@ -217,4 +217,8 @@ public class LibraryUtils {
     }
 
 
+    public List<Book> listAvailableBooks() {
+        logger.info("received request to list available books");
+        return persistence.listAvailableBooks();
+    }
 }

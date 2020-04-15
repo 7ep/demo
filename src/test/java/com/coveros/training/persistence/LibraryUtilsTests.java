@@ -231,6 +231,12 @@ public class LibraryUtilsTests {
         Assert.assertEquals(borrowers, borrowerList);
     }
 
+    @Test
+    public void testShouldListAvailableBooks() {
+        libraryUtils.listAvailableBooks();
+        Mockito.verify(mockPersistenceLayer).listAvailableBooks();
+    }
+
     /**
      * A helper function to generate a list of books, given a list of titles.
      */

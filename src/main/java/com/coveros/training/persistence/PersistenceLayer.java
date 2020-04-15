@@ -341,6 +341,33 @@ public class PersistenceLayer {
         return runQuery(sqlData);
     }
 
+
+    /**
+     * Returns the entire list of books that are currently available to borrow
+     */
+    public List<Book> listAvailableBooks() {
+        Function<ResultSet, List<Book>> extractor = throwingFunctionWrapper(rs -> {
+            if (rs.next()) {
+                List<Book> bookList = new ArrayList<>();
+                do {
+                    long id = rs.getLong(1);
+                    String title = StringUtils.makeNotNullable(rs.getString(2));
+                    bookList.add(new Book(id, title));
+                } while (rs.next());
+                return bookList;
+            } else {
+                return new ArrayList<>();
+            }
+        });
+
+        final SqlData sqlData =
+                new SqlData<>(
+                        "get all available books",
+                        "SELECT b.id, b.title FROM library.book b LEFT JOIN library.loan l ON b.id = l.book WHERE l.borrow_date IS NULL;",
+                        extractor);
+        return runQuery(sqlData);
+    }
+
     public List<Borrower> listAllBorrowers() {
         Function<ResultSet, List<Borrower>> extractor = throwingFunctionWrapper(rs -> {
             if (rs.next()) {

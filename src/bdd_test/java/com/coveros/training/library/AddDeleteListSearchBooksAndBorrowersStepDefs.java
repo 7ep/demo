@@ -19,6 +19,7 @@ import java.util.List;
 
 import static com.coveros.training.persistence.LibraryUtilsTests.generateListOfBooks;
 import static com.coveros.training.persistence.LibraryUtilsTests.generateListOfBorrowers;
+import static org.junit.Assert.assertEquals;
 
 public class AddDeleteListSearchBooksAndBorrowersStepDefs {
 
@@ -59,7 +60,7 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
 
     @Then("the system has the book registered")
     public void the_system_has_the_book_registered() {
-        Assert.assertEquals(LibraryActionResults.SUCCESS, libraryActionResults);
+        assertEquals(LibraryActionResults.SUCCESS, libraryActionResults);
         Assert.assertTrue(myBook.id > 0);
     }
 
@@ -85,13 +86,13 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
 
     @Then("the system reports an error indicating that the book is already registered")
     public void the_system_reports_an_error_indicating_that_TheBookIsAlreadyRegistered() {
-        Assert.assertEquals(LibraryActionResults.ALREADY_REGISTERED_BOOK, libraryActionResults);
+        assertEquals(LibraryActionResults.ALREADY_REGISTERED_BOOK, libraryActionResults);
     }
 
 
     @Then("the system reports an error indicating that the book cannot be deleted because it was never registered")
     public void theSystemReportsAnErrorIndicatingThatTheBookCannotBeDeletedBecauseItWasNeverRegistered() {
-        Assert.assertEquals(LibraryActionResults.NON_REGISTERED_BOOK_CANNOT_BE_DELETED, libraryActionResults);
+        assertEquals(LibraryActionResults.NON_REGISTERED_BOOK_CANNOT_BE_DELETED, libraryActionResults);
     }
 
     @Given("a borrower, {string}, is not currently registered in the system")
@@ -108,9 +109,9 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
     @Then("the system has the borrower registered")
     public void the_system_has_the_borrower_registered() {
         final Borrower borrower = libraryUtils.searchForBorrowerByName(myBorrowerName);
-        Assert.assertEquals(borrower.name, myBorrowerName);
+        assertEquals(borrower.name, myBorrowerName);
         Assert.assertTrue(borrower.id > 0);
-        Assert.assertEquals(LibraryActionResults.SUCCESS, libraryActionResults);
+        assertEquals(LibraryActionResults.SUCCESS, libraryActionResults);
     }
 
     @Given("a borrower, {string}, is currently registered in the system")
@@ -148,13 +149,13 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
     @Then("the whole list of books is returned")
     public void the_whole_list_of_books_is_returned() {
         final List<Book> expectedBooks = generateListOfBooks(new String[]{"a", "b", "c"});
-        Assert.assertEquals(expectedBooks, allBooks);
+        assertEquals(expectedBooks, allBooks);
     }
 
     @Then("the whole list of borrowers is returned")
     public void the_whole_list_of_borrowers_is_returned() {
         final List<Borrower> expectedBorrowers = generateListOfBorrowers(new String[]{"a", "b", "c"});
-        Assert.assertEquals(expectedBorrowers, allBorrowers);
+        assertEquals(expectedBorrowers, allBorrowers);
     }
 
     @When("a librarian searches by that title")
@@ -164,13 +165,13 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
 
     @Then("the system returns the book's full data")
     public void the_system_returns_the_books_full_data() {
-        Assert.assertEquals(myBookTitle, myBook.title);
+        assertEquals(myBookTitle, myBook.title);
         Assert.assertTrue(myBook.id > 0);
     }
 
     @Then("the system returns the borrower's full data")
     public void the_system_returns_the_borrowers_full_data() {
-        Assert.assertEquals(myBorrowerName, myBorrower.name);
+        assertEquals(myBorrowerName, myBorrower.name);
         Assert.assertTrue(myBorrower.id > 0);
     }
 
@@ -264,12 +265,12 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
 
     @Then("the system reports an error indicating that the borrower is already registered")
     public void the_system_reports_an_error_indicating_that_the_borrower_is_already_registered() {
-        Assert.assertEquals(LibraryActionResults.ALREADY_REGISTERED_BORROWER, libraryActionResults);
+        assertEquals(LibraryActionResults.ALREADY_REGISTERED_BORROWER, libraryActionResults);
     }
 
     @Then("the system reports an error indicating that the borrower cannot be deleted because he or she was never registered")
     public void the_system_reports_an_error_indicating_that_the_borrower_cannot_be_deleted_because_he_or_she_was_never_registered() {
-        Assert.assertEquals(LibraryActionResults.NON_REGISTERED_BORROWER_CANNOT_BE_DELETED, libraryActionResults);
+        assertEquals(LibraryActionResults.NON_REGISTERED_BORROWER_CANNOT_BE_DELETED, libraryActionResults);
     }
 
     @When("a librarian searches by that id")
@@ -319,5 +320,31 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
         libraryUtils.registerBook(myBookTitle);
         libraryUtils.registerBorrower(ALICE);
         libraryUtils.lendBook(bookTitle, ALICE, JAN_1ST);
+    }
+
+    @Given("some books are checked out")
+    public void some_books_are_checked_out() {
+        initializeEmptyDatabaseAndUtility();
+        // register a, b, and c
+        libraryUtils.registerBook("a");
+        libraryUtils.registerBook("b");
+        libraryUtils.registerBook("c");
+        libraryUtils.registerBorrower("someone");
+
+        // loan out b
+        libraryUtils.lendBook("b", "someone", JAN_1ST);
+    }
+
+    @When("a librarian lists the available books")
+    public void a_librarian_lists_the_available_books() {
+        allBooks = libraryUtils.listAvailableBooks();
+    }
+
+    @Then("the system responds with only the available books")
+    public void the_system_responds_with_only_the_available_books() {
+        List<Book> expectedBooks = new ArrayList<>();
+        expectedBooks.add(new Book(1, "a"));
+        expectedBooks.add(new Book(3, "c"));
+        assertEquals(expectedBooks, allBooks);
     }
 }

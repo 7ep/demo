@@ -34,5 +34,10 @@ Feature: Librarians may list and search books
         When a librarian lists all the registered books
         Then the system reports that there are no books in the system
 
+    Scenario: Can obtain a list of available books
+        Given some books are checked out
+        When a librarian lists the available books
+        Then the system responds with only the available books
+
 
 

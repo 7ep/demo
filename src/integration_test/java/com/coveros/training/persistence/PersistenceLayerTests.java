@@ -14,9 +14,11 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 /**
@@ -51,7 +53,7 @@ public class PersistenceLayerTests {
 
         long id = pl.saveNewBorrower(DEFAULT_BORROWER.name);
 
-        Assert.assertEquals("The first row in a database gets an index of 1", 1, id);
+        assertEquals("The first row in a database gets an index of 1", 1, id);
     }
 
     /**
@@ -69,7 +71,7 @@ public class PersistenceLayerTests {
         pl.updateBorrower(1, newName);
 
         String name = pl.getBorrowerName(1);
-        Assert.assertEquals(newName, name);
+        assertEquals(newName, name);
     }
 
     /**
@@ -82,7 +84,7 @@ public class PersistenceLayerTests {
 
         Borrower borrower = pl.searchBorrowerDataByName(DEFAULT_BORROWER.name);
 
-        Assert.assertEquals(DEFAULT_BORROWER, borrower);
+        assertEquals(DEFAULT_BORROWER, borrower);
     }
 
     /**
@@ -95,7 +97,7 @@ public class PersistenceLayerTests {
 
         Book book = pl.searchBooksByTitle(DEFAULT_BOOK.title);
 
-        Assert.assertEquals(expectedBook, book);
+        assertEquals(expectedBook, book);
     }
 
     /**
@@ -110,7 +112,7 @@ public class PersistenceLayerTests {
         // search for it by id
         Book book = pl.searchBooksById(DEFAULT_BOOK.id);
 
-        Assert.assertEquals(expectedBook, book);
+        assertEquals(expectedBook, book);
     }
 
     /**
@@ -122,7 +124,7 @@ public class PersistenceLayerTests {
 
         Borrower borrower = pl.searchBorrowersById(DEFAULT_BORROWER.id);
 
-        Assert.assertEquals(DEFAULT_BORROWER, borrower);
+        assertEquals(DEFAULT_BORROWER, borrower);
     }
 
     @Test
@@ -131,7 +133,7 @@ public class PersistenceLayerTests {
 
         User user = pl.searchForUserByName(DEFAULT_USER.name);
 
-        Assert.assertEquals(DEFAULT_USER, user);
+        assertEquals(DEFAULT_USER, user);
     }
 
     @Test
@@ -151,7 +153,7 @@ public class PersistenceLayerTests {
 
         final long loanId = pl.createLoan(DEFAULT_BOOK, DEFAULT_BORROWER, BORROW_DATE);
 
-        Assert.assertEquals(1, loanId);
+        assertEquals(1, loanId);
     }
 
 
@@ -161,7 +163,7 @@ public class PersistenceLayerTests {
 
         Loan loan = pl.searchForLoanByBook(DEFAULT_BOOK);
 
-        Assert.assertEquals(DEFAULT_LOAN, loan);
+        assertEquals(DEFAULT_LOAN, loan);
     }
 
     @Test
@@ -170,7 +172,7 @@ public class PersistenceLayerTests {
 
         Loan loan = pl.searchForLoanByBorrower(DEFAULT_BORROWER).get(0);
 
-        Assert.assertEquals(DEFAULT_LOAN, loan);
+        assertEquals(DEFAULT_LOAN, loan);
     }
 
     @Test
@@ -179,7 +181,7 @@ public class PersistenceLayerTests {
 
         long id = pl.saveNewUser(DEFAULT_USER.name);
 
-        Assert.assertEquals(DEFAULT_USER.id, id);
+        assertEquals(DEFAULT_USER.id, id);
     }
 
     @Test
@@ -188,7 +190,7 @@ public class PersistenceLayerTests {
 
         long id = pl.saveNewBook(DEFAULT_BOOK.title);
 
-        Assert.assertEquals(DEFAULT_BOOK.id, id);
+        assertEquals(DEFAULT_BOOK.id, id);
     }
 
     @Test
@@ -197,7 +199,7 @@ public class PersistenceLayerTests {
 
         long id = pl.createLoan(DEFAULT_BOOK, DEFAULT_BORROWER, BORROW_DATE);
 
-        Assert.assertEquals(DEFAULT_LOAN.id, id);
+        assertEquals(DEFAULT_LOAN.id, id);
     }
 
     @Test
@@ -227,7 +229,25 @@ public class PersistenceLayerTests {
 
         final List<Book> books = pl.listAllBooks();
 
-        Assert.assertEquals(expectedList, books);
+        assertEquals(expectedList, books);
+    }
+
+    @Test
+    public void testShouldListAvailableBooks() {
+        runRestoreThreeBooksThreeBorrowers();
+        // loan out a book
+        pl.createLoan(pl.searchBooksByTitle("b"), pl.searchBorrowerDataByName("alice"), BORROW_DATE);
+
+        // create expected book list
+        final List<Book> expectedBooks = new ArrayList();
+        expectedBooks.add(new Book(1, "a"));
+        expectedBooks.add(new Book(3, "c"));
+
+        // act
+        final List<Book> books = pl.listAvailableBooks();
+
+        // assert
+        assertEquals(expectedBooks, books);
     }
 
     @Test
@@ -237,7 +257,7 @@ public class PersistenceLayerTests {
 
         final List<Borrower> borrowers = pl.listAllBorrowers();
 
-        Assert.assertEquals(expectedList, borrowers);
+        assertEquals(expectedList, borrowers);
     }
 
     @Test(expected = SqlRuntimeException.class)
@@ -269,7 +289,7 @@ public class PersistenceLayerTests {
 
         final String borrowerName = persistenceLayer.getBorrowerName(1);
 
-        Assert.assertEquals("", borrowerName);
+        assertEquals("", borrowerName);
     }
 
     /**
@@ -301,7 +321,7 @@ public class PersistenceLayerTests {
      * This can be run here, simply put @Test on top.
      */
     public void runBackup() {
-        pl.runBackup("v2_one_loan.sql");
+        pl.runBackup("v2_three_books_three_borrowers.sql");
     }
 
     /**
@@ -324,6 +344,13 @@ public class PersistenceLayerTests {
 
     private void runRestoreOneLoan() {
         runRestore("v2_one_loan.sql");
+    }
+
+    /**
+     * This backup has books: a, b, and c.  The borrowers are alice, bob, and carol
+     */
+    private void runRestoreThreeBooksThreeBorrowers() {
+        runRestore("v2_three_books_three_borrowers.sql");
     }
 
     private void runRestore(String scriptName) {
