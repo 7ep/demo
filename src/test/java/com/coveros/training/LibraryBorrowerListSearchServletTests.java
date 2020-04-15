@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import static org.mockito.Mockito.*;
 
-public class LibraryBorrowerListSearchServletServletTests {
+public class LibraryBorrowerListSearchServletTests {
 
     private static final String A_BORROWER = "abe borrower";
     private static final Borrower DEFAULT_BORROWER = new Borrower(1, A_BORROWER);

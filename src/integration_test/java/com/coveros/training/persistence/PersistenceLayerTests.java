@@ -239,8 +239,49 @@ public class PersistenceLayerTests {
         pl.createLoan(pl.searchBooksByTitle("b"), pl.searchBorrowerDataByName("alice"), BORROW_DATE);
 
         // create expected book list
-        final List<Book> expectedBooks = new ArrayList();
+        final List<Book> expectedBooks = new ArrayList<>();
         expectedBooks.add(new Book(1, "a"));
+        expectedBooks.add(new Book(3, "c"));
+
+        // act
+        final List<Book> books = pl.listAvailableBooks();
+
+        // assert
+        assertEquals(expectedBooks, books);
+    }
+
+
+    /**
+     * If you check them all out - you'll get nothing in the available list.
+     */
+    @Test
+    public void testShouldListNoAvailableBooksIfAllCheckedOut() {
+        runRestoreThreeBooksThreeBorrowers();
+        // loan out a book
+        pl.createLoan(pl.searchBooksByTitle("a"), pl.searchBorrowerDataByName("alice"), BORROW_DATE);
+        pl.createLoan(pl.searchBooksByTitle("b"), pl.searchBorrowerDataByName("alice"), BORROW_DATE);
+        pl.createLoan(pl.searchBooksByTitle("c"), pl.searchBorrowerDataByName("alice"), BORROW_DATE);
+
+        // create expected book list
+        final List<Book> expectedBooks = new ArrayList<>();
+
+        // act
+        final List<Book> books = pl.listAvailableBooks();
+
+        // assert
+        assertEquals(expectedBooks, books);
+    }
+
+    /**
+     * If none are checked out - you'll get everything in the available list.
+     */
+    @Test
+    public void testShouldListAllBooksIfNoneCheckedOut() {
+        runRestoreThreeBooksThreeBorrowers();
+        // create expected book list
+        final List<Book> expectedBooks = new ArrayList<>();
+        expectedBooks.add(new Book(1, "a"));
+        expectedBooks.add(new Book(2, "b"));
         expectedBooks.add(new Book(3, "c"));
 
         // act
