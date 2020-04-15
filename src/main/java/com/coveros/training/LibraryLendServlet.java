@@ -22,10 +22,10 @@ public class LibraryLendServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         LibraryActionResults libraryActionResults;
 
-        final String book = request.getParameter("book");
+        final String book = StringUtils.makeNotNullable(request.getParameter("book"));
         request.setAttribute("book", book);
 
-        final String borrower = request.getParameter("borrower");
+        final String borrower = StringUtils.makeNotNullable(request.getParameter("borrower"));
         request.setAttribute("borrower", borrower);
 
         if (book.isEmpty()) {

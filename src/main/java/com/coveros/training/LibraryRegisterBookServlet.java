@@ -18,7 +18,7 @@ public class LibraryRegisterBookServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        final String book = request.getParameter("book");
+        final String book = StringUtils.makeNotNullable(request.getParameter("book"));
         LibraryActionResults libraryActionResults;
 
         if (book.isEmpty()) {

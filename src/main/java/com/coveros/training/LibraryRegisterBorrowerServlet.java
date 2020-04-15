@@ -18,7 +18,7 @@ public class LibraryRegisterBorrowerServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        final String borrower = request.getParameter("borrower");
+        final String borrower = StringUtils.makeNotNullable(request.getParameter("borrower"));
         LibraryActionResults libraryActionResults;
 
         if (borrower.isEmpty()) {

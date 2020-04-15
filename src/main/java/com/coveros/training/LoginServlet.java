@@ -17,10 +17,10 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        String username = request.getParameter("username");
+        String username = StringUtils.makeNotNullable(request.getParameter("username"));
         request.setAttribute("username", username);
 
-        String password = request.getParameter("password");
+        String password = StringUtils.makeNotNullable(request.getParameter("password"));
         request.setAttribute("password", password);
 
         String responseText;

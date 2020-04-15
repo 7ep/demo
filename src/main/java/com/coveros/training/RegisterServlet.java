@@ -20,10 +20,10 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        String username = request.getParameter(USERNAME_PARAM);
+        String username = StringUtils.makeNotNullable(request.getParameter(USERNAME_PARAM));
         request.setAttribute(USERNAME_PARAM, username);
 
-        String password = request.getParameter(PASSWORD_PARAM);
+        String password = StringUtils.makeNotNullable(request.getParameter(PASSWORD_PARAM));
         request.setAttribute(PASSWORD_PARAM, password);
 
         String responseText;
