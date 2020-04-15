@@ -56,6 +56,9 @@ function createSearchBox(input_id) {
     return searchbox;
 }
 
+/**
+  * Add a dropdown, a <select> to choose amongst the available books.
+  */
 function addDropdown(id, getdata) {
     let element = document.getElementById(id);
     let nameOfElement = element.getAttribute("name");
@@ -232,7 +235,7 @@ let extractData = function(value, extractor) {
 }
 
 // Add an autocomplete to the book input for lending
-talk("GET", "book")
+talk("GET", "listavailable")
 .then(function(v){
   betterUserExperienceForInput(v, book => book.Title, "lend_book");
 });
