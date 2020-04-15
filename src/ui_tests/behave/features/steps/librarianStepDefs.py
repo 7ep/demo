@@ -51,10 +51,8 @@ def __lend_book(context, my_borrower_name, my_book_title):
     driver = context.driver
     driver.get(URL)
     book = driver.find_element_by_id("lend_book")
-    book.clear()
     book.send_keys(my_book_title)
     borrower = driver.find_element_by_id("lend_borrower")
-    borrower.clear()
     borrower.send_keys(my_borrower_name)
     submit_button = driver.find_element_by_id("lend_book_submit")
     submit_button.click()
