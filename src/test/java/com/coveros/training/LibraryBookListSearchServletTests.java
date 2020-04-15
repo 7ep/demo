@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import static org.mockito.Mockito.*;
 
-public class LibraryBookListSearchServletServletTests {
+public class LibraryBookListSearchServletTests {
 
     public static final String A_BOOK = "a book";
     public static final Book DEFAULT_BOOK = new Book(1, A_BOOK);
