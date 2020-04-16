@@ -64,7 +64,7 @@ apply from: "$rootDir/gradle/cucumber_bdd_tests.gradle"
 apply from: "$rootDir/gradle/remote_actions.gradle"
 
 // including our script plugin for running Selenified
-apply from: "$rootDir/gradle/selenified_tests.gradle"
+//apply from: "$rootDir/gradle/selenified_tests.gradle"
 
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked"
@@ -218,7 +218,7 @@ sonarqube {
         property "sonar.sources", "src/main/java"
         property "sonar.tests", "src/test/java,src/integration_test/java,src/bdd_test/java"
         property "sonar.java.binaries", "build/classes/java/main"
-        property "sonar.junit.reportPaths", "build/test-results/test/,build/test-results/fastIntegrationTest"
+        property "sonar.junit.reportPaths", "build/test-results/test/,build/test-results/integrate"
         property "sonar.coverage.jacoco.xmlReportPaths", "build/jacoco/jacoco.xml"
     }
 }
@@ -347,6 +347,33 @@ static void checkIfAlive() {
     }
     if (code != 200) {
         throw new Exception("\n\nServer is not returning a 200.  Instead, it is: " +code + "\n\n")
+    }
+}
+
+task checkQualityGate() {
+    doLast {
+        isQualityGateGood()
+    }
+}
+
+// throws an exception if the quality gate fails.
+static void isQualityGateGood() {
+    URL url = new URL("http://localhost:9000/api/qualitygates/project_status?projectKey=Demo")
+    HttpURLConnection connection = (HttpURLConnection) url.openConnection()
+    connection.setRequestMethod("GET")
+    connection.connect()
+    int code = connection.getResponseCode()
+    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()))
+    String strCurrentLine
+    while ((strCurrentLine = br.readLine()) != null) {
+        // ha ha no need to parse JSON!
+        print(strCurrentLine)
+        if (strCurrentLine.startsWith("{\"projectStatus\":{\"status\":\"ERROR\"")) {
+            throw new GradleException("The quality gate for Demo on Sonarqube failed.  Check Sonarqube.")
+        }
+    }
+    if (code != 200) {
+        throw new GradleException("response from Sonar was " + code)
     }
 }
 
