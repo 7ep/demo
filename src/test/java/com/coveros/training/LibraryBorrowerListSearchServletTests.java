@@ -11,6 +11,9 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.Arrays;
+
+import static com.coveros.training.LibraryBorrowerListSearchServlet.RESULT;
 import static org.mockito.Mockito.*;
 
 public class LibraryBorrowerListSearchServletTests {
@@ -34,16 +37,32 @@ public class LibraryBorrowerListSearchServletTests {
 
     /**
      * If we don't pass a name or an id, we'll get a list of all borrowers
+     * But what do we get if there aren't any?
      */
     @Test
-    public void testListAllBorrowers() {
+    public void testListAllBorrowers_noBorrowersExist() {
         when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
 
         // act
         libraryBorrowerListSearchServlet.doGet(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(libraryUtils).listAllBorrowers();
+        verify(request).setAttribute(RESULT, "No borrowers exist in the database");
+    }
+
+
+    /**
+     * If we don't pass a name or an id, we'll get a list of all borrowers
+     */
+    @Test
+    public void testListAllBorrowers() {
+        when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
+        when(libraryUtils.listAllBorrowers()).thenReturn(Arrays.asList(DEFAULT_BORROWER));
+        // act
+        libraryBorrowerListSearchServlet.doGet(request, response);
+
+        // verify that the correct redirect was chosen.
+        verify(request).setAttribute(RESULT, "[{\"Name\": \"abe borrower\", \"Id\": \"1\"}]");
     }
 
     /**
@@ -64,10 +83,10 @@ public class LibraryBorrowerListSearchServletTests {
     }
 
     /**
-     * If we pass a name, we'll get a particular borrower
+     * If we pass a name, and the borrower isn't found
      */
     @Test
-    public void testSearchByName() {
+    public void testSearchByNameNotFound() {
         when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
         when(request.getParameter("name")).thenReturn(A_BORROWER);
         // the following is just to avoid a null pointer exception when the test succeeds
@@ -78,6 +97,23 @@ public class LibraryBorrowerListSearchServletTests {
 
         // verify that the correct redirect was chosen.
         verify(libraryUtils).searchForBorrowerByName(A_BORROWER);
+    }
+
+    /**
+     * If we pass a name, we'll get a particular borrower
+     */
+    @Test
+    public void testSearchByName() {
+        when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
+        when(request.getParameter("name")).thenReturn(A_BORROWER);
+        // the following is just to avoid a null pointer exception when the test succeeds
+        when(libraryUtils.searchForBorrowerByName(A_BORROWER)).thenReturn(DEFAULT_BORROWER);
+
+        // act
+        libraryBorrowerListSearchServlet.doGet(request, response);
+
+        // verify that the correct redirect was chosen.
+        verify(request).setAttribute(RESULT, "[{\"Name\": \"abe borrower\", \"Id\": \"1\"}]");
     }
 
 
@@ -94,7 +130,7 @@ public class LibraryBorrowerListSearchServletTests {
         libraryBorrowerListSearchServlet.doGet(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(request).setAttribute(LibraryBorrowerListSearchServlet.RESULT, "No borrowers exist in the database");
+        verify(request).setAttribute(RESULT, "No borrowers exist in the database");
     }
 
     /**
@@ -111,7 +147,44 @@ public class LibraryBorrowerListSearchServletTests {
         libraryBorrowerListSearchServlet.doGet(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(request).setAttribute(LibraryBorrowerListSearchServlet.RESULT, "No borrowers found with an id of 1");
+        verify(request).setAttribute(RESULT, "No borrowers found with an id of 1");
+    }
+
+
+    /**
+     * If borrower found by id
+     */
+    @Test
+    public void testSearchBorrowerFoundById() {
+        when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
+        when(request.getParameter("id")).thenReturn("1");
+        // the following is just to avoid a null pointer exception when the test succeeds
+        when(libraryUtils.searchForBorrowerById(1)).thenReturn(DEFAULT_BORROWER);
+
+        // act
+        libraryBorrowerListSearchServlet.doGet(request, response);
+
+        // verify that the correct redirect was chosen.
+        verify(request).setAttribute(RESULT, "[{\"Name\": \"abe borrower\", \"Id\": \"1\"}]");
+    }
+
+
+    /**
+     * If the id isn't a number
+     */
+    @Test
+    public void testSearchByBadId() {
+        when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
+        // a is not a valid id
+        when(request.getParameter("id")).thenReturn("a");
+        // the following is just to avoid a null pointer exception when the test succeeds
+        when(libraryUtils.searchForBorrowerById(1)).thenReturn(DEFAULT_BORROWER);
+
+        // act
+        libraryBorrowerListSearchServlet.doGet(request, response);
+
+        // verify that the correct redirect was chosen.
+        verify(request).setAttribute(RESULT, "Error: could not parse the borrower id as an integer");
     }
 
     /**
@@ -129,7 +202,7 @@ public class LibraryBorrowerListSearchServletTests {
 
         // verify that the correct redirect was chosen.
         verify(libraryUtils).searchForBorrowerByName(A_BORROWER);
-        verify(request).setAttribute(LibraryBorrowerListSearchServlet.RESULT, "No borrowers found with a name of " + A_BORROWER);
+        verify(request).setAttribute(RESULT, "No borrowers found with a name of " + A_BORROWER);
     }
 
     /**
@@ -145,7 +218,7 @@ public class LibraryBorrowerListSearchServletTests {
         libraryBorrowerListSearchServlet.doGet(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(request).setAttribute(LibraryBorrowerListSearchServlet.RESULT, "Error: please search by either name or id, not both");
+        verify(request).setAttribute(RESULT, "Error: please search by either name or id, not both");
     }
 
 }
