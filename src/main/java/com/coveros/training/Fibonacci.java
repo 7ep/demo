@@ -3,7 +3,7 @@ package com.coveros.training;
 public class Fibonacci {
 
     private Fibonacci() {
-        throw new IllegalStateException("Utility class");
+        // static utility class.  Do not construct.
     }
 
     public static long calculate(long n) {

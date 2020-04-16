@@ -11,6 +11,9 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.Arrays;
+
+import static com.coveros.training.LibraryBookListSearchServlet.RESULT;
 import static org.mockito.Mockito.*;
 
 public class LibraryBookListSearchServletTests {
@@ -38,12 +41,45 @@ public class LibraryBookListSearchServletTests {
     @Test
     public void testListAllBooks() {
         when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
+        when(libraryUtils.listAllBooks()).thenReturn(Arrays.asList(DEFAULT_BOOK));
+        // act
+        libraryBookListSearchServlet.doGet(request, response);
+
+        // verify that the correct redirect was chosen.
+        verify(request).setAttribute(RESULT, "[{\"Title\": \"a book\", \"Id\": \"1\"}]");
+    }
+
+    /**
+     * If we don't pass a title or an id, we'll get a list of all books
+     * this tests when the database is empty of books
+     */
+    @Test
+    public void testListAllBooks_NoBooksInDatabase() {
+        when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
 
         // act
         libraryBookListSearchServlet.doGet(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(libraryUtils).listAllBooks();
+        verify(request).setAttribute(RESULT, "No books exist in the database");
+    }
+
+    /**
+     * If we pass an id, we'll get a particular book
+     * testing for when there's no books found by that id
+     */
+    @Test
+    public void testSearchById_noBookFound() {
+        when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
+        when(request.getParameter("id")).thenReturn("1");
+        // the following is just to avoid a null pointer exception when the test succeeds
+        when(libraryUtils.searchForBookById(1)).thenReturn(Book.createEmpty());
+
+        // act
+        libraryBookListSearchServlet.doGet(request, response);
+
+        // verify that the correct redirect was chosen.
+        verify(request).setAttribute(RESULT, "No books found with an id of 1");
     }
 
     /**
@@ -54,13 +90,13 @@ public class LibraryBookListSearchServletTests {
         when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
         when(request.getParameter("id")).thenReturn("1");
         // the following is just to avoid a null pointer exception when the test succeeds
-        when(libraryUtils.searchForBookById(1)).thenReturn(Book.createEmpty());
+        when(libraryUtils.searchForBookById(1)).thenReturn(DEFAULT_BOOK);
 
         // act
         libraryBookListSearchServlet.doGet(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(libraryUtils).searchForBookById(1);
+        verify(request).setAttribute(RESULT, "[{\"Title\": \"a book\", \"Id\": \"1\"}]");
     }
 
     /**
@@ -78,7 +114,7 @@ public class LibraryBookListSearchServletTests {
 
         // verify that the correct redirect was chosen.
         verify(libraryUtils).searchForBookByTitle(A_BOOK);
-        verify(request).setAttribute(LibraryBookListSearchServlet.RESULT, "[{\"Title\": \"a book\", \"Id\": \"1\"}]");
+        verify(request).setAttribute(RESULT, "[{\"Title\": \"a book\", \"Id\": \"1\"}]");
     }
 
     /**
@@ -94,7 +130,7 @@ public class LibraryBookListSearchServletTests {
         libraryBookListSearchServlet.doGet(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(request).setAttribute(LibraryBookListSearchServlet.RESULT, "No books exist in the database");
+        verify(request).setAttribute(RESULT, "No books exist in the database");
     }
 
     /**
@@ -111,7 +147,7 @@ public class LibraryBookListSearchServletTests {
         libraryBookListSearchServlet.doGet(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(request).setAttribute(LibraryBookListSearchServlet.RESULT, "No books found with an id of 1");
+        verify(request).setAttribute(RESULT, "No books found with an id of 1");
     }
 
     /**
@@ -129,7 +165,7 @@ public class LibraryBookListSearchServletTests {
 
         // verify that the correct redirect was chosen.
         verify(libraryUtils).searchForBookByTitle(A_BOOK);
-        verify(request).setAttribute(LibraryBookListSearchServlet.RESULT, "No books found with a title of " + A_BOOK);
+        verify(request).setAttribute(RESULT, "No books found with a title of " + A_BOOK);
     }
 
     /**
@@ -145,7 +181,7 @@ public class LibraryBookListSearchServletTests {
         libraryBookListSearchServlet.doGet(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(request).setAttribute(LibraryBookListSearchServlet.RESULT, "Error: please search by either title or id, not both");
+        verify(request).setAttribute(RESULT, "Error: please search by either title or id, not both");
     }
 
 }

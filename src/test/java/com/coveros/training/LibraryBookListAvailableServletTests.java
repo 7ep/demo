@@ -10,6 +10,9 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.Arrays;
+
+import static com.coveros.training.LibraryBookListAvailableServlet.RESULT;
 import static org.mockito.Mockito.*;
 
 public class LibraryBookListAvailableServletTests {
@@ -35,14 +38,46 @@ public class LibraryBookListAvailableServletTests {
      * If we don't pass a title or an id, we'll get a list of all books
      */
     @Test
-    public void testListAvailableBooks() {
+    public void testListAvailableBooks_OneBook() {
+        when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
+        when(libraryUtils.listAvailableBooks()).thenReturn(Arrays.asList(DEFAULT_BOOK));
+
+        // act
+        libraryBookListAvailableServlet.doGet(request, response);
+
+        // verify that the correct redirect was chosen.
+        verify(request).setAttribute(RESULT, "[{\"Title\": \"a book\", \"Id\": \"1\"}]");
+    }
+
+    /**
+     * If we don't pass a title or an id, we'll get a list of all books
+     */
+    @Test
+    public void testListAvailableBooks_MultipleBook() {
+        when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
+        when(libraryUtils.listAvailableBooks()).thenReturn(Arrays.asList(DEFAULT_BOOK, DEFAULT_BOOK, DEFAULT_BOOK));
+
+        // act
+        libraryBookListAvailableServlet.doGet(request, response);
+
+        // verify that the correct redirect was chosen.
+        verify(request).setAttribute(RESULT, "[{\"Title\": \"a book\", \"Id\": \"1\"},{\"Title\": \"a book\", \"Id\": \"1\"},{\"Title\": \"a book\", \"Id\": \"1\"}]");
+    }
+
+
+    /**
+     * If we don't pass a title or an id, we'll get a list of all books
+     * This tests what happens if there's no books in the database
+     */
+    @Test
+    public void testListAvailableBooks_EmptyList() {
         when(request.getRequestDispatcher(ServletUtils.RESTFUL_RESULT_JSP)).thenReturn(requestDispatcher);
 
         // act
         libraryBookListAvailableServlet.doGet(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(libraryUtils).listAvailableBooks();
+        verify(request).setAttribute(RESULT, "No books exist in the database");
     }
 
     /**
@@ -58,7 +93,7 @@ public class LibraryBookListAvailableServletTests {
         libraryBookListAvailableServlet.doGet(request, response);
 
         // verify that the correct redirect was chosen.
-        verify(request).setAttribute(LibraryBookListAvailableServlet.RESULT, "No books exist in the database");
+        verify(request).setAttribute(RESULT, "No books exist in the database");
     }
 
 
