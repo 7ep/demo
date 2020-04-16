@@ -246,6 +246,20 @@ talk("GET", "borrower")
     betterUserExperienceForInput(v, borrower => borrower.Name, "lend_borrower");
 });
 
+/**
+  * Adding this to an input field will provide a better UX experience
+  * in certain cases.
+  *
+  * This is used on the "lend book" fields, to provide a better experience.
+  * specifically, if there are no values to select from on a field, lock
+  * the field.  If there are between 1 and 9 values, create a dropdown.
+  * otherwise, create an autocommplete mechanism - as the user types values,
+  * a searchbox below the input is populated with potential values that fit.
+  *
+  * @param v data received from XHR in JSON format
+  * @param extractor a lambda used in a map across JSON elements to extract a string per item
+  * @param the id to a particular text input on the page
+  */
 function betterUserExperienceForInput(v, extractor, input_id) {
   let receivedData = extractData(v, extractor);
   if (receivedData == null) {
