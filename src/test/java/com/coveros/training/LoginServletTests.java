@@ -40,6 +40,21 @@ public class LoginServletTests {
     }
 
     /**
+     * If a particular username and password are not registered, login will fail.  access denied.
+     */
+    @Test
+    public void testShouldGetAccessDeniedIfUserNotRegistered() {
+        when(request.getRequestDispatcher(ServletUtils.RESULT_JSP)).thenReturn(requestDispatcher);
+        when(request.getParameter("username")).thenReturn("alice");
+        when(request.getParameter("password")).thenReturn("abc123");
+        when(LoginServlet.loginUtils.isUserRegistered("alice", "abc1234")).thenReturn(true);
+
+        loginServlet.doPost(request, response);
+
+        Mockito.verify(request).setAttribute("result", "access denied");
+    }
+
+    /**
      * If they pass in an empty string, it should return a message
      * indicating that.
      */
