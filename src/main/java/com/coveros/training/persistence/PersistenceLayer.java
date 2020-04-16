@@ -319,33 +319,17 @@ public class PersistenceLayer {
     }
 
     public List<Book> listAllBooks() {
-        Function<ResultSet, List<Book>> extractor = throwingFunctionWrapper(rs -> {
-            if (rs.next()) {
-                List<Book> bookList = new ArrayList<>();
-                do {
-                    long id = rs.getLong(1);
-                    String title = StringUtils.makeNotNullable(rs.getString(2));
-                    bookList.add(new Book(id, title));
-                } while (rs.next());
-                return bookList;
-            } else {
-                return new ArrayList<>();
-            }
-        });
-
-        final SqlData sqlData =
-                new SqlData<>(
-                        "get all books",
-                        "SELECT id, title FROM library.book;",
-                        extractor);
-        return runQuery(sqlData);
+        return listBooks("get all books", "SELECT id, title FROM library.book;");
     }
-
 
     /**
      * Returns the entire list of books that are currently available to borrow
      */
     public List<Book> listAvailableBooks() {
+        return listBooks("get all available books", "SELECT b.id, b.title FROM library.book b LEFT JOIN library.loan l ON b.id = l.book WHERE l.borrow_date IS NULL;");
+    }
+
+    private List<Book> listBooks(String description, String sqlCode) {
         Function<ResultSet, List<Book>> extractor = throwingFunctionWrapper(rs -> {
             if (rs.next()) {
                 List<Book> bookList = new ArrayList<>();
@@ -362,8 +346,8 @@ public class PersistenceLayer {
 
         final SqlData sqlData =
                 new SqlData<>(
-                        "get all available books",
-                        "SELECT b.id, b.title FROM library.book b LEFT JOIN library.loan l ON b.id = l.book WHERE l.borrow_date IS NULL;",
+                        description,
+                        sqlCode,
                         extractor);
         return runQuery(sqlData);
     }
