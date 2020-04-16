@@ -137,7 +137,9 @@ dependencies {
 }
 
 pitest {
-    targetClasses = ['com.coveros.training.*']  //by default "${project.group}.*"
+    targetClasses =
+            ['com.coveros.training.RegisterServlet', 'com.coveros.training.RegisterServletTests',
+            'com.coveros.training.LibraryUtils', 'com.coveros.training.LibraryUtilsTests']  //by default "${project.group}.*"
     threads = 4
     outputFormats = ['XML', 'HTML']
     timestampedReports = false
