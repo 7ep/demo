@@ -30,10 +30,14 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
     implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.12.1'
 
+    // following is used to make API calls during our tests.
+    // see https://hc.apache.org/httpcomponents-client-4.5.x/fluent-hc/dependency-info.html
+    implementation 'org.apache.httpcomponents:fluent-hc:4.5.12'
+
     // HtmlUnit is a browser that is controlled directly by Java.  It has no UI, and
     // runs really, *really* fast.
     // https://mvnrepository.com/artifact/net.sourceforge.htmlunit/htmlunit
-    compile group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.39.1'
+    implementation group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.39.1'
 
 }
 
