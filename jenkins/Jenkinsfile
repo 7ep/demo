@@ -92,7 +92,7 @@ pipeline {
 
     stage('UI Tests') {
         steps {
-            sh 'cd src/ui_tests/java && ./gradlew test'
+            sh 'cd src/ui_tests/java && ./gradlew clean test'
         }
         post {
             always {
