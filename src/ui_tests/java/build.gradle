@@ -17,8 +17,24 @@ dependencies {
     // junit, for running unit tests
     testImplementation 'junit:junit:4.12'
 
+    // Selenium - used for testing commonly-used browsers
     // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
     testImplementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.0.0-alpha-5'
+
+    // a logging framework, so it becomes easily possible to see what is happening
+    // in our code in realtime.
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.12.1'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.1'
+
+    // The following gives us the ability to use slf4j api calls.
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.12.1'
+
+    // HtmlUnit is a browser that is controlled directly by Java.  It has no UI, and
+    // runs really, *really* fast.
+    // https://mvnrepository.com/artifact/net.sourceforge.htmlunit/htmlunit
+    compile group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.39.1'
+
 }
 
 // more info on test logging: https://discuss.gradle.org/t/whats-upcoming-in-gradle-1-1-test-logging/7741
