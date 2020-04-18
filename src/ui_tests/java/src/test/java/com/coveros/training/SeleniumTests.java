@@ -1,9 +1,8 @@
 package com.coveros.training;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -11,15 +10,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class SeleniumTests {
-    private WebDriver driver;
+    private static WebDriver driver;
 
-    @Before
-    public void setUp() {
+    @BeforeClass
+    public static void setUp() {
         driver = new ChromeDriver();
     }
 
-    @After
-    public void tearDown() {
+    @AfterClass
+    public static void tearDown() {
         driver.quit();
     }
 
@@ -41,6 +40,89 @@ public class SeleniumTests {
         driver.findElement(By.linkText("Return")).click();
         driver.findElement(By.id("lend_book")).sendKeys("some book");
         driver.findElement(By.id("lend_borrower")).sendKeys("some borrower");
+        driver.findElement(By.id("lend_book_submit")).click();
+        final String result = driver.findElement(By.id("result")).getText();
+        assertEquals("SUCCESS", result);
+    }
+
+    /**
+     * In this case, we're adding no books, so we shouldn't
+     * be able to interact with this, it should throw ane exception
+     *
+     * more detail:
+     * Under lending, books and borrowers inputs have three modes.
+     * a) if no books/borrowers, lock the input
+     * b) If 1 - 9, show a dropdown
+     * c) If 10 and up, show an autocomplete
+     */
+    @Test(expected = org.openqa.selenium.ElementNotInteractableException.class)
+    public void test_shouldShowLockedInput() {
+        // clear the database...
+        driver.get("http://localhost:8080/demo/flyway");
+
+        driver.get("http://localhost:8080/demo/library.html");
+        driver.findElement(By.id("lend_book")).sendKeys("some book");
+    }
+
+    /**
+     * In this case, we have one book and one borrower,
+     * so we should get a dropdown
+     *
+     * more detail:
+     * Under lending, books and borrowers inputs have three modes.
+     * a) if no books/borrowers, lock the input
+     * b) If 1 - 9, show a dropdown
+     * c) If 10 and up, show an autocomplete
+     */
+    @Test
+    public void test_shouldShowDropdowns() {
+        // clear the database...
+        driver.get("http://localhost:8080/demo/flyway");
+        ApiCalls.registerBook("some book");
+        ApiCalls.registerBorrowers("some borrower");
+
+        driver.get("http://localhost:8080/demo/library.html");
+
+        // using the arrow keys to select an element is a very "dropdown" kind of behavior.
+        driver.findElement(By.id("lend_book")).sendKeys(Keys.ARROW_UP);
+        driver.findElement(By.id("lend_borrower")).sendKeys(Keys.ARROW_UP);
+        driver.findElement(By.id("lend_book_submit")).click();
+        final String result = driver.findElement(By.id("result")).getText();
+        assertEquals("SUCCESS", result);
+    }
+
+    /**
+     * In this case, we have 10 books and one borrower,
+     * so we should get a autocomplete for books
+     *
+     * more detail:
+     * Under lending, books and borrowers inputs have three modes.
+     * a) if no books/borrowers, lock the input
+     * b) If 1 - 9, show a dropdown
+     * c) If 10 and up, show an autocomplete
+     */
+    @Test
+    public void test_shouldShowAutocomplete() {
+        // clear the database...
+        driver.get("http://localhost:8080/demo/flyway");
+        ApiCalls.registerBook("a");
+        ApiCalls.registerBook("b");
+        ApiCalls.registerBook("c");
+        ApiCalls.registerBook("d");
+        ApiCalls.registerBook("e");
+        ApiCalls.registerBook("f");
+        ApiCalls.registerBook("g");
+        ApiCalls.registerBook("h");
+        ApiCalls.registerBook("i");
+        ApiCalls.registerBook("j");
+        ApiCalls.registerBorrowers("some borrower");
+
+        driver.get("http://localhost:8080/demo/library.html");
+
+        // using the arrow keys to select an element is a very "dropdown" kind of behavior.
+        driver.findElement(By.id("lend_book")).sendKeys("f");
+        driver.findElement(By.xpath("//li[contains(.,\'f\')]")).click();
+        driver.findElement(By.id("lend_borrower")).sendKeys(Keys.ARROW_UP);
         driver.findElement(By.id("lend_book_submit")).click();
         final String result = driver.findElement(By.id("result")).getText();
         assertEquals("SUCCESS", result);

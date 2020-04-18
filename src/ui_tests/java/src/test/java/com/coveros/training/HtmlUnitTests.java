@@ -47,10 +47,13 @@ public class HtmlUnitTests {
 
     private void type(DomElement input, String text) {
         try {
+            // try to send text assuming it's a text input...
             ((HtmlTextInput) input).type(text);
         } catch (Exception ex) {
+            // if we fail *because* it's a password input
             if (ex.getMessage().contains("HtmlPasswordInput cannot be cast to class com.gargoylesoftware.htmlunit.html.HtmlTextInput")) {
                 try {
+                    // try to use it as a password input.
                     ((HtmlPasswordInput) input).type(text);
                 } catch (Exception ex1) {
                     throw new RuntimeException(ex1);
@@ -89,23 +92,19 @@ public class HtmlUnitTests {
     @Test
     public void test_shouldRegisterAndLoginUser() {
         getPage("http://localhost:8080/demo/flyway");
+        String username = "some user";
+        String password = "asdflkajsdfl;aksjdfal;sdfkj";
+        ApiCalls.registerUser(username, password);
+
         HtmlPage page = getPage("http://localhost:8080/demo/library.html");
-        type(page.getElementById("register_username"), "some user");
-        type(page.getElementById("register_password"), "lksdjfoapsijfasdf");
-        page = click(page.getElementById("register_submit"));
-        final DomElement registerResult = page.getElementById("result");
-
-        assertTrue("result was " + registerResult.getTextContent(),
-                registerResult.getTextContent().contains("status: SUCCESSFULLY_REGISTERED"));
-
-        page = click(page.getAnchorByText("Return"));
-        type(page.getElementById("login_username"), "some user");
-        type(page.getElementById("login_password"), "lksdjfoapsijfasdf");
+        type(page.getElementById("login_username"), username);
+        type(page.getElementById("login_password"), password);
         page = click(page.getElementById("login_submit"));
         final DomElement loginResult = page.getElementById("result");
 
         assertTrue("result was " + loginResult.getTextContent(),
                 loginResult.getTextContent().contains("access granted"));
     }
+
 
 }
