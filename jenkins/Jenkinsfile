@@ -71,9 +71,9 @@ pipeline {
       }
     }
 
-    // We use a different framework for UI tests, Behave, because Python rules
+    // We use a BDD framework for some UI tests, Behave, because Python rules
     // when it comes to experimentation with UI tests.  You can try things and see how they work out.
-    stage('UI Tests') {
+    stage('UI BDD Tests') {
       steps {
         sh './gradlew runBehaveTests'
         sh './gradlew generateCucumberReport'
@@ -83,6 +83,17 @@ pipeline {
           junit 'build/test-results/bdd_ui/*.xml'
         }
       }
+    }
+
+    stage('UI Tests') {
+        steps {
+            sh 'cd src/ui_tests/java && ./gradlew test'
+        }
+        post {
+            always {
+                junit 'src/ui_tests/java/build/test-results/test/'
+            }
+        }
     }
 
     stage('Analyze security of dependencies') {
