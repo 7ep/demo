@@ -96,7 +96,7 @@ pipeline {
         }
         post {
             always {
-                junit 'src/ui_tests/java/build/test-results/*.xml'
+                junit 'src/ui_tests/java/build/test-results/test/*.xml'
             }
         }
     }
