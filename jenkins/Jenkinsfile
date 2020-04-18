@@ -40,6 +40,11 @@ pipeline {
         // generate the code coverage report for jacoco
         sh './gradlew jacocoTestReport'
       }
+      post {
+          always {
+            junit 'build/test-results/bdd/*.xml'
+          }
+        }
     }
 
     stage('Static Analysis') {
@@ -91,7 +96,7 @@ pipeline {
         }
         post {
             always {
-                junit 'src/ui_tests/java/build/test-results/test/'
+                junit 'src/ui_tests/java/build/test-results/*.xml'
             }
         }
     }

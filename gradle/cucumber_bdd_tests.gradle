@@ -48,6 +48,7 @@ task libraryBdd (type: Test) {
 
             args = ['--monochrome',
                     '--plugin', 'progress',
+                    '--plugin', 'junit:build/test-results/bdd/library.xml',
                     '--plugin', 'json:build/bdd/library.json',
                     '--plugin', 'html:build/reports/bdd/library',
                     '--glue', 'com.coveros.training.library',
@@ -83,6 +84,7 @@ task mathBdd (type: Test) {
 
             args = ['--monochrome',
                     '--plugin', 'progress',
+                    '--plugin', 'junit:build/test-results/bdd/math.xml',
                     '--plugin', 'json:build/bdd/math.json',
                     '--plugin', 'html:build/reports/bdd/math',
                     '--glue', 'com.coveros.training.math',
@@ -118,6 +120,7 @@ task authBdd (type: Test) {
 
             args = ['--monochrome',
                     '--plugin', 'progress',
+                    '--plugin', 'junit:build/test-results/bdd/auth.xml',
                     '--plugin', 'json:build/bdd/auth.json',
                     '--plugin', 'html:build/reports/bdd/authentication',
                     '--glue', 'com.coveros.training.authentication',
@@ -152,6 +155,7 @@ task expensesBdd (type: Test) {
 
             args = ['--monochrome',
                     '--plugin', 'progress',
+                    '--plugin', 'junit:build/test-results/bdd/expenses.xml',
                     '--plugin', 'json:build/bdd/expenses.json',
                     '--plugin', 'html:build/reports/bdd/expenses',
                     '--glue', 'com.coveros.training.expenses',
@@ -187,6 +191,7 @@ task cartesianProductBdd (type: Test) {
 
             args = ['--monochrome',
                     '--plugin', 'progress',
+                    '--plugin', 'junit:build/test-results/bdd/cartesian.xml',
                     '--plugin', 'json:build/bdd/cartesianproduct.json',
                     '--plugin', 'html:build/reports/bdd/cartesianproduct',
                     '--glue', 'com.coveros.training.cartesianproduct',
