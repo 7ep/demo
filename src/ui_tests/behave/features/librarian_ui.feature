@@ -1,8 +1,8 @@
-Feature: A librarian may lend a book from the library
+Feature: A librarian has a user interface to lend a book
 
     As a librarian,
-    I would like to lend a book
-    so that patrons may enjoy it outside the library.
+    I want a UI for lending a book
+    so that it is easy to provide books to borrowers
 
     # This user story relates to behavior from a UI-centric point of view.
     # Note that we want as few UI tests as possible.  Logic should be tested lower down, this
