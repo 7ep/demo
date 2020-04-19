@@ -454,7 +454,7 @@ dependencyCheck {
     showSummary = false
     autoUpdate = true
     cveValidForHours = 24 * 30 // about a month.
-    format = 'HTML' // options are  (HTML, XML, CSV, JSON, VULN, ALL).
+    format = 'XML' // options are  (HTML, XML, CSV, JSON, VULN, ALL).
     failBuildOnCVSS = 8 // see https://www.first.org/cvss/specification-document#5-Qualitative-Severity-Rating-Scale
 }
 
