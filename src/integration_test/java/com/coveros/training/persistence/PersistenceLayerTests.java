@@ -374,6 +374,7 @@ public class PersistenceLayerTests {
 
     /**
      * this will set "alice" with id of 1 into the database as a borrower
+     * and "The DevOps Handbook" with id of 1 as a book.
      */
     private void runRestoreOneBookOneBorrower() {
         runRestore("v2_one_book_one_borrower.sql");

@@ -28,7 +28,7 @@ First, the BDD feature file - the user story and scenarios.  The presumption is 
 
 
 
-Feature: A librarian may return books that were borrowed
+    Feature: A librarian may return books that were borrowed
 
     As a librarian,
     I want to mark books as returned,
