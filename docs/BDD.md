@@ -589,12 +589,14 @@ Let's start by adding the methods.  They would look something like this:
 
 
 The migration script would look like this:
+
 resources/db.migration/V3__Add_Return_date_to_loan.sql
 
 
         ALTER TABLE library.loan ADD COLUMN RETURN_DATE date;
-        Running the persistence test now works!
 
+
+Running the persistence test now works!
 
 This would be a good point to commit.  
 
@@ -881,6 +883,8 @@ This code isn't compiling, so we can use the IDE to autogenerate some of this fo
 
 
 libraryUtils:
+
+
     /**
      * Book can be in one of three states: not registered, loaned out, or not loaned out.
      */
