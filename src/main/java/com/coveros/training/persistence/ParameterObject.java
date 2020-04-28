@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 /**
  * a POJO container for the parameters for the {@link SqlData} object.
  */
-public final class ParameterObject {
+public final class ParameterObject<T> {
 
     /**
      * The data we are injecting into the SQL statement
@@ -18,9 +18,9 @@ public final class ParameterObject {
     /**
      * The type of the data we are injecting into the SQL statement (e.g. Integer, String, etc.)
      */
-    final Class type;
+    final Class<T> type;
 
-    ParameterObject(Object data, Class type) {
+    ParameterObject(Object data, Class<T> type) {
         this.data = data;
         this.type = type;
     }
@@ -35,7 +35,7 @@ public final class ParameterObject {
         if (obj.getClass() != getClass()) {
             return false;
         }
-        ParameterObject rhs = (ParameterObject) obj;
+        ParameterObject<?> rhs = (ParameterObject<?>) obj;
         return new EqualsBuilder()
                 .append(data, rhs.data)
                 .append(type, rhs.type)
@@ -51,8 +51,8 @@ public final class ParameterObject {
                 toHashCode();
     }
 
-    public static ParameterObject createEmpty() {
-        return new ParameterObject("", String.class);
+    public static ParameterObject<Void> createEmpty() {
+        return new ParameterObject<>("", Void.class);
     }
 
     public boolean isEmpty() {

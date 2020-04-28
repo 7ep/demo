@@ -17,16 +17,17 @@ import java.util.stream.Collectors;
 @WebServlet(name = "LibraryBorrowerListSearch", urlPatterns = {"/borrower"}, loadOnStartup = 1)
 public class LibraryBorrowerListSearchServlet extends HttpServlet {
 
+    private static final long serialVersionUID = -7374339112812653844L;
     private static final Logger logger = LoggerFactory.getLogger(LibraryBorrowerListSearchServlet.class);
     public static final String RESULT = "result";
     static LibraryUtils libraryUtils = new LibraryUtils();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) {
         final String idString = StringUtils.makeNotNullable(request.getParameter("id"));
         final String name = StringUtils.makeNotNullable(request.getParameter("name"));
 
-        String result = "";
+        String result;
         if (idString.isEmpty() && name.isEmpty()) {
             result = listAllBorrowers();
         } else if (! idString.isEmpty() && name.isEmpty()) {
@@ -42,7 +43,7 @@ public class LibraryBorrowerListSearchServlet extends HttpServlet {
         ServletUtils.forwardToRestfulResult(request, response, logger);
     }
 
-    private String searchByName(String name) {
+    private String searchByName(final String name) {
         logger.info("Received request for borrowers, name requested - searching for borrower by name {}", name);
         final Borrower borrower = libraryUtils.searchForBorrowerByName(name);
         if (borrower.isEmpty()) {
@@ -51,12 +52,12 @@ public class LibraryBorrowerListSearchServlet extends HttpServlet {
         return "["+borrower.toOutputString()+"]";
     }
 
-    private String searchById(String idString) {
+    private String searchById(final String idString) {
         logger.info("Received request for borrowers, id requested - searching for borrower by id {}", idString);
-        int id = 0;
+        int id;
         try {
             id = Integer.parseInt(idString);
-        } catch (NumberFormatException ex) {
+        } catch (final NumberFormatException ex) {
             return "Error: could not parse the borrower id as an integer";
         }
         final Borrower borrower = libraryUtils.searchForBorrowerById(id);

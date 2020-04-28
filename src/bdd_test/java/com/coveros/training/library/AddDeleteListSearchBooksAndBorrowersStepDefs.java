@@ -28,7 +28,6 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
     private Book myBook = Book.createEmpty();
     private String myBookTitle = "";
     private Borrower myBorrower = Borrower.createEmpty();
-    private Loan myLoan = Loan.createEmpty();
     private String myBorrowerName = "";
     private final Date JAN_1ST = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 1));
     private LibraryUtils libraryUtils = LibraryUtils.createEmpty();

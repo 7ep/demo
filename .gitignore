@@ -71,3 +71,8 @@ bin/
 
 # Javascript dependencies
 node_modules/
+
+# stuff that Visual Code adds
+.classpath
+.project
+.settings/

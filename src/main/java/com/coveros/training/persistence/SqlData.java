@@ -21,6 +21,8 @@ import java.util.function.Function;
  * <p>
  * Was necessary to suppress the nullness warnings on this class due to its
  * use of generics.
+ * The generic R is the result type - if we ask for a string, R would be a String.
+ * On the other hand if R might be a compound type, like Employee.
  */
 @SuppressWarnings("nullness")
 final class SqlData<R> {
@@ -39,7 +41,7 @@ final class SqlData<R> {
     /**
      * The data that we will inject to the SQL statement.
      */
-    private final List<ParameterObject> params;
+    private final List<ParameterObject<?>> params;
 
     /**
      * A generic function - takes a {@link ResultSet} straight from the database,
@@ -80,8 +82,8 @@ final class SqlData<R> {
      *              to see what we can process.
      * @param clazz the class of the thing.  I would rather not use reflection, let's keep it above board for now.
      */
-    void addParameter(Object data, Class clazz) {
-        params.add(new ParameterObject(data, clazz));
+    <T> void addParameter(Object data, Class<T> clazz) {
+        params.add(new ParameterObject<>(data, clazz));
     }
 
     /**
@@ -93,7 +95,7 @@ final class SqlData<R> {
     void applyParametersToPreparedStatement(PreparedStatement st) {
         try {
             for (int i = 1; i <= params.size(); i++) {
-                ParameterObject p = params.get(i - 1);
+                ParameterObject<?> p = params.get(i - 1);
                 if (p.type == String.class) {
                     st.setString(i, (String) p.data);
                 } else if (p.type == Integer.class) {
@@ -119,7 +121,7 @@ final class SqlData<R> {
         if (obj.getClass() != getClass()) {
             return false;
         }
-        SqlData rhs = (SqlData) obj;
+        SqlData<?> rhs = (SqlData<?>) obj;
         return new EqualsBuilder()
                 .append(description, rhs.description)
                 .append(preparedStatement, rhs.preparedStatement)
@@ -143,8 +145,8 @@ final class SqlData<R> {
         return ToStringBuilder.reflectionToString(this);
     }
 
-    public static SqlData createEmpty() {
-        return new SqlData("", "");
+    public static <T> SqlData<T> createEmpty() {
+        return new SqlData<>("", "");
     }
 
     public boolean isEmpty() {

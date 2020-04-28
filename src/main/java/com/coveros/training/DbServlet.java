@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "DbServlet", urlPatterns = {"/flyway"}, loadOnStartup = 1)
 public class DbServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 1960160729302133928L;
     private final PersistenceLayer pl;
 
     public DbServlet() {

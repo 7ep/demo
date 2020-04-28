@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @WebServlet(name = "LibraryBookListSearch", urlPatterns = {"/book"}, loadOnStartup = 1)
 public class LibraryBookListSearchServlet extends HttpServlet {
 
+    private static final long serialVersionUID = -56598540573518235L;
     private static final Logger logger = LoggerFactory.getLogger(LibraryBookListSearchServlet.class);
     public static final String RESULT = "result";
     static LibraryUtils libraryUtils = new LibraryUtils();
@@ -26,7 +27,7 @@ public class LibraryBookListSearchServlet extends HttpServlet {
         final String idString = StringUtils.makeNotNullable(request.getParameter("id"));
         final String title = StringUtils.makeNotNullable(request.getParameter("title"));
 
-        String result = "";
+        String result;
         if (idString.isEmpty() && title.isEmpty()) {
             result = listAllBooks();
         } else if (! idString.isEmpty() && title.isEmpty()) {
@@ -53,7 +54,7 @@ public class LibraryBookListSearchServlet extends HttpServlet {
 
     private String searchById(String idString) {
         logger.info("Received request for books, id requested - searching for book by id {}", idString);
-        int id = 0;
+        int id;
         try {
             id = Integer.parseInt(idString);
         } catch (NumberFormatException ex) {

@@ -1,5 +1,6 @@
 package com.coveros.training.persistence;
 
+import com.coveros.training.domainobjects.User;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,18 +32,18 @@ public class SqlDataTests {
 
     @Test
     public void testShouldOutputGoodString() {
-        final SqlData sqlData = createTestSqlData();
+        final SqlData<String> sqlData = createTestSqlData();
         Assert.assertTrue("toString was: " + sqlData.toString(), sqlData.toString().contains("description=this is the description,preparedStatement=this is the prepared statement = ?;,params=[]"));
     }
 
     @Test
     public void testCanCreateEmpty() {
-        final SqlData sqlData = SqlData.createEmpty();
+        final SqlData<String> sqlData = SqlData.createEmpty();
         Assert.assertTrue(sqlData.isEmpty());
     }
 
-    private SqlData createTestSqlData() {
-        return new SqlData("this is the description", "this is the prepared statement = ?;");
+    private <T> SqlData<T> createTestSqlData() {
+        return new SqlData<>("this is the description", "this is the prepared statement = ?;");
     }
 
     @Test
@@ -79,8 +80,8 @@ public class SqlDataTests {
         applyParam("", String.class);
     }
 
-    private void applyParam(Object o, Class clazz) {
-        final SqlData sqlData = new SqlData("just a test", "SELECT * FROM user WHERE id = ?");
+    private <T> void applyParam(Object o, Class<T> clazz) {
+        final SqlData<User> sqlData = new SqlData<>("just a test", "SELECT * FROM user WHERE id = ?");
         sqlData.addParameter(o, clazz);
 
         sqlData.applyParametersToPreparedStatement(preparedStatement);

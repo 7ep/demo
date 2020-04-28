@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"}, loadOnStartup = 1)
 public class LoginServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 7302828964216520580L;
     private static final Logger logger = LoggerFactory.getLogger(LoginServlet.class);
     static LoginUtils loginUtils = new LoginUtils();
 

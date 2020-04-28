@@ -14,6 +14,7 @@ import java.math.BigInteger;
 @WebServlet(name = "AckServlet", urlPatterns = {"/ackermann"}, loadOnStartup = 1)
 public class AckServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 5669410483481180165L;
     public static final String RESULT = "result";
     static Logger logger = LoggerFactory.getLogger(AckServlet.class);
 

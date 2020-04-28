@@ -7,12 +7,10 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 
-import java.math.BigInteger;
 import java.util.Map;
 
 public class AlcoholStepDefs {
 
-    private BigInteger result;
     private AlcoholResult alcoholResult;
     private DinnerPrices dinnerPrices;
 

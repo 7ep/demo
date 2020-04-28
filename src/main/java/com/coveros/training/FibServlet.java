@@ -14,6 +14,7 @@ import java.math.BigInteger;
 @WebServlet(name = "FibServlet", urlPatterns = {"/fibonacci"}, loadOnStartup = 1)
 public class FibServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 5290010004362186530L;
     public static final String RESULT = "result";
     public static final String FIBONACCI_VALUE_IS = "Fibonacci value is {}";
     static Logger logger = LoggerFactory.getLogger(FibServlet.class);

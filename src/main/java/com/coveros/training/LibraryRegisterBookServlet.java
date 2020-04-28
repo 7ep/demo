@@ -13,11 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "LibraryRegisterBookServlet", urlPatterns = {"/registerbook"}, loadOnStartup = 1)
 public class LibraryRegisterBookServlet extends HttpServlet {
 
+    private static final long serialVersionUID = -6971471412293552088L;
     private static final Logger logger = LoggerFactory.getLogger(LibraryRegisterBookServlet.class);
     static LibraryUtils libraryUtils = new LibraryUtils();
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    protected void doPost(final HttpServletRequest request, final HttpServletResponse response) {
         final String book = StringUtils.makeNotNullable(request.getParameter("book"));
         LibraryActionResults libraryActionResults;
 

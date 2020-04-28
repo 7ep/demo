@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "MathServlet", urlPatterns = {"/math"}, loadOnStartup = 1)
 public class MathServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 1766696864489619658L;
     static org.slf4j.Logger logger = LoggerFactory.getLogger(MathServlet.class);
 
     private int putNumberInRequest(String itemName, HttpServletRequest request) {

@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @WebServlet(name = "LibraryBookListAvailableSearch", urlPatterns = {"/listavailable"}, loadOnStartup = 1)
 public class LibraryBookListAvailableServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 3219972716578253134L;
     private static final Logger logger = LoggerFactory.getLogger(LibraryBookListAvailableServlet.class);
     public static final String RESULT = "result";
     static LibraryUtils libraryUtils = new LibraryUtils();

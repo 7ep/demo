@@ -15,6 +15,7 @@ import java.time.LocalDate;
 @WebServlet(name = "LibraryLendServlet", urlPatterns = {"/lend"}, loadOnStartup = 1)
 public class LibraryLendServlet extends HttpServlet {
 
+    private static final long serialVersionUID = -6507483398690297645L;
     private static final Logger logger = LoggerFactory.getLogger(LibraryLendServlet.class);
     static LibraryUtils libraryUtils = new LibraryUtils();
 

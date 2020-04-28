@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import static java.util.stream.Collectors.toSet;
-
 public class CartesianProductStepDefs {
 
     Set<Set<String>> setOfSets;
