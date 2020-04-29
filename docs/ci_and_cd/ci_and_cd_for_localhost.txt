@@ -146,7 +146,7 @@ Now let's create a pipeline so it does some actual work.
 
   Click Add Link
 
-  Link URL: http://localhost:8080/javadocs/index.html
+  Link URL: http://localhost:8080/javadoc/index.html
   Link Text: Javadoc
 
 - Under Pipeline, click on the dropdown and select "Pipeline script from SCM"
