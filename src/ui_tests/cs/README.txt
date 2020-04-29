@@ -14,3 +14,8 @@ To run tests:
     Then, to run these tests,
         1. Open the solution with Visual Studio 2019
         2. On the toolbar, select Test -> Run -> All tests
+
+    Alternate:
+        On the command line, in the testproject directory, run:
+
+            dotnet test
