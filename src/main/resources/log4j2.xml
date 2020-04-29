@@ -2,12 +2,15 @@
 <Configuration monitorinterval="30" status="info" strict="true">
 
     <Appenders>
+        <!-- configure the logging output for the console.  See https://logging.apache.org/log4j/2.x/manual/layouts.html -->
         <Appender type="Console" name="Console">
             <Layout type="PatternLayout" pattern="%d %p %m%n"/>
         </Appender>
     </Appenders>
 
+
     <Loggers>
+        <!-- set the logging to the INFO level - meaning it will show INFO and up (INFO, WARN, FATAL, etc) -->
         <Root level="INFO">
             <AppenderRef ref="Console"/>
         </Root>

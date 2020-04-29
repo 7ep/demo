@@ -1,10 +1,9 @@
 package com.coveros.training.library;
 
-import com.coveros.training.domainobjects.Book;
-import com.coveros.training.domainobjects.Borrower;
-import com.coveros.training.domainobjects.LibraryActionResults;
-import com.coveros.training.domainobjects.Loan;
-import com.coveros.training.persistence.LibraryUtils;
+import com.coveros.training.library.domainobjects.Book;
+import com.coveros.training.library.domainobjects.Borrower;
+import com.coveros.training.library.domainobjects.LibraryActionResults;
+import com.coveros.training.library.domainobjects.Loan;
 import com.coveros.training.persistence.PersistenceLayer;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;

@@ -1,6 +1,6 @@
 package com.coveros.training.math;
 
-import com.coveros.training.Ackermann;
+import com.coveros.training.mathematics.Ackermann;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;

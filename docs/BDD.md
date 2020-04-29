@@ -970,10 +970,10 @@ Now the first scenario is done.  Most of our work is done - let's take a look at
 
         package com.coveros.training;
 
-        import com.coveros.training.domainobjects.Book;
-        import com.coveros.training.domainobjects.Borrower;
-        import com.coveros.training.domainobjects.LibraryActionResults;
-        import com.coveros.training.persistence.LibraryUtils;
+        import com.coveros.training.library.domainobjects.Book;
+        import com.coveros.training.library.domainobjects.Borrower;
+        import com.coveros.training.library.domainobjects.LibraryActionResults;
+        import com.coveros.training.library.LibraryUtils;
         import com.coveros.training.persistence.PersistenceLayer;
         import cucumber.api.java.en.Given;
         import cucumber.api.java.en.Then;
@@ -1156,8 +1156,8 @@ Once you have done that a while, we can look at what results we might get.  Here
 
         package com.coveros.training;
 
-        import com.coveros.training.domainobjects.LibraryActionResults;
-        import com.coveros.training.persistence.LibraryUtils;
+        import com.coveros.training.library.domainobjects.LibraryActionResults;
+        import com.coveros.training.library.LibraryUtils;
         import org.junit.Assert;
         import org.junit.Test;
         import org.mockito.Mockito;

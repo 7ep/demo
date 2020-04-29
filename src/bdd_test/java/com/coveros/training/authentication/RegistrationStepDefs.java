@@ -1,16 +1,15 @@
 package com.coveros.training.authentication;
 
-import com.coveros.training.domainobjects.PasswordResult;
-import com.coveros.training.domainobjects.RegistrationResult;
-import com.coveros.training.domainobjects.RegistrationStatusEnums;
+import com.coveros.training.authentication.domainobjects.PasswordResult;
+import com.coveros.training.authentication.domainobjects.RegistrationResult;
+import com.coveros.training.authentication.domainobjects.RegistrationStatusEnums;
 import com.coveros.training.persistence.PersistenceLayer;
-import com.coveros.training.persistence.RegistrationUtils;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 
-import static com.coveros.training.domainobjects.PasswordResultEnums.INSUFFICIENT_ENTROPY;
+import static com.coveros.training.authentication.domainobjects.PasswordResultEnums.INSUFFICIENT_ENTROPY;
 
 public class RegistrationStepDefs {
 

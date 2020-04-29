@@ -1,6 +1,6 @@
 package com.coveros.training.persistence;
 
-import com.coveros.training.domainobjects.User;
+import com.coveros.training.authentication.domainobjects.User;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Assert;
 import org.junit.Before;

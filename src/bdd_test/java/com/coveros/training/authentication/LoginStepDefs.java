@@ -1,8 +1,6 @@
 package com.coveros.training.authentication;
 
-import com.coveros.training.persistence.LoginUtils;
 import com.coveros.training.persistence.PersistenceLayer;
-import com.coveros.training.persistence.RegistrationUtils;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;

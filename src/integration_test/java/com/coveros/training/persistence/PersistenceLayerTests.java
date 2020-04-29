@@ -1,9 +1,9 @@
 package com.coveros.training.persistence;
 
-import com.coveros.training.domainobjects.Book;
-import com.coveros.training.domainobjects.Borrower;
-import com.coveros.training.domainobjects.Loan;
-import com.coveros.training.domainobjects.User;
+import com.coveros.training.library.domainobjects.Book;
+import com.coveros.training.library.domainobjects.Borrower;
+import com.coveros.training.library.domainobjects.Loan;
+import com.coveros.training.authentication.domainobjects.User;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.junit.Assert;
 import org.junit.Before;
