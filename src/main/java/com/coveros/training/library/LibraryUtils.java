@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 import java.sql.Date;
 import java.util.List;
 
+/**
+ * Business logic for handling library needs.  For example, {@link #lendBook}
+ */
 public class LibraryUtils {
 
     private final PersistenceLayer persistence;
@@ -24,6 +27,13 @@ public class LibraryUtils {
         this(new PersistenceLayer());
     }
 
+    /**
+     * Lend a book to a borrower.
+     * @param bookTitle The title of a registered book, e.g. see {@link #registerBook(String)}
+     * @param borrowerName the name of a registered borrower, e.g. see {@link #registerBorrower(String)}
+     * @param borrowDate the date the book is being lent out.
+     * @return an enum {@link LibraryActionResults} indicating the resultant status
+     */
     public LibraryActionResults lendBook(String bookTitle, String borrowerName, Date borrowDate) {
         logger.info("starting process to lend a book: {} to borrower: {}", bookTitle, borrowerName);
         final Book book = searchForBookByTitle(bookTitle);
@@ -64,6 +74,11 @@ public class LibraryUtils {
         persistence.createLoan(book, borrower, borrowDate);
     }
 
+    /**
+     * Register a borrower with the library
+     * @param borrower the name of a borrower
+     * @return an enum, {@link LibraryActionResults} indicating the resultant status
+     */
     public LibraryActionResults registerBorrower(String borrower) {
         logger.info("trying to register a borrower with name: {}", borrower);
         final Borrower borrowerDetails = searchForBorrowerByName(borrower);
@@ -86,6 +101,11 @@ public class LibraryUtils {
         persistence.saveNewBorrower(borrower);
     }
 
+    /**
+     * Register a new book with the library
+     * @param bookTitle the title of a book
+     * @return an enum {@link LibraryActionResults} indicating the resultant status
+     */
     public LibraryActionResults registerBook(String bookTitle) {
         if (bookTitle.isEmpty()) {
             throw new IllegalArgumentException("bookTitle was an empty string - disallowed when registering books");

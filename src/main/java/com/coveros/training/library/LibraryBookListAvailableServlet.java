@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Web API to list books available for borrowing.
+ */
 @MultipartConfig
 @WebServlet(name = "LibraryBookListAvailableSearch", urlPatterns = {"/listavailable"}, loadOnStartup = 1)
 public class LibraryBookListAvailableServlet extends HttpServlet {

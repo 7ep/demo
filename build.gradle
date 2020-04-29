@@ -47,6 +47,12 @@ plugins {
     id 'org.hidetake.ssh' version '2.10.1'
 }
 
+// Configure our javadoc to include an overview for our project, a
+// document that provides general ideas of the whole.
+javadoc {
+    options.overview = "src/main/javadoc/overview.html"
+}
+
 repositories {
     mavenCentral()
 }
@@ -138,10 +144,10 @@ dependencies {
 
 pitest {
     targetClasses =
-            ['com.coveros.training.RegisterServlet',
-             'com.coveros.training.RegisterServletTests',
-             'com.coveros.training.persistence.LibraryUtils',
-             'com.coveros.training.persistence.LibraryUtilsTests']
+            ['com.coveros.training.authentication.RegisterServlet',
+             'com.coveros.training.authentication.RegisterServletTests',
+             'com.coveros.training.library.LibraryUtils',
+             'com.coveros.training.library.LibraryUtilsTests']
     threads = 4
     outputFormats = ['XML', 'HTML']
     timestampedReports = false

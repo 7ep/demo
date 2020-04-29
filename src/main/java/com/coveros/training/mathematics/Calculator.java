@@ -34,7 +34,7 @@ public class Calculator {
 
     /**
      * This method converts integers 0 to 10 into their
-     * ordinals.  For example: 0 -> "zero"
+     * ordinals.  For example: 0 -&gt; "zero"
      */
     public static String toStringZeroToTen(int i) {
         switch (i) {

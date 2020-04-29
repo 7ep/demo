@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Web API to list all borrowers or search borrowers by id / name
+ */
 @MultipartConfig
 @WebServlet(name = "LibraryBorrowerListSearch", urlPatterns = {"/borrower"}, loadOnStartup = 1)
 public class LibraryBorrowerListSearchServlet extends HttpServlet {

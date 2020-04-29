@@ -119,6 +119,12 @@ pipeline {
       }
     }
 
+    stage('Build documentation') {
+      steps {
+         sh './gradlew javadoc'
+      }
+    }
+
 
     // This is the stage where we deploy to production.  If any test
     // fails, we won't get here.  Note that we aren't really doing anything - this

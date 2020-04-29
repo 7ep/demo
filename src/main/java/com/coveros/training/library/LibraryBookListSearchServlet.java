@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Web API to list all books or search books by id / title
+ */
 @MultipartConfig
 @WebServlet(name = "LibraryBookListSearch", urlPatterns = {"/book"}, loadOnStartup = 1)
 public class LibraryBookListSearchServlet extends HttpServlet {

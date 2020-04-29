@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.sql.Date;
 import java.time.LocalDate;
 
+/**
+ * Web API to lend a book to a borrower
+ */
 @WebServlet(name = "LibraryLendServlet", urlPatterns = {"/lend"}, loadOnStartup = 1)
 public class LibraryLendServlet extends HttpServlet {
 

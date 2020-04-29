@@ -47,8 +47,8 @@ Modify the server.xml in the Tomcat "conf/" directory, at the bottom of the file
 
       <Host name="localhost"  appBase="webapps"
             unpackWARs="true" autoDeploy="true">
-
-        <Context docBase="/c:/Users/YOUR_USERNAME_HERE/.jenkins/workspace/Demo/build/reports/" path="/reports" />
+        <Context docBase="/c:/Users/byron/.jenkins/workspace/Demo/build/reports/" path="/reports" />
+        <Context docBase="/c:/Users/byron/.jenkins/workspace/Demo/build/docs/javadoc" path="/javadoc" />
 
 In the Tomcat /bin directory, create a new file, setenv.bat
 Give it this content (this is so we can connect with JMX dynamic analysis tools to Tomcat):
@@ -143,6 +143,11 @@ Now let's create a pipeline so it does some actual work.
 
   Link URL: http://localhost:8080/reports/pitest/index.html
   Link Text: Pitest Mutation Testing
+
+  Click Add Link
+
+  Link URL: http://localhost:8080/javadocs/index.html
+  Link Text: Javadoc
 
 - Under Pipeline, click on the dropdown and select "Pipeline script from SCM"
 - on the dropdown next to SCM, select Git.
