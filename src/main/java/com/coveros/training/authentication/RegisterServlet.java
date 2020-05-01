@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Provides an API endpoint to register a new user, recording their username and (a hash of their) password
+ */
 @WebServlet(name = "RegisterServlet", urlPatterns = {"/register"}, loadOnStartup = 1)
 public class RegisterServlet extends HttpServlet {
 

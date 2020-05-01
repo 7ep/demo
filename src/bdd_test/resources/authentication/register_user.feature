@@ -35,7 +35,6 @@ Feature: A user may register themselves to the system.
             | a        | too short      |
             | 123      | too short      |
             | aaaaa    | too short      |
-            |          | empty password |
 
     Scenario: A user is unable to register due to the username already existing
         Given a username of "adam" is registered

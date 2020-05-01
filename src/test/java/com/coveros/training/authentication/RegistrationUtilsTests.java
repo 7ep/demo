@@ -3,7 +3,9 @@ package com.coveros.training.authentication;
 import com.coveros.training.authentication.domainobjects.*;
 import com.coveros.training.persistence.PersistenceLayer;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -111,18 +113,18 @@ public class RegistrationUtilsTests {
         Assert.assertEquals(expectedResult, registrationResult);
     }
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     /**
      * If we pass in an empty username, we should get a response that
      * registration failed.
      */
     @Test
     public void testShouldProcessRegistration_EmptyUsername() {
-        RegistrationResult expectedResult = new RegistrationResult(false, RegistrationStatusEnums.EMPTY_USERNAME);
-
-        final RegistrationResult registrationResult =
-                registrationUtils.processRegistration("", GOOD_PASSWORD);
-
-        Assert.assertEquals(expectedResult, registrationResult);
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("string must not be null or empty at this point");
+        registrationUtils.processRegistration("", GOOD_PASSWORD);
     }
 
     /**

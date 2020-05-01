@@ -1,6 +1,5 @@
 package com.coveros.training.helpers;
 
-import com.coveros.training.helpers.CheckUtils;
 import org.junit.Test;
 
 public class CheckUtilsTests {

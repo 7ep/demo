@@ -12,7 +12,11 @@ import org.slf4j.LoggerFactory;
 import static com.coveros.training.authentication.domainobjects.PasswordResultEnums.EMPTY_PASSWORD;
 import static com.coveros.training.authentication.domainobjects.PasswordResultEnums.*;
 import static com.coveros.training.authentication.domainobjects.RegistrationStatusEnums.*;
+import static com.coveros.training.helpers.CheckUtils.checkStringNotNullOrEmpty;
 
+/**
+ * Provides logic for registering a new user
+ */
 public class RegistrationUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
@@ -27,33 +31,24 @@ public class RegistrationUtils {
         this(new PersistenceLayer());
     }
 
+    /**
+     * A business process to evaluate an attempt to register a new user.
+     * <ol>
+     *     <li>Make sure the username and password aren't null or empty</li>
+     *     <li>Make sure the user isn't already in the database</li>
+     *     <li>Check if the password is sufficiently complex to be secure</li>
+     *     <li>Create a new account for this user, saving the user's credentials</li>
+     * </ol>
+     */
     public RegistrationResult processRegistration(String username, String password) {
         logger.info("Starting registration");
-        // first we check if the username is empty
-        boolean isUsernameEmpty = username == null || username.isEmpty();
-
-        if (isUsernameEmpty) {
-            logger.info("username is empty during registration");
-            return new RegistrationResult(false, EMPTY_USERNAME);
-        }
+        checkStringNotNullOrEmpty(username);
+        checkStringNotNullOrEmpty(password);
 
         if (isUserInDatabase(username)) {
             logger.info("cannot register this user - they are already registered");
             return new RegistrationResult(false, ALREADY_REGISTERED);
         }
-
-        return registerUser(username, password);
-    }
-
-    public static RegistrationUtils createEmpty() {
-        return new RegistrationUtils(PersistenceLayer.createEmpty());
-    }
-
-    public boolean isEmpty() {
-        return persistenceLayer.isEmpty();
-    }
-
-    private RegistrationResult registerUser(String username, String password) {
 
         // then we check if the password is good.
         final PasswordResult passwordResult = isPasswordGood(password);
@@ -66,6 +61,14 @@ public class RegistrationUtils {
         saveToDatabase(username, password);
         logger.info("saving new user, {}, to database", username);
         return new RegistrationResult(true, SUCCESSFULLY_REGISTERED);
+    }
+
+    public static RegistrationUtils createEmpty() {
+        return new RegistrationUtils(PersistenceLayer.createEmpty());
+    }
+
+    public boolean isEmpty() {
+        return persistenceLayer.isEmpty();
     }
 
     /**

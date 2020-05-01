@@ -4,6 +4,9 @@ import com.coveros.training.persistence.PersistenceLayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Provides business-layer for determining if entered credentials qualify for authentication
+ */
 public class LoginUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginUtils.class);
@@ -17,6 +20,10 @@ public class LoginUtils {
         this(new PersistenceLayer());
     }
 
+    /**
+     * Determine if input is correct credentials for a registered user.
+     * @return true if the credentials are valid, false otherwise
+     */
     public boolean isUserRegistered(String username, String password) {
         logger.info("checking if credentials for {} are valid for login", username);
         boolean isValid = persistenceLayer.areCredentialsValid(username, password);
