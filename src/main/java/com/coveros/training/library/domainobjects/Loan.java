@@ -7,6 +7,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.sql.Date;
 
+/**
+ * Represents the data that we consider full and complete to define
+ * a particular loan of a book to a borrower in the library.
+ * This coincides neatly with the details in the database.
+ */
 public final class Loan {
 
     /**

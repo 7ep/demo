@@ -18,6 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * This class is the only place in our application allowed to speak
+ * directly to the database.  All business functionality that
+ * requires database access must go through here.
+ */
 public class PersistenceLayer {
 
     private final DataSource dataSource;

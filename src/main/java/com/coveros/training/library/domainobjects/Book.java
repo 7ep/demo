@@ -4,7 +4,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-
+/**
+ * Represents the data that we consider full and complete to define
+ * a particular book in the library.  This coincides neatly with the details in the database.
+ */
 public final class Book {
 
     /**

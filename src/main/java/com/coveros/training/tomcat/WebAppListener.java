@@ -23,12 +23,19 @@ public class WebAppListener implements ServletContextListener {
         this.pl = pl;
     }
 
+    /**
+     * Cleans and migrates the database using Flyway.
+     * See database migration files like V2__Rest_of_tables_for_auth_and_library.sql
+     */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         //  clean the database and configure the schema
         pl.cleanAndMigrateDatabase();
     }
 
+    /**
+     * This does nothing, but it's required to implement per the interface.
+     */
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         // do nothing.
