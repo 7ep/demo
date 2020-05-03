@@ -1,0 +1,85 @@
+Endpoints
+---------
+
+For endpoints (access to the functionality from the outside world, aka its web API), look for files
+ending in the word "Servlet".
+
+In those files, the class has annotation which includes text like this:
+
+    urlPatterns = {"/ackermann"}
+
+The value of the urlPattern, in this case "ackermann", designates the url that is exposed to the
+outside world.  In this case, the URL for the endpoint would be:
+
+    demo/ackermann
+
+
+Persistence
+-----------
+
+The database is solely accessed from the file PersistenceLayer.java
+
+This project uses FlywayDB https://flywaydb.org/
+FlywayDB is a database migration tool - an application that runs scripts against our database
+to set it into a clean and organized state.  This allows us certain benefits when working with
+our database, such as:
+
+ - It provides a more organized approach to changing the schema of the database
+ - Allows for better testing of the database
+ - Allows for carefully vetted changes to the database
+
+
+Business functionality
+----------------------
+
+Most of the business functionality is stored in files ending with "Utils".
+What does that mean? It means that the business algorithms are mostly stored there.
+
+
+Avoidance of null
+-----------------
+
+Throughout this application, it was attempted to avoid null.  Null is fine and all,
+but it has a problem: null is too vague a description, and it's too easy to forget to
+handle the situation when something comes back null.
+
+1) if I request a "user" from the database, and I get null ... what does that mean? Does
+it mean there was no user?  That there was an error? Who knows
+
+2) In Java, a lot of methods return an object, and oftentimes it returns null, and it's
+just so painfully easy to forget to handle what happens when it's null.
+
+
+Immutability
+------------
+
+Immutable data structures are easier to track.  The basic problem with immutability
+is that when it is possible for a certain data structure to be changed after creation,
+it's just too easy to do so.  When a structure's state can easily change, and the code
+has any parallelization or event-driven code, trying to be certain of the code's behavior
+becomes quite a bit more difficult.
+
+When we create a data structure, we favor doing so immutably - that is, once created, it cannot
+be changed.  To make a change, we have to recreate the data structure.
+
+
+Packages
+--------
+
+The packages are divided up by domain.  For example, the majority of code for the library is
+in com.coveros.training.library.
+
+
+Testing
+-------
+
+Good testing from a sincere quality perspective is crucial for high-quality applications.
+There are all kinds of testing, for all kinds of quality considerations.  For example, do
+you care about internal quality?  There are a number of frameworks you can apply to keep
+you honest about that.  Do you care about correct functioning at the granular level? Unit
+tests (especially following TDD) help out there.  What about making sure that business
+requirements are carefully met?  We include BDD for that purpose - see the files in
+src/bdd_test.  We also include a Jenkinsfile (called "Jenkinsfile")  for use with
+Jenkins (https://www.jenkins.io/) which is a CI/CD tool.  Jenkins runs a huge slew of
+tests which examine many aspects of the program, including non-functionals like
+security and performance testing.
