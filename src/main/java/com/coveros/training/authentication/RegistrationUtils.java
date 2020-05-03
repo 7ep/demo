@@ -77,13 +77,13 @@ public class RegistrationUtils {
      * <p>
      *     To summarize - we check the following here:
      *  </p>
-     *  <ul>
+     *  <ol>
      *    <li>The password must not be empty</li>
      *    <li>it must not be too short (less than 6 characters)</li>
      *    <li>cannot be too long (more than 100 characters - this is because the framework</li>
      *    <li>that analyzes it slows to a crawl with more than 100 characters)</li>
      *    <li>Whether the entropy framework we're using considers the password good.</li>
-     * </ul>
+     * </ol>
      *  <p>See {@link PasswordResult}</p>
      */
     public static PasswordResult isPasswordGood(String password) {

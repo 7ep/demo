@@ -4,7 +4,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-
+/**
+ * This class holds detailed data on the results of
+ * trying to register a new user.  See {@link com.coveros.training.authentication.RegistrationUtils#processRegistration}
+ */
 public final class RegistrationResult {
 
     public final boolean wasSuccessfullyRegistered;
