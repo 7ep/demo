@@ -45,6 +45,12 @@ plugins {
     // ability to run commands on a remote server, and to copy
     // files to/from servers
     id 'org.hidetake.ssh' version '2.10.1'
+
+    // Provides us the ability to disallow null.
+    // see https://en.wikipedia.org/wiki/Tony_Hoare#Apologies_and_retractions
+    // see https://github.com/kelloggm/checkerframework-gradle-plugin
+    id "org.checkerframework" version "0.5.0"
+
 }
 
 // Configure our javadoc to include an overview for our project, a
@@ -60,6 +66,8 @@ repositories {
 // apply our fancy cucumber reporting program, see https://plugins.gradle.org/plugin/com.github.spacialcircumstances.gradle-cucumber-reporting
 apply plugin: "com.github.spacialcircumstances.gradle-cucumber-reporting"
 
+apply plugin: 'org.checkerframework'
+
 // including our script plugin for running our integration tests
 apply from: "$rootDir/gradle/integration_tests.gradle"
 
@@ -74,6 +82,21 @@ apply from: "$rootDir/gradle/remote_actions.gradle"
 
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked"
+}
+
+// applying extra criteria to our code - null not allowed
+// Note that adding checkers will add unexpected content to
+// the code, which may conflict with other dependencies.
+
+// For that reason, this is currently commented out.
+
+// Checker is very useful, but due to the conflicts it
+// creates, we bring it to life for a short time just
+// to improve code, and then put it back to sleep.
+checkerFramework {
+//    checkers = [
+//            'org.checkerframework.checker.nullness.NullnessChecker',
+//    ]
 }
 
 // configure jetty to run on port 8080 when we run "./gradlew appRun"
@@ -102,7 +125,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     // mockito, for mocking objects in our unit tests
-    testImplementation 'org.mockito:mockito-core:2.28.2'
+    testImplementation 'org.mockito:mockito-core:3.3.3'
 
     // nbvcxz is a tool to determine how robust a password is.  See
     // https://github.com/GoSimpleLLC/nbvcxz
@@ -478,6 +501,14 @@ test {
 
     // Fail the 'test' task on the first test failure
     failFast = true
+
+    debugOptions {
+        // make the following true if you want to attach with a debugger while testing
+        enabled = false
+        port = 4455
+        server = true
+        suspend = true
+    }
 
     // generate a report on coverage
     finalizedBy jacocoTestReport

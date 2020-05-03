@@ -5,7 +5,6 @@ import com.coveros.training.library.domainobjects.Borrower;
 import com.coveros.training.library.domainobjects.Loan;
 import com.coveros.training.authentication.domainobjects.User;
 import org.h2.jdbcx.JdbcConnectionPool;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -17,8 +16,10 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 /**
@@ -34,7 +35,7 @@ public class PersistenceLayerTests {
     private static final Borrower DEFAULT_BORROWER = new Borrower(1, DEFAULT_NAME);
     private static final Loan DEFAULT_LOAN = new Loan(DEFAULT_BOOK, DEFAULT_BORROWER, 1, BORROW_DATE);
     private static final User DEFAULT_USER = new User(DEFAULT_NAME, 1);
-    PersistenceLayer pl;
+    IPersistenceLayer pl;
 
     @Before
     public void initDatabase() {
@@ -70,7 +71,7 @@ public class PersistenceLayerTests {
         // change the borrower's name
         pl.updateBorrower(1, newName);
 
-        String name = pl.getBorrowerName(1);
+        String name = pl.getBorrowerName(1).orElseThrow();
         assertEquals(newName, name);
     }
 
@@ -82,7 +83,7 @@ public class PersistenceLayerTests {
     public void testShouldBeAbleToSearchBorrowerByName() {
         runRestoreOneBookOneBorrower();
 
-        Borrower borrower = pl.searchBorrowerDataByName(DEFAULT_BORROWER.name);
+        Borrower borrower = pl.searchBorrowerDataByName(DEFAULT_BORROWER.name).orElseThrow();
 
         assertEquals(DEFAULT_BORROWER, borrower);
     }
@@ -95,7 +96,7 @@ public class PersistenceLayerTests {
         runRestoreOneBookOneBorrower();
         final Book expectedBook = new Book(1, DEFAULT_BOOK.title);
 
-        Book book = pl.searchBooksByTitle(DEFAULT_BOOK.title);
+        Book book = pl.searchBooksByTitle(DEFAULT_BOOK.title).orElseThrow();
 
         assertEquals(expectedBook, book);
     }
@@ -110,7 +111,7 @@ public class PersistenceLayerTests {
         final Book expectedBook = new Book(1, DEFAULT_BOOK.title);
 
         // search for it by id
-        Book book = pl.searchBooksById(DEFAULT_BOOK.id);
+        Book book = pl.searchBooksById(DEFAULT_BOOK.id).orElseThrow();
 
         assertEquals(expectedBook, book);
     }
@@ -122,7 +123,7 @@ public class PersistenceLayerTests {
     public void testShouldBeAbleToSearchForBorrowersById() {
         runRestoreOneBookOneBorrower();
 
-        Borrower borrower = pl.searchBorrowersById(DEFAULT_BORROWER.id);
+        Borrower borrower = pl.searchBorrowersById(DEFAULT_BORROWER.id).orElseThrow();
 
         assertEquals(DEFAULT_BORROWER, borrower);
     }
@@ -131,7 +132,7 @@ public class PersistenceLayerTests {
     public void testShouldBeAbleToSearchAUserByName() {
         runRestoreOneUser();
 
-        User user = pl.searchForUserByName(DEFAULT_USER.name);
+        User user = pl.searchForUserByName(DEFAULT_USER.name).orElseThrow();
 
         assertEquals(DEFAULT_USER, user);
     }
@@ -142,9 +143,9 @@ public class PersistenceLayerTests {
         final String newPassword = "abc123";
 
         pl.updateUserWithPassword(1, newPassword);
-        final boolean result = pl.areCredentialsValid(DEFAULT_BORROWER.name, newPassword);
+        final boolean result = pl.areCredentialsValid(DEFAULT_BORROWER.name, newPassword).orElseThrow();
 
-        Assert.assertTrue(result);
+        assertTrue(result);
     }
 
     @Test
@@ -161,7 +162,7 @@ public class PersistenceLayerTests {
     public void testWeCanSearchForALoanByABook() {
         runRestoreOneLoan();
 
-        Loan loan = pl.searchForLoanByBook(DEFAULT_BOOK);
+        Loan loan = pl.searchForLoanByBook(DEFAULT_BOOK).orElseThrow();
 
         assertEquals(DEFAULT_LOAN, loan);
     }
@@ -170,7 +171,7 @@ public class PersistenceLayerTests {
     public void testWeCanSearchForALoanByABorrower() {
         runRestoreOneLoan();
 
-        Loan loan = pl.searchForLoanByBorrower(DEFAULT_BORROWER).get(0);
+        Loan loan = pl.searchForLoanByBorrower(DEFAULT_BORROWER).get().get(0);
 
         assertEquals(DEFAULT_LOAN, loan);
     }
@@ -207,9 +208,9 @@ public class PersistenceLayerTests {
         runRestoreOneBookOneBorrower();
 
         pl.deleteBook(DEFAULT_BOOK.id);
-        final Book book = pl.searchBooksByTitle(DEFAULT_BOOK.title);
+        final Optional<Book> book = pl.searchBooksByTitle(DEFAULT_BOOK.title);
 
-        Assert.assertTrue(book.isEmpty());
+        assertTrue(book.isEmpty());
     }
 
     @Test
@@ -217,9 +218,9 @@ public class PersistenceLayerTests {
         runRestoreOneBookOneBorrower();
 
         pl.deleteBorrower(DEFAULT_BORROWER.id);
-        final Borrower borrower = pl.searchBorrowerDataByName(DEFAULT_BORROWER.name);
+        final Optional<Borrower> borrower = pl.searchBorrowerDataByName(DEFAULT_BORROWER.name);
 
-        Assert.assertTrue(borrower.isEmpty());
+        assertTrue(borrower.isEmpty());
     }
 
     @Test
@@ -227,7 +228,7 @@ public class PersistenceLayerTests {
         runRestoreOneBookOneBorrower();
         List<Book> expectedList = Arrays.asList(DEFAULT_BOOK);
 
-        final List<Book> books = pl.listAllBooks();
+        final List<Book> books = pl.listAllBooks().orElseThrow();
 
         assertEquals(expectedList, books);
     }
@@ -236,7 +237,7 @@ public class PersistenceLayerTests {
     public void testShouldListAvailableBooks() {
         runRestoreThreeBooksThreeBorrowers();
         // loan out a book
-        pl.createLoan(pl.searchBooksByTitle("b"), pl.searchBorrowerDataByName("alice"), BORROW_DATE);
+        pl.createLoan(pl.searchBooksByTitle("b").orElseThrow(), pl.searchBorrowerDataByName("alice").orElseThrow(), BORROW_DATE);
 
         // create expected book list
         final List<Book> expectedBooks = new ArrayList<>();
@@ -244,7 +245,7 @@ public class PersistenceLayerTests {
         expectedBooks.add(new Book(3, "c"));
 
         // act
-        final List<Book> books = pl.listAvailableBooks();
+        final List<Book> books = pl.listAvailableBooks().orElseThrow();
 
         // assert
         assertEquals(expectedBooks, books);
@@ -258,18 +259,15 @@ public class PersistenceLayerTests {
     public void testShouldListNoAvailableBooksIfAllCheckedOut() {
         runRestoreThreeBooksThreeBorrowers();
         // loan out a book
-        pl.createLoan(pl.searchBooksByTitle("a"), pl.searchBorrowerDataByName("alice"), BORROW_DATE);
-        pl.createLoan(pl.searchBooksByTitle("b"), pl.searchBorrowerDataByName("alice"), BORROW_DATE);
-        pl.createLoan(pl.searchBooksByTitle("c"), pl.searchBorrowerDataByName("alice"), BORROW_DATE);
-
-        // create expected book list
-        final List<Book> expectedBooks = new ArrayList<>();
+        pl.createLoan(pl.searchBooksByTitle("a").orElseThrow(), pl.searchBorrowerDataByName("alice").orElseThrow(), BORROW_DATE);
+        pl.createLoan(pl.searchBooksByTitle("b").orElseThrow(), pl.searchBorrowerDataByName("alice").orElseThrow(), BORROW_DATE);
+        pl.createLoan(pl.searchBooksByTitle("c").orElseThrow(), pl.searchBorrowerDataByName("alice").orElseThrow(), BORROW_DATE);
 
         // act
-        final List<Book> books = pl.listAvailableBooks();
+        final Optional<List<Book>> books = pl.listAvailableBooks();
 
         // assert
-        assertEquals(expectedBooks, books);
+        assertTrue(books.isEmpty());
     }
 
     /**
@@ -285,7 +283,7 @@ public class PersistenceLayerTests {
         expectedBooks.add(new Book(3, "c"));
 
         // act
-        final List<Book> books = pl.listAvailableBooks();
+        final List<Book> books = pl.listAvailableBooks().orElseThrow();
 
         // assert
         assertEquals(expectedBooks, books);
@@ -296,7 +294,7 @@ public class PersistenceLayerTests {
         runRestoreOneBookOneBorrower();
         List<Borrower> expectedList = Arrays.asList(DEFAULT_BORROWER);
 
-        final List<Borrower> borrowers = pl.listAllBorrowers();
+        final List<Borrower> borrowers = pl.listAllBorrowers().orElseThrow();
 
         assertEquals(expectedList, borrowers);
     }
@@ -328,9 +326,9 @@ public class PersistenceLayerTests {
         when(resultSet.next()).thenReturn(false);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
-        final String borrowerName = persistenceLayer.getBorrowerName(1);
+        final Optional<String> borrowerName = persistenceLayer.getBorrowerName(1);
 
-        assertEquals("", borrowerName);
+        assertTrue(borrowerName.isEmpty());
     }
 
     /**

@@ -3,6 +3,7 @@ package com.coveros.training.authentication.domainobjects;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * This class holds detailed data on the results of
@@ -24,7 +25,7 @@ public final class RegistrationResult {
         this(wasSuccessfullyRegistered, status, "");
     }
 
-    public final boolean equals(Object obj) {
+    public final boolean equals(@Nullable Object obj) {
         if (obj == null) {
             return false;
         }

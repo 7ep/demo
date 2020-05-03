@@ -1,5 +1,6 @@
 package com.coveros.training.authentication;
 
+import com.coveros.training.persistence.IPersistenceLayer;
 import com.coveros.training.persistence.PersistenceLayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +11,9 @@ import org.slf4j.LoggerFactory;
 public class LoginUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginUtils.class);
-    private final PersistenceLayer persistenceLayer;
+    private final IPersistenceLayer persistenceLayer;
 
-    public LoginUtils(PersistenceLayer persistenceLayer) {
+    public LoginUtils(IPersistenceLayer persistenceLayer) {
         this.persistenceLayer = persistenceLayer;
     }
 
@@ -26,7 +27,7 @@ public class LoginUtils {
      */
     public boolean isUserRegistered(String username, String password) {
         logger.info("checking if credentials for {} are valid for login", username);
-        boolean isValid = persistenceLayer.areCredentialsValid(username, password);
+        boolean isValid = persistenceLayer.areCredentialsValid(username, password).orElse(false);
         if (isValid) {
             logger.info("credentials for {} are valid - granting access", username);
         } else {

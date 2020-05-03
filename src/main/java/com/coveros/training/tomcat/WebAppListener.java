@@ -1,5 +1,6 @@
 package com.coveros.training.tomcat;
 
+import com.coveros.training.persistence.IPersistenceLayer;
 import com.coveros.training.persistence.PersistenceLayer;
 
 import javax.servlet.ServletContextEvent;
@@ -13,13 +14,13 @@ import javax.servlet.annotation.WebListener;
 @WebListener
 public class WebAppListener implements ServletContextListener {
 
-    private final PersistenceLayer pl;
+    private final IPersistenceLayer pl;
 
     public WebAppListener() {
         pl = new PersistenceLayer();
     }
 
-    public WebAppListener(PersistenceLayer pl) {
+    public WebAppListener(IPersistenceLayer pl) {
         this.pl = pl;
     }
 

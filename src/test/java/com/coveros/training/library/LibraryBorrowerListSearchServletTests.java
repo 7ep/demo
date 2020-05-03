@@ -21,9 +21,9 @@ public class LibraryBorrowerListSearchServletTests {
     private static final Borrower DEFAULT_BORROWER = new Borrower(1, A_BORROWER);
     private HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
     private HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-    private LibraryBorrowerListSearchServlet libraryBorrowerListSearchServlet;
+    private LibraryBorrowerListSearchServlet libraryBorrowerListSearchServlet = spy(new LibraryBorrowerListSearchServlet());;
     private final RequestDispatcher requestDispatcher = Mockito.mock(RequestDispatcher.class);
-    private LibraryUtils libraryUtils = Mockito.mock(LibraryUtils.class);
+    private final LibraryUtils libraryUtils = Mockito.mock(LibraryUtils.class);
 
 
     @Before

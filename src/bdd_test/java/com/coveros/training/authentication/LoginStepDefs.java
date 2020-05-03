@@ -1,5 +1,6 @@
 package com.coveros.training.authentication;
 
+import com.coveros.training.persistence.IPersistenceLayer;
 import com.coveros.training.persistence.PersistenceLayer;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -11,7 +12,7 @@ public class LoginStepDefs {
     private boolean isRegisteredUser;
     private RegistrationUtils registrationUtils = RegistrationUtils.createEmpty();
     private LoginUtils loginUtils = LoginUtils.createEmpty();
-    private PersistenceLayer pl = new PersistenceLayer();
+    private IPersistenceLayer pl = new PersistenceLayer();
 
     /**
      * create objects for registration and login, and clear the database.

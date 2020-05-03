@@ -13,7 +13,7 @@ import java.io.PrintWriter;
  */
 public class EmptyDataSourceTests {
 
-    private EmptyDataSource emptyDataSource;
+    private EmptyDataSource emptyDataSource = new EmptyDataSource();
 
     @Before
     public void init() {

@@ -24,6 +24,7 @@ techniques.  Some of the techniques exemplified are:
 * [Database versioning](https://github.com/7ep/demo/blob/master/src/main/resources/db/migration/V2__Rest_of_tables_for_auth_and_library.sql), with [Flyway](https://flywaydb.org/)
 * Security analysis using [DependencyCheck](https://www.owasp.org/index.php/OWASP_Dependency_Check)
 * Hot-swap code with [Gretty](https://github.com/gretty-gradle-plugin/gretty)
+* Enhanced type system using [Checker Framework](https://checkerframework.org/)
 * See its [architecture](https://github.com/7ep/demo/blob/master/docs/dev_notes/architecture.txt)
 
 

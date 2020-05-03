@@ -1,6 +1,7 @@
 package com.coveros.training.authentication;
 
 import com.coveros.training.authentication.domainobjects.*;
+import com.coveros.training.persistence.IPersistenceLayer;
 import com.coveros.training.persistence.PersistenceLayer;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -9,6 +10,7 @@ import org.junit.rules.ExpectedException;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -18,7 +20,7 @@ public class RegistrationUtilsTests {
     private static final String GOOD_PASSWORD = "LpcVWwRkWSNVH";
     private static final String ALICE = "alice";
     private static final String BAD_PASSWORD = "abc123horsestaples";
-    private final PersistenceLayer persistenceLayer = mock(PersistenceLayer.class);
+    private final IPersistenceLayer persistenceLayer = mock(IPersistenceLayer.class);
     private final RegistrationUtils registrationUtils = new RegistrationUtils(persistenceLayer);
 
     @Test
@@ -89,7 +91,7 @@ public class RegistrationUtilsTests {
     @Test
     public void testShouldDetermineIfUserInDatabase() {
         // mock that a user is found when we search for them
-        when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(new User(ALICE, 1));
+        when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(Optional.of(new User(ALICE, 1)));
 
         final boolean result = registrationUtils.isUserInDatabase(ALICE);
 
@@ -104,7 +106,7 @@ public class RegistrationUtilsTests {
     @Test
     public void testShouldProcessRegistration_HappyPath() {
         // this needs to not find a user
-        when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(User.createEmpty());
+        when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(Optional.empty());
         RegistrationResult expectedResult = new RegistrationResult(true, RegistrationStatusEnums.SUCCESSFULLY_REGISTERED);
 
         final RegistrationResult registrationResult =
@@ -133,7 +135,7 @@ public class RegistrationUtilsTests {
     @Test
     public void testShouldProcessRegistration_BadPassword() {
         // this needs to not find a user
-        when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(User.createEmpty());
+        when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(Optional.empty());
         final PasswordResult result = RegistrationUtils.isPasswordGood(BAD_PASSWORD);
         RegistrationResult expectedResult = new RegistrationResult(false, RegistrationStatusEnums.BAD_PASSWORD, result.toPrettyString());
 
@@ -149,7 +151,7 @@ public class RegistrationUtilsTests {
     @Test
     public void testShouldProcessRegistration_ExistingUser() {
         // this needs to find an existing user - so they are already registered
-        when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(new User(ALICE, 1));
+        when(persistenceLayer.searchForUserByName(ALICE)).thenReturn(Optional.of(new User(ALICE, 1)));
         RegistrationResult expectedResult = new RegistrationResult(false, RegistrationStatusEnums.ALREADY_REGISTERED);
 
         final RegistrationResult registrationResult =

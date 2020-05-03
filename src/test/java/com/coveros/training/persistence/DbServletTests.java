@@ -10,7 +10,7 @@ import static org.mockito.Mockito.*;
 
 public class DbServletTests {
 
-    private final PersistenceLayer pl = Mockito.mock(PersistenceLayer.class);
+    private final IPersistenceLayer pl = Mockito.mock(IPersistenceLayer.class);
     private final DbServlet dbServlet = Mockito.spy(new DbServlet(pl));
     private final HttpServletRequest request = Mockito.mock(HttpServletRequest.class, RETURNS_DEEP_STUBS);
     private final HttpServletResponse response = Mockito.mock(HttpServletResponse.class);

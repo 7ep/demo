@@ -1,9 +1,10 @@
 package com.coveros.training.persistence;
 
+import com.coveros.training.helpers.CheckUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -11,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -24,7 +26,6 @@ import java.util.function.Function;
  * The generic R is the result type - if we ask for a string, R would be a String.
  * On the other hand if R might be a compound type, like Employee.
  */
-@SuppressWarnings("nullness")
 final class SqlData<R> {
 
     /**
@@ -48,10 +49,10 @@ final class SqlData<R> {
      * and then carries out actions on it, per the user's intentions, to convert it
      * into something of type {@link R}.
      */
-    public final Function<ResultSet, R> extractor;
+    public final Function<ResultSet, Optional<R>> extractor;
 
-    SqlData(String description, String preparedStatement) {
-        this(description, preparedStatement, null);
+    SqlData(String description, String preparedStatement, Object ... params) {
+        this(description, preparedStatement, (resultSet -> Optional.empty()), params);
     }
 
     /**
@@ -62,11 +63,24 @@ final class SqlData<R> {
      * @param preparedStatement The SQL that is run on the database
      * @param extractor         see {@link #extractor} a function that is run to convert the returned {@link ResultSet} into whatever we want
      */
-    SqlData(String description, String preparedStatement, Function<ResultSet, R> extractor) {
+    SqlData(String description, String preparedStatement, Function<ResultSet, Optional<R>> extractor, Object ... params) {
         this.description = description;
         this.preparedStatement = preparedStatement;
         this.params = new ArrayList<>();
+        if (params.length > 0) {
+            generateParams(params);
+        }
         this.extractor = extractor;
+    }
+
+    /**
+     * Loads the parameters for this SQL
+     * @param params
+     */
+    private void generateParams(Object[] params) {
+        for (Object param:params) {
+            addParameter(param, param.getClass());
+        }
     }
 
 
@@ -111,7 +125,7 @@ final class SqlData<R> {
         }
     }
 
-    public final boolean equals(Object obj) {
+    public final boolean equals(@Nullable Object obj) {
         if (obj == null) {
             return false;
         }

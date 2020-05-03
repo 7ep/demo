@@ -21,9 +21,9 @@ public class LibraryBookListAvailableServletTests {
     public static final Book DEFAULT_BOOK = new Book(1, A_BOOK);
     private HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
     private HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-    private LibraryBookListAvailableServlet libraryBookListAvailableServlet;
+    private LibraryBookListAvailableServlet libraryBookListAvailableServlet = spy(new LibraryBookListAvailableServlet());
     private final RequestDispatcher requestDispatcher = Mockito.mock(RequestDispatcher.class);
-    private LibraryUtils libraryUtils = Mockito.mock(LibraryUtils.class);
+    private final LibraryUtils libraryUtils = Mockito.mock(LibraryUtils.class);
 
 
     @Before
@@ -31,7 +31,7 @@ public class LibraryBookListAvailableServletTests {
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
         libraryBookListAvailableServlet = spy(new LibraryBookListAvailableServlet());
-        libraryBookListAvailableServlet.libraryUtils = this.libraryUtils;
+        LibraryBookListAvailableServlet.libraryUtils = this.libraryUtils;
     }
 
     /**

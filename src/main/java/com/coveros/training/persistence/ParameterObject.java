@@ -3,6 +3,7 @@ package com.coveros.training.persistence;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
@@ -25,7 +26,7 @@ public final class ParameterObject<T> {
         this.type = type;
     }
 
-    public final boolean equals(Object obj) {
+    public final boolean equals(@Nullable Object obj) {
         if (obj == null) {
             return false;
         }

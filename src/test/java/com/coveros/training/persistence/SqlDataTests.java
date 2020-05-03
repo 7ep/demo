@@ -18,7 +18,7 @@ import static org.mockito.Mockito.doThrow;
 public class SqlDataTests {
 
     private static final Date BORROW_DATE = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 1));
-    private PreparedStatement preparedStatement;
+    private PreparedStatement preparedStatement = Mockito.mock(PreparedStatement.class);
 
     @Before
     public void init() {

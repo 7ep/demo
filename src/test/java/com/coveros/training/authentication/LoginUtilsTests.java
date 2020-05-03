@@ -1,5 +1,6 @@
 package com.coveros.training.authentication;
 
+import com.coveros.training.persistence.IPersistenceLayer;
 import com.coveros.training.persistence.PersistenceLayer;
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,12 +11,13 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 public class LoginUtilsTests {
 
-    private LoginUtils loginUtils;
-    private PersistenceLayer mockPersistenceLayer;
+    private IPersistenceLayer mockPersistenceLayer = Mockito.mock(IPersistenceLayer.class);
+    private LoginUtils loginUtils = Mockito.spy(new LoginUtils(mockPersistenceLayer));
+
 
     @Before
     public void init() {
-        mockPersistenceLayer = Mockito.mock(PersistenceLayer.class);
+        mockPersistenceLayer = Mockito.mock(IPersistenceLayer.class);
         loginUtils = Mockito.spy(new LoginUtils(mockPersistenceLayer));
     }
 

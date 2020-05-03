@@ -16,7 +16,7 @@ public class LibraryRegisterBorrowerServletTests {
 
     private HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
     private HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-    private LibraryRegisterBorrowerServlet libraryRegisterBorrowerServlet;
+    private LibraryRegisterBorrowerServlet libraryRegisterBorrowerServlet = spy(new LibraryRegisterBorrowerServlet());
     private final RequestDispatcher requestDispatcher = Mockito.mock(RequestDispatcher.class);
 
     @Before

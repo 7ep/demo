@@ -1,10 +1,9 @@
 Architecture summary
 --------------------
 
-A web application that serves all data server-side.
-Uses a H2 database for persistence.
-Server is Tomcat.
-An educational tool to discuss aspects of quality.
+This is a web application with server-side rendering, used as an educational tool to discuss aspects of quality.
+Database:  H2
+Server: Tomcat.
 
 Endpoints
 ---------
@@ -41,7 +40,6 @@ Business functionality
 ----------------------
 
 Most of the business functionality is stored in files ending with "Utils".
-What does that mean? It means that the business algorithms are mostly stored there.
 
 
 Avoidance of null
@@ -52,7 +50,7 @@ but it has a problem: null is too vague a description, and it's too easy to forg
 handle the situation when something comes back null.
 
 1) if I request a "user" from the database, and I get null ... what does that mean? Does
-it mean there was no user?  That there was an error? Who knows
+it mean there was no user?  That there was an error? Who knows.
 
 2) In Java, a lot of methods return an object, and oftentimes it returns null, and it's
 just so painfully easy to forget to handle what happens when it's null.

@@ -14,13 +14,13 @@ import javax.servlet.http.HttpServletResponse;
 public class DbServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1960160729302133928L;
-    private final PersistenceLayer pl;
+    private final IPersistenceLayer pl;
 
     public DbServlet() {
         pl = new PersistenceLayer();
     }
 
-    public DbServlet(PersistenceLayer pl) {
+    public DbServlet(IPersistenceLayer pl) {
         this.pl = pl;
     }
 

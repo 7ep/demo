@@ -4,6 +4,7 @@ import com.coveros.training.library.domainobjects.Book;
 import com.coveros.training.library.domainobjects.Borrower;
 import com.coveros.training.library.domainobjects.LibraryActionResults;
 import com.coveros.training.library.domainobjects.Loan;
+import com.coveros.training.persistence.IPersistenceLayer;
 import com.coveros.training.persistence.PersistenceLayer;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -28,7 +29,7 @@ public class BookCheckOutStepDefs {
     private LibraryUtils libraryUtils = LibraryUtils.createEmpty();
     private final Date JAN_2ND = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 2));
     private LibraryActionResults libraryActionResults = LibraryActionResults.NULL;
-    private PersistenceLayer pl = new PersistenceLayer();
+    private IPersistenceLayer pl = new PersistenceLayer();
 
     /**
      * Set up the databases, clear them, initialize the Library Utility with them.

@@ -25,7 +25,7 @@ public class LoginServletTests {
     private HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
     private HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
     private RequestDispatcher requestDispatcher = Mockito.mock(RequestDispatcher.class);
-    private LoginServlet loginServlet;
+    private LoginServlet loginServlet = spy(new LoginServlet());
 
     /**
      * We'll be mocking requests and responses and so on throughout these

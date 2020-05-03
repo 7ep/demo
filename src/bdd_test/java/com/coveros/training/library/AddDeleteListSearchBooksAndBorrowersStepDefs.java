@@ -4,6 +4,7 @@ import com.coveros.training.library.domainobjects.Book;
 import com.coveros.training.library.domainobjects.Borrower;
 import com.coveros.training.library.domainobjects.LibraryActionResults;
 import com.coveros.training.library.domainobjects.Loan;
+import com.coveros.training.persistence.IPersistenceLayer;
 import com.coveros.training.persistence.PersistenceLayer;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -32,7 +33,7 @@ public class AddDeleteListSearchBooksAndBorrowersStepDefs {
     private LibraryUtils libraryUtils = LibraryUtils.createEmpty();
     private final Date JAN_2ND = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 2));
     private LibraryActionResults libraryActionResults = LibraryActionResults.NULL;
-    private PersistenceLayer pl = new PersistenceLayer();
+    private IPersistenceLayer pl = new PersistenceLayer();
     private List<Book> allBooks = new ArrayList<>();
     private List<Borrower> allBorrowers = new ArrayList<>();
 

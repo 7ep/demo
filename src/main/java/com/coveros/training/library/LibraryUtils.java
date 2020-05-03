@@ -4,11 +4,13 @@ import com.coveros.training.library.domainobjects.Book;
 import com.coveros.training.library.domainobjects.Borrower;
 import com.coveros.training.library.domainobjects.LibraryActionResults;
 import com.coveros.training.library.domainobjects.Loan;
+import com.coveros.training.persistence.IPersistenceLayer;
 import com.coveros.training.persistence.PersistenceLayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,10 +18,10 @@ import java.util.List;
  */
 public class LibraryUtils {
 
-    private final PersistenceLayer persistence;
+    private final IPersistenceLayer persistence;
     private static final Logger logger = LoggerFactory.getLogger(LibraryUtils.class);
 
-    public LibraryUtils(PersistenceLayer persistence) {
+    public LibraryUtils(IPersistenceLayer persistence) {
         this.persistence = persistence;
     }
 
@@ -132,18 +134,18 @@ public class LibraryUtils {
 
     public Loan searchForLoanByBook(Book book) {
         logger.info("searching for loan by book with title: {}", book.title);
-        return persistence.searchForLoanByBook(book);
+        return persistence.searchForLoanByBook(book).orElse(Loan.createEmpty());
     }
 
 
     public List<Loan> searchForLoanByBorrower(Borrower borrower) {
         logger.info("searching for loan by borrower with name: {}", borrower.name);
-        return persistence.searchForLoanByBorrower(borrower);
+        return persistence.searchForLoanByBorrower(borrower).orElse(new ArrayList<>());
     }
 
     public Borrower searchForBorrowerByName(String borrowerName) {
         logger.info("searching for borrower by name: {}", borrowerName);
-        return persistence.searchBorrowerDataByName(borrowerName);
+        return persistence.searchBorrowerDataByName(borrowerName).orElse(Borrower.createEmpty());
     }
 
     public Book searchForBookByTitle(String title) {
@@ -151,7 +153,7 @@ public class LibraryUtils {
             throw new IllegalArgumentException("when searching for a book, must include a non-empty string for title");
         }
         logger.info("search for book with title: {}", title);
-        final Book book = persistence.searchBooksByTitle(title);
+        final Book book = persistence.searchBooksByTitle(title).orElse(Book.createEmpty());
         if (book.isEmpty()) {
             logger.info("No book found with title of {}", title);
         } else {
@@ -168,7 +170,7 @@ public class LibraryUtils {
             throw new IllegalArgumentException("when searching for a book, must include an id of one or greater");
         }
         logger.info("search for book with id: {}", id);
-        final Book book = persistence.searchBooksById(id);
+        final Book book = persistence.searchBooksById(id).orElse(Book.createEmpty());
         if (book.isEmpty()) {
             logger.info("No book found with id of {}", id);
         } else {
@@ -185,7 +187,7 @@ public class LibraryUtils {
             throw new IllegalArgumentException("when searching for a borrower, must include an id of one or greater");
         }
         logger.info("search for borrower with id: {}", id);
-        final Borrower borrower = persistence.searchBorrowersById(id);
+        final Borrower borrower = persistence.searchBorrowersById(id).orElse(Borrower.createEmpty());
         if (borrower.isEmpty()) {
             logger.info("No borrower found with id of {}", id);
         } else {
@@ -228,18 +230,18 @@ public class LibraryUtils {
 
     public List<Book> listAllBooks() {
         logger.info("received request to list all books");
-        return persistence.listAllBooks();
+        return persistence.listAllBooks().orElse(new ArrayList<>());
     }
 
 
     public List<Borrower> listAllBorrowers() {
         logger.info("received request to list all borrowers");
-        return persistence.listAllBorrowers();
+        return persistence.listAllBorrowers().orElse(new ArrayList<>());
     }
 
 
     public List<Book> listAvailableBooks() {
         logger.info("received request to list available books");
-        return persistence.listAvailableBooks();
+        return persistence.listAvailableBooks().orElse(new ArrayList<>());
     }
 }

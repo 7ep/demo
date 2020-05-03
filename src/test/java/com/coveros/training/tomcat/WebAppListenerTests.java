@@ -1,6 +1,6 @@
 package com.coveros.training.tomcat;
 
-import com.coveros.training.persistence.PersistenceLayer;
+import com.coveros.training.persistence.IPersistenceLayer;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -8,7 +8,7 @@ import javax.servlet.ServletContextEvent;
 
 public class WebAppListenerTests {
 
-    private final PersistenceLayer pl = Mockito.mock(PersistenceLayer.class);
+    private final IPersistenceLayer pl = Mockito.mock(IPersistenceLayer.class);
     private final WebAppListener webAppListener = Mockito.spy(new WebAppListener(pl));
     private final ServletContextEvent servletContextEvent = Mockito.mock(ServletContextEvent.class);
 
@@ -26,6 +26,6 @@ public class WebAppListenerTests {
     @Test
     public void testContextDestroyed() {
         webAppListener.contextDestroyed(servletContextEvent);
-        Mockito.verifyZeroInteractions(pl);
+        Mockito.verifyNoInteractions(pl);
     }
 }

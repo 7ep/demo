@@ -3,6 +3,7 @@ package com.coveros.training.library.domainobjects;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Represents the data that we consider full and complete to define
@@ -25,7 +26,7 @@ public final class Book {
         this.id = id;
     }
 
-    public final boolean equals(Object obj) {
+    public final boolean equals(@Nullable Object obj) {
         if (obj == null) {
             return false;
         }

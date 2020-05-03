@@ -974,6 +974,7 @@ Now the first scenario is done.  Most of our work is done - let's take a look at
         import com.coveros.training.library.domainobjects.Borrower;
         import com.coveros.training.library.domainobjects.LibraryActionResults;
         import com.coveros.training.library.LibraryUtils;
+        import com.coveros.training.persistence.IPersistenceLayer;
         import com.coveros.training.persistence.PersistenceLayer;
         import cucumber.api.java.en.Given;
         import cucumber.api.java.en.Then;
@@ -992,7 +993,7 @@ Now the first scenario is done.  Most of our work is done - let's take a look at
             private Book myBook = Book.createEmpty();
             private Borrower myBorrower = Borrower.createEmpty();
             private LibraryUtils libraryUtils = LibraryUtils.createEmpty();
-            private PersistenceLayer pl = new PersistenceLayer();
+            private IPersistenceLayer pl = new PersistenceLayer();
             private LibraryActionResults result = LibraryActionResults.NULL;
 
             /**

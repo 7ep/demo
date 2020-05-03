@@ -1,6 +1,7 @@
 package com.coveros.training.library;
 
 import com.coveros.training.library.domainobjects.*;
+import com.coveros.training.persistence.IPersistenceLayer;
 import com.coveros.training.persistence.PersistenceLayer;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,13 +15,15 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 public class LibraryUtilsTests {
 
-    private LibraryUtils libraryUtils;
-    private PersistenceLayer mockPersistenceLayer;
+    private IPersistenceLayer mockPersistenceLayer = Mockito.mock(IPersistenceLayer.class);
+    private LibraryUtils libraryUtils = Mockito.spy(new LibraryUtils(mockPersistenceLayer));
+
     private final Book DEFAULT_BOOK = BookTests.createTestBook();
     private final Borrower DEFAULT_BORROWER = BorrowerTests.createTestBorrower();
     private final static Date BORROW_DATE = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 1));
@@ -28,7 +31,7 @@ public class LibraryUtilsTests {
 
     @Before
     public void init() {
-        mockPersistenceLayer = Mockito.mock(PersistenceLayer.class);
+        mockPersistenceLayer = Mockito.mock(IPersistenceLayer.class);
         libraryUtils = Mockito.spy(new LibraryUtils(mockPersistenceLayer));
     }
 
@@ -118,7 +121,7 @@ public class LibraryUtilsTests {
 
     @Test
     public void testCanSearchForBooksByTitle() {
-        Mockito.when(mockPersistenceLayer.searchBooksByTitle(DEFAULT_BOOK.title)).thenReturn(DEFAULT_BOOK);
+        Mockito.when(mockPersistenceLayer.searchBooksByTitle(DEFAULT_BOOK.title)).thenReturn(Optional.of(DEFAULT_BOOK));
         libraryUtils.searchForBookByTitle(DEFAULT_BOOK.title);
         Mockito.verify(mockPersistenceLayer, times(1)).searchBooksByTitle(DEFAULT_BOOK.title);
     }
@@ -136,7 +139,7 @@ public class LibraryUtilsTests {
 
     @Test
     public void testCanSearchForBooksById() {
-        Mockito.when(mockPersistenceLayer.searchBooksById(DEFAULT_BOOK.id)).thenReturn(DEFAULT_BOOK);
+        Mockito.when(mockPersistenceLayer.searchBooksById(DEFAULT_BOOK.id)).thenReturn(Optional.of(DEFAULT_BOOK));
         libraryUtils.searchForBookById(DEFAULT_BOOK.id);
         Mockito.verify(mockPersistenceLayer, times(1)).searchBooksById(DEFAULT_BOOK.id);
     }
@@ -157,7 +160,7 @@ public class LibraryUtilsTests {
      */
     @Test
     public void testCanDeleteBook() {
-        Mockito.when(mockPersistenceLayer.searchBooksByTitle(DEFAULT_BOOK.title)).thenReturn(DEFAULT_BOOK);
+        Mockito.when(mockPersistenceLayer.searchBooksByTitle(DEFAULT_BOOK.title)).thenReturn(Optional.of(DEFAULT_BOOK));
 
         final LibraryActionResults result = libraryUtils.deleteBook(DEFAULT_BOOK);
 
@@ -170,7 +173,7 @@ public class LibraryUtilsTests {
      */
     @Test
     public void testCannotDeleteNonRegisteredBook() {
-        Mockito.when(mockPersistenceLayer.searchBooksByTitle(DEFAULT_BOOK.title)).thenReturn(Book.createEmpty());
+        Mockito.when(mockPersistenceLayer.searchBooksByTitle(DEFAULT_BOOK.title)).thenReturn(Optional.empty());
 
         final LibraryActionResults result = libraryUtils.deleteBook(DEFAULT_BOOK);
 
@@ -183,7 +186,7 @@ public class LibraryUtilsTests {
      */
     @Test
     public void testCanDeleteBorrower() {
-        Mockito.when(mockPersistenceLayer.searchBorrowerDataByName(DEFAULT_BORROWER.name)).thenReturn(DEFAULT_BORROWER);
+        Mockito.when(mockPersistenceLayer.searchBorrowerDataByName(DEFAULT_BORROWER.name)).thenReturn(Optional.of(DEFAULT_BORROWER));
 
         final LibraryActionResults result = libraryUtils.deleteBorrower(DEFAULT_BORROWER);
 
@@ -196,7 +199,7 @@ public class LibraryUtilsTests {
      */
     @Test
     public void testCannotDeleteNonRegisteredBorrower() {
-        Mockito.when(mockPersistenceLayer.searchBorrowerDataByName(DEFAULT_BORROWER.name)).thenReturn(Borrower.createEmpty());
+        Mockito.when(mockPersistenceLayer.searchBorrowerDataByName(DEFAULT_BORROWER.name)).thenReturn(Optional.empty());
 
         final LibraryActionResults result = libraryUtils.deleteBorrower(DEFAULT_BORROWER);
 
@@ -212,7 +215,7 @@ public class LibraryUtilsTests {
     @Test
     public void testShouldBeAbleToListAllBooks() {
         final List<Book> books = generateListOfBooks(new String[]{"foo", "bar"});
-        Mockito.when(mockPersistenceLayer.listAllBooks()).thenReturn(books);
+        Mockito.when(mockPersistenceLayer.listAllBooks()).thenReturn(Optional.of(books));
 
         List<Book> bookList = libraryUtils.listAllBooks();
 
@@ -227,7 +230,7 @@ public class LibraryUtilsTests {
     @Test
     public void testShouldBeAbleToListAllBorrowers() {
         final List<Borrower> borrowers = generateListOfBorrowers(new String[]{"foo", "bar"});
-        Mockito.when(mockPersistenceLayer.listAllBorrowers()).thenReturn(borrowers);
+        Mockito.when(mockPersistenceLayer.listAllBorrowers()).thenReturn(Optional.of(borrowers));
         List<Borrower> borrowerList = libraryUtils.listAllBorrowers();
         Assert.assertEquals(borrowers, borrowerList);
     }

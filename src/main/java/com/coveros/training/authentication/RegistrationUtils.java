@@ -2,6 +2,7 @@ package com.coveros.training.authentication;
 
 import com.coveros.training.authentication.domainobjects.PasswordResult;
 import com.coveros.training.authentication.domainobjects.RegistrationResult;
+import com.coveros.training.persistence.IPersistenceLayer;
 import com.coveros.training.persistence.PersistenceLayer;
 import me.gosimple.nbvcxz.Nbvcxz;
 import me.gosimple.nbvcxz.scoring.Result;
@@ -21,9 +22,9 @@ public class RegistrationUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(RegistrationUtils.class);
 
-    private final PersistenceLayer persistenceLayer;
+    private final IPersistenceLayer persistenceLayer;
 
-    public RegistrationUtils(PersistenceLayer persistenceLayer) {
+    public RegistrationUtils(IPersistenceLayer persistenceLayer) {
         this.persistenceLayer = persistenceLayer;
     }
 
@@ -80,8 +81,8 @@ public class RegistrationUtils {
      *  <ol>
      *    <li>The password must not be empty</li>
      *    <li>it must not be too short (less than 6 characters)</li>
-     *    <li>cannot be too long (more than 100 characters - this is because the framework</li>
-     *    <li>that analyzes it slows to a crawl with more than 100 characters)</li>
+     *    <li>it cannot be too long (more than 100 characters - this is because the framework</li>
+     *    <li>analysis slows to a crawl with more than 100 characters)</li>
      *    <li>Whether the entropy framework we're using considers the password good.</li>
      * </ol>
      *  <p>See {@link PasswordResult}</p>
