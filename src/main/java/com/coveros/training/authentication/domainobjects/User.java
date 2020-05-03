@@ -5,6 +5,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 
+/**
+ * Represents the data that we consider full and complete to define
+ * a particular user.  This coincides neatly with the details in the database.
+ */
 public final class User {
 
     /**
