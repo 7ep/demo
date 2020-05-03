@@ -5,6 +5,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 
+/**
+ * This contains the results of checking the complexity of a given
+ * password - that is, how good of a password, how secure, is it?
+ * See {@link com.coveros.training.authentication.RegistrationUtils#isPasswordGood}
+ * for the calculation that generates this.
+ */
 public final class PasswordResult {
 
     public final PasswordResultEnums status;

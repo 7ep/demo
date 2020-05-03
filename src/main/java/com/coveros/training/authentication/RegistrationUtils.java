@@ -73,8 +73,18 @@ public class RegistrationUtils {
 
     /**
      * Whether we qualify a password as good.
+     *
      * <p>
-     * See implementation for criteria.
+     *     To summarize - we check the following here:
+     *  </p>
+     *  <ul>
+     *    <li>The password must not be empty</li>
+     *    <li>it must not be too short (less than 6 characters)</li>
+     *    <li>cannot be too long (more than 100 characters - this is because the framework</li>
+     *    <li>that analyzes it slows to a crawl with more than 100 characters)</li>
+     *    <li>Whether the entropy framework we're using considers the password good.</li>
+     * </ul>
+     *  <p>See {@link PasswordResult}</p>
      */
     public static PasswordResult isPasswordGood(String password) {
         if (password.isEmpty()) {
