@@ -1,3 +1,11 @@
+Architecture summary
+--------------------
+
+A web application that serves all data server-side.
+Uses a H2 database for persistence.
+Server is Tomcat.
+An educational tool to discuss aspects of quality.
+
 Endpoints
 ---------
 
