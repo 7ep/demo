@@ -23,13 +23,16 @@ public class CheckUtils {
 
     /**
      * Makes sure the input value is a valid string of length 1 or greater
-     * @param value the string to check
+     * @param values the strings to check
      * @throws IllegalArgumentException if the string is null or empty
      */
-    public static void checkStringNotNullOrEmpty(String value) {
-        if(value == null || value.isEmpty()) {
-            throw new IllegalArgumentException("string must not be null or empty at this point");
+    public static void checkStringNotNullOrEmpty(String ... values) {
+        for (String value: values) {
+            if(value == null || value.isEmpty()) {
+                throw new IllegalArgumentException("string must not be null or empty at this point");
+            }
         }
+
     }
 
 }

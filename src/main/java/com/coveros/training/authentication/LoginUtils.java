@@ -1,5 +1,6 @@
 package com.coveros.training.authentication;
 
+import com.coveros.training.helpers.CheckUtils;
 import com.coveros.training.persistence.IPersistenceLayer;
 import com.coveros.training.persistence.PersistenceLayer;
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ public class LoginUtils {
      * @return true if the credentials are valid, false otherwise
      */
     public boolean isUserRegistered(String username, String password) {
+        CheckUtils.checkStringNotNullOrEmpty(username, password);
         logger.info("checking if credentials for {} are valid for login", username);
         boolean isValid = persistenceLayer.areCredentialsValid(username, password).orElse(false);
         if (isValid) {

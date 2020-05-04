@@ -19,6 +19,5 @@ Feature: A user may login to the system.
             | username | password      | note                                        |
             | adam     | lpcvwwrkwsnvh | the password is correct, but all lower-case |
             | adamee   | LpcVWwRkWSNVH | we used an incorrect username               |
-            | adam     |               | we used an empty password                   |
             | adam     | LpcVWwR       | we used a shortened version of the password |
             | ALICE    | LpcVWwRkWSNVH | the username was made all upper-case        |

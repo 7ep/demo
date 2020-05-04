@@ -39,11 +39,23 @@ def test_math_api_with_non_numeric():
     assert "Error: only accepts integers" in r.text
 
 
-# register with a good password and an empty database
+# register with a good password
 def test_register_api():
     __reset_database()
     r = requests.post("%s/demo/register" % URL, data={'username': 'alice', 'password': 'B65S3xNW8vXQHyjYnD72L3mejc'})
     assert "successfully registered: true" in r.text
+
+# register with an empty password
+def test_register_api_empty_password():
+    __reset_database()
+    r = requests.post("%s/demo/register" % URL, data={'username': 'alice', 'password': ''})
+    assert "no password provided" in r.text
+
+# register with an empty username
+def test_register_api_empty_username():
+    __reset_database()
+    r = requests.post("%s/demo/register" % URL, data={'username': '', 'password': 'B65S3xNW8vXQHyjYnD72L3mejc'})
+    assert "no username provided" in r.text
 
 
 # register, then login
@@ -52,6 +64,20 @@ def test_login_api():
     requests.post("%s/demo/register" % URL, data={'username': 'alice', 'password': 'B65S3xNW8vXQHyjYnD72L3mejc'})
     r = requests.post("%s/demo/login" % URL, data={'username': 'alice', 'password': 'B65S3xNW8vXQHyjYnD72L3mejc'})
     assert "access granted" in r.text
+
+# register, then login with empty username
+def test_login_api_empty_username():
+    __reset_database()
+    requests.post("%s/demo/register" % URL, data={'username': 'alice', 'password': 'B65S3xNW8vXQHyjYnD72L3mejc'})
+    r = requests.post("%s/demo/login" % URL, data={'username': '', 'password': 'B65S3xNW8vXQHyjYnD72L3mejc'})
+    assert "no username provided" in r.text
+
+# register, then login with empty password
+def test_login_api_empty_password():
+    __reset_database()
+    requests.post("%s/demo/register" % URL, data={'username': 'alice', 'password': 'B65S3xNW8vXQHyjYnD72L3mejc'})
+    r = requests.post("%s/demo/login" % URL, data={'username': 'alice', 'password': ''})
+    assert "no password provided" in r.text
 
 
 # test that we get the correct result if we try to register a book
