@@ -1,5 +1,6 @@
 package com.coveros.training.library.domainobjects;
 
+import com.coveros.training.helpers.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -58,7 +59,7 @@ public final class Borrower {
     }
 
     public final String toOutputString() {
-        return String.format("{\"Name\": \"%s\", \"Id\": \"%s\"}", name, id);
+        return String.format("{\"Name\": \"%s\", \"Id\": \"%s\"}", StringUtils.escapeForJson(name), id);
     }
 
     public final String toString() {

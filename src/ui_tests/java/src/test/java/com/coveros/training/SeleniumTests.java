@@ -128,6 +128,27 @@ public class SeleniumTests {
         assertEquals("SUCCESS", result);
     }
 
+    /**
+     * If the value for a book or borrower has a quote in it,
+     * single or double, it should continue to work.
+     */
+    @Test
+    public void test_ShouldHandleQuotesInBookOrBorrowerValue() {
+        // clear the database...
+        driver.get("http://localhost:8080/demo/flyway");
+        ApiCalls.registerBook("some \"book");
+        ApiCalls.registerBorrowers("some \"borrower");
+
+        driver.get("http://localhost:8080/demo/library.html");
+
+        // using the arrow keys to select an element is a very "dropdown" kind of behavior.
+        driver.findElement(By.id("lend_book")).sendKeys(Keys.ARROW_UP);
+        driver.findElement(By.id("lend_borrower")).sendKeys(Keys.ARROW_UP);
+        driver.findElement(By.id("lend_book_submit")).click();
+        final String result = driver.findElement(By.id("result")).getText();
+        assertEquals("SUCCESS", result);
+    }
+
     @Test
     public void test_ShouldRegisterAndLoginUser() {
         driver.get("http://localhost:8080/demo/flyway");
