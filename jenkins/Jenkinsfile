@@ -76,8 +76,12 @@ pipeline {
       sh './gradlew deployToTestWindowsLocal'
       // pipenv needs to be installed and on the path for this to work.
       sh 'pipenv install'
+
+      // Wait here until the server tells us it's up and listening
+      sh './gradlew waitForHeartBeat'
       }
     }
+
 
     // Run the tests which investigate the functioning of the API.
     stage('API Tests') {

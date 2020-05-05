@@ -383,6 +383,42 @@ static void checkIfAlive() {
     }
 }
 
+
+// This is very similar to "checkIfAlive" function, but here,
+// we just wait until we get a heartbeat.  We don't stop polling
+// until we see that.
+void waitForHeartbeat() {
+    int code = 0
+    while (code != 200){
+        try {
+            URL url = new URL("http://localhost:8080/demo")
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection()
+            connection.setRequestMethod("GET")
+            connection.connect()
+
+            code = connection.getResponseCode()
+
+            if (code != 200) {
+                logger.error("\nServer response is: " +code + ".  Waiting 2 seconds")
+                sleep 2
+            } else {
+                logger.info("\nServer is awake")
+            }
+        } catch (Exception ignored) {
+            logger.error("\nServer failed to connect.  Waiting 2 seconds")
+            sleep 2
+            // ignored.
+            //throw new Exception(ignored.getMessage())
+        }
+    }
+}
+
+task waitForHeartbeatTask() {
+    doLast {
+        waitForHeartbeat()
+    }
+}
+
 task checkQualityGate() {
     doLast {
         isQualityGateGood()
