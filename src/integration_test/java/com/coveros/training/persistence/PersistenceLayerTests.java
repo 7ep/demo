@@ -345,7 +345,7 @@ public class PersistenceLayerTests {
 
     /**
      * An exception of the right type should be thrown
-     * when an error occurs in the {@link PersistenceLayer#executeUpdateTemplate(SqlData)} method.
+     * when an error occurs in the {@link PersistenceLayer#executeUpdateTemplate} method.
      */
     @Test(expected = SqlRuntimeException.class)
     public void testExecuteUpdateTemplate_ExceptionThrown() throws SQLException {
@@ -353,7 +353,7 @@ public class PersistenceLayerTests {
         when(dataSource.getConnection()).thenThrow(new SQLException());
         final PersistenceLayer persistenceLayer = new PersistenceLayer(dataSource);
 
-        persistenceLayer.executeUpdateTemplate(SqlData.createEmpty());
+        persistenceLayer.executeUpdateTemplate("","");
     }
 
     /**

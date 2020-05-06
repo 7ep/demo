@@ -39,12 +39,9 @@ public class PersistenceLayer implements IPersistenceLayer {
 
     /**
      * This command provides a template to execute updates (including inserts) on the database
-     *
-     * @param sqlData An object that contains the necessary components to run a SQL statement.
-     *                Usually contains some SQL text and some values that will be injected
-     *                into the statement at run-time.
      */
-    <T> void executeUpdateTemplate(SqlData<T> sqlData) {
+    void executeUpdateTemplate(String description, String preparedStatement, Object ... params) {
+        final SqlData<Object> sqlData = new SqlData<>(description, preparedStatement, params);
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st = prepareStatementWithKeys(sqlData, connection)) {
                 executeUpdateOnPreparedStatement(sqlData, st);
@@ -59,16 +56,6 @@ public class PersistenceLayer implements IPersistenceLayer {
             String preparedStatement,
             Object ... params) {
         final SqlData<Object> sqlData = new SqlData<>(description, preparedStatement, params);
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement st = prepareStatementWithKeys(sqlData, connection)) {
-                return executeInsertOnPreparedStatement(sqlData, st);
-            }
-        } catch (SQLException ex) {
-            throw new SqlRuntimeException(ex);
-        }
-    }
-
-    private <T> long executeInsertTemplate(SqlData<T> sqlData) {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st = prepareStatementWithKeys(sqlData, connection)) {
                 return executeInsertOnPreparedStatement(sqlData, st);
@@ -115,24 +102,24 @@ public class PersistenceLayer implements IPersistenceLayer {
     @Override
     public long saveNewBorrower(String borrowerName) {
         CheckUtils.checkStringNotNullOrEmpty(borrowerName);
-        return executeInsertTemplate(new SqlData<>(
+        return executeInsertTemplate(
                 "adds a new library borrower",
-                "INSERT INTO library.borrower (name) VALUES (?);", borrowerName));
+                "INSERT INTO library.borrower (name) VALUES (?);", borrowerName);
     }
 
     @Override
     public long createLoan(Book book, Borrower borrower, Date borrowDate) {
-        return executeInsertTemplate(new SqlData<>(
+        return executeInsertTemplate(
                 "Creates a new loan of a book to a borrower",
-                "INSERT INTO library.loan (book, borrower, borrow_date) VALUES (?, ?, ?);", book.id, borrower.id, borrowDate));
+                "INSERT INTO library.loan (book, borrower, borrow_date) VALUES (?, ?, ?);", book.id, borrower.id, borrowDate);
     }
 
     @Override
     public long saveNewBook(String bookTitle) {
         CheckUtils.checkStringNotNullOrEmpty(bookTitle);
-        return executeInsertTemplate(new SqlData<>(
+        return executeInsertTemplate(
                 "Creates a new book in the database",
-                "INSERT INTO library.book (title) VALUES (?);", bookTitle));
+                "INSERT INTO library.book (title) VALUES (?);", bookTitle);
     }
 
     @Override
@@ -147,25 +134,25 @@ public class PersistenceLayer implements IPersistenceLayer {
     public void updateBorrower(long id, String borrowerName) {
         CheckUtils.checkIntParamPositive(id);
         CheckUtils.checkStringNotNullOrEmpty(borrowerName);
-        executeUpdateTemplate(new SqlData<>(
+        executeUpdateTemplate(
                 "Updates the borrower's data",
-                "UPDATE library.borrower SET name = ? WHERE id = ?;", borrowerName, id));
+                "UPDATE library.borrower SET name = ? WHERE id = ?;", borrowerName, id);
     }
 
     @Override
     public void deleteBook(long id) {
         CheckUtils.checkIntParamPositive(id);
-        executeUpdateTemplate(new SqlData<>(
+        executeUpdateTemplate(
                 "Deletes a book from the database",
-                "DELETE FROM library.book WHERE id = ?;", id));
+                "DELETE FROM library.book WHERE id = ?;", id);
     }
 
     @Override
     public void deleteBorrower(long id) {
         CheckUtils.checkIntParamPositive(id);
-        executeUpdateTemplate(new SqlData<>(
+        executeUpdateTemplate(
                 "Deletes a borrower from the database",
-                "DELETE FROM library.borrower WHERE id = ?;", id));
+                "DELETE FROM library.borrower WHERE id = ?;", id);
     }
 
     @Override
@@ -391,9 +378,9 @@ public class PersistenceLayer implements IPersistenceLayer {
     public void updateUserWithPassword(long id, String password) {
         CheckUtils.checkIntParamPositive(id);
         String hashedPassword = createHashedValueFromPassword(password);
-        executeUpdateTemplate(new SqlData<>(
+        executeUpdateTemplate(
                 "Updates the user's password field with a new hash",
-                "UPDATE auth.user SET password_hash = ? WHERE id = ?;", hashedPassword, id));
+                "UPDATE auth.user SET password_hash = ? WHERE id = ?;", hashedPassword, id);
     }
 
     private String createHashedValueFromPassword(String password) {
