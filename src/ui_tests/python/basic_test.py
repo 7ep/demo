@@ -7,6 +7,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import requests
 from selenium.webdriver.common.proxy import Proxy, ProxyType
@@ -61,12 +62,13 @@ class TestBasic():
     library.register_borrower(DEFAULT_BORROWER)
 
     # Enter in part of a borrower's name, then select the person from a list
-    self.driver.find_element(By.ID, "lend_book").send_keys("nother")
-    self.driver.find_element(By.CSS_SELECTOR, "#lend_book_searchlist > li[data='another book']").click()
+    self.driver.get(HOMEPAGE)
+    self.driver.find_element(By.ID, "lend_book").send_keys(Keys.ARROW_UP)
 
     # and select a book in a si
     # and lend them the book...
-    assert self.driver.find_element(By.ID, "lend_book").value == "another book"
+    select = Select(self.driver.find_element(By.ID, "lend_book"))
+    assert select.first_selected_option.text == "another book"
 
 
 
