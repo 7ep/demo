@@ -155,14 +155,14 @@ final class SqlData<R> {
     }
 
     public final String toString() {
-        String paramsString = "";
+        StringBuilder paramsString = new StringBuilder();
         for(ParameterObject<?> p : params) {
-            paramsString += p;
+            paramsString.append(p);
         }
 
         return new ToStringBuilder(this).
                 append("description", description).
-                append("params", paramsString).
+                append("params", paramsString.toString()).
                 append("prepared statement", preparedStatement).
                 toString();
     }

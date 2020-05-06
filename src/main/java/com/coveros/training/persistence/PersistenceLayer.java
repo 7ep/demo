@@ -51,7 +51,7 @@ public class PersistenceLayer implements IPersistenceLayer {
         }
     }
 
-    public <T> long executeInsertTemplate(
+    public long executeInsertTemplate(
             String description,
             String preparedStatement,
             Object ... params) {
