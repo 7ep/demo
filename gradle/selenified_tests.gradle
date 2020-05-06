@@ -17,7 +17,6 @@ dependencies {
 task selenified(type: Test) {
     testClassesDirs = sourceSets.selenifiedtests.output.classesDirs
     classpath = sourceSets.selenifiedtests.runtimeClasspath
-    def threads = System.getProperty("threads") ? System.getProperty("threads") : 5
     systemProperties System.getProperties()
 
     useTestNG() {
@@ -36,7 +35,7 @@ task selenified(type: Test) {
     options {
         listeners.add("com.coveros.selenified.utilities.Transformer")
         parallel = 'methods'
-        threadCount = threads
+        threadCount = 5
     }
 
 }
