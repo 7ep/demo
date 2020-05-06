@@ -78,7 +78,7 @@ apply from: "$rootDir/gradle/cucumber_bdd_tests.gradle"
 apply from: "$rootDir/gradle/remote_actions.gradle"
 
 // including our script plugin for running Selenified
-//apply from: "$rootDir/gradle/selenified_tests.gradle"
+apply from: "$rootDir/gradle/selenified_tests.gradle"
 
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked"
