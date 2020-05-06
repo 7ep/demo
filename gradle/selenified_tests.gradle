@@ -6,9 +6,6 @@ sourceSets {
 }
 
 dependencies {
-    selenifiedtestsCompile sourceSets.main.output
-    selenifiedtestsCompile sourceSets.test.output
-
     // Selenified, a Coveros application to aid with test needs using Selenium
     // This has a properties file in src/test/resource/selenified_tests.properties
     selenifiedtestsCompile (group: 'com.coveros', name: 'selenified', version: '3.3.0')

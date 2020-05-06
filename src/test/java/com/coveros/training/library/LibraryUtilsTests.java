@@ -2,7 +2,6 @@ package com.coveros.training.library;
 
 import com.coveros.training.library.domainobjects.*;
 import com.coveros.training.persistence.IPersistenceLayer;
-import com.coveros.training.persistence.PersistenceLayer;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;

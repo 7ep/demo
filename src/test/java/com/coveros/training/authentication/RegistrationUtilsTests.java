@@ -2,7 +2,6 @@ package com.coveros.training.authentication;
 
 import com.coveros.training.authentication.domainobjects.*;
 import com.coveros.training.persistence.IPersistenceLayer;
-import com.coveros.training.persistence.PersistenceLayer;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;

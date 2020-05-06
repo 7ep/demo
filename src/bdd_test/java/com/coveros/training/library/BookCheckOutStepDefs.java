@@ -29,7 +29,7 @@ public class BookCheckOutStepDefs {
     private LibraryUtils libraryUtils = LibraryUtils.createEmpty();
     private final Date JAN_2ND = Date.valueOf(LocalDate.of(2018, Month.JANUARY, 2));
     private LibraryActionResults libraryActionResults = LibraryActionResults.NULL;
-    private IPersistenceLayer pl = new PersistenceLayer();
+    private final IPersistenceLayer pl = new PersistenceLayer();
 
     /**
      * Set up the databases, clear them, initialize the Library Utility with them.

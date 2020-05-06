@@ -119,7 +119,7 @@ public class RegistrationUtils {
     }
 
     public boolean isUserInDatabase(String username) {
-        return !persistenceLayer.searchForUserByName(username).isEmpty();
+        return persistenceLayer.searchForUserByName(username).isPresent();
     }
 
     private void saveToDatabase(String username, String password) {

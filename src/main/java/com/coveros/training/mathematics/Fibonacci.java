@@ -7,7 +7,7 @@ public class Fibonacci {
     }
 
     public static long calculate(long n) {
-        long result = 0;
+        long result;
 
         if (n <= 1) {
             result = n;

@@ -36,9 +36,9 @@ public class AckermannParameterizedTests {
         });
     }
 
-    private long m;
-    private long n;
-    private BigInteger expected;
+    private final long m;
+    private final long n;
+    private final BigInteger expected;
 
     public AckermannParameterizedTests(long m, long n, String expected) {
         this.m = m;

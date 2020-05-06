@@ -19,7 +19,7 @@ public class RegistrationStepDefs {
     private RegistrationResult myRegistrationResult = RegistrationResult.createEmpty();
     private RegistrationUtils registrationUtils = RegistrationUtils.createEmpty();
     private PasswordResult passwordResult = PasswordResult.createEmpty();
-    private IPersistenceLayer pl = new PersistenceLayer();
+    private final IPersistenceLayer pl = new PersistenceLayer();
 
     /**
      * create objects for registration and login, and clear the database.

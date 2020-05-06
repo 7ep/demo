@@ -158,9 +158,8 @@ public class PersistenceLayer implements IPersistenceLayer {
     @Override
     public Optional<String> getBorrowerName(long id) {
         CheckUtils.checkIntParamPositive(id);
-        Function<ResultSet, Optional<String>> extractor = handleSqlResponse(rs -> {
-            return Optional.of(StringUtils.makeNotNullable(rs.getString(1)));
-        });
+        Function<ResultSet, Optional<String>> extractor =
+                handleSqlResponse(rs -> Optional.of(StringUtils.makeNotNullable(rs.getString(1))));
 
         return runQuery(new SqlData<>(
                         "get a borrower's name by their id",

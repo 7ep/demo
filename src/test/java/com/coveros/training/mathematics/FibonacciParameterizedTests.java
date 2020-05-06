@@ -20,9 +20,9 @@ public class FibonacciParameterizedTests {
         });
     }
 
-    private int fInput;
+    private final int fInput;
 
-    private int fExpected;
+    private final int fExpected;
 
     public FibonacciParameterizedTests(int input, int expected) {
         this.fInput = input;
