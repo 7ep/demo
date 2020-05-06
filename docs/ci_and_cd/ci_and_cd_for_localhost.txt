@@ -47,8 +47,7 @@ Modify the server.xml in the Tomcat "conf/" directory, at the bottom of the file
 
       <Host name="localhost"  appBase="webapps"
             unpackWARs="true" autoDeploy="true">
-        <Context docBase="/c:/Users/byron/.jenkins/workspace/Demo/build/reports/" path="/reports" />
-        <Context docBase="/c:/Users/byron/.jenkins/workspace/Demo/build/docs/javadoc" path="/javadoc" />
+        <Context docBase="/c:/Users/YOUR_NAME_HERE/.jenkins/workspace/Demo/" path="/demoworkspace" />
 
 In the Tomcat /bin directory, create a new file, setenv.bat
 Give it this content (this is so we can connect with JMX dynamic analysis tools to Tomcat):
@@ -116,7 +115,7 @@ Now let's create a pipeline so it does some actual work.
 - Check the box labeled "Do not allow concurrent builds".  (We don't want race conditions in our pipeline, and we don't want excessive memory usage on this demo machine)
 - Check the box for "Sidebar links". Add a link.  Enter this:
 
-  Link URL: http://localhost:8080/reports/bdd/cucumber-html-reports/overview-features.html
+  Link URL: http://localhost:8080/demoworkspace/build/reports/bdd/cucumber-html-reports/overview-features.html
   Link Text: Cucumber report.
 
   Click Add Link.
@@ -126,7 +125,7 @@ Now let's create a pipeline so it does some actual work.
 
   Click Add Link.
 
-  Link URL: http://localhost:8080/reports/dependency-check-report.html
+  Link URL: http://localhost:8080/demoworkspace/build/reports/dependency-check-report.html
   Link Text: Dependency check report
 
   Click Add Link.
@@ -136,17 +135,17 @@ Now let's create a pipeline so it does some actual work.
 
   Click Add Link
 
-  Link URL: http://localhost:8080/reports/jacoco/index.html
+  Link URL: http://localhost:8080/demoworkspace/build/reports/jacoco/index.html
   Link Text: Jacoco coverage report
 
   Click Add Link
 
-  Link URL: http://localhost:8080/reports/pitest/index.html
+  Link URL: http://localhost:8080/demoworkspace/build/reports/pitest/index.html
   Link Text: Pitest Mutation Testing
 
   Click Add Link
 
-  Link URL: http://localhost:8080/javadoc/index.html
+  Link URL: http://localhost:8080/demoworkspace/build/docs/javadoc/index.html
   Link Text: Javadoc
 
 - Under Pipeline, click on the dropdown and select "Pipeline script from SCM"
