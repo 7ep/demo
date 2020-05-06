@@ -14,15 +14,14 @@ public class MathStepDefs {
         // just a comment.  No state to set up.
     }
 
-    @When("I add (.*) to (.*)")
-    public void i_add_to(String num1, String num2) {
-        // Write code here that turns the phrase above into concrete actions
-        calculated_total = Integer.parseInt(num1) + Integer.parseInt(num2);
+    @When("I add {int} to {int}")
+    public void i_add_to(int num1, int num2) {
+        calculated_total = num1 + num2;
     }
 
-    @Then("the result should be (.*)")
-    public void the_result_should_be(String total) {
-        Assert.assertEquals(Integer.parseInt(total), calculated_total);
+    @Then("the result should be {int}")
+    public void the_result_should_be(int total) {
+        Assert.assertEquals(total, calculated_total);
     }
 
 }
