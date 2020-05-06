@@ -122,7 +122,7 @@ dependencies {
     providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
 
     // junit, for running unit tests
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
 
     // mockito, for mocking objects in our unit tests
     testImplementation 'org.mockito:mockito-core:3.3.3'
@@ -135,28 +135,28 @@ dependencies {
     // for equals and hashcode are met.  It's very strict.  Because it's very
     // strict, it forces us to create very safe, very solid code.
     // https://mvnrepository.com/artifact/nl.jqno.equalsverifier/equalsverifier
-    testImplementation group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.1.10'
+    testImplementation group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.1.13'
 
-    testImplementation 'io.cucumber:cucumber-java:4.8.0'
-    testImplementation 'io.cucumber:cucumber-junit:4.8.0'
+    testImplementation 'io.cucumber:cucumber-java:5.7.0'
+    testImplementation 'io.cucumber:cucumber-junit:5.7.0'
 
     // The commons-lang3 package has some utility classes that are very helpful
     // for those interested in safer coding.  Particularly, the equalsbuilder and hashcodebuilder.
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
 
     // a logging framework, so it becomes easily possible to see what is happening
     // in our code in realtime.
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.12.1'
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.1'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.13.2'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.2'
 
     // The following gives us the ability to use slf4j api calls.
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.12.1'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.13.2'
 
     // we'll use this as our database
     // https://mvnrepository.com/artifact/com.h2database/h2
-    localDeps group: 'com.h2database', name: 'h2', version: '1.4.199'
+    localDeps group: 'com.h2database', name: 'h2', version: '1.4.200'
 
     // so we can put a copy of h2 in a convenient place
     implementation configurations.localDeps
