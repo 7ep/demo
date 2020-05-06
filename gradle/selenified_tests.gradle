@@ -35,7 +35,7 @@ task selenified(type: Test) {
     options {
         listeners.add("com.coveros.selenified.utilities.Transformer")
         parallel = 'methods'
-        threadCount = 5
+        threadCount = 1
     }
 
 }
