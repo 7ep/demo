@@ -155,7 +155,16 @@ final class SqlData<R> {
     }
 
     public final String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        String paramsString = "";
+        for(ParameterObject<?> p : params) {
+            paramsString += p;
+        }
+
+        return new ToStringBuilder(this).
+                append("description", description).
+                append("params", paramsString).
+                append("prepared statement", preparedStatement).
+                toString();
     }
 
     public static <T> SqlData<T> createEmpty() {

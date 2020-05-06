@@ -14,7 +14,10 @@ public class UserTests {
     @Test
     public void testShouldOutputGoodString() {
         final User user = createTestUser();
-        Assert.assertTrue("toString was: " + user.toString(), user.toString().contains("name=alice,id=1"));
+        final String s = user.toString();
+        Assert.assertTrue("toString was: " + user.toString(),
+                s.contains("name=alice") &&
+                s.contains("id=1"));
     }
 
     @Test

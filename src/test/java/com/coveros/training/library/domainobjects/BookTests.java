@@ -14,7 +14,10 @@ public class BookTests {
     @Test
     public void testShouldOutputGoodString() {
         final Book book = createTestBook();
-        Assert.assertTrue("toString was: " + book.toString(), book.toString().contains("title=The DevOps Handbook,id=1"));
+        final String b = book.toString();
+        Assert.assertTrue("toString was: " + book.toString(),
+                b.contains("title=The DevOps Handbook") &&
+                b.contains("id=1"));
     }
 
     public static Book createTestBook() {

@@ -14,7 +14,13 @@ public class PasswordResultTests {
     @Test
     public void testShouldOutputGoodString() {
         final PasswordResult passwordResult = createTestPasswordResult();
-        Assert.assertTrue(passwordResult.toString().contains("status=SUCCESS,entropy=0.0,timeToCrackOffline=,timeToCrackOnline=,message=BASIC_PASSWORD_CHECKS_FAILED"));
+        final String result = passwordResult.toString();
+        Assert.assertTrue("was " + passwordResult,
+                result.contains("status=SUCCESS") &&
+                result.contains("entropy=0.0") &&
+                result.contains("timeToCrackOffline=") &&
+                result.contains("timeToCrackOnline=") &&
+                result.contains("message=BASIC_PASSWORD_CHECKS_FAILED"));
     }
 
     private static PasswordResult createTestPasswordResult() {

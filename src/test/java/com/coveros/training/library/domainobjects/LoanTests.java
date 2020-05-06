@@ -18,7 +18,7 @@ public class LoanTests {
     @Test
     public void testShouldOutputGoodString() {
         final Loan loan = createTestLoan();
-        Assert.assertTrue("toString was: " + loan.toString(), loan.toString().contains("title=The DevOps Handbook,id=1"));
+        Assert.assertTrue("toString was: " + loan.toString(), loan.toString().contains("title=The DevOps Handbook"));
     }
 
     public static Loan createTestLoan() {

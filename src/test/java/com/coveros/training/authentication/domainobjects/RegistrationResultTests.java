@@ -15,7 +15,11 @@ public class RegistrationResultTests {
     @Test
     public void testShouldOutputGoodString() {
         final RegistrationResult registrationResult = RegistrationResult.createEmpty();
-        Assert.assertTrue(registrationResult.toString().contains("wasSuccessfullyRegistered=false,status=EMPTY,message="));
+        final String result = registrationResult.toString();
+        Assert.assertTrue("was " + registrationResult,
+                result.contains("wasSuccessfullyRegistered=false") &&
+                        result.contains("status=EMPTY") &&
+                        result.contains("message="));
     }
 
     @Test

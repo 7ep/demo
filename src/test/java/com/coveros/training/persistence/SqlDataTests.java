@@ -33,7 +33,7 @@ public class SqlDataTests {
     @Test
     public void testShouldOutputGoodString() {
         final SqlData<String> sqlData = createTestSqlData();
-        Assert.assertTrue("toString was: " + sqlData.toString(), sqlData.toString().contains("description=this is the description,preparedStatement=this is the prepared statement = ?;,params=[]"));
+        Assert.assertTrue("toString was: " + sqlData.toString(), sqlData.toString().contains("description=this is the description,params=,prepared statement=this is the prepared statement = ?;"));
     }
 
     @Test
