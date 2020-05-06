@@ -54,6 +54,20 @@ public class PersistenceLayer implements IPersistenceLayer {
         }
     }
 
+    public <T> long executeInsertTemplate(
+            String description,
+            String preparedStatement,
+            Object ... params) {
+        final SqlData<Object> sqlData = new SqlData<>(description, preparedStatement, params);
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement st = prepareStatementWithKeys(sqlData, connection)) {
+                return executeInsertOnPreparedStatement(sqlData, st);
+            }
+        } catch (SQLException ex) {
+            throw new SqlRuntimeException(ex);
+        }
+    }
+
     private <T> long executeInsertTemplate(SqlData<T> sqlData) {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st = prepareStatementWithKeys(sqlData, connection)) {
@@ -124,9 +138,9 @@ public class PersistenceLayer implements IPersistenceLayer {
     @Override
     public long saveNewUser(String username) {
         CheckUtils.checkStringNotNullOrEmpty(username);
-        return executeInsertTemplate(new SqlData<>(
+        return executeInsertTemplate(
                 "Creates a new user in the database",
-                "INSERT INTO auth.user (name) VALUES (?);", username));
+                "INSERT INTO auth.user (name) VALUES (?);", username);
     }
 
     @Override
