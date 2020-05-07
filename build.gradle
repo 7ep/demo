@@ -162,7 +162,8 @@ dependencies {
     implementation configurations.localDeps
 
     // so we can programmatically run flyway at startup
-    implementation "org.flywaydb:flyway-core:6.0.8"
+    // https://mvnrepository.com/artifact/org.flywaydb/flyway-core
+    implementation "org.flywaydb:flyway-core:6.4.1"
 }
 
 pitest {
