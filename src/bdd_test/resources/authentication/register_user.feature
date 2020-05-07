@@ -22,7 +22,7 @@ Feature: A user may register themselves to the system.
         Examples:
             | password                |
             | typical_password_123    |
-            | aaaaaa                  |
+            | aaaaaaaaaa              |
             | password123             |
             | really_totally_long     |
 

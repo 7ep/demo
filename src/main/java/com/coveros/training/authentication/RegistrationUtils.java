@@ -92,7 +92,7 @@ public class RegistrationUtils {
             logger.info("password was empty");
             return PasswordResult.createDefault(EMPTY_PASSWORD);
         }
-        if (password.length() < 6) {
+        if (password.length() < 10) {
             logger.info("password was too short");
             return PasswordResult.createDefault(TOO_SHORT);
         }
