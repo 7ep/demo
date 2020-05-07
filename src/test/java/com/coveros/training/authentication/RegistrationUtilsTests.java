@@ -35,25 +35,6 @@ public class RegistrationUtilsTests {
     }
 
     /**
-     * While these passwords may look good, they represent
-     * examples of passwords that can be easily cracked, as
-     * measured by a tool we use.
-     */
-    @Test
-    public void testShouldHaveInsufficientEntropyInPassword() {
-        final List<String> badPasswords =
-                Arrays.asList(
-                        "abc123",
-                        "abc123horse",
-                        "abc123horsestaples",
-                        "typical_password_123");
-        for (String password : badPasswords) {
-            final PasswordResult result = RegistrationUtils.isPasswordGood(password);
-            Assert.assertEquals("password: " + password, PasswordResultEnums.INSUFFICIENT_ENTROPY, result.status);
-        }
-    }
-
-    /**
      * A lightweight performance test for a slow call
      */
     @Test
