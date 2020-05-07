@@ -27,9 +27,30 @@ public class NbvcxzTests {
      * measured by a tool we use.
      */
     @Test
+    @Ignore
     public void testShouldHaveInsufficientEntropyInPassword() {
         final List<String> badPasswords =
                 Arrays.asList(
+                        "zV7HHoOtua",  // insufficient
+                        "IUIHtABOOd",  // insufficient
+                        "M9TeTcfGH7",  // insufficient
+                        "r49ZaBa235",  // insufficient
+                        "212wjwqmnn",  // insufficient
+                        "arinoTZEAo",  // insufficient
+                        "y4Mup0NN5t",  // insufficient
+                        "F2KareyqQy",  // insufficient
+                        "5mdC3Uvutu",  // insufficient
+                        "wj03Az3mPt",  // insufficient
+                        "6nuZZO6ssH",  // insufficient
+                        "ll5acnE``u",  // insufficient
+                        "`/B88{lE4n",  // insufficient
+                        "yOHG%EY0u0",  // insufficient
+                        "qhhPIAN0?y",  // insufficient
+                        "67n3e85,pL,", // insufficient
+                        "pWaYNeYlDi9", // insufficient
+                        "h31pWA5eoDI", // insufficient
+                        "sheaQPf0ruu", // insufficient
+
                         "abc12345az",
                         "abc123horse",
                         "abc123horsestaples",
@@ -37,6 +58,36 @@ public class NbvcxzTests {
         for (String password : badPasswords) {
             final PasswordResult result = RegistrationUtils.isPasswordGood(password);
             Assert.assertEquals("password: " + password, PasswordResultEnums.INSUFFICIENT_ENTROPY, result.status);
+        }
+    }
+
+
+    /**
+     * These are passwords that meet complexity criteria.
+     */
+    @Test
+    @Ignore
+    public void testShouldHaveSuccessfulEntropyInPassword() {
+        final List<String> goodPasswords =
+                Arrays.asList(
+                        "zV7HHo1tua",
+                        "IUIHtA1OOd",
+                        "M9TeTc1GH7",
+                        "r49ZaB1235",
+                        "y4Mup01N5t",
+                        "F2Kare1qQy",
+                        "5mdC3U1utu",
+                        "wj03Az1mPt",
+                        "6nuZZO1ssH",
+                        "ll5acn1``u",
+                        "yOHG%E10u0",
+                        "qhhPIA10?y",
+                        "pWaYNe1lDi9",
+                        "h31pWA1eoDI",
+                        "sheaQP10ruu");
+        for (String password : goodPasswords) {
+            final PasswordResult result = RegistrationUtils.isPasswordGood(password);
+            Assert.assertEquals("password: " + password, PasswordResultEnums.SUCCESS, result.status);
         }
     }
 
