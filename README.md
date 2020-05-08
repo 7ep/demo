@@ -1,7 +1,8 @@
 ## Demo - demonstrates an application and tests
 
 This is an application by [Coveros](https://www.coveros.com/) to demonstrate good
-software practices.  
+software practices.  As we say in agile... _Working software over comprehensive 
+documentation_ ... but that doesn't mean we can't have pretty good documentation too. 
 
 #### Quick Start:
 
@@ -11,7 +12,7 @@ software practices.
 * Visit the application with your browser at http://localhost:8080/demo
 
 #### Summary:
- 
+
 Demo consists of a simple web application and tests.  Its goal is to provide 
 an environment suitable for demonstration and practice in valuable development
 techniques.  Some of the techniques exemplified are:
@@ -161,6 +162,7 @@ On Windows
     gradlew runAllTests    
     
 #### Summary of relevant Gradle commands
+* gradlew coveros - show a cheat sheet of commands for Demo
 * gradlew apprun - runs the application
 * gradlew check - runs all tests possible with only dependency being Java 8.  No need for app to be running.
 * gradlew runAllTests - runs the whole set of tests**  
@@ -187,14 +189,25 @@ Details on building out a CI/CD pipeline are found in the "docs/ci_and_cd" direc
 For example, to set it all up on a [local Windows box](https://raw.githubusercontent.com/7ep/demo/master/docs/ci_and_cd/ci_and_cd_for_localhost.txt) 
 
 ###### Features of the pipeline:
-* A fully functioning demonstration CI/CD pipeline using Jenkins.
-* Incorporates static analysis using SonarQube
+* A fully functioning and documented demonstration CI/CD pipeline using Jenkins.
+* BDD tests run with a report generated
+* Static analysis quality-gating using SonarQube
 * UI tests running on Chrome
+* Performance testing with Jmeter
+* Security analysis with OWASP's "DependencyCheck"
+* Complex commands wrapped simply using Gradle
+* Mutation testing with Pitest
+* Javadocs built
+
+
 
 ---
 
-##Screenshots:
+## Screenshots:
 ![Jenkins pipeline](https://c2.staticflickr.com/8/7889/33202009658_11422b7f20_b.jpg)
+
 ![Zap attach proxy](https://c2.staticflickr.com/8/7905/33202009438_8f367e20ec_o.png)
+
 ![SonarQube analysis](https://c2.staticflickr.com/8/7823/33202009548_e678128200_b.jpg)
+
 ![Running performance tests](https://c2.staticflickr.com/8/7854/47077017751_7e045f68dd_b.jpg)
