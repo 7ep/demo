@@ -6,7 +6,7 @@ documentation_ ... but that doesn't mean we can't have pretty good documentation
 
 #### Quick Start:
 
-* You must have javac available in your PATH (see [JDK notes](#java-installation-notes))
+* Put Java on your PATH (see [JDK notes](#java-installation-notes))
 * Clone or [download](https://github.com/7ep/demo/archive/master.zip) this repo.  (if you download, unzip the file to a directory.)
 * On the command line in the top directory of this repo, run `gradlew apprun`
 * Visit the application with your browser at http://localhost:8080/demo
@@ -64,7 +64,9 @@ to visit these links and download / install the applications found there.
 
 #### Java installation notes
 
-To install: download the [development kit](https://www.oracle.com/technetwork/java/javase/downloads/index.html), make note of the installation directory.  Add that directory 
+I've tested Demo with Java 8,9,10,11,and 12.  
+
+Download the [development kit](https://www.oracle.com/java/technologies/javase-downloads.html#JDK11), make note of the installation directory.  Add that directory 
 to your path.  For example, on Windows, press the Windows button, type "env" to edit the environment
 variables for your account.  Under _user variables_ click New and add:
 
