@@ -215,6 +215,8 @@ public class PersistenceLayer implements IPersistenceLayer {
      */
 
 
+    // Library functions
+
     @Override
     public long saveNewBorrower(String borrowerName) {
         CheckUtils.checkStringNotNullOrEmpty(borrowerName);
@@ -238,15 +240,6 @@ public class PersistenceLayer implements IPersistenceLayer {
         return executeInsertTemplate(
                 "Creates a new book in the database",
                 "INSERT INTO library.book (title) VALUES (?);", bookTitle);
-    }
-
-
-    @Override
-    public long saveNewUser(String username) {
-        CheckUtils.checkStringNotNullOrEmpty(username);
-        return executeInsertTemplate(
-                "Creates a new user in the database",
-                "INSERT INTO auth.user (name) VALUES (?);", username);
     }
 
 
@@ -404,56 +397,6 @@ public class PersistenceLayer implements IPersistenceLayer {
 
 
     @Override
-    public Optional<User> searchForUserByName(String username) {
-        CheckUtils.checkStringNotNullOrEmpty(username);
-        Function<ResultSet, Optional<User>> extractor = handleSqlResponse(rs -> {
-            final long id = rs.getLong(1);
-            return Optional.of(new User(username, id));
-        });
-
-        return runQuery(new SqlData<>(
-                        "search for a user by id, return that user if found, otherwise return an empty user",
-                        "SELECT id  FROM auth.user WHERE name = ?;",
-                        extractor, username));
-    }
-
-    @Override
-    public Optional<Boolean> areCredentialsValid(String username, String password) {
-        Function<ResultSet, Optional<Boolean>> extractor = handleSqlResponse(rs -> {
-            final long id = rs.getLong(1);
-            assert (id > 0);
-            return Optional.of(true);
-        });
-
-        final String hexHash = createHashedValueFromPassword(password);
-        return runQuery(new SqlData<>(
-                        "check to see if the credentials for a user are valid",
-                        "SELECT id FROM auth.user WHERE name = ? AND password_hash = ?;",
-                        extractor, username, hexHash));
-    }
-
-    @Override
-    public void updateUserWithPassword(long id, String password) {
-        CheckUtils.checkIntParamPositive(id);
-        String hashedPassword = createHashedValueFromPassword(password);
-        executeUpdateTemplate(
-                "Updates the user's password field with a new hash",
-                "UPDATE auth.user SET password_hash = ? WHERE id = ?;", hashedPassword, id);
-    }
-
-    private String createHashedValueFromPassword(String password) {
-        CheckUtils.checkStringNotNullOrEmpty(password);
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] encodedhash = digest.digest(
-                    password.getBytes(StandardCharsets.UTF_8));
-            return bytesToHex(encodedhash);
-        } catch (NoSuchAlgorithmException e) {
-            throw new SqlRuntimeException(e);
-        }
-    }
-
-    @Override
     public Optional<List<Loan>> searchForLoanByBorrower(Borrower borrower) {
         Function<ResultSet, Optional<List<Loan>>> extractor = handleSqlResponse(rs -> {
             List<Loan> loans = new ArrayList<>();
@@ -469,13 +412,14 @@ public class PersistenceLayer implements IPersistenceLayer {
         });
 
         return runQuery(new SqlData<>(
-                        "search for all loans by borrower",
-                        "SELECT loan.id, loan.borrow_date, loan.book, book.title " +
+                "search for all loans by borrower",
+                "SELECT loan.id, loan.borrow_date, loan.book, book.title " +
                         "FROM library.loan loan " +
                         "JOIN library.book book ON book.id = loan.book " +
                         "WHERE loan.borrower = ?;",
-                        extractor, borrower.id));
+                extractor, borrower.id));
     }
+
 
     @Override
     public Optional<Loan> searchForLoanByBook(Book book) {
@@ -489,18 +433,97 @@ public class PersistenceLayer implements IPersistenceLayer {
         });
 
         return runQuery(new SqlData<>(
-                        "search for a loan by book",
-                        "SELECT loan.id, loan.borrow_date, loan.borrower, bor.name " +
+                "search for a loan by book",
+                "SELECT loan.id, loan.borrow_date, loan.borrower, bor.name " +
                         "FROM library.loan loan " +
                         "JOIN library.borrower bor ON bor.id = loan.borrower " +
                         "WHERE loan.book = ?;",
-                        extractor, book.id));
+                extractor, book.id));
     }
 
-    private static String bytesToHex(byte[] hash) {
+
+    // authentication functions
+
+
+    @Override
+    public long saveNewUser(String username) {
+        CheckUtils.checkStringNotNullOrEmpty(username);
+        return executeInsertTemplate(
+                "Creates a new user in the database",
+                "INSERT INTO auth.user (name) VALUES (?);", username);
+    }
+
+
+    @Override
+    public Optional<User> searchForUserByName(String username) {
+        CheckUtils.checkStringNotNullOrEmpty(username);
+        Function<ResultSet, Optional<User>> extractor = handleSqlResponse(rs -> {
+            final long id = rs.getLong(1);
+            return Optional.of(new User(username, id));
+        });
+
+        return runQuery(new SqlData<>(
+                "search for a user by id, return that user if found, otherwise return an empty user",
+                "SELECT id  FROM auth.user WHERE name = ?;",
+                extractor, username));
+    }
+
+
+    @Override
+    public Optional<Boolean> areCredentialsValid(String username, String password) {
+        Function<ResultSet, Optional<Boolean>> extractor = handleSqlResponse(rs -> {
+            final long id = rs.getLong(1);
+            assert (id > 0);
+            return Optional.of(true);
+        });
+
+        final String hexHash = createHashedValueFromPassword(password);
+        return runQuery(new SqlData<>(
+                "check to see if the credentials for a user are valid",
+                "SELECT id FROM auth.user WHERE name = ? AND password_hash = ?;",
+                extractor, username, hexHash));
+    }
+
+
+    @Override
+    public void updateUserWithPassword(long id, String password) {
+        CheckUtils.checkIntParamPositive(id);
+        String hashedPassword = createHashedValueFromPassword(password);
+        executeUpdateTemplate(
+                "Updates the user's password field with a new hash",
+                "UPDATE auth.user SET password_hash = ? WHERE id = ?;", hashedPassword, id);
+    }
+
+
+    /**
+     * Given a password (for example, "password123"), return a
+     * hash of that.
+     * @param password a user's password
+     * @return a hash of the password value.  a one-way function that returns a unique value,
+     *          but different than the original, cannot be converted back to its original value.
+     */
+    private String createHashedValueFromPassword(String password) {
+        CheckUtils.checkStringNotNullOrEmpty(password);
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] encodedhash = digest.digest(
+                    password.getBytes(StandardCharsets.UTF_8));
+            return bytesToHex(encodedhash);
+        } catch (NoSuchAlgorithmException e) {
+            throw new SqlRuntimeException(e);
+        }
+    }
+
+
+    /**
+     * Converts an array of bytes to their corresponding hex string
+     * @param bytes an array of bytes
+     * @return a hex string of that array
+     */
+    private static String bytesToHex(byte[] bytes) {
         StringBuilder hexString = new StringBuilder();
-        for (byte hash1 : hash) {
-            String hex = Integer.toHexString(0xff & hash1);
+        for (byte b : bytes) {
+            String hex = Integer.toHexString(0xff & b);
             if (hex.length() == 1) hexString.append('0');
             hexString.append(hex);
         }
@@ -517,6 +540,11 @@ public class PersistenceLayer implements IPersistenceLayer {
      * ==========================================================
      * ==========================================================
      */
+
+
+    public static IPersistenceLayer createEmpty() {
+        return new PersistenceLayer(new EmptyDataSource());
+    }
 
 
     @Override
@@ -556,6 +584,18 @@ public class PersistenceLayer implements IPersistenceLayer {
         }
     }
 
+
+    /*
+     * ==========================================================
+     * ==========================================================
+     *
+     *  Database migration code - using FlywayDb
+     *
+     * ==========================================================
+     * ==========================================================
+     */
+
+
     @Override
     public void cleanAndMigrateDatabase() {
         cleanDatabase();
@@ -579,10 +619,6 @@ public class PersistenceLayer implements IPersistenceLayer {
                 .schemas("ADMINISTRATIVE", "LIBRARY", "AUTH")
                 .dataSource(this.dataSource)
                 .load();
-    }
-
-    public static IPersistenceLayer createEmpty() {
-        return new PersistenceLayer(new EmptyDataSource());
     }
 
 }
