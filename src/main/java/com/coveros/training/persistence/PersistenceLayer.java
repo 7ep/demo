@@ -22,6 +22,16 @@ import java.util.function.Function;
 
 public class PersistenceLayer implements IPersistenceLayer {
 
+    /*
+     * ==========================================================
+     * ==========================================================
+     *
+     *  Class construction - details of making this class
+     *
+     * ==========================================================
+     * ==========================================================
+     */
+
     private final DataSource dataSource;
 
     public PersistenceLayer() {
@@ -37,6 +47,24 @@ public class PersistenceLayer implements IPersistenceLayer {
                 "jdbc:h2:mem:training;MODE=PostgreSQL", "", "");
     }
 
+    /*
+     * ==========================================================
+     * ==========================================================
+     *
+     *  Micro ORM
+     *    Demo has a simplistic Object Relational Mapper (ORM)
+     *    implementation.  These are the methods that comprise
+     *    the mechanisms for that.
+     *
+     *    In comparison, a gargantuan project like Hibernate
+     *    would consist of a heckuva-lot-more than this.  That's
+     *    why this one is termed, "micro"
+     *
+     * ==========================================================
+     * ==========================================================
+     */
+
+
     /**
      * This command provides a template to execute updates (including inserts) on the database
      */
@@ -51,6 +79,7 @@ public class PersistenceLayer implements IPersistenceLayer {
         }
     }
 
+
     public long executeInsertTemplate(
             String description,
             String preparedStatement,
@@ -64,6 +93,7 @@ public class PersistenceLayer implements IPersistenceLayer {
             throw new SqlRuntimeException(ex);
         }
     }
+
 
     <T> long executeInsertOnPreparedStatement(SqlData<T> sqlData, PreparedStatement st) throws SQLException {
         sqlData.applyParametersToPreparedStatement(st);
@@ -80,10 +110,12 @@ public class PersistenceLayer implements IPersistenceLayer {
         }
     }
 
+
     private <T> void executeUpdateOnPreparedStatement(SqlData<T> sqlData, PreparedStatement st) throws SQLException {
         sqlData.applyParametersToPreparedStatement(st);
         st.executeUpdate();
     }
+
 
     /**
      * A helper method.  Simply creates a prepared statement that
@@ -99,6 +131,90 @@ public class PersistenceLayer implements IPersistenceLayer {
                 Statement.RETURN_GENERATED_KEYS);
     }
 
+
+    <R> Optional<R> runQuery(SqlData<R> sqlData) {
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement st =
+                         connection.prepareStatement(sqlData.preparedStatement)) {
+                sqlData.applyParametersToPreparedStatement(st);
+                try (ResultSet resultSet = st.executeQuery()) {
+                    return sqlData.extractor.apply(resultSet);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new SqlRuntimeException(ex);
+        }
+
+    }
+
+
+    /**
+     * This is an interface to a wrapper around {@link Function} so we can catch exceptions
+     * in the generic function.
+     *
+     * @param <R> The return type
+     * @param <E> The type of the exception
+     */
+    @FunctionalInterface
+    private interface ThrowingFunction<R, E extends Exception> {
+        R apply(ResultSet resultSet) throws E;
+    }
+
+
+    /**
+     * This wraps the throwing function, so that we are not forced to
+     * catch an exception in our ordinary code - it's caught and handled
+     * here.
+     * @param throwingFunction a lambda that throws a checked exception we have to handle.
+     *                         specifically in this case that's a SqlRuntimeException
+     * @param <R> the type of value returned
+     * @return returns a function that runs and returns a function wrapped with an exception handler
+     */
+    static <R> Function<ResultSet, R> throwingFunctionWrapper(
+            ThrowingFunction<R, Exception> throwingFunction) {
+
+        return resultSet -> {
+            try {
+                return throwingFunction.apply(resultSet);
+            } catch (Exception ex) {
+                throw new SqlRuntimeException(ex);
+            }
+        };
+    }
+
+
+    /**
+     * Accepts a function to extract data from a {@link ResultSet} and
+     * removes some boilerplate with handling its response.
+     * Works in conjunction with {@link #throwingFunctionWrapper}
+     * @param extractorFunction a function that extracts data from a {@link ResultSet}
+     * @param <T> the type of data we'll retrieve from the {@link ResultSet}
+     * @return either the type of data wrapped with an optional, or {@link Optional#empty}
+     */
+    private <T> Function<ResultSet, Optional<T>> handleSqlResponse(
+            ThrowingFunction<Optional<T>, Exception> extractorFunction) {
+        return throwingFunctionWrapper(rs -> {
+            if (rs.next()) {
+                return extractorFunction.apply(rs);
+            } else {
+                return Optional.empty();
+            }
+        });
+    }
+
+
+    /*
+     * ==========================================================
+     * ==========================================================
+     *
+     *  Business functions
+     *     loaning out books, registering users, etc
+     *
+     * ==========================================================
+     * ==========================================================
+     */
+
+
     @Override
     public long saveNewBorrower(String borrowerName) {
         CheckUtils.checkStringNotNullOrEmpty(borrowerName);
@@ -107,12 +223,14 @@ public class PersistenceLayer implements IPersistenceLayer {
                 "INSERT INTO library.borrower (name) VALUES (?);", borrowerName);
     }
 
+
     @Override
     public long createLoan(Book book, Borrower borrower, Date borrowDate) {
         return executeInsertTemplate(
                 "Creates a new loan of a book to a borrower",
                 "INSERT INTO library.loan (book, borrower, borrow_date) VALUES (?, ?, ?);", book.id, borrower.id, borrowDate);
     }
+
 
     @Override
     public long saveNewBook(String bookTitle) {
@@ -122,6 +240,7 @@ public class PersistenceLayer implements IPersistenceLayer {
                 "INSERT INTO library.book (title) VALUES (?);", bookTitle);
     }
 
+
     @Override
     public long saveNewUser(String username) {
         CheckUtils.checkStringNotNullOrEmpty(username);
@@ -129,6 +248,7 @@ public class PersistenceLayer implements IPersistenceLayer {
                 "Creates a new user in the database",
                 "INSERT INTO auth.user (name) VALUES (?);", username);
     }
+
 
     @Override
     public void updateBorrower(long id, String borrowerName) {
@@ -139,6 +259,7 @@ public class PersistenceLayer implements IPersistenceLayer {
                 "UPDATE library.borrower SET name = ? WHERE id = ?;", borrowerName, id);
     }
 
+
     @Override
     public void deleteBook(long id) {
         CheckUtils.checkIntParamPositive(id);
@@ -147,6 +268,7 @@ public class PersistenceLayer implements IPersistenceLayer {
                 "DELETE FROM library.book WHERE id = ?;", id);
     }
 
+
     @Override
     public void deleteBorrower(long id) {
         CheckUtils.checkIntParamPositive(id);
@@ -154,6 +276,7 @@ public class PersistenceLayer implements IPersistenceLayer {
                 "Deletes a borrower from the database",
                 "DELETE FROM library.borrower WHERE id = ?;", id);
     }
+
 
     @Override
     public Optional<String> getBorrowerName(long id) {
@@ -166,7 +289,6 @@ public class PersistenceLayer implements IPersistenceLayer {
                         "SELECT name FROM library.borrower WHERE id = ?;",
                         extractor, id));
     }
-
 
 
     @Override
@@ -183,6 +305,7 @@ public class PersistenceLayer implements IPersistenceLayer {
                         "SELECT id, name FROM library.borrower WHERE name = ?;",
                         extractor, borrowerName));
     }
+
 
     @Override
     public Optional<Book> searchBooksByTitle(String bookTitle) {
@@ -230,15 +353,18 @@ public class PersistenceLayer implements IPersistenceLayer {
                         extractor, id));
     }
 
+
     @Override
     public Optional<List<Book>> listAllBooks() {
         return listBooks("get all books", "SELECT id, title FROM library.book;");
     }
 
+
     @Override
     public Optional<List<Book>> listAvailableBooks() {
         return listBooks("get all available books", "SELECT b.id, b.title FROM library.book b LEFT JOIN library.loan l ON b.id = l.book WHERE l.borrow_date IS NULL;");
     }
+
 
     private Optional<List<Book>> listBooks(String description, String sqlCode) {
         Function<ResultSet, Optional<List<Book>>> extractor = handleSqlResponse(rs -> {
@@ -256,6 +382,7 @@ public class PersistenceLayer implements IPersistenceLayer {
                         sqlCode,
                         extractor));
     }
+
 
     @Override
     public Optional<List<Borrower>> listAllBorrowers() {
@@ -275,74 +402,6 @@ public class PersistenceLayer implements IPersistenceLayer {
                         extractor));
     }
 
-
-    <R> Optional<R> runQuery(SqlData<R> sqlData) {
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement st =
-                         connection.prepareStatement(sqlData.preparedStatement)) {
-                sqlData.applyParametersToPreparedStatement(st);
-                try (ResultSet resultSet = st.executeQuery()) {
-                    return sqlData.extractor.apply(resultSet);
-                }
-            }
-        } catch (SQLException ex) {
-            throw new SqlRuntimeException(ex);
-        }
-
-    }
-
-
-    /**
-     * This is an interface to a wrapper around {@link Function} so we can catch exceptions
-     * in the generic function.
-     *
-     * @param <R> The return type
-     * @param <E> The type of the exception
-     */
-    @FunctionalInterface
-    private interface ThrowingFunction<R, E extends Exception> {
-        R apply(ResultSet resultSet) throws E;
-    }
-
-    /**
-     * This wraps the throwing function, so that we are not forced to
-     * catch an exception in our ordinary code - it's caught and handled
-     * here.
-     * @param throwingFunction a lambda that throws a checked exception we have to handle.
-     *                         specifically in this case that's a SqlRuntimeException
-     * @param <R> the type of value returned
-     * @return returns a function that runs and returns a function wrapped with an exception handler
-     */
-    static <R> Function<ResultSet, R> throwingFunctionWrapper(
-            ThrowingFunction<R, Exception> throwingFunction) {
-
-        return resultSet -> {
-            try {
-                return throwingFunction.apply(resultSet);
-            } catch (Exception ex) {
-                throw new SqlRuntimeException(ex);
-            }
-        };
-    }
-
-    /**
-     * Accepts a function to extract data from a {@link ResultSet} and
-     * removes some boilerplate with handling its response.
-     * Works in conjunction with {@link #throwingFunctionWrapper}
-     * @param extractorFunction a function that extracts data from a {@link ResultSet}
-     * @param <T> the type of data we'll retrieve from the {@link ResultSet}
-     * @return either the type of data wrapped with an optional, or {@link Optional#empty}
-     */
-    private <T> Function<ResultSet, Optional<T>> handleSqlResponse(
-            ThrowingFunction<Optional<T>, Exception> extractorFunction) {
-        return throwingFunctionWrapper(rs -> {
-            if (rs.next()) {
-                return extractorFunction.apply(rs);
-            } else {
-                return Optional.empty();
-            }
-        });
-    }
 
     @Override
     public Optional<User> searchForUserByName(String username) {
@@ -447,6 +506,18 @@ public class PersistenceLayer implements IPersistenceLayer {
         }
         return hexString.toString();
     }
+
+
+    /*
+     * ==========================================================
+     * ==========================================================
+     *
+     *  General utility methods
+     *
+     * ==========================================================
+     * ==========================================================
+     */
+
 
     @Override
     public boolean isEmpty() {
