@@ -191,7 +191,7 @@ public class PersistenceLayer implements IPersistenceLayer {
      * @param <T> the type of data we'll retrieve from the {@link ResultSet}
      * @return either the type of data wrapped with an optional, or {@link Optional#empty}
      */
-    private <T> Function<ResultSet, Optional<T>> handleSqlResponse(
+    private <T> Function<ResultSet, Optional<T>> createExtractor(
             ThrowingFunction<Optional<T>, Exception> extractorFunction) {
         return throwingFunctionWrapper(rs -> {
             if (rs.next()) {
@@ -275,7 +275,7 @@ public class PersistenceLayer implements IPersistenceLayer {
     public Optional<String> getBorrowerName(long id) {
         CheckUtils.checkIntParamPositive(id);
         Function<ResultSet, Optional<String>> extractor =
-                handleSqlResponse(rs -> Optional.of(StringUtils.makeNotNullable(rs.getString(1))));
+                createExtractor(rs -> Optional.of(StringUtils.makeNotNullable(rs.getString(1))));
 
         return runQuery(new SqlData<>(
                         "get a borrower's name by their id",
@@ -287,7 +287,7 @@ public class PersistenceLayer implements IPersistenceLayer {
     @Override
     public Optional<Borrower> searchBorrowerDataByName(String borrowerName) {
         CheckUtils.checkStringNotNullOrEmpty(borrowerName);
-        Function<ResultSet, Optional<Borrower>> extractor = handleSqlResponse(rs -> {
+        Function<ResultSet, Optional<Borrower>> extractor = createExtractor(rs -> {
             long id = rs.getLong(1);
             String name = StringUtils.makeNotNullable(rs.getString(2));
             return Optional.of(new Borrower(id, name));
@@ -303,7 +303,7 @@ public class PersistenceLayer implements IPersistenceLayer {
     @Override
     public Optional<Book> searchBooksByTitle(String bookTitle) {
         CheckUtils.checkStringNotNullOrEmpty(bookTitle);
-        Function<ResultSet, Optional<Book>> extractor = handleSqlResponse(rs -> {
+        Function<ResultSet, Optional<Book>> extractor = createExtractor(rs -> {
             long id = rs.getLong(1);
             return Optional.of(new Book(id, bookTitle));
         });
@@ -318,7 +318,7 @@ public class PersistenceLayer implements IPersistenceLayer {
     @Override
     public Optional<Book> searchBooksById(long id) {
         CheckUtils.checkIntParamPositive(id);
-        Function<ResultSet, Optional<Book>> extractor = handleSqlResponse(rs -> {
+        Function<ResultSet, Optional<Book>> extractor = createExtractor(rs -> {
             long bookId = rs.getLong(1);
             String title = StringUtils.makeNotNullable(rs.getString(2));
             return Optional.of(new Book(bookId, title));
@@ -334,7 +334,7 @@ public class PersistenceLayer implements IPersistenceLayer {
     @Override
     public Optional<Borrower> searchBorrowersById(long id) {
         CheckUtils.checkIntParamPositive(id);
-        Function<ResultSet, Optional<Borrower>> extractor = handleSqlResponse(rs -> {
+        Function<ResultSet, Optional<Borrower>> extractor = createExtractor(rs -> {
             long borrowerId = rs.getLong(1);
             String name = StringUtils.makeNotNullable(rs.getString(2));
             return Optional.of(new Borrower(borrowerId, name));
@@ -360,7 +360,7 @@ public class PersistenceLayer implements IPersistenceLayer {
 
 
     private Optional<List<Book>> listBooks(String description, String sqlCode) {
-        Function<ResultSet, Optional<List<Book>>> extractor = handleSqlResponse(rs -> {
+        Function<ResultSet, Optional<List<Book>>> extractor = createExtractor(rs -> {
             List<Book> bookList = new ArrayList<>();
             do {
                 long id = rs.getLong(1);
@@ -379,7 +379,7 @@ public class PersistenceLayer implements IPersistenceLayer {
 
     @Override
     public Optional<List<Borrower>> listAllBorrowers() {
-        Function<ResultSet, Optional<List<Borrower>>> extractor = handleSqlResponse(rs -> {
+        Function<ResultSet, Optional<List<Borrower>>> extractor = createExtractor(rs -> {
             List<Borrower> borrowerList = new ArrayList<>();
             do {
                 long id = rs.getLong(1);
@@ -398,7 +398,7 @@ public class PersistenceLayer implements IPersistenceLayer {
 
     @Override
     public Optional<List<Loan>> searchForLoanByBorrower(Borrower borrower) {
-        Function<ResultSet, Optional<List<Loan>>> extractor = handleSqlResponse(rs -> {
+        Function<ResultSet, Optional<List<Loan>>> extractor = createExtractor(rs -> {
             List<Loan> loans = new ArrayList<>();
             do {
                 final long loanId = rs.getLong(1);
@@ -423,7 +423,7 @@ public class PersistenceLayer implements IPersistenceLayer {
 
     @Override
     public Optional<Loan> searchForLoanByBook(Book book) {
-        Function<ResultSet, Optional<Loan>> extractor = handleSqlResponse(rs -> {
+        Function<ResultSet, Optional<Loan>> extractor = createExtractor(rs -> {
             final long loanId = rs.getLong(1);
             final Date borrowDate = rs.getDate(2);
             final long borrowerId = rs.getLong(3);
@@ -457,7 +457,7 @@ public class PersistenceLayer implements IPersistenceLayer {
     @Override
     public Optional<User> searchForUserByName(String username) {
         CheckUtils.checkStringNotNullOrEmpty(username);
-        Function<ResultSet, Optional<User>> extractor = handleSqlResponse(rs -> {
+        Function<ResultSet, Optional<User>> extractor = createExtractor(rs -> {
             final long id = rs.getLong(1);
             return Optional.of(new User(username, id));
         });
@@ -471,7 +471,7 @@ public class PersistenceLayer implements IPersistenceLayer {
 
     @Override
     public Optional<Boolean> areCredentialsValid(String username, String password) {
-        Function<ResultSet, Optional<Boolean>> extractor = handleSqlResponse(rs -> {
+        Function<ResultSet, Optional<Boolean>> extractor = createExtractor(rs -> {
             final long id = rs.getLong(1);
             assert (id > 0);
             return Optional.of(true);
