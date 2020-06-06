@@ -20,7 +20,11 @@ Open another terminal.  Run the pipenv shell:
 
   pipenv shell
 
-Then, run python.  You should see something like this:
+Then, run python:
+
+  python
+
+You should see something like this:
 	Python 3.7.0 (v3.7.0:1bf9cc5093, Jun 27 2018, 04:06:47) [MSC v.1914 32 bit (Intel)] on win32
 	Type "help", "copyright", "credits" or "license" for more information.
 	>>>
@@ -50,11 +54,11 @@ You should see that page show up in the browser, if you did that right.
 Let's get some information about the page, like it's title.  Easy:
 
 	>>> driver.title
-	'Web Demo'
+	'Library'
 	
 Let's assert that:
 
-	assert_that(driver.title, contains_string('Web Demo'))
+	assert_that(driver.title, contains_string('Library'))
 
 This should return nothing, indicating success.  Let's try it with something that's not there:
 

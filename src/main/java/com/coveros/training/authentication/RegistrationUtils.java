@@ -2,6 +2,7 @@ package com.coveros.training.authentication;
 
 import com.coveros.training.authentication.domainobjects.PasswordResult;
 import com.coveros.training.authentication.domainobjects.RegistrationResult;
+import com.coveros.training.helpers.CheckUtils;
 import com.coveros.training.persistence.IPersistenceLayer;
 import com.coveros.training.persistence.PersistenceLayer;
 import me.gosimple.nbvcxz.Nbvcxz;
@@ -13,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import static com.coveros.training.authentication.domainobjects.PasswordResultEnums.EMPTY_PASSWORD;
 import static com.coveros.training.authentication.domainobjects.PasswordResultEnums.*;
 import static com.coveros.training.authentication.domainobjects.RegistrationStatusEnums.*;
-import static com.coveros.training.helpers.CheckUtils.checkStringNotNullOrEmpty;
+import static com.coveros.training.helpers.CheckUtils.StringMustNotBeNullOrEmpty;
 
 /**
  * Provides logic for registering a new user
@@ -43,13 +44,14 @@ public class RegistrationUtils {
      */
     public RegistrationResult processRegistration(String username, String password) {
         logger.info("Starting registration");
-        checkStringNotNullOrEmpty(username);
-        checkStringNotNullOrEmpty(password);
+        StringMustNotBeNullOrEmpty(username);
+        StringMustNotBeNullOrEmpty(password);
 
         if (isUserInDatabase(username)) {
             logger.info("cannot register this user - they are already registered");
             return new RegistrationResult(false, ALREADY_REGISTERED);
         }
+        // at this point we know the user is not yet registered in the database
 
         // then we check if the password is good.
         final PasswordResult passwordResult = isPasswordGood(password);
@@ -92,21 +94,33 @@ public class RegistrationUtils {
             logger.info("password was empty");
             return PasswordResult.createDefault(EMPTY_PASSWORD);
         }
-        if (password.length() < 10) {
+        StringMustNotBeNullOrEmpty(password);
+
+        final boolean isTooSmall = password.length() < 10;
+        if (isTooSmall) {
             logger.info("password was too short");
             return PasswordResult.createDefault(TOO_SHORT);
         }
-        if (password.length() > 100) {
+        CheckUtils.mustBeTrueAtThisPoint(isTooSmall == false,
+                "At this point, the password cannot be too small");
+
+        final boolean isTooLarge = password.length() > 100;
+        if (isTooLarge) {
             logger.info("password was too long");
             return PasswordResult.createDefault(TOO_LONG);
         }
+        CheckUtils.mustBeTrueAtThisPoint(isTooLarge == false,
+                "At this point, the password cannot be too large");
 
         // Nbvcxz is a tool that tests entropy on passwords
         // See github.com/GoSimpleLLC/nbvcxz
         final Nbvcxz nbvcxz = new Nbvcxz();
         final Result result = nbvcxz.estimate(password);
         final String suggestions = String.join(";", result.getFeedback().getSuggestion());
+
         final Double entropy = result.getEntropy();
+        CheckUtils.mustBeTrueAtThisPoint(entropy > 0d, "There must be *some* entropy at this point, more than 0");
+
         String timeToCrackOff = TimeEstimate.getTimeToCrackFormatted(result, "OFFLINE_BCRYPT_12");
         String timeToCrackOn = TimeEstimate.getTimeToCrackFormatted(result, "ONLINE_THROTTLED");
         if (!result.isMinimumEntropyMet()) {

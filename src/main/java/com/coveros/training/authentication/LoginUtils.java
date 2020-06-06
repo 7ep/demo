@@ -27,7 +27,7 @@ public class LoginUtils {
      * @return true if the credentials are valid, false otherwise
      */
     public boolean isUserRegistered(String username, String password) {
-        CheckUtils.checkStringNotNullOrEmpty(username, password);
+        CheckUtils.StringMustNotBeNullOrEmpty(username, password);
         logger.info("checking if credentials for {} are valid for login", username);
         boolean isValid = persistenceLayer.areCredentialsValid(username, password).orElse(false);
         if (isValid) {

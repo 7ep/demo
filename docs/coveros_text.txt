@@ -27,7 +27,7 @@
 
 gradlew generateCucumberReport   - Runs cucumber and creates a nice-looking HTML report.
 gradlew dependencyCheckAnalyze   - Analyzes security reports for the dependencies of this project.
-gradlew fastIntegrationTest      - Runs the database integration tests.
+gradlew integrate                - Runs the database integration tests.
 gradlew startH2Console           - Starts a console to examine the H2 database file.
 gradlew <task 1>... taskTree     - A utility that will show the task tree for a particular task.
 

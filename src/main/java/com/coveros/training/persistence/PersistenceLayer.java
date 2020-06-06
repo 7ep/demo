@@ -219,7 +219,7 @@ public class PersistenceLayer implements IPersistenceLayer {
 
     @Override
     public long saveNewBorrower(String borrowerName) {
-        CheckUtils.checkStringNotNullOrEmpty(borrowerName);
+        CheckUtils.StringMustNotBeNullOrEmpty(borrowerName);
         return executeInsertTemplate(
                 "adds a new library borrower",
                 "INSERT INTO library.borrower (name) VALUES (?);", borrowerName);
@@ -236,7 +236,7 @@ public class PersistenceLayer implements IPersistenceLayer {
 
     @Override
     public long saveNewBook(String bookTitle) {
-        CheckUtils.checkStringNotNullOrEmpty(bookTitle);
+        CheckUtils.StringMustNotBeNullOrEmpty(bookTitle);
         return executeInsertTemplate(
                 "Creates a new book in the database",
                 "INSERT INTO library.book (title) VALUES (?);", bookTitle);
@@ -245,8 +245,8 @@ public class PersistenceLayer implements IPersistenceLayer {
 
     @Override
     public void updateBorrower(long id, String borrowerName) {
-        CheckUtils.checkIntParamPositive(id);
-        CheckUtils.checkStringNotNullOrEmpty(borrowerName);
+        CheckUtils.IntParameterMustBePositive(id);
+        CheckUtils.StringMustNotBeNullOrEmpty(borrowerName);
         executeUpdateTemplate(
                 "Updates the borrower's data",
                 "UPDATE library.borrower SET name = ? WHERE id = ?;", borrowerName, id);
@@ -255,7 +255,7 @@ public class PersistenceLayer implements IPersistenceLayer {
 
     @Override
     public void deleteBook(long id) {
-        CheckUtils.checkIntParamPositive(id);
+        CheckUtils.IntParameterMustBePositive(id);
         executeUpdateTemplate(
                 "Deletes a book from the database",
                 "DELETE FROM library.book WHERE id = ?;", id);
@@ -264,7 +264,7 @@ public class PersistenceLayer implements IPersistenceLayer {
 
     @Override
     public void deleteBorrower(long id) {
-        CheckUtils.checkIntParamPositive(id);
+        CheckUtils.IntParameterMustBePositive(id);
         executeUpdateTemplate(
                 "Deletes a borrower from the database",
                 "DELETE FROM library.borrower WHERE id = ?;", id);
@@ -273,7 +273,7 @@ public class PersistenceLayer implements IPersistenceLayer {
 
     @Override
     public Optional<String> getBorrowerName(long id) {
-        CheckUtils.checkIntParamPositive(id);
+        CheckUtils.IntParameterMustBePositive(id);
         Function<ResultSet, Optional<String>> extractor =
                 createExtractor(rs -> Optional.of(StringUtils.makeNotNullable(rs.getString(1))));
 
@@ -286,7 +286,7 @@ public class PersistenceLayer implements IPersistenceLayer {
 
     @Override
     public Optional<Borrower> searchBorrowerDataByName(String borrowerName) {
-        CheckUtils.checkStringNotNullOrEmpty(borrowerName);
+        CheckUtils.StringMustNotBeNullOrEmpty(borrowerName);
         Function<ResultSet, Optional<Borrower>> extractor = createExtractor(rs -> {
             long id = rs.getLong(1);
             String name = StringUtils.makeNotNullable(rs.getString(2));
@@ -302,7 +302,7 @@ public class PersistenceLayer implements IPersistenceLayer {
 
     @Override
     public Optional<Book> searchBooksByTitle(String bookTitle) {
-        CheckUtils.checkStringNotNullOrEmpty(bookTitle);
+        CheckUtils.StringMustNotBeNullOrEmpty(bookTitle);
         Function<ResultSet, Optional<Book>> extractor = createExtractor(rs -> {
             long id = rs.getLong(1);
             return Optional.of(new Book(id, bookTitle));
@@ -317,7 +317,7 @@ public class PersistenceLayer implements IPersistenceLayer {
 
     @Override
     public Optional<Book> searchBooksById(long id) {
-        CheckUtils.checkIntParamPositive(id);
+        CheckUtils.IntParameterMustBePositive(id);
         Function<ResultSet, Optional<Book>> extractor = createExtractor(rs -> {
             long bookId = rs.getLong(1);
             String title = StringUtils.makeNotNullable(rs.getString(2));
@@ -333,7 +333,7 @@ public class PersistenceLayer implements IPersistenceLayer {
 
     @Override
     public Optional<Borrower> searchBorrowersById(long id) {
-        CheckUtils.checkIntParamPositive(id);
+        CheckUtils.IntParameterMustBePositive(id);
         Function<ResultSet, Optional<Borrower>> extractor = createExtractor(rs -> {
             long borrowerId = rs.getLong(1);
             String name = StringUtils.makeNotNullable(rs.getString(2));
@@ -447,7 +447,7 @@ public class PersistenceLayer implements IPersistenceLayer {
 
     @Override
     public long saveNewUser(String username) {
-        CheckUtils.checkStringNotNullOrEmpty(username);
+        CheckUtils.StringMustNotBeNullOrEmpty(username);
         return executeInsertTemplate(
                 "Creates a new user in the database",
                 "INSERT INTO auth.user (name) VALUES (?);", username);
@@ -456,7 +456,7 @@ public class PersistenceLayer implements IPersistenceLayer {
 
     @Override
     public Optional<User> searchForUserByName(String username) {
-        CheckUtils.checkStringNotNullOrEmpty(username);
+        CheckUtils.StringMustNotBeNullOrEmpty(username);
         Function<ResultSet, Optional<User>> extractor = createExtractor(rs -> {
             final long id = rs.getLong(1);
             return Optional.of(new User(username, id));
@@ -487,7 +487,7 @@ public class PersistenceLayer implements IPersistenceLayer {
 
     @Override
     public void updateUserWithPassword(long id, String password) {
-        CheckUtils.checkIntParamPositive(id);
+        CheckUtils.IntParameterMustBePositive(id);
         String hashedPassword = createHashedValueFromPassword(password);
         executeUpdateTemplate(
                 "Updates the user's password field with a new hash",
@@ -503,7 +503,7 @@ public class PersistenceLayer implements IPersistenceLayer {
      *          but different than the original, cannot be converted back to its original value.
      */
     private String createHashedValueFromPassword(String password) {
-        CheckUtils.checkStringNotNullOrEmpty(password);
+        CheckUtils.StringMustNotBeNullOrEmpty(password);
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] encodedhash = digest.digest(

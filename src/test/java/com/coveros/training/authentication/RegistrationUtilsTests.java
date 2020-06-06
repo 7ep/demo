@@ -3,6 +3,7 @@ package com.coveros.training.authentication;
 import com.coveros.training.authentication.domainobjects.*;
 import com.coveros.training.persistence.IPersistenceLayer;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -37,6 +38,7 @@ public class RegistrationUtilsTests {
     /**
      * A lightweight performance test for a slow call
      */
+    @Ignore
     @Test
     public void testShouldPerformWell() {
         long start = System.currentTimeMillis();

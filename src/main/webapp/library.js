@@ -1,4 +1,95 @@
 /**
+  * This code enables us to keep track of which listeners we
+  * have added to elements.  For example, if we add a "click"
+  * listener, this code adds a new method, getEventListeners,
+  * to get the list of event listeners.
+  */
+var ListenerTracker=new function(){
+    // a variable to track whether this has been run already.
+    // is set to true after the initial run of this code, so follow-up
+    // calls will do nothing.
+    var is_active=false;
+
+    // listener tracking datas
+
+    // the web elements (also known as "nodes")
+    var _elements_  =[];
+
+    //
+    var _listeners_ =[];
+
+    this.init=function(){
+        if(!is_active){//avoid duplicate call
+            intercep_events_listeners();
+        }
+        is_active=true;
+    };
+
+    // register individual element and returns its corresponding listeners
+    var register_element=function(element){
+        if(_elements_.indexOf(element)==-1){
+            // NB : split by useCapture to make listener easier to find when removing
+            var elt_listeners=[{/*useCapture=false*/},{/*useCapture=true*/}];
+            _elements_.push(element);
+            _listeners_.push(elt_listeners);
+        }
+        return _listeners_[_elements_.indexOf(element)];
+    };
+    var intercep_events_listeners = function(){
+        // backup overrided methods
+        var _super_={
+            "addEventListener"      : HTMLElement.prototype.addEventListener,
+            "removeEventListener"   : HTMLElement.prototype.removeEventListener
+        };
+
+        Element.prototype["addEventListener"]=function(type, listener, useCapture){
+            var listeners=register_element(this);
+            // add event before to avoid registering if an error is thrown
+            _super_["addEventListener"].apply(this,arguments);
+            // adapt to 'elt_listeners' index
+            useCapture=useCapture?1:0;
+
+            if(!listeners[useCapture][type])listeners[useCapture][type]=[];
+            listeners[useCapture][type].push(listener);
+        };
+
+        Element.prototype["removeEventListener"]=function(type, listener, useCapture){
+            var listeners=register_element(this);
+            // add event before to avoid registering if an error is thrown
+            _super_["removeEventListener"].apply(this,arguments);
+            // adapt to 'elt_listeners' index
+            useCapture=useCapture?1:0;
+            if(!listeners[useCapture][type])return;
+            var lid = listeners[useCapture][type].indexOf(listener);
+            if(lid>-1)listeners[useCapture][type].splice(lid,1);
+        };
+
+        Element.prototype["getEventListeners"]=function(type){
+            var listeners=register_element(this);
+            // convert to listener datas list
+            var result=[];
+            for(var useCapture=0,list;list=listeners[useCapture];useCapture++){
+                if(typeof(type)=="string"){// filtered by type
+                    if(list[type]){
+                        for(var id in list[type]){
+                            result.push({"type":type,"listener":list[type][id],"useCapture":!!useCapture});
+                        }
+                    }
+                }else{// all
+                    for(var _type in list){
+                        for(var id in list[_type]){
+                            result.push({"type":_type,"listener":list[_type][id],"useCapture":!!useCapture});
+                        }
+                    }
+                }
+            }
+            return result;
+        };
+    };
+}();
+ListenerTracker.init();
+
+/**
   * Creates a list item. see https://www.w3.org/TR/REC-html40/struct/lists.html#edef-LI
   * Adds an attribute, "data", that holds the text data, and also
   * puts the text in as the inner text node
@@ -18,12 +109,14 @@ function createItemForList(text) {
   * @param the base id on which to select parts of the searchbox
   */
 function addItemClickBehavior(item, input_id) {
+    console.assert(item.getEventListeners('click').length == 0)
     // if the user clicks, put the value in the input field
     item.addEventListener('click', function(event) {
       let input_field = document.getElementById(input_id);
       input_field.value = event.target.innerText;
       deleteSearchBox(input_id);
     });
+    console.assert(item.getEventListeners('click').length == 1)
 }
 
 /**
