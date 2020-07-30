@@ -34,7 +34,7 @@ plugins {
     // which code-under-test is actually "tested", rather than
     // simply being run during the test.  It does this by
     // changing the code and seeing if the test fails as a result.
-    id 'info.solidsoft.pitest' version '1.4.5'
+    id 'info.solidsoft.pitest' version '1.5.1'
 
     // Dependency Check analyzes the dependencies for 
     // potential security issues.
