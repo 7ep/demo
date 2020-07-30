@@ -47,7 +47,7 @@ Modify the server.xml in the Tomcat "conf/" directory, at the bottom of the file
 
       <Host name="localhost"  appBase="webapps"
             unpackWARs="true" autoDeploy="true">
-        <Context docBase="/c:/Users/YOUR_NAME_HERE/.jenkins/workspace/Demo/" path="/demoworkspace" />
+        <Context docBase="/c:/Users/YOUR_NAME_HERE/.jenkins/workspace" path="/workspace" />
 
 In conf/context.xml, add the following, to avoid a complaint by Tomcat about "nsufficient free space available after evicting expired cache entries - consider increasing the maximum size of the cache"
 
@@ -129,7 +129,7 @@ Now let's create a pipeline so it does some actual work.
 
   Click Add Link.
 
-  Link URL: http://localhost:8080/demoworkspace/build/reports/dependency-check-report.html
+  Link URL: http://localhost:8080/workspace/Demo/build/reports/dependency-check-report.html
   Link Text: Dependency check report
 
   Click Add Link.
@@ -139,17 +139,17 @@ Now let's create a pipeline so it does some actual work.
 
   Click Add Link
 
-  Link URL: http://localhost:8080/demoworkspace/build/reports/jacoco/index.html
+  Link URL: http://localhost:8080/workspace/Demo/build/reports/jacoco/index.html
   Link Text: Jacoco coverage report
 
   Click Add Link
 
-  Link URL: http://localhost:8080/demoworkspace/build/reports/pitest/index.html
+  Link URL: http://localhost:8080/workspace/Demo/build/reports/pitest/index.html
   Link Text: Pitest Mutation Testing
 
   Click Add Link
 
-  Link URL: http://localhost:8080/demoworkspace/build/docs/javadoc/index.html
+  Link URL: http://localhost:8080/workspace/Demo/build/docs/javadoc/index.html
   Link Text: Javadoc
 
 - Under Pipeline, click on the dropdown and select "Pipeline script from SCM"
