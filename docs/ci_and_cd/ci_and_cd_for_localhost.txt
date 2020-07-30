@@ -49,6 +49,10 @@ Modify the server.xml in the Tomcat "conf/" directory, at the bottom of the file
             unpackWARs="true" autoDeploy="true">
         <Context docBase="/c:/Users/YOUR_NAME_HERE/.jenkins/workspace/Demo/" path="/demoworkspace" />
 
+In conf/context.xml, add the following, to avoid a complaint by Tomcat about "nsufficient free space available after evicting expired cache entries - consider increasing the maximum size of the cache"
+
+    <Resources cachingAllowed="true" cacheMaxSize="100000" />
+
 In the Tomcat /bin directory, create a new file, setenv.bat
 Give it this content (this is so we can connect with JMX dynamic analysis tools to Tomcat):
 set CATALINA_OPTS=%CATALINA_OPTS% -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9999 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Djava.rmi.server.hostname=localhost
