@@ -19,7 +19,7 @@ dependencies {
 
     // Selenium - used for testing commonly-used browsers
     // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
-    testImplementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.0.0-alpha-5'
+    testImplementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
 
     // a logging framework, so it becomes easily possible to see what is happening
     // in our code in realtime.
@@ -43,6 +43,8 @@ dependencies {
 
 // more info on test logging: https://discuss.gradle.org/t/whats-upcoming-in-gradle-1-1-test-logging/7741
 test {
+    maxParallelForks = 1; // Will not do parallel execution
+
     testLogging {
         exceptionFormat "full" // default is "short"
         // uncomment the following to see the unit test progress in the output
