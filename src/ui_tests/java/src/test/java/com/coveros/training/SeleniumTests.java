@@ -18,12 +18,7 @@ public class SeleniumTests {
     }
 
     @AfterClass
-    public static void tearDown() throws InterruptedException {
-        // putting a little delay before tearing everything down.
-        // on a hypothesis - seems like sometimes just running
-        // driver.quit catches the program off-guard, so maybe
-        // 200 milliseconds is sufficient to catch its breath
-        Thread.sleep(200);
+    public static void tearDown() {
         driver.quit();
     }
 
@@ -88,6 +83,7 @@ public class SeleniumTests {
 
         driver.get("http://localhost:8080/demo/library.html");
 
+        // using the arrow keys to select an element is a very "dropdown" kind of behavior.
         driver.findElement(By.id("lend_book")).findElement(By.xpath("//option[contains(.,\'some book\')]")).click();
         driver.findElement(By.id("lend_borrower")).findElement(By.xpath("//option[contains(.,\'some borrower\')]")).click();
         driver.findElement(By.id("lend_book_submit")).click();
@@ -123,7 +119,7 @@ public class SeleniumTests {
 
         driver.get("http://localhost:8080/demo/library.html");
 
-        // use the autocomplete and select an option
+        // using the arrow keys to select an element is a very "dropdown" kind of behavior.
         driver.findElement(By.id("lend_book")).sendKeys("f");
         driver.findElement(By.xpath("//li[contains(.,\'f\')]")).click();
         driver.findElement(By.id("lend_borrower")).findElement(By.xpath("//option[contains(.,\'some borrower\')]")).click();
@@ -145,6 +141,7 @@ public class SeleniumTests {
 
         driver.get("http://localhost:8080/demo/library.html");
 
+        // using the arrow keys to select an element is a very "dropdown" kind of behavior.
         driver.findElement(By.id("lend_book")).findElement(By.xpath("//option[contains(.,\'some \"book\')]")).click();
         driver.findElement(By.id("lend_borrower")).findElement(By.xpath("//option[contains(.,\'some \"borrower\')]")).click();
         driver.findElement(By.id("lend_book_submit")).click();
