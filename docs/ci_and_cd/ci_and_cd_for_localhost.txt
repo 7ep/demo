@@ -177,7 +177,7 @@ Now let's create a pipeline so it does some actual work.
      Repository URL: C:\Users\byron\fake_central_repo\demo  (Yours may be a different place)
      In Branches to Build:
      Branch specifier: refs/heads/master
-     In Script Path: jenkins/JenkinsfileLocal
+     In Script Path: jenkins/Jenkinsfile
 
      Click save
 
