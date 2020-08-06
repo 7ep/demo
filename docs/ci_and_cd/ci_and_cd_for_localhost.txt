@@ -127,7 +127,7 @@ Now let's create a pipeline so it does some actual work.
 - Check the box labeled "Do not allow concurrent builds".  (We don't want race conditions in our pipeline, and we don't want excessive memory usage on this demo machine)
 - Check the box for "Sidebar links". Add a link.  Enter this:
 
-  Link URL: http://localhost:8080/demoworkspace/build/reports/bdd/cucumber-html-reports/overview-features.html
+  Link URL: http://localhost:8080/workspace/Demo/build/reports/bdd/cucumber-html-reports/overview-features.html
   Link Text: Cucumber report.
 
   Click Add Link.
