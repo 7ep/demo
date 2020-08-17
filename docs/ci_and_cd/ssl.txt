@@ -1,0 +1,20 @@
+Setting up Tomcat to use certificates
+
+https://stackoverflow.com/a/41366949/713809
+openssl req -x509 -newkey rsa:4096 -sha256 -days 8000 -nodes -keyout training.key -out training.crt -subj "/CN=training" -addext "subjectAltName=DNS:training,IP:10.0.0.1"
+
+https://tomcat.apache.org/tomcat-9.0-doc/ssl-howto.html#Configuration
+openssl pkcs12 -export -in training.crt -inkey training.key -out training.p12 -name tomcat -CAfile training.crt -caname root -chain
+
+when running this command, it will ask you for a password:
+"Enter Export Password:"
+
+(I used 3Qzyge7H31QavDANTUL3hY0d)
+
+Whatever you enter there, you will include as the passowrd in server.xml:
+    <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+               maxThreads="200" SSLEnabled="true"
+			   scheme="https" secure="true"
+			   keystoreFile="${user.home}/training.p12" keystorePass="3Qzyge7H31QavDANTUL3hY0d"
+			   clientAuth="false" sslProtocol="TLS"
+			   >
