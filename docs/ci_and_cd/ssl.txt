@@ -3,6 +3,8 @@ Setting up Tomcat to use certificates
 https://stackoverflow.com/a/41366949/713809
 openssl req -x509 -newkey rsa:4096 -sha256 -days 8000 -nodes -keyout training.key -out training.crt -subj "/CN=training" -addext "subjectAltName=DNS:training,IP:10.0.0.1"
 
+(Note that 8000 in the command above means 8000 days, which should keep us in business for a while)
+
 https://tomcat.apache.org/tomcat-9.0-doc/ssl-howto.html#Configuration
 openssl pkcs12 -export -in training.crt -inkey training.key -out training.p12 -name tomcat -CAfile training.crt -caname root -chain
 
@@ -18,3 +20,13 @@ Whatever you enter there, you will include as the passowrd in server.xml:
 			   keystoreFile="${user.home}/training.p12" keystorePass="3Qzyge7H31QavDANTUL3hY0d"
 			   clientAuth="false" sslProtocol="TLS"
 			   >
+
+Once that is done, go to https://localhost:8443 in Chrome and it will complain about insecurity.  Click advanced
+and go to the "unsafe" site.  When you get there, it is possible to click on the icon to the left of the URL to
+get details about the cert.  On the second tab there, click on copy to file, use the default .der configuration
+and save it to the desktop as cert.der
+
+Double-click on that file on the desktop and click on Install Certificate.  Choose local machine, place all certificates
+in the following store, browse, and choose Trusted Root Certification Authorities.
+
+Restart Chrome, and try to connect to https://localhost:8443, it should work fine now.
