@@ -164,6 +164,12 @@ dependencies {
     // so we can programmatically run flyway at startup
     // https://mvnrepository.com/artifact/org.flywaydb/flyway-core
     implementation "org.flywaydb:flyway-core:6.4.1"
+
+    // provides monitoring of the application during runtime.
+    // go to http://url/demo/monitoring
+    // https://mvnrepository.com/artifact/net.bull.javamelody/javamelody-core
+    implementation group: 'net.bull.javamelody', name: 'javamelody-core', version: '1.85.0'
+
 }
 
 pitest {

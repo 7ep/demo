@@ -1,9 +1,9 @@
                                  .ccccccccc..                                  Interesting links when the system is up:
                         .cccccccccc                                            ----------------------------------------
-                  cCCCCCCCC
-             .CCCCCCCCCCc                                                      http://localhost:8080/demo - the main application
-         .cCCCCCCCCCC/                                                         http://localhost:8080/demo/console - the database viewer
-      /CCCCCCCCCCC/                                                                  (use URL of jdbc:h2:mem:training and no user or password)
+                  cCCCCCCCC                                                    http://localhost:8080/demo - the main application
+             .CCCCCCCCCCc                                                      http://localhost:8080/demo/console - the database viewer
+         .cCCCCCCCCCC/                                                               (use URL of jdbc:h2:mem:training and no user or password)
+      /CCCCCCCCCCC/                                                            http://localhost:8080/demo/monitoring - monitoring of the server
     /CCCCCCCCCCCC/
    /CCCCCCCCCCCC/        .dCCCCb. .dOOOOb. dP   .dP .dEEEEb. RRdRRRb. .dOOOOb. .dSSSSb.
   /CCCCCCCCCCCC/         CC'  `"" OO'  `OO VV   dV' EEoooodC RR'  `RR OO'  `OO YSooooo.
