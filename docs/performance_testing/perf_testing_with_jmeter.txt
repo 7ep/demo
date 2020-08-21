@@ -48,3 +48,23 @@ the screen.
 Make the logging clearly visible - move the window around to suit.
 
 Show the Jmeter listener graph of thoroughput.
+
+
+Configuring JMeter for reports
+------------------------------
+There's great information on the built-in report generator, at:
+
+https://www.ubik-ingenierie.com/blog/reporting-feature-in-jmeter/
+
+I changed a couple settings in the bin/user.properties file:
+
+The granularity of graphs in millis (defaults to one minute):
+
+jmeter.reportgenerator.overall_granularity=1000
+
+The transactions you want in report:
+
+jmeter.reportgenerator.exporter.html.series_filter=^(Search|Order)(-success|-failure)?$
+
+You can use a helper menu to generate this last property from your plan,
+Help > Export transactions for report
