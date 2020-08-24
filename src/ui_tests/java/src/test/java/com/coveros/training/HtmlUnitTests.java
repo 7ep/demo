@@ -1,5 +1,6 @@
 package com.coveros.training;
 
+import com.gargoylesoftware.htmlunit.ProxyConfig;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -21,6 +22,14 @@ public class HtmlUnitTests {
         driver = new WebClient();
         // prevent javascript from running.  We want these tests to really zip.
         driver.getOptions().setJavaScriptEnabled(false);
+        ProxyConfig proxyConfig = new ProxyConfig("localhost", 10888);
+        driver.getOptions().setProxyConfig(proxyConfig);
+        try {
+            getPage("http://localhost:8080");
+        } catch (Exception ex) {
+            // if we get here, the proxy isn't listening at that location.  Switch to non-proxy mode
+            driver.getOptions().setProxyConfig(new ProxyConfig());
+        }
     }
 
     @After

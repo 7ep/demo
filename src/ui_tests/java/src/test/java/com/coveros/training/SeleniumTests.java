@@ -18,7 +18,12 @@ public class SeleniumTests {
     }
 
     @AfterClass
-    public static void tearDown() {
+    public static void tearDown() throws InterruptedException {
+        // putting a little delay before tearing everything down.
+        // on a hypothesis - seems like sometimes just running
+        // driver.quit catches the program off-guard, so maybe
+        // 200 milliseconds is sufficient to catch its breath
+        Thread.sleep(200);
         driver.quit();
     }
 
