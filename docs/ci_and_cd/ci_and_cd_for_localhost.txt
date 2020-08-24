@@ -152,6 +152,16 @@ Now let's create a pipeline so it does some actual work.
   Link URL: http://localhost:8080/workspace/Demo/build/docs/javadoc/index.html
   Link Text: Javadoc
 
+  Click Add Link
+
+  Link URL: http://training:8080/workspace/Demo/perf_report/index.html
+  Link Text: Performance report
+
+  Click Add Link
+
+  Link URL: http://training:8080/workspace/Demo/build/reports/zap/zap-report.html
+  Link Text: Zap report
+
 - Under Pipeline, click on the dropdown and select "Pipeline script from SCM"
 - on the dropdown next to SCM, select Git.
 - fill in these values:
