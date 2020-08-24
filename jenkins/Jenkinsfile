@@ -79,6 +79,9 @@ pipeline {
 
       // Wait here until the server tells us it's up and listening
       sh './gradlew waitForHeartBeat'
+
+      // clear Zap's memory for the incoming tests
+      sh 'curl http://zap/JSON/core/action/newSession -s --proxy localhost:9888'
       }
     }
 
@@ -175,6 +178,13 @@ pipeline {
     stage('Build documentation') {
       steps {
          sh './gradlew javadoc'
+      }
+    }
+
+    stage('Collect Zap Security Report') {
+      steps {
+        sh 'mkdir -p build/reports/zap'
+        sh 'curl http://zap/OTHER/core/other/htmlreport --proxy localhost:9888 > build/reports/zap/zap_report.html'
       }
     }
 
