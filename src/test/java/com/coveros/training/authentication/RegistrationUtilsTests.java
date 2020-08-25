@@ -23,6 +23,10 @@ public class RegistrationUtilsTests {
     private final IPersistenceLayer persistenceLayer = mock(IPersistenceLayer.class);
     private final RegistrationUtils registrationUtils = new RegistrationUtils(persistenceLayer);
 
+    /**
+     * a really short password can be found by brute force extremely quickly,
+     * making this highly insecure
+     */
     @Test
     public void testShouldFailOnShortPassword() {
         final PasswordResult result = RegistrationUtils.isPasswordGood("abc");
