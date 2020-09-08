@@ -58,7 +58,7 @@ pipeline {
 
     // Runs an analysis of the code, looking for any
     // patterns that suggest potential bugs.
-    stage('Static Analysis') {
+    stage('Security: Static Analysis') {
       steps {
         sh './gradlew sonarqube'
         // wait for sonarqube to finish its analysis
@@ -71,7 +71,7 @@ pipeline {
     // Move the binary over to the test environment and
     // get it running, in preparation for tests that
     // require a whole system to be running.
-    stage('Deploy to test') {
+    stage('Deploy to TEST') {
       steps {
       sh './gradlew deployToTestWindowsLocal'
       // pipenv needs to be installed and on the path for this to work.
@@ -144,7 +144,7 @@ pipeline {
     // Standards and Technology (NIST), and checks if the software
     // we are importing has any major known vulnerabilities. If so,
     // the build will halt at this point.
-    stage('Analyze security of dependencies') {
+    stage('Security: Dependency Analysis') {
       steps {
          sh './gradlew dependencyCheckAnalyze'
       }
@@ -153,7 +153,7 @@ pipeline {
     // Run Jmeter performance testing https://jmeter.apache.org/
     // This test simulates 50 users concurrently using our software
     // for a set of common tasks.
-    stage('Testing performance') {
+    stage('Performance Tests') {
       steps {
          sh './gradlew runPerfTests'
       }
@@ -169,13 +169,13 @@ pipeline {
     // happens that no matter how code is changed, the tests
     // continue to pass, which implies that the test wasn't really
     // providing any value for those lines.
-    stage('Mutation testing') {
+    stage('Mutation Tests') {
       steps {
          sh './gradlew pitest'
       }
     }
 
-    stage('Build documentation') {
+    stage('Build Documentation') {
       steps {
          sh './gradlew javadoc'
       }
