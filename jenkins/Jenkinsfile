@@ -75,7 +75,7 @@ pipeline {
       steps {
       sh './gradlew deployToTestWindowsLocal'
       // pipenv needs to be installed and on the path for this to work.
-      sh 'pipenv install'
+      sh 'PIPENV_IGNORE_VIRTUALENVS=1 pipenv install'
 
       // Wait here until the server tells us it's up and listening
       sh './gradlew waitForHeartBeat'
