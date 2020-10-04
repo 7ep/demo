@@ -176,7 +176,7 @@ On Windows
 * gradlew dependencyCheckAnalyze - analyzes security reports for the dependencies of 
   this project.  See https://www.owasp.org/index.php/OWASP_Dependency_Check
 * gradlew sonarqube - runs static analysis using SonarQube.  Sonarqube must be running - check http://localhost:9000
-* gradlew fastIntegrationTest - runs the database integration tests
+* gradlew integrate - runs the database integration tests
 * gradlew startH2Console - Starts a console to examine the H2 database file.  (user and
   password are empty, URL to use is jdbc:h2:./build/db/training)
 * gradlew <task 1>...<task N> taskTree - a utility that will show the task tree for a particular task
