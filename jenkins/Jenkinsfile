@@ -43,7 +43,7 @@ pipeline {
     // These are the Behavior Driven Development (BDD) tests
     // See the files in src/bdd_test
     // These tests do not require a running system.
-    stage('Automated Acceptance Tests') {
+    stage('BDD Tests') {
       steps {
         sh './gradlew generateCucumberReports'
         // generate the code coverage report for jacoco
@@ -58,7 +58,7 @@ pipeline {
 
     // Runs an analysis of the code, looking for any
     // patterns that suggest potential bugs.
-    stage('Security: Static Analysis') {
+    stage('Static Analysis') {
       steps {
         sh './gradlew sonarqube'
         // wait for sonarqube to finish its analysis
@@ -71,7 +71,7 @@ pipeline {
     // Move the binary over to the test environment and
     // get it running, in preparation for tests that
     // require a whole system to be running.
-    stage('Deploy to TEST') {
+    stage('Deploy to Test') {
       steps {
       sh './gradlew deployToTestWindowsLocal'
       // pipenv needs to be installed and on the path for this to work.
