@@ -16,13 +16,13 @@ def test_math_api_happy_path():
 
 
 # does it handle negatives well?
-def test_math_api_negative_numbers():
+def test_math_api_negative_numbers_integer():
     r = requests.post("%s/demo/math" % URL, data={'item_a': '-9', 'item_b': '-7'})
     assert "-16" in r.text
 
 
 # Only handles integers.  Will fail with decimals.
-def test_math_api_negative_numbers():
+def test_math_api_negative_numbers_float():
     r = requests.post("%s/demo/math" % URL, data={'item_a': '-9.1', 'item_b': '-7.1'})
     assert "Error: only accepts integers" in r.text
 
