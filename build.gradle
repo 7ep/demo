@@ -51,6 +51,18 @@ plugins {
     // see https://github.com/kelloggm/checkerframework-gradle-plugin
     id "org.checkerframework" version "0.5.0"
 
+    // https://blog.gradle.org/java-toolchains
+    // java toolchains - a gradle 6.7 feature - allows us to
+    // specify an exact version of the JDK to use when compiling,
+    // and will pull it down if not found on the user's machine.
+    id "java-library"
+
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
 }
 
 // Configure our javadoc to include an overview for our project, a

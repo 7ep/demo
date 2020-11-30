@@ -64,7 +64,7 @@ to visit these links and download / install the applications found there.
 
 #### Java installation notes
 
-I've tested Demo with Java 8,9,10,11,and 12.  
+Demo is targeted at JDK 11  
 
 Download the [development kit](https://www.oracle.com/java/technologies/javase-downloads.html#JDK11), make note of the installation directory.  Add that directory 
 to your path.  For example, on Windows, press the Windows button, type "env" to edit the environment

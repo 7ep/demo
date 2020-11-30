@@ -4,6 +4,12 @@ plugins {
 
     // provides unit test coverage
     id 'jacoco'
+
+    // https://blog.gradle.org/java-toolchains
+    // java toolchains - a gradle 6.7 feature - allows us to
+    // specify an exact version of the JDK to use when compiling,
+    // and will pull it down if not found on the user's machine.
+    id "java-library"
 }
 
 repositories {
@@ -40,6 +46,12 @@ dependencies {
     implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.12.1'
 
     implementation group: 'org.jacoco', name: 'org.jacoco.core', version: '0.8.5'
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
 }
 
 /**
