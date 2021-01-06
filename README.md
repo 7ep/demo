@@ -6,7 +6,7 @@ documentation_ ... but that doesn't mean we can't have pretty good documentation
 
 #### Quick Start:
 
-* Put Java on your PATH (see [JDK notes](#java-installation-notes))
+* Install [Java](https://www.java.com/en/download/) if you don't already have it.
 * Clone or [download](https://github.com/7ep/demo/archive/master.zip) this repo.  (if you download, unzip the file to a directory.)
 * On the command line in the top directory of this repo, run `gradlew apprun`
 * Visit the application with your browser at http://localhost:8080/demo
@@ -44,7 +44,6 @@ Its essential goals:
 
 #### Table of contents:
 1. [Optional dependencies](#optional-dependencies)
-1. [Java installation notes](#java-installation-notes)
 1. [Chromedriver installation notes](#chromedriver-installation-notes)
 1. [Python installation notes](#python-installation-notes)
 1. [To build and run tests](#to-build-and-run-tests)
@@ -61,35 +60,6 @@ to visit these links and download / install the applications found there.
 * [Chrome internet browser](https://www.google.com/chrome/)
 
 ---
-
-#### Java installation notes
-
-Demo is targeted at JDK 11  
-
-Download the [development kit](https://www.oracle.com/java/technologies/javase-downloads.html#JDK11), make note of the installation directory.  Add that directory 
-to your path.  For example, on Windows, press the Windows button, type "env" to edit the environment
-variables for your account.  Under _user variables_ click New and add:
-
-*  Variable name: JAVA_HOME
-*  Variable value: C:\Program Files\Java\jdk-11.0.5   _replace this with the correct path_
-
-Click OK.
-Click the PATH user variable and click edit, and then click New, and add a new line for Java
-as follows:
-
-    %JAVA_HOME%\bin
-    
-Test this out by opening a command terminal, for example run the program called "cmd", and run this:
-    
-    javac -version
-    
-You should get something similar to the following:
-
-    C:\Users\byron>javac -version
-    javac 11.0.5
-    
-Now you are ready!
-
 
 #### Chromedriver installation notes
 make sure that the [Chromedriver](https://chromedriver.chromium.org/) executable is installed in one of the directories that is 
