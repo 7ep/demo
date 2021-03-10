@@ -1,25 +1,27 @@
 buildscript {
-  repositories {
-    maven {
-      url "https://plugins.gradle.org/m2/"
+    repositories {
+        mavenCentral()
     }
-  }
-  dependencies {
-    classpath "com.github.spacialcircumstances:gradle-cucumber-reporting:0.1.8"
-  }
+    dependencies {
+        classpath 'org.owasp:dependency-check-gradle:4.0.2'
+    }
 }
+
 
 plugins {
     id 'war'
 
-    // gretty is a gradle plugin to make it easy to run a server and hotswap code at runtime.
-    id 'org.gretty' version '3.0.2'
-
     // provides access to a database versioning tool.
-    id "org.flywaydb.flyway" version "6.0.8"
+    id "org.flywaydb.flyway" version "5.2.4"
+
+    // gretty is a gradle plugin to make it easy to run a server and hotswap code at runtime.
+    id 'org.gretty' version '2.3.1'
 
     // scans our code for static analysis
-    id "org.sonarqube" version "2.8"
+    id "org.sonarqube" version "2.7"
+
+    // provides Cucumber reporting
+    id "com.github.spacialcircumstances.gradle-cucumber-reporting" version "0.0.15"
 
     // provides unit test coverage
     id 'jacoco'
@@ -28,56 +30,38 @@ plugins {
     // for any particular task.
     // usage: gradle <task 1>...<task N> taskTree
     // see https://github.com/dorongold/gradle-task-tree
-    id "com.dorongold.task-tree" version "1.4"
+    id "com.dorongold.task-tree" version "1.3.1"
 
     // pitest provides mutation testing coverage - this shows
     // which code-under-test is actually "tested", rather than
     // simply being run during the test.  It does this by
     // changing the code and seeing if the test fails as a result.
-    id 'info.solidsoft.pitest' version '1.4.5'
+    id 'info.solidsoft.pitest' version '1.4.0'
 
-    // Dependency Check analyzes the dependencies for 
-    // potential security issues.
-    // see https://plugins.gradle.org/plugin/org.owasp.dependencycheck
-    id "org.owasp.dependencycheck" version "5.3.2"
+    // add spotbugs for static code analysis
+    id "com.github.spotbugs" version "1.7.1"
 
-    // this gives us the abilities of SSH - specifically, the
-    // ability to run commands on a remote server, and to copy
-    // files to/from servers
-    id 'org.hidetake.ssh' version '2.10.1'
+
 }
 
-repositories {
-    mavenCentral()
-}
+// sets the version of Java we want to use - 8
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
-// apply our fancy cucumber reporting program, see https://plugins.gradle.org/plugin/com.github.spacialcircumstances.gradle-cucumber-reporting
-apply plugin: "com.github.spacialcircumstances.gradle-cucumber-reporting"
+// the checker framework adds a bunch of type annotations that
+// can insure safer coding practices.  See https://checkerframework.org/manual/
+apply from: "$rootDir/gradle/checkerframework.gradle"
 
 // including our script plugin for running our integration tests
-apply from: "$rootDir/gradle/integration_tests.gradle"
+apply from: "$rootDir/gradle/fast_integration_test.gradle"
 
 // including our script plugin for running BDD-type tests
-apply from: "$rootDir/gradle/cucumber_bdd_tests.gradle"
+apply from: "$rootDir/gradle/bdd_test.gradle"
 
-// our script plugin for provisioning servers
-apply from: "$rootDir/gradle/remote_actions.gradle"
+// Dependency Check analyzes the dependencies for potential security issues.
+// see https://plugins.gradle.org/plugin/org.owasp.dependencycheck
+apply plugin: 'org.owasp.dependencycheck'
 
-// including our script plugin for running Selenified
-apply from: "$rootDir/gradle/selenified_tests.gradle"
-
-tasks.withType(JavaCompile) {
-    options.compilerArgs << "-Xlint:unchecked"
-}
-
-// configure jetty to run on port 8080 when we run "./gradlew appRun"
-gretty {
-    httpPort = 8080
-    servletContainer = 'tomcat9'
-    contextPath = "demo"
-    def jacocoAgent = zipTree(configurations.jacocoAgent.singleFile).filter { it.name == "jacocoagent.jar" }.singleFile
-    jvmArgs = ["-javaagent:$jacocoAgent=output=tcpserver,address=localhost,port=6300", '-Dcom.sun.management.jmxremote', '-Dcom.sun.management.jmxremote.port=9999', '-Dcom.sun.management.jmxremote.ssl=false', '-Dcom.sun.management.jmxremote.authenticate=false']
-}
 
 repositories {
     jcenter()
@@ -89,51 +73,68 @@ configurations {
 }
 
 dependencies {
-    // necessary for the servlet functionality.  See any class ending in "Servlet"
-    providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
+    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 
     // junit, for running unit tests
-    testImplementation 'junit:junit:4.12'
+    testCompile 'junit:junit:4.12'
 
     // mockito, for mocking objects in our unit tests
-    testImplementation 'org.mockito:mockito-core:2.28.2'
+    testCompile 'org.mockito:mockito-core:2.7.19'
 
     // nbvcxz is a tool to determine how robust a password is.  See
     // https://github.com/GoSimpleLLC/nbvcxz
-    implementation group: 'me.gosimple', name: 'nbvcxz', version: '1.4.3'
+    compile group: 'me.gosimple', name: 'nbvcxz', version: '1.4.3'
 
     // the glorious equalsverifier.  This is a tool that tests the contract
     // for equals and hashcode are met.  It's very strict.  Because it's very
     // strict, it forces us to create very safe, very solid code.
     // https://mvnrepository.com/artifact/nl.jqno.equalsverifier/equalsverifier
-    testImplementation group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.1.10'
-
-    testImplementation 'io.cucumber:cucumber-java:4.8.0'
-    testImplementation 'io.cucumber:cucumber-junit:4.8.0'
+    testCompile group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.0.3'
 
     // The commons-lang3 package has some utility classes that are very helpful
     // for those interested in safer coding.  Particularly, the equalsbuilder and hashcodebuilder.
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
 
     // a logging framework, so it becomes easily possible to see what is happening
     // in our code in realtime.
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.12.1'
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.1'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
 
     // The following gives us the ability to use slf4j api calls.
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.12.1'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.11.1'
+
 
     // we'll use this as our database
     // https://mvnrepository.com/artifact/com.h2database/h2
-    localDeps group: 'com.h2database', name: 'h2', version: '1.4.199'
+    localDeps group: 'com.h2database', name: 'h2', version: '1.4.197'
 
     // so we can put a copy of h2 in a convenient place
-    implementation configurations.localDeps
+    compile configurations.localDeps
 
     // so we can programmatically run flyway at startup
-    implementation "org.flywaydb:flyway-core:6.0.8"
+    compile "org.flywaydb:flyway-core:5.2.4"
+
+    // added for SCA test
+    compile 'org.apache.struts:struts2-apps:2.1.2'
+
+    // findsecbugs plugin for SpotBugs
+    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
+}
+
+spotbugs {
+    toolVersion = '3.1.12'
+    ignoreFailures = true
+    effort = "max"
+    reportLevel = "low"
+    reportsDir = file("$project.buildDir/spotbugs")
+}
+
+
+task copyToLib(type: Copy) {
+    from configurations.localDeps
+    into "$buildDir/lib"
 }
 
 pitest {
@@ -143,102 +144,80 @@ pitest {
     timestampedReports = false
 }
 
-tasks.getByName('pitest').finalizedBy 'printReportPathsPitest'
-
-task('printReportPathsPitest') {
-    doLast {
-        print "\n\n\n"
-        println "------------------------------------------------------------"
-        println "Reports were generated by the tests."
-        println "------------------------------------------------------------"
-        println ""
-        println "PiTest:   build/reports/pitest/index.html"
-        println "------------------------------------------------------------"
-        print "\n"
-    }
+// configure jetty to run on port 8080 when we run "./gradlew appRun"
+gretty {
+    httpPort = 8080
+    servletContainer = 'tomcat8'
+    contextPath = "demo"
 }
 
 // configuration for the cucumber reports.
 cucumberReports {
     outputDir = file('build/reports/bdd')
-    buildId = '1'
-    // merge together all the cucumber reports with a suffix of "json"
-    reports = files(fileTree(dir: "build/bdd", include: '*.json'))
+    buildName = '0'
+    reports = files('build/bdd/file.json')
     testTasksFinalizedByReport = false
-    projectNameOverride = "$projectname"
 }
 
 flyway {
-    // with this URL, H2 will create a file at build/db/training, will use
-    // postgresql syntax for the SQL (mode=postgresql), and the first time you hit the database
-    // will open the database's server up for further connections (auto_server = true)
     url = 'jdbc:h2:./build/db/training;AUTO_SERVER=TRUE;MODE=POSTGRESQL'
     driver = 'org.h2.Driver'
-    // no point in using a username or password, security slows our teaching down.
     user = ""
     password = ""
     schemas = ['ADMINISTRATIVE', 'LIBRARY', 'AUTH']
 }
 
-/**
- * Put the h2 dependency in a convenient place so we can run it from
- * the command line.
- */
-task copyH2JarToLib(type: Copy) {
-    from configurations.localDeps
-    into "$buildDir/lib"
-}
 
 // starts the h2 console
 task startH2Console(type: Exec) {
-    dependsOn 'copyH2JarToLib'
-    commandLine 'javaw', '-cp', 'build/lib/h2-1.4.199.jar', 'org.h2.tools.Console'
+    dependsOn 'copyToLib'
+    commandLine 'javaw','-cp','build/lib/h2-1.4.197.jar','org.h2.tools.Console'
 }
 
 generateCucumberReports.dependsOn(cucumber)
 
 jacocoTestReport {
-    executionData(fileTree(dir: "$buildDir/jacoco", include: '*.exec'))
-    reports {
-        xml.enabled true
-        csv.enabled false
-        xml.destination file("${buildDir}/jacoco/jacoco.xml")
-        html.destination file("${buildDir}/reports/jacoco")
-    }
+    executionData("$buildDir/jacoco/combineCoverage.exec")
 }
 
+// a way to combine the coverage reports for the purpose of seeing the
+// whole picture when we run jacocoTestReport
+task combineCoverage (type: JacocoMerge) {
+    executionData = files("$buildDir/jacoco/test.exec", "$buildDir/jacoco/fastIntegrationTest.exec")
+    mustRunAfter fastIntegrationTest
+}
+
+// Add the combined report when we run check
+check.dependsOn(combineCoverage)
 check.dependsOn(jacocoTestReport)
 
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "$projectname"
-        property "sonar.projectName", "$projectname"
-        property "sonar.projectDescription", "A demonstration of a web application with good test coverage and best practices"
         property "sonar.sources", "src/main/java"
         property "sonar.tests", "src/test/java,src/integration_test/java,src/bdd_test/java"
         property "sonar.java.binaries", "build/classes/java/main"
         property "sonar.junit.reportPaths", "build/test-results/test/,build/test-results/fastIntegrationTest"
-        property "sonar.coverage.jacoco.xmlReportPaths", "build/jacoco/jacoco.xml"
+        property "sonar.jacoco.reportPaths", "build/jacoco/test.exec,build/jacoco/fastIntegrationTest.exec"
+	property "sonar.host.url", "https://localhost/sonar"
+	property "sonar.projectKey", "demo"
+	property "sonar.projectName", "Demo Application"
+	property "sonar.dependencyCheck.reportPath", "$project.buildDir/reports/dependency-check-report.xml"
     }
 }
 
 // parallellize the tests, making them finish sooner.
 tasks.withType(Test) {
     maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
-    failFast = true
 }
 
-task runApiTests(type: Exec) {
-    doFirst {
-        checkIfAlive()
-    }
-    workingDir 'src/api_tests'
-    commandLine 'pipenv', 'run', 'pytest', '--junitxml', '../../build/test-results/api_tests/TEST-api_test_results.xml'
+task runApiTests(type:Exec) {
+   workingDir 'api_tests'
+   commandLine 'pipenv','run','pytest','--junitxml','../build/test-results/api_tests/TEST-api_test_results.xml'
 }
 
 static boolean SearchDirectoryForChromedriver(File dir) {
-    return dir.listFiles({ file -> file.name.contains("chromedriver") } as FileFilter).any()
+    return dir.listFiles({ file -> file.name.contains("chromedriver") } as FileFilter).any();
 }
 
 static boolean ScanPathForChromeDriver() {
@@ -248,292 +227,81 @@ static boolean ScanPathForChromeDriver() {
     // Add the local ui_tests directory too - it will still work if it's there
     pathDirectories.add("ui_tests")
 
-    return pathDirectories.any({ dir -> SearchDirectoryForChromedriver(new File(dir)) })
+    return pathDirectories.any({dir -> SearchDirectoryForChromedriver(new File(dir))})
 }
 
-/**
- * Put the current Git commit sha in a file accessible while running.
- */
-task('writeGitCommitToFile') {
-    File file = new File("src/main/webapp/commit.html")
-    file.write(getCurrentGitHash() )
+task runBehaveTests(type:Exec) {
+   doFirst {
+       def chromedriver_exists_in_ui_tests = ScanPathForChromeDriver();
+       if (! chromedriver_exists_in_ui_tests) {
+           ignoreExitValue true
+           throw new Exception(
+                   "\n\nFor your reference, here is the system path we checked:\n\n" +
+                    System.getenv('PATH') +
+                   "\n\n*****************************\n" +
+                   "*****************************\n" +
+                   "Does not look like you have Chromedriver in your \n" +
+                   "PATH or ui_tests directory.\n\n" +
+                   "Download it from http://chromedriver.chromium.org/ and store the binary\n" +
+                   "in your system path or in the ui_tests directory.\n" +
+                   "See the PATH variable expanded above.\n" +
+                   "*****************************\n" +
+                   "*****************************\n"
+
+           )
+       }
+   }
+   workingDir 'ui_tests'
+   commandLine 'pipenv','run','behave'
 }
-
-/**
- * This gnarly little method gets the current commit.  It's really a simple-minded
- * approach, which makes it easy to read but maybe likely to fail?  time will tell.
- */
-static String getCurrentGitHash() {
-    String headFileLocation = ".git/HEAD"
-    String commitLocation
-    int locationOfSpace
-    String currentHead
-    FileReader fr_forGitHead
-    FileReader fr_forGitHash
-    String result
-    boolean shouldExit = false
-
-    try {
-        fr_forGitHead = new FileReader(headFileLocation)
-    } catch (Exception ignored) {
-        return "NO_GIT_HEAD_FOUND"
-    }
-
-    new BufferedReader(fr_forGitHead).with { br ->
-        // get the directory to the current HEAD
-        result = "EMPTY_INITIAL_VALUE"
-        try {
-            currentHead = br.readLine()
-        } catch (Exception ignored) {
-            result = "COULD_NOT_READ_HEAD_FILE"
-            shouldExit = true
-        }
-        finally {
-            br.close()
-        }
-        locationOfSpace = currentHead.indexOf(" ")
-        // extract out the portion that is the directory only
-        // the whole contents go something like: "ref: refs/heads/master"
-        commitLocation = currentHead.substring(locationOfSpace + 1)
-        // read the file at that location (e.g. .git/refs/heads/master )
-    }
-    if (shouldExit) {
-        return result
-    }
-
-    try {
-        fr_forGitHash = new FileReader(".git/" + commitLocation)
-    } catch (Exception ignored) {
-        return "NO_GIT_HASH_FILE_FOUND"
-    }
-
-    new BufferedReader(fr_forGitHash).with { br ->
-        result = "EMPTY_AT_BEGINNING"
-        try {
-            result = br.readLine()
-        } catch (Exception ignored) {
-            result = "COULD_NOT_READ_COMMIT_HASH"
-        } finally {
-            br.close()
-        }
-    }
-    return result
-}
-
-compileJava.finalizedBy writeGitCommitToFile
-
-// returns true if the application is running.
-static void checkIfAlive() {
-    int code
-    try {
-        URL url = new URL("http://localhost:8080/demo")
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection()
-        connection.setRequestMethod("GET")
-        connection.connect()
-
-        code = connection.getResponseCode()
-    } catch (Exception ignored) {
-        String errorMsg = "\n\n\n" +
-                "****************************************\n" +
-                "*       SERVER IS NOT RUNNING          *\n" +
-                "****************************************\n" +
-                " The server has to be running to run    \n" +
-                " tests you requested                    \n" +
-                "                                        \n" +
-                " To start the app:                      \n" +
-                "    gradlew apprun                   \n" +
-                "****************************************\n"
-        throw new Exception(errorMsg)
-    }
-    if (code != 200) {
-        throw new Exception("\n\nServer is not returning a 200.  Instead, it is: " +code + "\n\n")
-    }
-}
-
-task runBehaveTests(type: Exec) {
-    doFirst {
-        checkIfAlive()
-        def chromedriver_exists_in_ui_tests = ScanPathForChromeDriver()
-		def chrm = project.properties['chromedriver.path']
-
-		// make sure that the path to chromedriver isn't null or empty:
-		def chromedriver_full_path_empty = chrm == null || chrm.isEmpty()
-        if (chromedriver_full_path_empty) {
-            chrm = "(NOT SET)"
-        }
-
-        if (!chromedriver_exists_in_ui_tests && chromedriver_full_path_empty) {
-            ignoreExitValue true
-            throw new Exception(
-
-
-					"\n\n*****************************************************\n" +
-					"*****************************************************\n" +
-					"Does not look like you have Chromedriver on your \n" +
-					"PATH or have set the full directory in gradle.properties.\n\n" +
-
-					"Download it from http://chromedriver.chromium.org/\n" +
-					"*****************************************************\n" +
-					"*****************************************************\n" +
-
-
-					"\n\nMore detail:\n  We couldn't find Chromedriver, which is needed to run the \n" +
-					"  Behave tests (The UI-focused Behavior Driven Development test)\n" +
-
-					"\nThe easiest way to fix this, once you have downloaded Chromedriver, \n" +
-					"is to move the Chromedriver executable into a directory that is in \n" +
-					"your path.\n" +
-
-                    "\nFor your reference, here are all the directories we checked:\n\n" +
-					System.getenv('PATH') +
-					
-					"\n\nAn alternate way is to set the path to the Chromedriver executable\n" +
-					"in the gradle.properties file, at chromedriver.path\n" +
-					
-					"\nFor example: \n" +
-					"\nchromedriver.path=C:/foo/bar/chromedriver_win32/chromedriver.exe\n" +
-                    "\n\nHere is the value of your \"chromedriver.path\" \n(found in gradle.properties): \n\n" +
-					chrm +
-
-                    "\n\nIMPORTANT MESSAGES ABOVE! SCROLL UP."
-
-            )
-        }
-    }
-
-    workingDir 'src/ui_tests/behave'
-    // PIPENV defaults to only two directories down respecting PIPFILE in ancestry.
-    environment "PIPENV_MAX_DEPTH", "10"
-    // run behave and output a json file (we'll convert that to Cucumber format later for reporting)
-    commandLine 'pipenv', 'run', 'behave', '--format','json','-o','../../../build/bdd/behave.output', '-D', 'chromedriver_path='+(project.properties['chromedriver.path'] ?: "")
-}
-
-// Run a command to convert the Behave json to Cucumber format.
-// Once this is done, we can run generateCucumberReport again and it will have the Behave results included.
-task convertBehaveOutputToCucumber(type: Exec) {
-    commandLine 'pipenv', 'run', 'python', '-m', 'behave2cucumber', '-i', 'build/bdd/behave.output', '-o', 'build/bdd/behave_cucumber_style.json'
-}
-runBehaveTests.finalizedBy convertBehaveOutputToCucumber
-
 
 task runAllTests(type: GradleBuild) {
-    doFirst {
-        checkIfAlive()
-    }
     tasks = ['check', 'runApiTests', 'runBehaveTests']
-    finalizedBy(jacocoTestReport)
 }
-
 // more info on test logging: https://discuss.gradle.org/t/whats-upcoming-in-gradle-1-1-test-logging/7741
 test {
     testLogging {
         exceptionFormat "full" // default is "short"
         // uncomment the following to see the unit test progress in the output
         //events "started", "passed", "skipped", "failed", "standardOut", "standardError"
-        events "passed", "skipped", "failed", "standardOut", "standardError"
-
-        // set to false to disable detailed failure logs
-        showExceptions true
-
-        // enable to see standard out and error streams inline with the test results
-        showStandardStreams true
     }
-
-    // Fail the 'test' task on the first test failure
-    failFast = true
-
-    // generate a report on coverage
-    finalizedBy jacocoTestReport
 }
 
 dependencyCheck {
-    // if we don't include the specific configurations to scan, it will scan everything,
-    // which means getting into the dependencies of tomcat and jetty, which should
-    // have no bearing on us.
-    scanConfigurations = ['default']
-    showSummary = false
-    autoUpdate = true
-    cveValidForHours = 24 * 30 // about a month.
-    format = 'XML' // options are  (HTML, XML, CSV, JSON, VULN, ALL).
-    failBuildOnCVSS = 8 // see https://www.first.org/cvss/specification-document#5-Qualitative-Severity-Rating-Scale
+    showSummary=false
+    autoUpdate=false
+    cveValidForHours=168 // a week.
+    format='XML' // options are  (HTML, XML, CSV, JSON, VULN, ALL).
 }
 
-task('printReportPathsCheck') {
-    doLast {
+task('printReportPathsCheck'){
+    doLast{
         print "\n\n\n"
-        println "------------------------------------------------------------"
+        println "-------------------------------------------------------------------------------"
         println "Reports were generated by the tests."
-        println "------------------------------------------------------------"
+        println "-------------------------------------------------------------------------------"
         println ""
-        println "Coverage:   build/reports/jacoco/test/html/index.html"
-        println "BDD Report: build/reports/bdd/cucumber-html-report-basic/index.html"
-        println "Unit Tests: build/reports/tests/"
-        println "------------------------------------------------------------"
+        println "Coverage Report:         build/reports/jacoco/test/html/index.html"
+        println "Cucumber BDD Report:     build/reports/bdd/cucumber-html-report-basic/index.html"
+        println "Unit Test Reports:       build/reports/tests/"
+        println "-------------------------------------------------------------------------------"
         print "\n"
-    }
-}
-
-task('coveros') {
-    doLast {
-      String fileContents = new File('docs/coveros_text.txt').text
-      print fileContents
     }
 }
 
 check.finalizedBy 'printReportPathsCheck'
 
-task('printReportPathsDependencyCheck') {
-    doLast {
+task('printReportPathsDependencyCheck'){
+    doLast{
         print "\n\n\n"
-        println "---------------------------------------------------------------"
+        println "-------------------------------------------------------------------------------"
         println "Reports were generated by the tests."
-        println "---------------------------------------------------------------"
+        println "-------------------------------------------------------------------------------"
         println ""
-        println "Dependency Check: build/reports/dependency-check-report.html"
-        println "---------------------------------------------------------------"
+        println "Dependency Check:        build/reports/dependency-check-report.html"
+        println "-------------------------------------------------------------------------------"
         print "\n"
     }
 }
 
 dependencyCheckAnalyze.finalizedBy 'printReportPathsDependencyCheck'
-
-// This is for when we run tests on the local Windows box
-// you can pass in the property directly on the command line
-// like this: gradlew deployToTestWindowsLocal -Pdeploy_directory="C:/Users/byron/Desktop/test_tools/tomcat-9/webapps"
-//
-// or, you can have it set as a system property, like this:
-// ORG_GRADLE_PROJECT_deploy_directory="C:/Users/byron/Desktop/test_tools/tomcat-9/webapps"
-task deployToTestWindowsLocal(type: Copy) {
-    dependsOn war
-
-    if (project.hasProperty('deploy_directory')) {
-        from("$buildDir/libs/") {
-            // a bit of a hack - would prefer to directly target the output of the war task
-            include "*-1.0.0.war"
-            rename { "demo.war" }
-        }
-        into "${deploy_directory}"
-    }
-
-    doLast {
-        sleep 5 * 1000
-    }
-}
-
-task runPerfTests(type:Exec) {
-    workingDir '.'
-
-    //on windows:
-    commandLine 'jmeter.bat', '-n', '-t', 'docs\\50_users_at_once.jmx', '-l', 'test.jtl'
-
-    //store the output instead of printing to the console:
-    standardOutput = new ByteArrayOutputStream()
-
-    //extension method stopTomcat.output() can be used to obtain the output:
-    ext.output = {
-        return standardOutput.toString()
-    }
-}
-
-
-
