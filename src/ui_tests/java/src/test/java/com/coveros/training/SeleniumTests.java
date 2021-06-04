@@ -1,5 +1,6 @@
 package com.coveros.training;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -14,6 +15,7 @@ public class SeleniumTests {
 
     @BeforeClass
     public static void setUp() {
+        WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
     }
 

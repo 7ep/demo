@@ -44,6 +44,9 @@ dependencies {
     // https://mvnrepository.com/artifact/net.sourceforge.htmlunit/htmlunit
     implementation group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.39.1'
 
+    // https://search.maven.org/artifact/io.github.bonigarcia/webdrivermanager/4.4.3/jar
+    testImplementation("io.github.bonigarcia:webdrivermanager:4.4.3")
+
 }
 
 // more info on test logging: https://discuss.gradle.org/t/whats-upcoming-in-gradle-1-1-test-logging/7741
