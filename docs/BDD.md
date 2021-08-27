@@ -14,7 +14,9 @@ Contents
 - [Developing the UI](#developing-the-ui)
 
 
-
+Note: There is a video file showing a run-through of a slightly
+earlier version of this file at BDD_video.mp4 in this same
+directory - take a look!
 
 
 
