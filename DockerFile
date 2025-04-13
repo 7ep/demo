@@ -1,0 +1,45 @@
+# Base Image
+FROM gradle:7.3.3-jdk11 AS builder
+
+# Working directory
+WORKDIR /desktop_app
+
+# Copy all project files
+COPY . .
+
+# Make gradlew executable
+RUN chmod +x ./gradlew
+
+# Build application
+RUN ./gradlew assemble --no-daemon
+
+# Check where the JAR file actually is
+RUN find /desktop_app -name "*.jar" | grep -v "/gradle/" > jar_location.txt
+
+# Runtime stage - JRE only
+FROM eclipse-temurin:11-jre-jammy
+WORKDIR /app
+
+# Create non-root user (increased security)
+RUN groupadd -r appgroup && \
+    useradd -r -g appgroup -d /app -s /bin/false appuser && \
+    chown -R appuser:appgroup /app
+
+# Copy the file with JAR location
+COPY --from=builder /desktop_app/jar_location.txt /app/
+
+COPY --from=builder /desktop_app/build/ /app/build/
+
+# Use the first JAR found in the build directory (temp solution)
+RUN find /app/build -name "*.jar" | grep -v "/gradle/" | head -1 > jar_path.txt && \
+    if [ -s jar_path.txt ]; then \
+      cp $(cat jar_path.txt) /app/app.jar && \
+      chown appuser:appgroup /app/app.jar; \
+    else \
+      echo "No JAR files found!" && exit 1; \
+    fi
+
+# Runtime config
+USER appuser
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
