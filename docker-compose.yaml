@@ -1,0 +1,50 @@
+services:
+  jenkins:
+    build: ./jenkins
+    privileged: true
+    user: root
+    ports:
+    - 8081:8080
+    - 50000:50000
+    container_name: jenkins
+    volumes:
+    - /home/codespace:/var/jenkins_home
+    - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - dev-network
+    depends_on:
+      - sonarqube
+
+  sonarqube:
+    image: sonarqube:8.9-community
+    container_name: sonarqube
+    environment:
+      - SONARQUBE_JDBC_URL=jdbc:postgresql://db:5432/sonar
+      - SONARQUBE_JDBC_USERNAME=sonar
+      - SONARQUBE_JDBC_PASSWORD=sonar
+    ports:
+      - "9000:9000"
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+    networks:
+      - dev-network
+
+  db:
+    image: postgres:latest
+    container_name: sonar-db
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+      - POSTGRES_DB=sonar
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+
+volumes:
+  jenkins_home:
+  sonarqube_data:
+  db_data:

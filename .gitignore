@@ -76,3 +76,4 @@ node_modules/
 .classpath
 .project
 .settings/
+jenkins/jenkins_home/
