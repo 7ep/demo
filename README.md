@@ -40,7 +40,7 @@ Its essential goals:
 * Well documented
 * High performance
 * Illustrates maximum number of techniques
-* Easy to get up to speed
+* Easy to get up to speed.  Understood!!
 
 #### Table of contents:
 1. [Optional dependencies](#optional-dependencies)
