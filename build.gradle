@@ -15,7 +15,7 @@ plugins {
 
     // gretty is a gradle plugin to make it easy to run a server and hotswap code at runtime.
     // https://plugins.gradle.org/plugin/org.gretty
-    id 'org.gretty' version '3.0.4'
+    id 'org.gretty' version '3.1.5'
 
     // provides access to a database versioning tool.
     id "org.flywaydb.flyway" version "6.0.8"
