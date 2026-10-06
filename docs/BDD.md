@@ -15,8 +15,7 @@ Contents
 
 
 Note: There is a video file showing a run-through of a slightly
-earlier version of this file at BDD_video.mp4 in this same
-directory - take a look!
+earlier version of this file at [BDD_video.mp4](https://renomad.com/files/bdd_video.mp4) - take a look!
 
 
 
